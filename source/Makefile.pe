@@ -1,0 +1,114 @@
+# Makefile for pe
+# give this file a mimetype of text/x-makefile and Pe will give you a nice project window
+
+TARGET		= sample
+# DEBUG should be either 1 or 0
+DEBUG		= 0
+DEFINES		= BETA # DEMO
+LIBS		= be root
+LIBPATHS	= 
+INCPATHS	= 
+WARNINGS	=  -Wall -Wno-multichar -Wno-ctor-dtor-privacy -Wno-sign-compare
+CFLAGS		=
+LDFLAGS		=
+# this one is used as finishing touch before the mimeset is done
+# I'm using it to put a timestamp in the app
+FINISH_BUILD	= rez -o $(TARGET) Resources/Now.r
+
+#%{
+# Pe generated file list:
+Sources = \
+	./Sources/Hello.cpp \
+
+Resources = \
+	./Resources/RFoo.r \
+#%}
+
+define SOURCES
+	$(Sources)
+endef
+
+define RESOURCES
+	$(Resources)
+endef
+
+ifeq ($(DEBUG), 1)
+	DBG		= -gdwarf-2
+	OPT		= -O0
+	OBJDIR	= Obj.Debug
+else
+	DBG		= 
+	OPT		= -O3
+	OBJDIR	= Obj.NoDebug
+endif
+
+define SRC_TO_OBJ
+	$(addprefix $(OBJDIR)/, $(addsuffix .o, $(foreach file, $(SOURCES), $(basename $(notdir $(file))))))
+endef
+
+define R_TO_RSRC
+	$(addprefix $(OBJDIR)/, $(addsuffix .rsrc, $(foreach file, $(RESOURCES), $(basename $(notdir $(file))))))
+endef
+
+
+OBJS = $(SRC_TO_OBJ)
+RSRC = $(R_TO_RSRC)
+
+# create a unique list of paths to our sources
+SRC_PATHS += $(sort $(foreach file, $(SOURCES), $(dir $(file))))
+R_PATHS += $(sort $(foreach file, $(RESOURCES), $(dir $(file))))
+
+VPATH :=
+# add the list of source paths to VPATH if not already present
+VPATH += $(addprefix :, $(subst  ,:, $(filter-out $($(subst, :, ,$(VPATH))), $(SRC_PATHS))))
+VPATH += $(addprefix :, $(subst  ,:, $(filter-out $($(subst, :, ,$(VPATH))), $(R_PATHS))))
+
+# add the list of source paths to INLCUDES if not already present
+INCLUDES = $(foreach path, $(INCPATHS) $(SRC_PATHS), $(addprefix -I, $(path)))
+RINCLUDES = $(foreach path, $(RINCPATHS) $(R_PATHS), $(addprefix -I, $(path)))
+
+# add the -L prefix to all library paths to search
+LINK_PATHS = $(foreach path, $(LIBPATHS), $(addprefix -L, $(path)))
+
+# add the -l prefix to all libs to be linked against
+LINK_LIBS = $(foreach lib, $(LIBS), $(addprefix -l, $(lib)))
+
+# add to the linker flags 
+LDFLAGS += $(LINK_PATHS) $(LINK_LIBS)
+
+CFLAGS	+= $(DBG) $(OPT) -fpic
+CFLAGS	+= $(foreach define, $(DEFINES), $(addprefix -D, $(define)))
+
+all: $(TARGET)
+
+$(TARGET): $(OBJDIR) $(OBJS) $(RSRC)
+	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
+ifeq ($(DEBUG), 0)
+	strip $(TARGET)
+endif
+	xres -o $(TARGET) $(RSRC)
+	$(FINISH_BUILD)
+	mimeset -f $(TARGET)
+
+clean:
+	rm -rf $(OBJDIR)
+
+$(OBJDIR)/%.rsrc: %.r
+	@ echo "-> "$(@F)
+	@ rez -o $@ -t $(RINCLUDES) $<
+
+$(OBJDIR):
+	@ test -d $(OBJDIR) || mkdir $(OBJDIR)
+
+$(OBJDIR)/%.o: %.cpp
+	@ echo "-> "$(@F)
+	@ $(CC) -c $< -o $@ $(INCLUDES) $(CFLAGS)
+
+include $(OBJS:%.o=%.d)
+
+$(OBJDIR)/%.d:%.cpp
+	@ test -d $(OBJDIR) || mkdir $(OBJDIR)
+	@ echo "-> "$(@F)
+	@ $(SHELL) -ec '$(CC) -M $(INCLUDES) $< | sed '\''s/\(.*\.o\)[ :]*/$(OBJDIR)\/\1 $(@F): /g'\'' > $@'
+
+FORCE:

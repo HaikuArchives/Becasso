@@ -1,0 +1,372 @@
+#
+# This is the Becasso strings file.
+# © 2000 ∑ Sum Software
+#
+# Dansk version by Morten Johan Wied Leerhøy
+# and Per Liboriussen
+#
+###################
+#
+# About Window
+0:Om Becasso
+1:URL
+2:Manual
+3:Version %s, bygget %s
+4:Demo version
+5:Initialisere Tilføjelser:
+6:Slip Becasso Palette Filer på den rette Farve Knap eller på det tilhørende Farve Editor Vindue.
+7:Registreret til:
+8:Din Nøglefil er beskadiget
+9:Registrer online
+# Main Window File menu
+10:Fil
+11:Nyt Lærred…
+12:Åben…
+13:Åben Tidligere
+14:Optag
+15:Printer Opsætning…
+16:Om Becasso
+18:Opsætning…
+17:Afslut Becasso
+# Names for MouseOver help
+19:Tilstand
+20:Tegne
+21:Vælge
+22:Pensel
+23:Slette
+24:Fylde
+25:Tekst
+26:Spray
+27:Frihånds
+28:Linie
+29:Fri Form
+30:Polygon
+31:Rektangel
+32:Oval
+33:Cirkel
+34:Ellipse
+40:Værktøj
+41:Forgrunds Farve
+42:Baggrunds Farve
+43:Mønster
+#
+# Canvas Window
+#
+# File Menu (uses File menu strings from Main Window
+50:Gem
+51:Gem som…
+52:Eksporter…
+53:Print
+54:Luk
+55:Afslut
+# Edit Menu
+60:Rediger
+61:Fortryd
+62:Igen
+63:Klip
+64:Kopier
+65:Indsæt
+403:Indsæt til nyt Lag
+404:Indsæt til nyt Lærred
+66:Vælg Alt
+67:Fravælg Alt
+68:Inverter Valg
+69:Vælg udfra Farve
+70:Forgrund
+71:Baggrund
+72:Automatisk
+73:Farvelæg Valg
+74:Udtræk Palette…
+75:Vælg udfra Kanal
+76:Alpha
+77:Rød
+78:Grøn
+79:Blå
+80:Cyan
+81:Magenta
+82:Gul
+83:Sort
+84:Farve
+85:Mætning
+86:Værdi
+87:Vælg Kanal
+88:Flyt
+89:Roter
+90:Hele Lærredet
+91:Beskær til Vindue
+92:Beskær til Valg
+93:Autobeskæring
+94:Udfyld til Vindue
+95:Venstre Top
+96:Højre Top
+97:Venstre Bund
+98:Højre Bund
+99:Center
+100:Tilpas til Vindue
+101:Bibehold Ratio
+102:Tilpas til Ratio
+103:Filtre
+104:Transformer
+105:Generer
+106:Centrer Mus
+107:Tilpas til…
+108:Vend
+400:Vandret
+401:Lodret
+402:Tilpas
+# Window Menu
+110:Vindue
+111:Lag
+112:Scaler
+113:Zoom Ind
+114:Zoom Ud
+115:Tilpas
+116:Forstør
+# Layer Menu
+120:Lag
+121:Tilføj nyt
+122:Indsæt nyt
+123:Kopier
+124:Fjern
+125:Sammenføj
+126:En op
+127:En ned
+128:Vælg
+129:Vælg Lag
+#
+# Various CanvasWindow strings
+#
+130:'%s' er et billed fra en nyere version af Becasso (%s).\nDu kan ikke åbne disse billeder med denne version af Becasso.
+131:Afbryd
+132:'%s' er et billed fra en nyere version af Becasso (%s).\nPrøv at åbne det alligevel?
+133:Fortsæt
+134:Translation Kit fejl:\nKunne ikke oversætte '%s'
+135:Hjælp
+136:OK
+137:Filen '%s' er af typen '%s'.\nDet ligner et billed format.\nMåske har du ikke installeret den rigtige Translator?
+138:Filen '%s' er af typen '%s'.\nJeg tror ikke det er et billede.
+# 140 or 141 go at the first %s in 139, #142 or #143 at the last.
+139:%s Billedet '%s' bruger alpha som gennemsigtighed istedet for opacitet.\n%s invertere  alpha kanalen.
+140:Jeg er ret sikker
+141:Jeg formoder
+# Note the trailing space on the next two strings
+142:Hvis du kun ser et ternet mønster,\nanbefaler jeg 
+143:Enten det, eller også har dette billede en stor mængde gennemsigtige pixels.  Hvis det ser underligt ud, prøv 
+144:Behold det som det er
+145:Inverter
+146:Gem ændringerne i '%s'?
+147:Undlad
+148:Gem
+149:Uden titel
+# Note the leading space in the next string
+405: (detalje)
+# MIME help text
+150:Undskyld jeg forstyrrer.  Jeg prøvede at foreslå en passede forlængelse til denne fil, men kunne ikke finde nogen i din MIME database for '%s'.\nDu kan selv tilføje forlængelser med  FileTypes preferences programmet, eller jeg kan bruge et af mine forslag.  Du kan også glemme alt om det ret gamle koncept med forlængelser i det hele taget , om end mange andre operativ systemer stadig er afhængige af dem.
+151:Fil type
+152:Opdater MIME
+153:Undervurder mig ej!
+154:Jeg har en liste med de mest brugte billed filtyper og deres forlængelser, men det kan ske at du har et par mere eksotiske typer som jeg ikke kender til.  Hvis det er tilfældet, vil jeg komme med et kvalificeret gæt, hvis ikke jeg kan komme på noget, dropper jeg simplethen den type. Jeg vil også holde mig fra filer som allerede har en forlængelse.\nDu vil altid kunne ændre filtypen ved hjælp af FileTypes preference programmet.
+155:Skriver billede…
+156:Dette er en sjælden fejl.  Et eller andet gik galt indeni Translator.\nDet kan være alt lige fra en konflikt i et delt bibilotek til for lidt harddisk plads.
+157:Udtræk Palette
+158:Du kan ikke gemme i denne demo udgave af Becasso.\nPå http://www.sumware.demon.nl kan du se hvordan du får den fulde version.\n\nTak fordi du fandt interesse for Becasso!
+159:Besøg URL
+#
+# Layer Window
+160:Lag in %s
+161:Unavngivet Lag
+162:Baggrund
+# Note leading space, #163 is appended when duplicating a layer
+163: Kopi
+164:Skjul
+165:Bland
+166:Multiplicer
+167:Funktion:
+# Menu in Layer Window
+170:Lag
+171:Tilføj Nyt Lag
+172:Insæt Nyt Lag
+173:Kopier Lag
+174:Saml Lag
+175:Fjern Lag
+# Note trailing space:
+176:Navn: 
+#
+# Various small input windows
+180:Lærred Størrelse
+181:Bredde
+182:Højde
+183:Udfør
+186:Opløsning
+187:pixels
+188:in
+189:cm
+402:Tilpas
+184:# farver
+185:Fjern Resterende Palette
+#
+# Color Editor
+#
+190:Gem Palette…
+191:Hent Palette…
+192:Generer Palette
+193:Default
+194:Grå
+195:Spektrum
+196:Varme Scala
+197:RGB Model
+198:HSV Model
+199:Farve (0–360)
+200:Mæthed (0–1)
+201:Værdi (0–1)
+202:Alpha Kanal
+203:Opacitet
+204:Farve Vælger
+205:RGB Tolerance
+206:Nuværende
+207:Bedste Match
+208:Nuværende Valg
+209:Tætteste Match i Palette
+210:(RGB afstand XXX)
+211:(RGB afstand: %3.1f)
+#
+#  Tool Attribute Windows
+#
+# General
+306:Ingen Parametre
+# Brush
+300:X-størrelse
+301:Y-størrelse
+302:Vinkel
+303:Styrke
+304:Mellemrum
+305:Hårdhed
+# Circle
+310:Penne Stør.
+311:Type
+312:Første Klik
+# Draw
+320:Kopier
+321:Over
+322:Slet
+323:Min
+324:Max
+325:Inverter
+326:Tilføj
+327:Fjern
+328:Blend
+329:Tegne tilstand:
+330:Tablet:
+331:Maximum # Fortrydelser
+# Eraser
+333:Form
+334:H Stør.
+335:V Stør.
+# Fill
+338:Tolerance
+339:Visuel Afstand
+340:Absolut RGB
+341:Visuel
+342:RGB
+343:Visuel Faktorer:
+344:R: 0.213 G: 0.715 B: 0.072
+# Lines
+348:Fyld Hjørner
+# Ovals
+350:Relative Hjørner
+351:Absolute Hjørner
+352:Relative
+353:Absolute
+# Spray Can
+355:Sigma
+356:Farve Ratio
+357:Flyde Rate
+358:Udtone med Afstand
+# Text
+360:Familie 
+361:Stil
+362:Punkt Stør.
+363:Forskydning
+364:Rotation
+365:Anti Alias
+#
+# Add-on windows
+#
+370:Stop
+371:Info
+372:Påfør
+#
+# Prefs window
+#
+380:Indstillinger
+381:Tilbage
+382:Påfør
+383:Antal Af Punkter i Tidligere menu:
+384:Interface sprog:
+385:(træder i kraft næste gang programmet starter)
+#
+# Magnify window
+410:Gitter fra
+411:Gitter S
+412:Gitter H
+#
+# Registration Window
+#
+420:Registrer Becasso 2.0
+421:Becasso 1.4 fundet.
+422:Dette er en gratis opdatering.
+423:For registrering: indsæt venligst Becasso 2.0 CD-ROM'en
+424:Udført
+425:Navn:
+426:Registrer
+427:Tak for dit køb af Becasso!
+428:Registrer venligst ved at skrive dit navn.
+429:Dette oplåser den fulde version.
+430:Becasso 2.0 var præ-installeret,
+431:men er endnu ikke blevet registreret.
+432:Vent venligst %d sekunder…
+433:(Denne pause forsvinder når du registrerer Becasso.)
+434:
+435:Inverter valg hele tiden
+436:PowerPC hardware fundet.
+437:Dette er en gratis version.
+#
+# Tip of the Day
+#
+500:Tip of the day
+501:Show tips at startup
+502:Next tip
+503:Welcome to Becasso!\nThis window will show you useful tips at startup,\nand it's recommended to read the tips at least once.
+504:Have you read the documentation? :-)\nIt's available via About Becasso.
+505:Right-clicking on a tool button opens its attributes (settings) window.
+506:Right-clicking on a color button opens an extensive color editor.
+507:The cursor shows you what mode you are in (a thin cross for drawing mode, a hollow cross for selection mode).
+508:You can tear off the menus from Becasso's main window.  Click on their buttons, then drag the mouse.  Becasso will remember their positions.
+509:Selections are not masks.  You can draw outside selections.
+510:Selections are not binary.  A pixel can be "a little" selected.  In 256 grades from "not selected at all" to "fully selected", in fact.
+511:To quickly grasp the concept of Becasso's selections, open a colorful image, paint a selection with the brush, and Shift-drag to copy/paste it.  You should see it's "fuzzy".
+512:Where it makes sense, add-ons can operate on the selected area as well as on the selection map itself (depending on the mode).  You can make gradiented selection maps this way.
+513:Use the Tab key to quickly switch between drawing mode and selection mode.
+514:In selection mode, the Fill tool is equivalent to a Magic Wand.
+515:The selection, by default, is inverted only when the mouse is over the canvas.  This behavior can be changed via the Preferences.
+516:Becasso can be used as an external editor from within other applications (such as Gobe Productive).
+517:If you have a fast machine, you can enlarge the filter preview area via the Preferences.
+518:Holding down the Option key turns your cursor into a color picker.
+519:For most tools, painting with the right mouse button exchanges the foreground and background colors.
+520:While a filter is open, you can drag the preview area by holding down the Command (Alt) key.
+521:The arrow keys move the cursor by one pixel.  Hold the Control key for faster movement.
+522:Holding both the Shift and Option keys turns the cursor into a grabbing hand.  You can then drag the canvas to scroll.
+523:The "WinGrab" capture add-on is ideal for writing software documentation.  It lets you screen-grab a single window.
+524:The "VideoGrabber" capture add-on in combination with a handycam is ideal for trying how a moustache would look on you.
+525:Becasso is scriptable.  It can be used, for example, to convert a bunch of images to a different format.
+526:Becasso comes with a Translator for its own format, so you can exchange Becasso images with other BeOS users even if they don't have the full version.
+527:A bit of history trivia: Becasso was the first commercially available paint program for the BeOS.
+528:When exporting to a low-fidelity file format (such as GIF), extracting the optimal color palette followed by quantizing can increase image quality immensely (see documentation for examples).
+529:Anyone can write Becasso add-ons!  The API and example code are included.
+530:The color picker works in the Magnify window too.
+531:Becasso comes with web-safe color palettes, which you can load via the Color Editor.  (Or you can drop them on the color buttons).
+532:The color editor accepts color drops from other applications, and can generate them too (drag off the color patches in the lower left corner).
+533:When dropping a color in an editor, the HTML hex representation of the color will be pasted.
+534:The BeOS desktop also accepts color drops.
+535:A color drop on a canvas will act as a Fill.
+536:The "Center Mouse" command (Command-M) is handy for drawing, say, concentric circles.

@@ -1,0 +1,36 @@
+LibImageManip Wrapper 0.4 for Becasso 1.5
+
+4/6/2001
+
+ImageManip Wrapper for Becasso provides two add-ons for Becasso. 
+A filter add-on that allows to use LibImageManip manipulator add-ons and 
+a transformer add-on that allows to use LibImageManip converter add-ons.
+
+News
+- PowerPC version built. Addons for Intel are in directory x86 and
+  for PowerPC in directory ppc.
+- LibImageManip converter add-ons work now.
+- Most filters take the selection rectangle into account. 
+  E.g. the "Page Curl" filter draws the page curl at the right
+  bottom of the selection and not in the right corner of the
+  layer (as it was done before and it is still done when no 
+  selection has been made).
+
+Bugs
+The filter "Carpet" crashes Becasso when selected!
+
+Requirements
+Becasso http://www.bebits.com/app/74
+LibImageManip http://www.bebits.com/app/782
+ImageManip GIMP Filters http://www.bebits.com/app/1988
+
+Installation
+If Becasso is installed in /boot/apps/Becasso simply move the
+files WrapperConverter and WrapperManipulator to 
+"move add-ons here". If Becasso is installed elsewhere move
+these two files into the "add-ons" directory in the Becasso
+directory.
+
+Have fun!
+Michael Pfeiffer
+michael.pfeiffer@utanet.at

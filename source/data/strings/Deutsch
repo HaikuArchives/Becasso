@@ -1,0 +1,375 @@
+#
+# This is the Becasso strings file.
+# © 2000 ∑ Sum Software
+#
+# Translation by Charlie Clarke, Marcus Jacob, and Michael Pfeiffer
+#
+###################
+#
+# About Window
+0:Über Becasso
+1:Homepage
+2:Handbuch
+3:Version %s vom %s
+4:Unregistrierte Version
+5:Add-Ons werden initialisiert
+6:Bitte ziehen Sie die Becasso Palette auf den entsprechenden Farbknopf oder das zugehörige Farbauswahlfenster
+7:Registriert für
+8:Ihre Schlüsseldatei ist beschädigt
+9:Online registrieren
+# Main Window File menu
+10:Datei
+11:Neues Bild…
+12:Bild öffnen…
+13:Zuletzt geöffnete Bilder
+14:Importieren
+15:Druckereinstellungen…
+16:Über Becasso
+17:Becasso beenden
+18:Einstellungen…
+# Names for MouseOver help
+19:Modus
+20:Zeichnen
+21:Auswählen
+22:Pinsel
+23:Radierer
+24:Füllen
+25:Text
+26:Sprühkanne
+27:Freihand
+28:Linien
+29:Freie Formen
+30:Polygone
+31:Rechtecke
+32:Ovale
+33:Kreise
+34:Ellipsen
+35:Klonen
+40:Werkzeug
+41:Vordergrundfarbe
+42:Hintergrundfarbe
+43:Muster
+#
+# Canvas Window
+#
+# File Menu (uses File menu strings from Main Window
+50:Speichern
+51:Speichern unter…
+52:Exportieren…
+53:Drucken
+54:Schließen
+55:Beenden
+# Edit Menu
+60:Bearbeiten
+61:Rückgängig
+62:Wiederholen
+63:Ausschneiden
+64:Kopieren
+65:Einfügen
+403:In neue Ebene eingfügen
+404:In neues Bild einfügen
+66:Alles auswählen
+67:Auswahl aufheben
+68:Auswahl invertieren
+69:Nach Farbe auswählen
+70:Vordergrund
+71:Hintergrund
+72:Automatisch
+73:Auswahl einfärben
+74:Palette exportieren…
+75:Kanal nach Auswahl
+76:Alpha
+77:Rot
+78:Grün
+79:Blau
+80:Cyan
+81:Magenta
+82:Gelb
+83:Schwarz
+84:Farbe
+85:Intensität
+86:Wert
+87:Auswahl nach Kanal
+88:Verschieben
+89:Drehen
+90:Gesamtes Bild
+91:Auf Fenstergröße zuschneiden
+92:Auf Auswahl zuschneiden
+93:Automatisch zuschneiden
+94:Auf Fenstergröße ergänzen
+95:Links oben
+96:Rechts oben
+97:Links unten
+98:Rechts unten
+99:Mitte
+100:An Fenstergröße anpassen
+101:Proportion beibehalten
+102:Proportion anpassen
+103:Filter
+104:Transformieren
+105:Erstellen
+106:Maus zentrieren
+107:Größe ändern…
+108:Spiegeln
+400:Horizontal
+401:Vertikal
+# Window Menu
+110:Fenster
+111:Ebenen
+112:Vergrößerung
+113:Vergrößern
+114:Verkleinern
+115:Größe anpassen
+116:Pixel Editor
+# Layer Menu
+120:Ebene
+121:Am Anfang einfügen
+122:Nach ausgewählter Ebene einfügen
+123:Duplizieren
+124:Entfernen
+125:Mischen
+126:Eins hoch
+127:Eins runter
+128:Wählen
+129:Ebene auswählen
+#
+# Various CanvasWindow strings
+#
+130:'%s' ist ein Bild einer neueren Becasso-Version %s.\nEs kann mit dieser Version nicht geöffnet werden.
+131:Abbruch
+132:'%s' ist ein Bild einer neueren Becasso-Version %s.\nSoll es dennoch geöffnet werden?
+133:Fortfahren
+134:Translation Kit-Fehler:\nKann '%s' nicht lesen.
+135:Hilfe
+136:OK
+137:Die Datei '%s' ist vom Typ '%s'.\nSie scheint ein Bild zu sein.\nVielleicht ist ein Translator nicht installiert?
+138:Die Datei '%s' ist vom Typ '%s'.\nSie scheint überhaupt kein Bild zu sein.
+# 140 or 141 go at the first %s in 139, #142 or #143 at the last.
+139:%s das Bild `%s' Alpha statt Deckkraft als Transparenz benutzt.\n%s den Alpha-Kanal zu invertieren.
+140:Ich bin mir sicher, dass
+141:Ich vermute, dass
+# Note the trailing space on the next two strings
+142:Wenn Sie nur ein kariertes Muster sehen,\nschlage ich vor,
+143:Entweder das, oder dieses Bild hat sehr viele transparente Pixel. Wenn es komisch aussieht, versuchen Sie
+144:So lassen
+145:Invertieren
+146:Änderungen in `%s' speichern?
+147:Verwerfen
+148:Speichern
+149:Ohne Namen
+# MIME help text
+150:Entschuldigen Sie die Störung. Ich wollte eine passende Erweiterung für die Datei vorschlagen, aber ich konnte keine in Ihrer MIME-Datenbank für '%s' finden.\nSie können diese Erweiterungen selbst in der FileTypes-Einstellung ändern oder meine Vorschläge übernehmen. Sie können aber auch einfach das völlig veraltete Konzept von Dateiendungen ignorieren, obwohl andere Betriebssysteme diese noch benötigen.
+151:Dateityp
+152:MIME-Typ aktualisieren
+153:Nicht mir mir!
+154:Ich habe eine Liste der üblichen Dateitypen und ihrer Endungen aber Sie könnten einige exotische Typen haben, die ich nicht kenne. In diesem Fall werde ich versuchen, einen Vorschlag zu machen oder den Dateityp zu ignorieren. Ich werde mich auch von Dateitypen fernhalten, die Endungen haben.\nSie können meine Vorschläge jedoch manuell durch die FileTypes-Anwendung in den Preferences ändern.
+155:Sichere Bild…
+156:Dies ist ein seltener Fehler. Es ist etwas mit dem Translator schiefgelaufen.\nDies könnte an einem Bibliothekenkonflikt oder zu wenig Festplattenplatz liegen.
+157:Palette exportieren
+158:In dieser Demoversion von Becasso ist speichern nicht möglich.\nAuf http://www.sumware.demon.nl können Sie nähere Informationen zur Vollversion abrufen.\n\nVielen Dank für Ihr Interesse an Becasso!
+159:Homepage besuchen
+#
+# Layer Window
+160:Ebenen in %s
+161:Unbetitelte Ebene
+162:Hintergrund
+# Note leading space, #163 is appended when duplicating a layer
+163: (Kopie)
+164:Verstecken
+165:Mischen
+166:Multiplizieren
+167:Vorgang:
+# Menu in Layer Window
+170:Ebene
+171:Am Anfang einfügen
+172:Nach ausgewählter Ebene einfügen
+173:Ausgewählte Ebene duplizieren
+174:Ebenen mischen
+175:Ausgewählte Ebene entfernen
+# Note trailing space:
+176:Name: 
+#
+# Various small input windows
+180:Bildgröße
+181:Breite:
+182:Höhe:
+183:Erstellen
+186:Auflösung:
+187:Pixel
+188:Zoll
+189:cm
+184:# Farben
+185:Restpalette entfernen
+402:Größe ändern
+406:Farbe:
+407:Aktueller Vordergrund
+408:Aktueller Hintergrund
+409:Transparent
+#
+# Color Editor
+#
+190:Palette speichern…
+191:Palette laden…
+192:Palette erstellen
+193:Standard
+194:Grau
+195:Spektrum
+196:Hitzeskala
+197:RGB-Modell
+198:HSV-Modell
+199:Farbe (0–360)
+200:Intensität (0–1)
+201:Wert (0–1)
+202:Alpha-Kanal
+203:Deckkraft
+204:Farbwähler
+205:RGB-Toleranz
+206:Aktuell
+207:Bester Treffer
+208:Aktuelle Auswahl
+209:Nähester Treffer in der Palette
+210:(RGB-Entfernung XXX)
+211:(RGB-Entfernung: %3.1f)
+#
+#  Tool Attribute Windows
+#
+# General
+306:Keine Parameter
+# Brush
+300:X-Größe:
+301:Y-Größe:
+302:Winkel:
+303:Stärke:
+304:Abstände:
+305:Härte:
+# Circle
+310:Größe:
+311:Typ
+312:Erster Klick
+# Draw
+320:Kopieren
+321:Darüber
+322:Radieren
+323:Minimum
+324:Maximum
+325:Invertieren
+326:Hinzufügen
+327:Abziehen
+328:Vermischen
+329:Zeichenmodus:
+330:Tablett: 
+331:Max. # Rückgänge
+# Eraser
+333:Form
+334:X-Größe:
+335:Y-Größe:
+# Fill
+338:Toleranz
+339:Visuelle Entfernung
+340:Absolutes RGB
+341:Visuell
+342:RGB
+343:Visuelle Faktoren:
+344:R: 0.213 G: 0.715 B: 0.072
+# Lines
+348:Ecken füllen
+# Ovals
+350:Relative Ecken
+351:Absolute Ecken
+352:Relativ
+353:Absolut
+# Spray Can
+355:Sigma:
+356:Farbratio:
+357:Druck:
+358:Mit Abstand verblassen
+# Text
+360:Schrift: 
+361:Stil: 
+362:Größe:
+363:Kursiv:
+364:Rotation:
+365:Glätten
+#
+# Add-on windows
+#
+370:Stop
+371:Info
+372:Anwenden
+#
+# Prefs window
+#
+380:Einstellungen
+381:Rückgängig
+382:Anwenden
+383:Zahl der Einträge im "Bild öffnen-Menü"
+384:Sprache:
+385:(Wird erst beim nächsten Start aktiv)
+386:Filtervorschaugröße:
+#
+# Magnify window
+410:Gitter aus 
+411:Gitter schwarz
+412:Gitter weiß
+#
+# Registration Window
+#
+420:Becasso 2.0 registrieren
+421:Becasso 1.4 gefunden.
+422:Dies ist ein kostenfreies Upgrade.
+423:Zum Registrieren bitte Becasso 1.5 CD-ROM einlegen
+424:Fertig
+425:Name:
+426:Registrieren
+427:Danke für Ihren Kauf von Becasso!
+428:Bitte registrieren Sie sich, indem Sie ihren Namen eingeben.
+429:Dies aktiviert die Vollversion
+430:Becasso 2.0 war vor-installiert,
+431:aber noch nicht registriert.
+432:Bitte warten Sie %d Sekunden…
+433:(Diese Verzögerung wird ausgeschaltet
+434:wenn Sie Becasso registrieren.)
+435:Auswahl immer invertieren
+436:PowerPC Hardware gefunden
+437:Dies ist ein kostenfreie Version.
+#
+# Tip of the Day
+#
+500:Tip des Tages
+501:Tips beim Programmstart anzeigen
+502:Nächster Tip
+503:Willkommen zu Becasso!\nIn diesem Fenster werden nützliche Tips beim Programmstart angezeigt.\nEs wird empfohlen diese zumindest einmal durchzulesen. 
+504:Haben Sie die Dokumentation gelesen? :-)\nSie ist verfügbar über das Menu "Über Becasso".
+505:Rechtsklicken auf eine Werkzeugschaltfläche öffnet das Attribut (Einstellungen) Fenster.
+506:Rechtsklicken auf eine Farbschaltfläche öffnet den umfassenden Farbeneditor.
+507:Der Mauszeiger zeigt den aktuellen Modus an (ein dünnes Kreuz für den Zeichenmodus, ein hohles Kreuz für den Auswahlmodus).
+508:Sie können Menüs aus dem Becasso Hauptfenster abreißen. Klicken Sie auf die entsprechende Schaltfläche und ziehen Sie mit der Maus weg. Becasso merkt sich ihre Positionen.
+509:Auswahlen sind keine Masken. Sie können ausserhalb eine Auswahl zeichnen.
+510:Eine Auswahl ist nicht binär. Ein Pixel kann "ein wenig" ausgewählt sein. In 256 Abstufungen von "gar nicht ausgewählt" bis "vollständig ausgewählt".
+511:Um das Konzept von Becassos's Auswahl schnell zu verstehen, öffnen Sie ein farbenfrohes Bild, zeichnen eine Auswahl mit dem Pinsel, und ziehen die Auswahl mit gedrückter Umschalttaste um zu kopieren/einzufügen. Sie sollten sehen, dass es "unscharf" ist.
+512:Wo es sinnvoll ist, können Add-Ons sowohl auf dem ausgewählen Bereich als auch auf die Auswahl selbst angewendet werden (im Anhängkeit vom Modus). Auf diese Weise können Sie eine verlaufende (Gradient) Auswahl erzeugen.
+513:Drücken sie die Tabulatortaste um schnell zwischen dem Zeichen- und Auswahlmodus umzuschalten.
+514:Im Auswahlmodus ist das Füllwerkzug äquivalent zum Zauberstab (Magic Wand).
+515:Die Auswahl wird nur invertiert angezeigt, wenn sich der Mauszeiger über dem Bild befindet. Dieses Verhalten kann in den Einstellungen geändert werden.
+516:Becasso kann als externer Editor von anderen Anwendungen aus benutzt werden (wie Gobe Productive).
+517:Wenn Sie einen schnellen Rechner haben, können Sie die Größe des  Vorschaubereichs eines Filters in den Einstellungen ändern. 
+518:Wird die Optionstaste gedrückt gehalten, verwandelt sich der Cursor in das Farbauswahlwerkzeug. 
+519:In den meisten Werkzeugen wird beim Zeichnen mit der rechten Maustaste, die Vordergrund- mit der Hintergrundfarbe gewechselt.  
+520:Solange eine Filter geöffnet ist, können Sie den Voranzeigebereich bei gedrückter Command (Alt) Taste mit der Maus verschieben.
+521:Die Cursortasten bewegen den Cursor um ein Pixel. Drücken Sie die Steuerungstaste für schnellere Bewegungen.
+522:Werden sowohl die Umschalt-, als auch die Optionstaste gedrückt, verwandelt sich der Mauszeiger in eine greifende Hand. Das Bild kann dann mit der Maus verschoben werden.  
+523:Das "WinGrab" Importierungs-Add-On ist ideal beim Schreiben von Softwaredokumentation. Es erlaubt den Inhalt eines Fensters zu importieren. 
+524:Das "VideoGrabber" Importierungs-Add-On in kombination mit einer Handkamera ist ideal um auszuprobieren wie ein Schnurbart an Ihnen aussehen würde.
+525:Becasso unterstützt Scripting. Es kann zum Beispiel verwendet werden um eine Menge von Bildern in ein anderes Format zu konvertieren.
+526:Becasso hat einen Translator für sein eigenes Dateiformat. Sie können Bilder mit anderen BeOS Benutzer austauschen, auch wenn diese nicht die registrierte Version besitzen.
+527:Eine kleine geschichtliche Trivialität: Becasso war das erste kommerziel erhältliche Zeichenprogramm für BeOS.
+528:Beim Exportieren in ein verlustbehaftetes Dateiformat (wie GIF), kann das Extrahieren der optimalen Farbpalette, gefolgt durch das Quantisieren die Bildqualität bedrächtlich verbessern (siehe Dokumentation für Beispiele).
+529:Jeder kann Becasso Add-Ons schreiben! Das API und Beispieleprogramme sind inkludiert.
+530:Das Farbauswahlwerkzeug funktioniert auch im Vergrößerungsfenster.
+531:Becasso kommt mit Web-sicheren Farbpaletten, die mit dem Farbeneditor geladen werden können. (Oder sie können Sie auch auf ein Farbschaltfläche mittels Drag and Drop ziehen).  
+532:Der Farbeneditor akzeptiert Color Drops von anderen Anwendungen und kann sie auch generieren (Wegenziehen eines Farbrechtecks in der unteren, linken Ecke).
+533:Beim Ziehen einer Farbe in eine Texteditor, wird die HTML hexadezimal Darstellung der Farbe eingefügt.
+534:Auch der BeOS Desktop akzeptiert Drag and Drop einer Farbe.
+535:Drag and Drop einer Farbe auf ein Bild füllt das Bild mit der Farbe.
+536:Der Befehl "Maus zentrieren" (Command-M) ist praktisch für das Zeichen von beispielsweise konzentrischen Kreisen. 
+

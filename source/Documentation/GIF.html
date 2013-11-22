@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>GIF Compression</title>
+</head>
+<body bgcolor="ffffff">
+
+<h1>GIF Compression</h1>
+
+The Graphics Interchange Format&copy; is a format for image files.  Although better formats are
+available, GIF<sup>sm</sup> is still the <i>de facto</i> standard for many web graphics.  It actually
+does a good job for graphics like (small) buttons and panels.  For images of photographic nature, the JPEG
+format is better suited.  The reason for this distinction is that the JPEG format uses a so-called 
+<i>lossy compression scheme</i>, which means that an image compressed with JPEG does not hold
+all details of the original image.  Depending on the quality setting (which is adjustable), a trade-off can be
+made between compactness of the resulting file and faithfulness to the original.  Due to the nature of the
+compression algorithm, JPEG is not particularly good at compressing graphics of "artificial" origin containing
+text, sharp edges, line art, etc., such as web buttons or business graphics.<p>
+The GIF format, on the contrary, offers <i>lossless compression</i>.  Due to its algorithm, GIF is best at
+compressing areas of (exactly) the same color (which hardly ever occur in photographic images).  A drawback
+of the GIF format is that it is limited to a palette of 256 colors.  To achieve better-looking results, you
+can use a technique called <i>dithering</i>, in which the inability of the human eye to exactly resolve
+adjacent pixels is taken advantage of to create the illusion of mixed colors (for example using 
+Becasso's <b>Quantize</b> add-on).  For even better results, the palette used for the
+quantization can be matched to best represent the colors used in the image by using Becasso's <b>Edit &gt; Extract
+Palette...</b> option.
+
+<h1>The Unisys Patent</h1>
+
+Unfortunately, the algorithm used for compression in GIF files (the so-called LZW algorithm) is covered
+by a patent held by Unisys.  This means distributing software that uses this algorithm is charged on a per-copy
+basis.<p>
+Because of this, the GIF Translator by Sum Software avoids the use of the LZW algorithm,
+exploiting a feature of the GIF format that allows exporting <i>uncompressed</i> files.  This way,
+the GIF Translator can be kept free.  The drawback, obviously, is larger files, which can be a rather
+important factor for web graphics.
+
+<h1>Third Party Compression Services</h1>
+
+Since the patent only covers the software using the algorithm and not the resulting image files
+themselves, nothing prevents you from loading the uncompressed GIF files into a commercial
+application that <i>does</i> license the algoritm, and writing them out again as compressed GIFs.<p>
+An interesting opportunity to compress your GIF files is the online compression service of
+<a href="http://www.gifwizard.com/pn=43051">GIF Wizard</a>.  You can specify a web site for them
+to check and recompress all GIF (and JPEG) files on it, or have them compress single files.
+<p>
+
+<TABLE CELLPADDING=0 CELLSPACING=0 BORDER=0 WIDTH=476><TR><TD> 
+<FORM METHOD=GET ACTION="http://www.gifwizard.com/PGW"> 
+<INPUT TYPE=hidden NAME=pn VALUE="43051"><INPUT TYPE=hidden name=task value=sitescanps> 
+<A href="http://www.gifwizard.com/pn=43051" target="_top"> 
+<IMG SRC="Images/gw_topa.gif" WIDTH=468 height=31 border=0 alt="GIF Wizard Free Site Survey!"><BR><IMG SRC="Images/gw_bottom.gif" WIDTH=185 HEIGHT=29 border=0></A> 
+<INPUT TYPE=text NAME=url VALUE="http://" size=22><INPUT TYPE=submit value="Go!"> 
+</FORM>
+</TD></TR></TABLE> 
+<p>
+Since the BeOS comes with a simple web server, called PoorMan, it is quite easy to use GIF Wizard:
+<ul>
+<li>Open PoorMan (it's in the Applications menu).  If it is launched for the first time, you can specify
+the directory containing the images you want to compress, or have it create the default directory.
+<li>Put your image files in the correct directory (the default directory for PoorMan is 
+<code>/boot/home/public_html</code>) or create links to your images in that directory.
+<li>Fill in your computer name or your IP address in the <code>http://</code> field in the banner above
+(for Dialup users, you can find your IP address in the Dialup Networking preferences panel or the Dialup
+Networking statistics panel).
+<li>Click the Go! button.
+<li>You will be taken to the GIF Wizard web site; further instructions can be found there.
+</ul>
+
+<hr> 
+<font size=2> 
+This documentation is &copy; 2000, <a href="http://www.sumware.demon.nl"><i>Sum 
+Software</i></a>.<br> 
+Last modification: 2 September 2000.<br> 
+Be and BeOS are registered trademarks of Be, Incorporated.  GIF is a 
+Service Mark property of CompuServe Incorporated.  All other trademarks used herein 
+belong to their respective owners. 
+</font>
+</body>
+</html>

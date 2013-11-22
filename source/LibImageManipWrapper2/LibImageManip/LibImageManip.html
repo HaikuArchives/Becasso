@@ -1,0 +1,517 @@
+<HTML>
+
+<HEAD><TITLE>Image manipulation library</TITLE></HEAD>
+
+<BODY>
+<H2>Image manipulation library</H2>
+
+<P><PRE>
+         File: LibImageManip.zip
+       Author: Edmund Vermeulen &lt;edmundv@xs4all.nl&gt;
+      Release: 1.1.0 (Jan 26th 2000)
+Compatibility: BeOS R4 for PowerPC and Intel
+     Location: contrib/libraries
+  Description: Image manipulation library
+        Notes: Public domain
+</PRE></P>
+
+<HR><BR
+
+<H3>Contents</H3>
+
+<UL>
+  <LI> <A HREF="#intro">Introduction</A>
+  <LI> <A HREF="#accessor">The bitmap accessor class</A>
+  <LI> <A HREF="#bbitmap">The BBitmapAccessor class</A>
+  <LI> <A HREF="#add-on">The add-on interface</A>
+  <LI> <A HREF="#application">The application interface</A>
+  <LI> <A HREF="#extensions">Standard io extensions</A>
+  <LI> <A HREF="#history">History</A>
+  <LI> <A HREF="#installation">Installation</A>
+  <LI> <A HREF="#copyleft">Public domain</A>
+</UL>
+
+<HR><BR
+
+<H3><A NAME="intro">Introduction</A></H3>
+
+<P><DFN>LibImageManip</DFN> is my attempt at creating a library for image manipulation
+add-ons that is simple to use. It is modelled after, and based on, the
+<A HREF="http://www.be.com/beware/Datatypes/Datatypes.lib.html">datatypes library</A> (now
+<A HREF="http://www.be.com/developers/developer_library/translation_kit.html">the translation kit</A>)
+by Jon Watte.</P>
+
+<P>The library basically supports two kinds of add-ons, known as <DFN>manipulators</DFN> and
+<DFN>converters</DFN>.</P>
+
+<DL>
+  <DT> <DFN>Manipulators</DFN>
+  <DD> A manipulator add-on takes a source bitmap and then manipulates it
+       any way it wants. Examples would be: gamma correct, twirl, ripple,
+       oil paint, negative, flip horizontal, etc.
+
+  <DT> <DFN>Converters</DFN>
+  <DD> A converter add-on takes a source bitmap and then converts it to
+       a new bitmap. Examples would be: scale, dither to 8-bit, rotate 90
+       degrees, crop, etc. Basically anything that needs a different size
+       or color depth.
+</DL>
+
+<P>The library and its add-on interface are designed to be as simple as possible
+in order to encourage anyone to create add-ons or use the library in his/her
+applications. The library is completely <A HREF="#copyleft">free</A> and comes
+with full source code.</P>
+
+<HR><BR>
+
+<H3><A NAME="accessor">The bitmap accessor class</A></H3>
+
+<P>The image manipulation library uses a proxy class for accessing bitmaps. This
+has several advantages over directly using the <CODE>BBitmap</CODE> class:</P>
+
+<UL>
+  <LI> The data doesn't have to be in the <CODE>BBitmap</CODE> format.
+  <LI> Not all bitmap data has to be in memory at the same time.
+  <LI> Progressive display is possible by sending messages from within the
+       accessor for the areas that have been changed.
+</UL>
+
+<P>The proxy class is an abstract base class with the following interface:</P>
+
+<PRE>
+  class BitmapAccessor
+  {
+  public:
+      virtual ~BitmapAccessor();
+      virtual bool IsValid() = 0;
+      virtual bool CreateBitmap(BRect bounds, color_space space) = 0;
+      virtual BRect Bounds() = 0;
+      virtual color_space ColorSpace() = 0;
+      virtual float BytesPerPixel(); 
+      virtual void *AccessBits(BRect area, int32 *rowBytes) = 0;
+      virtual void BitsNotChanged() = 0;
+  };
+</PRE>
+
+<P>The <CODE>IsValid()</CODE>, <CODE>Bounds()</CODE>, and <CODE>ColorSpace()</CODE>
+functions work the same as the equivalent functions in the <CODE>BBitmap</CODE> class.
+Beware that <CODE>Bounds()</CODE> may return a rectangle that is not positioned
+at (0, 0).</P>
+
+<P>The <CODE>CreateBitmap()</CODE> function is called from within the <CODE>Convert()</CODE>
+function by a converter add-on to create the destination bitmap.</P>
+
+<P>The <CODE>BytesPerPixel()</CODE> function is used to get the number of bytes in
+a single pixel. If the pixel size is larger than you would expect then you should
+simply skip the extra bytes at the end to get to the next pixel. This can be the case
+for 'multi-channel' bitmaps, where several channels of data are interleaved. For
+example, when accessing only the blue part of a 32-bit bitmap as if it was an 8-bit
+grayscale bitmap. For monochrome bitmaps the number of bytes per pixel is 1/8th.
+These bitmaps are special. For instance, you can only access the bits on their
+natural alignment, and not in the middle of a chunk.</P>
+
+<P>With the <CODE>AccessBits()</CODE> function you gain access to the raw data
+of a certain area of the bitmap. The number of bytes per row is returned in the
+<VAR>rowBytes</VAR> variable. You can use this number to skip to the next row of
+pixels if you accessed more then one row. The pointer returned by <CODE>AccessBits()</CODE>
+will remain valid until another call to <CODE>AccessBits()</CODE> or to the destructor
+is made. For efficienscy reasons you should keep the requested area small.</P>
+
+<HR><BR>
+
+<H3><A NAME="bbitmap">The BBitmapAccessor class</A></H3>
+
+<P>For applications there is a class for accessing <CODE>BBitmaps</CODE> implemented
+in the library. It is called <CODE>BBitmapAccessor</CODE>, and besides the normal
+bitmap accessor functions, it has the following extra functions:</P>
+
+<PRE>
+  class BBitmapAccessor : public BitmapAccessor
+  {
+  public:
+     // Constructor
+     BBitmapAccessor(BBitmap *bitmap = NULL, const BRect *section = NULL);
+
+     // Overriden BitmapAccessor functions
+     ...
+
+     // Get pointer to the BBitmap
+     virtual BBitmap *Bitmap() const;
+
+     // Get/set if the BBitmap should be deleted at destruction time
+     virtual bool Dispose() const;
+     virtual void SetDispose(bool flag);
+
+     // Set invokers for automatically sending messages when a bitmap
+     // is created and/or when it is updated
+     virtual void SetInvokers(BInvoker *bitmapCreated, BInvoker *bitmapUpdated);
+
+  private:
+     ...
+};
+</PRE>
+
+<P>The <CODE>BBitmap</CODE> to accesss can be specified in the constructor. Optionally,
+access can be restricted to a given rectangular section. By default, the ownership of the
+<CODE>BBitmap</CODE> stays with the caller. If you want the <CODE>BBitmapAccessor</CODE>
+object to delete the bitmap for you then you should call <CODE>SetDispose(true)</CODE> on it.
+If a new <CODE>BBitmap</CODE> is created through <CODE>CreateBitmap()</CODE> then the
+ownership initially lies with the <CODE>BBitmapAccessor</CODE> object. Call
+<CODE>SetDispose(false)</CODE> on it if you don't want it to be deleted for you.</P>
+
+<P>You can set invokers for automatically sending messages when a bitmap is created and/or
+when it is updated. You will be notified by the invoker's message with some extra data
+added to it. This will be respectively the newly created bitmap pointer, or a rectangle
+of the updated area. The data can be extracted from the message as follows:</P>
+
+<PRE>
+  BBitmap *new_bitmap;
+  msg->FindPointer("bitmap", reinterpret_cast<void **>(&new_bitmap));
+
+  BRect update_rect;
+  msg->FindRect("rect", &update_rect);
+</PRE>
+
+<P>The invokers will automatically be deleted by the <CODE>BBitmapAccessor</CODE> object.</P>
+
+<HR><BR>
+
+<H3><A NAME="add-on">The add-on interface</A></H3>
+
+<P>Here is a list of all exported data and functions of an image manipulation add-on.</P>
+
+<PRE>
+  const char addonName[];  /* required, C string, ex "Gamma Correct" */
+  const char addonInfo[];  /* required, descriptive C string, ex "Makes images brighter. Written by Slartibardfast." */
+  const char addonCategory[]; /* optional, C string, ex "Color" */
+  int32 addonVersion;  /* required, integer, ex 100 */
+
+  status_t Manipulate(
+      BitmapAccessor *sourceBitmap,
+      BMessage *ioExtension,        /* can be NULL */
+      bool checkOnly);
+
+  status_t Convert(
+      BitmapAccessor *sourceBitmap,
+      BitmapAccessor *destBitmap,   /* call CreateBitmap() on this */
+      BMessage *ioExtension,        /* can be NULL */
+      bool checkOnly);
+
+  status_t MakeConfig(  /* optional */
+      BMessage *ioExtension,        /* can be NULL */
+      BView **outView);
+
+  status_t GetConfigMessage(  /* optional */
+      BMessage *ioExtension,
+      BMessage *ioCapability);
+</PRE>
+
+<P>The <CODE>addonName</CODE>, <CODE>addonInfo</CODE>, <CODE>addonCategory</CODE>,
+and <CODE>addonVersion</CODE> are exported data that contain user accessable
+information about the add-on.</P>
+
+<P>The <CODE>Manipulate()</CODE> and <CODE>Convert()</CODE> functions are where
+the real work is done. Depending on which function an add-on exports, it
+is considered to be an image manipulator or image converter. Both functions
+can be called in normal or in 'check-only' mode. This last mode is used to
+ask an add-on if it supports a certain source bitmap and io extension.
+The add-on should return <CODE>B_NOT_ALLOWED</CODE> if it doesn't.</P>
+
+<P>Both the <CODE>Manipulate()</CODE> and <CODE>Convert()</CODE> functions take
+a pointer to a source bitmap accessor. The <CODE>Convert()</CODE> function
+also take a pointer to an empty bitmap accessor object on which it will call
+<CODE>CreateBitmap()</CODE> to create the destination bitmap. The
+<VAR>ioExtension</VAR> argument is optional, and may be ignored by the
+add-on.</P>
+
+<P>The <VAR>ioExtension</VAR> message can be used for passing add-on specific
+configuration settings as explained below. It can also be used to, for
+example, ask the add-on to only affect a certain rectangle instead of the
+whole bitmap. Some <A HREF="#extensions">standard io extensions</A> are
+defined for this purpose. The add-on should add the io extensions that it
+supports to the <VAR>ioCapability</VAR> message in its <CODE>GetConfigMessage()</CODE>
+function.</P>
+
+<P>The last two functions are optional. <CODE>MakeConfig()</CODE> allows the
+add-on to create a <CODE>BView</CODE> with controls to let the user
+configure the add-on's settings. <CODE>GetConfigMessage()</CODE> is used to
+get the current settings and supported capabilities from the add-on. The
+settings are added to the <VAR>ioExtension</VAR> message. This message can
+be stored and passed back to the add-on through the <CODE>Manipulate()</CODE>
+or <CODE>Convert()</CODE> functions. The capabilities are added as name and
+type code pairs to the <VAR>ioCapability</VAR> message. This can be used
+by an application to check if an add-on supports a certain io extension.</P>
+
+<HR><BR>
+
+<H3><A NAME="application">The application interface</A></H3>
+
+<P>Here is a list of the functions that an application can use in the image
+manipulation library.</P>
+
+<PRE>
+  /* Get the current version of the library and the minimum
+     version with which it is still compatible */
+  const char *
+  Image_Version(
+      int32 *curVersion,             /* will receive the current version */
+      int32 *minVersion);            /* will receive the minimum version */
+
+  /* Initialize the library before usage */
+  status_t
+  Image_Init(
+      const char *loadPath);         /* NULL for the default */
+
+  /* Shutdown the library after usage */
+  status_t
+  Image_Shutdown();
+
+  /* Get all image manipulators that support a given source bitmap
+     and io extension */
+  status_t
+  Image_GetManipulators(
+      BitmapAccessor *sourceBitmap,  /* NULL to get all manipulators */
+      BMessage *ioExtension,         /* can be NULL */
+      image_addon_id **outList,      /* call delete[] on it when done */
+      int32 *outCount);              /* will receive amount in list */
+
+  /* Get all image converters that support a given source bitmap
+     and io extension */
+  status_t
+  Image_GetConverters(
+      BitmapAccessor *sourceBitmap,  /* NULL to get all converters */
+      BMessage *ioExtension,         /* can be NULL */
+      image_addon_id **outList,      /* call delete[] on it when done */
+      int32 *outCount);              /* will receive amount in list */
+
+  /* Get info on an image manipulator or image converter add-on */
+  status_t
+  Image_GetAddonInfo(
+      image_addon_id imageAddon,
+      const char **addonName,        /* will receive pointer to the name */
+      const char **addonInfo,        /* will receive pointer to the info */
+      const char **addonCategory     /* will receive pointer to the category */
+      int32 *addonVersion);          /* will receive the version */
+
+  /* Let an add-on manipulate a bitmap */
+  status_t
+  Image_Manipulate(
+      image_addon_id imageManipulator,
+      BitmapAccessor *sourceBitmap,
+      BMessage *ioExtension,         /* can be NULL */
+      bool checkOnly = false);
+
+  /* Let an add-on convert a bitmap to another bitmap */
+  status_t
+  Image_Convert(
+      image_addon_id imageConverter,
+      BitmapAccessor *sourceBitmap,
+      BitmapAccessor *destBitmap,    /* will be called CreateBitmap() on */
+      BMessage *ioExtension,         /* can be NULL */
+      bool checkOnly = false);
+
+  /* Let an add-on make a BView that allows the user to configure it */
+  status_t
+  Image_MakeConfigurationView(
+      image_addon_id imageAddon,
+      BMessage *ioExtension,         /* can be NULL */
+      BView **configView);           /* will receive pointer to the new BView */
+
+  /* Get configuration and capabilities from an add-on */
+  status_t
+  Image_GetConfigurationMessage(
+      image_addon_id imageAddon,
+      BMessage *ioExtension,         /* message to add config info to */
+      BMessage *ioCapability);       /* message to add capability info to */
+
+  /* Create a new BBitmapAccessor object; mimics the constructor */
+  BBitmapAccessor *
+  Image_CreateBBitmapAccessor(
+      BBitmap *bitmap = NULL,
+      const BRect *section = NULL);
+</PRE>
+
+<P>To use the library in your own applications you have two options:</P>
+
+<DL>
+  <DT> <DFN>Normal linkage</DFN>
+  <DD> Include the file 'ImageManip.h', and link directly against the library. Just add
+       the file 'libimagemanip.so' to your project by dropping it on the BeIDE.
+  <DT> <DFN>Weak linkage</DFN>
+  <DD> This allows applications to run even if libimagemanip.so isn't installed.
+       Add the file 'ImportImageManip.cpp' to your application's project.
+       Be careful to define the symbol <CODE>_IMPEXP_IMAGEMANIP</CODE> to nothing
+       before including any of the library's header files. With weak linkage, you
+       have to use the <CODE>Image_CreateBBitmapAccessor()</CODE> function to create
+       new <CODE>BBitmapAccessor</CODE> objects.
+</DL>
+
+<HR><BR>
+
+<H3><A NAME="extensions">Standard io extensions</A></H3>
+
+<P><TABLE BORDER>
+<TR>
+  <TH> Name
+  <TH> Type
+  <TH> Description
+<TR>
+  <TD> "color_space"
+  <TD> <CODE>B_INT32_TYPE</CODE>
+  <TD> If possible, create the new bitmap with this color space when you call
+       <CODE>CreateBitmap()</CODE>.
+<TR>
+  <TD> "selection_rect"
+  <TD> <CODE>B_RECT_TYPE</CODE>
+  <TD> Selection rectangle; the pixels that make up the edge of the rectangle
+       are considered included in the rectangle.
+<TR>
+  <TD> "selection_map"
+  <TD> <CODE>B_POINTER_TYPE</CODE>
+  <TD> Selection bitmap; the pointer is to a <CODE>BitmapAccessor</CODE> object
+       which defines an "alpha" channel to determine selected-ness.
+<TR>
+  <TD> "use_alpha"
+  <TD> <CODE>B_BOOL_TYPE</CODE>
+  <TD> Use the alpha channel for determining selected-ness (for <CODE>B_RGBA32</CODE>
+       and friends).
+<TR>
+  <TD> "progress_invoker"
+  <TD> <CODE>B_POINTER_TYPE</CODE>
+  <TD> Pointer to a BInvoker for sending progress messages with the amount of
+       completion added. E.g. <CODE>AddFloat("completion", 0.5)</CODE> for 50%.
+</TABLE></P>
+
+<HR><BR>
+
+<H3><A NAME="history">History</A></H3>
+
+<P>Release 1.1.0 (Jan 26th 2000)</P>
+
+<UL>
+  <LI> Add-ons are now loaded on demand. This speeds up program start-up, and decreases
+       memory usage. Suggested by Scott Lindsey. Info about the available add-ons is stored
+       in the settings file '/boot/home/config/settings/ImageManip Settings'. Checks are made
+       to see is the add-on files have been changed since writing the settings.
+</UL>
+
+<P>Release 1.0.0 (Nov 18th 1999)</P>
+
+<UL>
+  <LI> Upped the version number to 1.0.0, because Gobe Productive is going to use
+       the image manipulation library.
+  <LI> <CODE>BitmapAccessor::BytesPerPixel()</CODE> now uses the OS function
+       <CODE>get_pixel_size_for()</CODE>.
+  <LI> Thanks to Scott Lindsey for compiling the PowerPC versions, since my BeBox is broken.
+</UL>
+
+<P>Release 0.6.1 (Jan 4th, 1999)</P>
+
+<UL>
+  <LI> Ported to BeOS R4.
+  <LI> Included GammaCorrect image manipulator add-on.
+</UL>
+
+<P>Release 0.6.0 (Aug 23th, 1998)</P>
+
+<UL>
+  <LI> In, out, make your mind up! I moved the implementation of the bitmap
+       accessor classes back into the library. You should remove the 'BitmapAccessor.cpp'
+       file from your application's project again. Suggested by Jon Watte.
+  <LI> Added an extra exported function for creating a <CODE>BBitmapAccessor</CODE>
+       object. This is needed when using weak linkage with the library.
+  <LI> Added a standard io extension for progress indication. Suggested by Scott
+       Lindsey.
+  <LI> Removed the <VAR>readOnly</VAR> argument from <CODE>BitmapAccessor::AccessBits()</CODE>.
+       Instead, you can now call the new <CODE>BitsNotChanged()</CODE> function when
+       you are finished with the bits, and didn't change them. This is better then
+       having to know beforehand that you aren't going to change anything. Suggested
+       by Jon Watte.
+  <LI> Added a <VAR>section</VAR> <CODE>BRect</CODE> pointer argument to the constructor of
+       <CODE>BBitmapAccessor</CODE>. If specified, it will limit access to the given area. I.e.
+       <CODE>Bounds()</CODE> will return a smaller area. Suggested by Jon Watte.
+  <LI> Fixed problems in <CODE>BBitmapAccessor::AccessBits()</CODE> with fractional
+       <CODE>BRect</CODE> values.
+  <LI> Added an example application (<DFN>ImageManipExample</DFN>) with source code
+       to the distribution.
+  <LI> Now scans the library path when loading the library as an add-on. The code
+       for this was snipped from Jon Watte's libprefs. Suggested by Jon Watte.
+</UL>
+
+<P>Release 0.5.0 (Aug 9th, 1998)</P>
+
+<UL>
+  <LI> Wrote code to import the functions from the library as an add-on. This
+       allows applications to run even if libimagemanip.so isn't installed.
+       Suggested by Jon Watte.
+  <LI> Removed bitmap accessor implementations from the library. You will have to
+       add the file 'BitmapAccessor.cpp' to your application's project.
+  <LI> Removed <CODE>const</CODE> restrictions in the <CODE>BitmapAccessor</CODE>
+       abstract base class.
+  <LI> Add-ons may export a C string with the category which they fall into.
+       Examples of such categories would be Color, Effect, Filter, Composite, etc.
+       Suggested by Trent Trautman and Scott Lindsey.
+  <LI> Add-ons can be run in check-only mode from the library's API. Suggested
+       by Scott Lindsey.
+</UL>
+
+<P>Release 0.4.0 (Jul 13th, 1998)</P>
+
+<UL>
+  <LI> Added some extra virtuals to the proxy class for possible future expansion.
+       Suggested by Jon Watte.
+  <LI> <CODE>BBitmapAccessor</CODE> is implemented in the library instead of the
+       header file, and has a <CODE>SetInvokers()</CODE> function for setting
+       invokers that send messages when the bitmap is created and when it is updated.
+  <LI> Added more color spaces to the <CODE>BytesPerPixel()</CODE> function.
+  <LI> Rewrote the example add-ons so that they only access one row of pixels at a time.
+  <LI> Added some standard io extensions to the documentation. Suggested by Jon Watte.
+  <LI> The 'MakeGray' add-on now understands the 'selection_rect' io extension.
+</UL>
+
+<P>Release 0.3.0 (Jul 6th, 1998)</P>
+
+<UL>
+  <LI> Introduced a proxy class for accessing bitmaps. Suggested by Jon Watte.
+  <LI> Ditched the talkback invokers. Not needed any more because of the proxy class.
+  <LI> Added <VAR>ioCapability</VAR> argument to <CODE>GetConfigMessage()</CODE>.
+       This allows an application to check if an add-on supports a certain io
+       extension. Suggested by Jon Watte.
+</UL>
+
+<P>Release 0.2.0 (Jun 22nd, 1998)</P>
+
+<UL>
+  <LI> First public (alpha) release.
+</UL>
+
+<HR><BR>
+
+<H3><A NAME="installation">Installation</A></H3>
+
+<P>To be able to use the library, you should copy the file 'libimagemanip.so'
+to the folder 'boot/home/config/lib'. You also need some add-ons in the
+folder 'boot/home/config/add-ons/ImageManip'.</P>
+
+<HR><BR>
+
+<H3><A NAME="copyleft">Public domain</A></H3>
+
+<P>The image manipulation library was written by Edmund Vermeulen, based on the
+original code of the datatypes library written by Jon Watte.</P>
+
+<P>The library, its example application, and the example add-ons are public domain.
+There are no restrictions on distribution or usage.</P>
+
+<P>This should ensure the future of the library, even if for some reason I should
+decide to stop maintaining it. In the mean time I would like to receive any
+comments or suggestions that you might have. Please write to me at
+<A HREF="mailto:edmundv@xs4all.nl">edmundv@xs4all.nl</A>.</P>
+
+<HR><BR>
+
+<A HREF="http://www.xs4all.nl/~edmundv/">Back to Edmund's home page</A>
+
+</BODY>
+
+</HTML>

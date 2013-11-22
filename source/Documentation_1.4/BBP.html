@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>BBitmap Exchange Protocol</title>
+<h1>BBitmap Exchange Protocol</h1>
+</head>
+<body bgcolor="#ffffff">
+<a name="Introduction"><h2>Introduction</h2></a>
+
+This document describes the protocol for using <b>Becasso</b> as an
+external bitmap editor from your application.  The protocol consists
+of a set of <code>BMessage</code>s and was jointly developed with
+Attila Mezei for use with <a 
+href="http://w3.datanet.hu/~mezeia/IE"><b>Interface Elements</b></a>.
+
+<h2>Description of the Protocol</h2>
+
+To open your bitmap in <b>Becasso</b>, send a
+<code>BBP_OPEN_BBITMAP</code> message with the following contents:<p>
+<table><tr>
+<td>Type</td><td>Name</td><td>Description</td></tr>
+<tr>
+<td><code>B_MESSENGER_TYPE</code></td>
+<td><code>target</code></td>
+<td>The target in your application that should receive any further
+correspondence with <b>Becasso</b></td></tr>
+<tr>
+<td><code>B_MESSAGE_TYPE</code></td>
+<td><code>BBitmap</code></td>
+<td><code>BBitmap</code> archive of the bitmap</td></tr>
+<tr>
+<td><code>B_FLOAT_TYPE</code></td>
+<td><code>zoom</code></td>
+<td>(optional) zooming factor, e.g. 2 means 200%</td></tr>
+<tr>
+<td><code>B_STRING_TYPE</code></td>
+<td><code>name</code></td>
+<td>(optional) name of the bitmap to show in the <b>Becasso</b> window
+title</td></tr>
+</table><p>
+
+<b>Becasso</b> will reply to the specified target with 
+<code>BBP_BBITMAP_OPENED</code>.  The message contains a
+<code>B_MESSENGER_TYPE</code> named "<code>target</code>" which you
+should send any further correspondence to.  If this
+<code>BMessenger</code> is absent, an error occurred.<p>
+
+When the user selects Save, <b>Becasso</b> will send you the edited
+bitmap back in a <code>BBP_SEND_BBITMAP</code> message, which contains
+the bitmap as an archive in a <code>B_MESSAGE_TYPE</code> entry named
+"<code>BBitmap</code>".  You can request the bitmap at any time by
+sending the canvas window a <code>BBP_REQUEST_BBITMAP</code>
+message.<p>
+
+When the user closes the <b>Becasso</b> canvas window, you will
+receive a <code>BBP_BBITMAP_CLOSED</code> message.<p>
+
+You can send <b>Becasso</b> a <code>BBP_REPLACE_BBITMAP</code> message
+with the following contents:<p>
+<table><tr>
+<td>Type</td><td>Name</td><td>Description</td></tr>
+<tr>
+<td><code>B_MESSAGE_TYPE</code></td>
+<td><code>BBitmap</code></td>
+<td><code>BBitmap</code> archive of the bitmap</td></tr>
+<tr>
+<td><code>B_FLOAT_TYPE</code></td>
+<td><code>zoom</code></td>
+<td>(optional) zooming factor, e.g. 2 means 200%</td></tr>
+<tr>
+<td><code>B_STRING_TYPE</code></td>
+<td><code>name</code></td>
+<td>(optional) name of the bitmap to show in the <b>Becasso</b> window
+title</td></tr>
+</table><p>
+
+When <b>Becasso</b> receives this, the current canvas will be replaced
+by the new bitmap you just sent.
+
+<b>Becasso</b> will check whether any messages received have their
+sender waiting (i.e. in synchronous mode) and will reply to the
+messages directly if so.
+
+The messages are defined in the file <code>BBP.h</code>.
+
+<h2>Code Example</h2>
+
+To use the <b>BBitmap Exchange Protocol</b> from your own application,
+the code would look something like this:
+
+<pre>
+team_id becasso_team;
+
+BMessage init (BBP_OPEN_BBITMAP);
+init.AddMessenger ("target", BMessenger (this, NULL));
+
+BMessage archive;
+my_bitmap->Archive (&archive, false);
+
+init.AddMessage ("BBitmap", &archive);
+init.AddString ("name", "My Bitmap");
+
+if (smallbitmap)
+    init.AddFloat ("zoom", 2.0);
+
+BMessenger becasso = BMessenger ("application/x-sum-becasso");
+
+if (becasso.IsValid())    // Becasso is already running
+    becasso.SendMessage (&init);
+else
+{
+    if (be_roster->Launch ("application/x-sum-becasso", 
+                           &init, 
+                           &becasso_team) != B_OK)
+        (new BAlert ("", 
+                     "Error Launching Becasso - visit http://www.sumware.demon.nl", 
+                     "OK")->Go();
+}
+</pre>
+
+<font size=2>Last modification 15 November 1999<br>
+Copyright &copy; 1998, 1999 Sum Software and Attila Mezei</font>
+</body>
+</html>

@@ -1,0 +1,44 @@
+This is Becasso version 2.0 as of December 24th, 2001.
+
+This software and the accompanying documentation is copyright (c) 1996-2001
+by Sum Software, The Netherlands.
+
+This software package comes as is, and Sum Software cannot be held
+responsible for any damage whatsoever, resulting from the use or mis-use
+of Becasso, whether to hardware or to software, or for any damage incurred
+through loss of data or otherwise.
+
+You are entitled to make one single copy of the files contained in
+this package for backup purposes.  This package is intended for a
+single user license.
+
+
+Translators
+
+Becasso comes with a set of Translators.  The installer will not overwrite any
+existing Translators (with the exception of the Becasso native Translator), even
+if these were installed along with a previous version of Becasso.  Instead, the 
+installer will ask you whether the current Translator may be replaced.  In most 
+cases, it should be safe to click the "Yes" button.  Only if you have installed a
+third party Translator (such as a GIF Translator) which you want to keep and
+use instead of Becasso's, you can skip installing that particular Translator.
+
+
+Trial version - important notice
+
+Note that to unlock Becasso, you will need a Keyfile.  Such a Keyfile can be purchased
+online.  Without such a Keyfile, Becasso will function in "trial" or "demo" mode.  You will be able to use all functionality, but
+
+• Exported and printed images will have the text 
+   "Becasso" printed diagonally across the image
+• Images saved in Becasso's native file format
+   will have an "invisible" watermark, which only
+   becomes visible when loading the files in other
+   applications.  These native files can later be
+   loaded and saved again with a registered version
+   of Becasso to remove the watermark.
+
+For details, see http://www.sumware.demon.nl/products/becasso/register.html, or
+select the "Register Online" menu item.
+
+For any questions or remarks please contact becasso@sumware.demon.nl

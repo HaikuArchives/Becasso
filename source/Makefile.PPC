@@ -1,0 +1,169 @@
+# Makefile for Becasso
+
+CC = mwcc -c
+AS = nasm -f elf 
+#SLD = gcc -lbe -Xlinker -x -nostart -Xlinker -soname=
+SLD = mwld -lbe -xms -export pragma 
+
+ADDONDIR = add-ons/
+
+#CFLAGS = -Wall -Wno-multichar -Wno-ctor-dtor-privacy -Wbad-function-cast\
+#	-Wconversion  -Wextern-inline  -Wwrite-strings -Woverloaded-virtual -O3\
+#	-fomit-frame-pointer -fno-pic -ffast-math\
+#	-march=pentiumpro -mcpu=pentiumpro
+CFLAGS = -O7
+
+
+addons: $(ADDONDIR)Blur $(ADDONDIR)CaptureTest $(ADDONDIR)Diffuse \
+	$(ADDONDIR)Gaussian $(ADDONDIR)Gradient $(ADDONDIR)Mandelbrot \
+	$(ADDONDIR)MotionBlur $(ADDONDIR)Noise $(ADDONDIR)OilPaint \
+	$(ADDONDIR)Ripple $(ADDONDIR)Scale $(ADDONDIR)Tile $(ADDONDIR)Wave \
+	$(ADDONDIR)Quantize $(ADDONDIR)Palmcam $(ADDONDIR)ColorCurves \
+	$(ADDONDIR)Negate $(ADDONDIR)Solarize $(ADDONDIR)DuoTone \
+	$(ADDONDIR)BumpMap $(ADDONDIR)WinGrab $(ADDONDIR)VideoGrabber
+
+Blur.o: Blur.cpp
+	$(CC) $(CFLAGS) Blur.cpp
+$(ADDONDIR)Blur: Blur.o
+	$(SLD) -o Blur Blur.o _APP_
+	mv Blur add-ons
+
+CaptureTest.o: CaptureTest.cpp
+	$(CC) $(CFLAGS) CaptureTest.cpp
+$(ADDONDIR)CaptureTest: CaptureTest.o
+	$(SLD) -o CaptureTest CaptureTest.o _APP_
+	mv CaptureTest add-ons
+
+Diffuse.o: Diffuse.cpp
+	$(CC) $(CFLAGS) Diffuse.cpp
+$(ADDONDIR)Diffuse: Diffuse.o
+	$(SLD) -o Diffuse Diffuse.o _APP_
+	mv Diffuse add-ons
+
+Gaussian.o: Gaussian.cpp
+	$(CC) $(CFLAGS) Gaussian.cpp
+$(ADDONDIR)Gaussian: Gaussian.o
+	$(SLD) -o Gaussian Gaussian.o _APP_
+	mv Gaussian add-ons
+
+Gradient.o: Gradient.cpp
+	$(CC) $(CFLAGS) Gradient.cpp
+$(ADDONDIR)Gradient: Gradient.o
+	$(SLD) -o Gradient Gradient.o _APP_
+	mv Gradient add-ons
+
+mandelbrot.o: mandelbrot.cpp
+	$(CC) $(CFLAGS) mandelbrot.cpp
+$(ADDONDIR)Mandelbrot: mandelbrot.o
+	$(SLD) -o Mandelbrot mandelbrot.o _APP_
+	mv Mandelbrot add-ons
+
+MotionBlur.o: MotionBlur.cpp
+	$(CC) $(CFLAGS) MotionBlur.cpp
+$(ADDONDIR)MotionBlur: MotionBlur.o
+	$(SLD) -o MotionBlur MotionBlur.o _APP_
+	mv MotionBlur add-ons
+
+Noise.o: Noise.cpp
+	$(CC) $(CFLAGS) Noise.cpp
+$(ADDONDIR)Noise: Noise.o
+	$(SLD) -o Noise Noise.o _APP_
+	mv Noise add-ons
+
+OilPaint.o: OilPaint.cpp
+	$(CC) $(CFLAGS) OilPaint.cpp
+$(ADDONDIR)OilPaint: OilPaint.o
+	$(SLD) -o OilPaint OilPaint.o _APP_
+	mv OilPaint add-ons
+
+Ripple.o: Ripple.cpp
+	$(CC) $(CFLAGS) Ripple.cpp
+$(ADDONDIR)Ripple: Ripple.o
+	$(SLD) -o Ripple Ripple.o _APP_
+	mv Ripple add-ons
+
+Scale.o: Scale.cpp
+	$(CC) $(CFLAGS) Scale.cpp
+$(ADDONDIR)Scale: Scale.o
+	$(SLD) -o Scale Scale.o _APP_
+	mv Scale add-ons
+
+Tile.o: Tile.cpp
+	$(CC) $(CFLAGS) Tile.cpp
+$(ADDONDIR)Tile: Tile.o
+	$(SLD) -o Tile Tile.o _APP_
+	mv Tile add-ons
+
+Wave.o: Wave.cpp
+	$(CC) $(CFLAGS) Wave.cpp
+$(ADDONDIR)Wave: Wave.o
+	$(SLD) -o Wave Wave.o _APP_
+	mv Wave add-ons
+
+Quantize.o: Quantize.cpp
+	$(CC) $(CFLAGS) Quantize.cpp
+$(ADDONDIR)Quantize: Quantize.o
+	$(SLD) -o Quantize Quantize.o _APP_
+	mv Quantize add-ons
+
+Palmcam.o: Palmcam.cpp
+	$(CC) $(CFLAGS) Palmcam.cpp
+dsc.o: dsc.c
+	$(CC) $(CFLAGS) dsc.c
+dc1000.o: dc1000.c
+	$(CC) $(CFLAGS) dc1000.c
+$(ADDONDIR)Palmcam: Palmcam.o dsc.o dc1000.o
+	$(SLD) -o Palmcam Palmcam.o dsc.o dc1000.o -ldevice -ltranslation _APP_
+	mv Palmcam add-ons
+
+ColorCurves.o: ColorCurves.cpp
+	$(CC) $(CFLAGS) ColorCurves.cpp
+#Colorcurves_x86.o: Colorcurves_x86.asm
+#	$(AS) Colorcurves_x86.asm
+$(ADDONDIR)ColorCurves: ColorCurves.o
+	$(SLD) -o ColorCurves ColorCurves.o _APP_
+	mv ColorCurves add-ons
+
+Negate.o: Negate.cpp
+	$(CC) $(CFLAGS) Negate.cpp
+$(ADDONDIR)Negate: Negate.o
+	$(SLD) -o Negate Negate.o _APP_
+	mv Negate add-ons
+
+Solarize.o: Solarize.cpp
+	$(CC) $(CFLAGS) Solarize.cpp
+$(ADDONDIR)Solarize: Solarize.o
+	$(SLD) -o Solarize Solarize.o _APP_
+	mv Solarize add-ons
+
+Sepia.o: Sepia.cpp
+	$(CC) $(CFLAGS) Sepia.cpp
+$(ADDONDIR)DuoTone: Sepia.o
+	$(SLD) -o DuoTone Sepia.o _APP_
+	mv DuoTone add-ons
+
+MultiGradient.o: MultiGradient.cpp
+	$(CC) $(CFLAGS) MultiGradient.cpp
+$(ADDONDIR)MultiGradient: MultiGradient.o
+	$(SLD) -o MultiGradient MultiGradient.o _APP_
+	mv MultiGradient add-ons
+
+BumpMap.o: BumpMap.cpp
+	$(CC) $(CFLAGS) BumpMap.cpp
+$(ADDONDIR)BumpMap: BumpMap.o
+	$(SLD) -o BumpMap BumpMap.o _APP_
+	mv BumpMap add-ons
+
+WinGrab.o: WinGrab.cpp
+	$(CC) $(CFLAGS) WinGrab.cpp
+$(ADDONDIR)WinGrab: WinGrab.o
+	$(SLD) -o WinGrab WinGrab.o _APP_
+	mv WinGrab add-ons
+
+VideoGrabber.o: VideoGrabber.cpp
+	$(CC) $(CFLAGS) VideoGrabber.cpp
+VideoConsumer.o: VideoConsumer.cpp
+	$(CC) $(CFLAGS) VideoConsumer.cpp
+$(ADDONDIR)VideoGrabber: VideoGrabber.o VideoConsumer.o
+	$(SLD) -lmedia -ltranslation -o VideoGrabber VideoGrabber.o VideoConsumer.o _APP_
+	mv VideoGrabber add-ons

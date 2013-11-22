@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+<TITLE>Becasso Tutorial</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td bgcolor="#306020">
+<font color="#ffffff" face="Verdana, Arial, Helvetica, Swiss" size=4>
+<b><i>&nbsp;Becasso Tutorial</i></b></font></td></tr></table><br>
+
+<br><br>
+<b><font face="Swiss, Helvetica, Sans-serif" size="6">
+Carved-Out Effect (inverted drop shadow)</font></b><p>
+
+<font face="Swiss, Helvetica, Sans-serif">
+
+This tutorial shows how to make a "carved out" effect in Becasso, also known as an
+"inverted drop shadow".  It will use layers (four in total) to achieve the effect,
+but only at the very last stage do you actually need to fiddle with any layer parameters.
+<p>
+
+<h3>Step 1</h3>
+<img src="image1.jpg" align="left" hspace="4" vspace="4">
+Pick a suitable background image.  For this particular effect, a marble, wooden,
+metal, or stone-like surface will look best.  In the example we have simply used
+the <b>Generate &gt; Tile</b> add-on to fill a blank new canvas with a stucco pattern,
+although you could just as well have loaded an existing image.
+<br clear="all"><br><br>
+
+<h3>Step 2</h3>
+<img src="image2.jpg" align="left" hspace="4" vspace="4">
+Switch to selection mode and select the area you want to give the carved out effect.
+You could paint using any of the tools, and in our example we have typed some text
+using the text tool and the Copperplate font.  Note that if you don't get the
+centering or position right the first time, you can select <b>Layer &gt; Translate</b>,
+which will also work on the selection map.
+<br clear="all"><br><br>
+
+<h3>Step 3</h3>
+<img src="layers1.png" align="right" valign="top" vspace="4" hspace="4">
+Now, select <b>Layer &gt; Duplicate</b>.  This creates an exact
+copy of the current layer (which happens to be a simple tiled pattern right now) into
+a new layer.  You will not see anything spectacular happen on screen, unless you have
+the Layer Window open.<p>
+
+Now, <b>Edit &gt; Cut</b> (<tt>Alt-X</tt>) the selection.  You have now "punched out" the text in the top layer.
+You will not be able to see so, since the underlying copy will show through, matching
+exactly with what you just cut out.  If you want, you can open the Layer Window to see
+what's going on.<p>
+
+Next, select <b>Layer &gt; Insert New</b>.  This new layer will be placed between the
+"cut out" top layer and the bottom layer.  Again, there isn't much visible on screen because
+this middle layer is transparent.  This layer will contain the shadow.<p>
+
+To create the shadow, first select <b>Edit &gt; Invert Selection</b> to select everything
+<i>but</i> the text you have cut out.  After that, select <b>Edit &gt; Colorize Selection
+&gt; Foreground</b> to paint that area black.  Again, nothing is visible on screen, as you
+have carefully painted the area <i>not</i> visible through the cut-out.
+Another option of doing the same would have been to fill the entire layer with
+black using the fill tool, and then selecting <b>Edit &gt; Cut</b> again.
+<p>
+
+If you have the Layer Window open at this time, it will look like shown.
+<br clear="all"><br><br>
+
+<h3>Step 4</h3>
+<img src="image3.jpg" align="left" hspace="4" vspace="4">
+The next step is to make the shadow a bit "blurry" by using the Gaussian Blur
+filter.  First, choose <b>Edit &gt; Deselect All</b> (<tt>Alt-D</tt>), otherwise
+the effect of the filter would be limited to the selected area &ndash; and nothing
+noteworthy would happen (remember that the selection, at this point, holds only, and exactly,
+the black area of the middle layer).<p>
+Now, invoke <b>Edit &gt; Filter &gt; Gaussian Blur</b> and adjust the parameters until
+you get a satisfying blur (the effect need only be quite subtle).  Remember you can
+<tt>Alt-</tt>drag the preview area over a more interesting spot of your canvas.
+Also, remember to swith back to drawing mode (<tt>Tab</tt>) or there will be
+nothing to blur.  Select <b>Apply</b> in the add-on once you're happy with the parameters.
+<br clear="all"><br><br>
+
+<h3>Step 5</h3>
+<img src="image4.jpg" align="left" hspace="4" vspace="4">
+The next step is to give the drop shadow artificial "depth".  This is done simply by
+invoking <b>Layer &gt; Translate</b>, and moving the layer a few pixels down and to the
+right.  The effect is as shown on the left.  Don't worry if the readability isn't
+very good, the last step will take care of that.  Focus on producing a good looking
+shadow effect.
+<br clear="all"><br><br>
+
+<h3>Step 6</h3>
+<img src="image5.jpg" align="left" hspace="4" vspace="4">
+Finally, as a fix-up to increase the readability (and the illusion of depth),
+we want to make the "lower" area a bit darker.  This is done by inserting a fourth
+layer (which will be directly above the background layer), filling it with pure black,
+and adjusting its global alpha value in the Layer Window.  For the example, it is set
+to 50.  You can also experiment with darkening using a colored layer.
+<br clear="all"><br><br>
+
+</font>
+</BODY>
+</HTML>

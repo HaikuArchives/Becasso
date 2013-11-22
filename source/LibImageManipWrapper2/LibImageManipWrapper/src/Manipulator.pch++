@@ -1,0 +1,7 @@
+#include <Be.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+#define MANIPULATOR
+#define IMAGEMANIP_WEAK_LINKAGE

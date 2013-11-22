@@ -1,0 +1,382 @@
+#
+# This is the Becasso strings file.
+# © 2000 ∑ Sum Software
+#
+# Translation by Raphael Moll and Stephane Landier
+#
+###################
+#
+# About Window
+0:A propos de Becasso
+1:URL
+2:Aide en ligne
+3:Version %s du %s
+4:Version non enregistrée
+5:Initialisation des add-on…
+6:Merci de déposer les fichiers de Palette Becasso sur le bouton de Couleur approprié, ou sur la fenêtre d'édition de Couleur associée
+7:Enregistré par
+8:Votre fichier d'enregistrement est endommagé
+9:Enregistrer online
+# Main Window File menu
+10:Fichier
+11:Nouveau document…
+12:Ouvrir…
+13:Documents récents
+14:Acquisition
+15:Mise en page…
+16:A propos de Becasso
+17:Quitter
+# Names for MouseOver help
+19:
+20:Dessin
+21:Sélection
+22:Brosse
+23:Effaceur
+24:Remplissage
+25:Texte
+26:Aérographe
+# "main libre" is literal translation, it means nothing
+27:Main libre
+28:Ligne
+# "force libre" is literal translation, it means nothing
+29:Forme libre
+30:Polygone
+31:Rectangle
+32:Ovale
+33:Cercle
+34:Ellipse
+40:
+41:Couleur de remplissage
+42:Couleur de fond
+43:Motif
+#
+# Canvas Window
+#
+# File Menu (uses File menu strings from Main Window
+50:Sauver
+51:Sauver sous…
+52:Exporter…
+53:Imprimer
+54:Fermer
+55:Quitter
+# Edit Menu
+60:Edition
+61:Annuler
+62:Refaire
+63:Couper
+64:Copier
+65:Coller
+403:Coller dans un nouveau calque
+404:Coller dans une nouvelle image
+66:Tout sélectionner
+67:Tout désélectionner
+68:Inverser la sélection
+69:Sélection par couleur
+70:Couleur de remplissage
+71:Couleur de fond
+72:Automatique
+73:Colorier la sélection
+74:Extraction de palette… 
+75:Couche vers sélection
+76:Alpha
+77:Rouge
+78:Vert
+79:Bleu
+80:Cyan
+81:Magenta
+82:Jaune
+83:Noir
+84:Teinte
+85:Saturation
+86:Valeur
+87:Sélection vers couche
+88:Déplacer
+89:Tourner
+90:Tout le document
+91:Tailler suivant la fenêtre
+92:Tailler suivant la sélection
+93:Tailler
+94:Remplir la fenêtre
+95:En haut à gauche
+96:En haut à droite
+97:En bas à gauche
+98:En bas à droite
+99:Centre
+# [*] RM not quite sure
+100:Ajuster à la fenêtre
+101:Préserver le ratio
+102:Adapter le ratio
+103:Filtres
+104:Transformer
+105:Générer
+106:Center la souris
+107:Ajuster à…
+108:Inversion
+400:Horizontal
+401:Vertical
+# Window Menu
+110:Fenêtres
+111:Calques
+112:Echelle
+113:Zoom avant
+114:Zoom arrière
+115:Ajuster
+# Layer Menu
+120:Calques
+121:Ajouter
+122:Insérer
+123:Dupliquer
+124:Supprimer
+125:Fusionner
+126:En avant
+127:En arrière
+128:Choisir
+129:Choisir calque
+#
+# Various CanvasWindow strings
+#
+# [*] ralf->sander : I removed several line breaks, they don't look really good when I try.
+#
+130:'%s' est une image créée par une version plus récente de Becasso (%s). Vous ne pouvez pas charger ce fichier avec cette version de Becasso.
+131:Annuler
+132:'%s' est une image créée par une version plus récente de Becasso (%s). Désirez vous quand même la charger ?
+133:Oui
+134:Erreur du Translation Kit:\nImpossible d'importer `%s'
+135:Aide
+136:OK
+137:Le fichier '%s' est de type '%s'. Ceci ne ressemble pas à un format d'image connu. Vérifiez que vous possédez le Translator correspondant.
+138:Le fichier '%s' est de type '%s'. Ce format ne correspond probablement pas du tout une image.
+# 140 or 141 go at the first %s in 139, #142 or #143 at the last.
+139:%s que l'image '%s' utilise l'alpha comme transparence et non comme opacité. %s d'inverser la couche alpha.
+140:Il est fort probable
+141:Il est possible
+# Note the trailing space on the next two strings
+# [*] ralf->sander : I removed the trailing space since the %s is already followed by a space (!?)
+142:Si vous ne voyez que le quadrillage du fond, vous devriez tenter
+143:Il est également possible que cette image contienne une majorité de pixels transparents. Si le résultat est étrange, tentez
+144:Laisser tel quel
+145:Inverser
+146:Sauvegarder les changements apportés à '%s'?
+147:Abandon
+148:Sauver
+149:Sans titre
+# MIME help text
+# [*] damn stuff, I must see it live to traduce this ! hey Sander, stop kidding !
+150:Désolé de vous interrompre. J'essayais de suggérer une extension appropriée pour ce fichier, sans toutefois réussir à en trouver un pour '%s' dans votre base de types MIME.\n Vous pouvez ajouter vous même ces extensions avec l'application Preferences FileTypes, ou bien je serais heureux de le faire suivant mes suggestions. Vous pouvez aussi tout simplement oublier ce concept dépassé d'extensions, bien que certains autres systèmes d'exploitation se basent toujours dessus pour identifier les fichiers.
+151:Type de fichier
+152:Mise à jour MIME
+153:Ne m'embétez pas
+154:Je dispose d'une liste des types de fichiers les plus courant ainsi que de leurs extensions mais vous possédez peut être des types exotiques que j'ignore. Dans ce cas, je vais tenter de faire un choix circonstancié et, si je ne trouve rien, j'ignorerais tout simplement ce type. J'éviterais aussi de toucher aux types de fichiers qui possèdent déjà des extensions.\n Vous pouvez toujours changer manuellement mes suggestions en utilisant l'application Preferences FileTypes.
+155:Ecriture de l'image…
+156:Ceci est une erreur peu courante. Une erreur interne est survenue dans le translateur.\nIl peut s'agir aussi bien d'un conflit de librairie partagée qu'un manque d'espace disque.
+157:Extraction de la palette
+158:L'enregistrement est désactive dans cette version démo de Becasso.\nSur http://www.sumware.demon.nl vous trouverez de plus amples informations sur la façon d'obtenir la version compléte.\n\nMerci de votre intérêt concernant Becasso !
+159:Visiter l'URL
+#
+# Layer Window
+160:Calques dans %s
+161:Calque sans titre
+162:Fond
+# Note leading space, #163 is appended when duplicating a layer
+163: copie
+164:Cacher
+165:Mélanger
+166:Multiplier
+167:Opération :
+# Menu in Layer Window
+170:Calque
+171:Ajouter
+172:Insérer
+173:Dupliquer
+174:Fusionner
+175:Supprimer
+# Note trailing space:
+176:Nom : 
+#
+# Various small input windows
+180:Taille du document
+181:Largeur
+182:Hauteur
+183:Créer
+184:# Couleurs
+# [*] RM->Sander, what does that do actually ?????!
+# [*] was Clobber Remaining Palette
+185:Ecraser la palette
+406:Couleur: 
+407:Remplissage Courant
+408:Fond Courant
+409:Transparent
+#
+# Color Editor
+#
+190:Sauver la palette…
+191:Ouvrir une palette…
+192:Générer une palette
+193:Défaut
+194:Niveaux de gris
+195:Spectre
+# [*] below this is literal translation, it means nothing
+196:Niveaux de chaleur
+197:Modèle RGB
+198:Modèle HSV
+199:Teinte (0–360)
+200:Saturation (0–1)
+201:Valeur (0–1)
+202:Couche alpha
+203:Opacité
+204:Sélecteur de couleur
+205:Tolérance RGB
+206:Courant
+# [*] below this is literal translation, it means nothing
+207:Plus proche
+208:Sélection courante
+209:La plus proche
+210:(distance RGB XXX)
+211:(distance RGB : %3.1f)
+#
+#  Tool Attribute Windows
+#
+# General
+306:Pas de paramètre
+# Brush
+300:Taille X
+301:Taille Y
+302:Angle
+303:Dureté
+304:Espacem.
+305:Acuité
+# Circle
+310:Trait
+311:Type
+312:Premier point
+# Draw
+320:Copie
+# [*] no idea of actually how to traduce this !
+321:Superposition
+322:Effacement
+323:Minimum
+324:Maximum
+325:Inversion
+326:Ajout
+327:Soustraction
+328:Mélange
+329:Mode de dessin :
+330:Tablette :
+331:Nb. d'annulations max.
+# Eraser
+333:Forme
+334:Taille H
+335:Taille V
+# Fill
+338:Tolérance
+339:Distance visuelle
+340:RGB absolut
+341:Visuel
+342:RGB
+343:Facteur visuel :
+344:R: 0.213 G: 0.715 B: 0.072
+# Lines
+# [*] below this is literal translation, it looks weird!
+348:Remplir les coins
+# Ovals
+# [*] below this is literal translation, it looks weird!
+350:Coins relatifs
+351:Coins absolus
+352:Relatifs
+353:Absolus
+# Spray Can
+355:Sigma
+# [*] the literal translation is "ratio de couleur", which does not fit and actually sounds weird!,m
+# "ratio" fits and looks correct (if you document it !)
+356:Ratio
+357:Débit
+358:Estomper suivant la distance
+# Text
+360:Famile : 
+361:Style : 
+362:Taille (Pt) :
+363:Inclinaison :
+364:Rotation :
+365:Anti-aliaser
+#
+# Add-on windows
+#
+370:Arrêter
+371:Information
+372:Appliquer
+#
+# Prefs window
+#
+380:Préférences
+381:Annuler
+382:Appliquer
+383:Nombre de documents récents :
+384:Langue :
+385:(cette option prendra effet au prochain démarrage)
+386:Taille de prévisualisation filtres:
+#
+# Magnify window
+410:Pas de grille
+411:Grille Noire
+412:Grille Blanche
+#
+# Registration Window
+#
+420:Enregistrer Becasso 2.0
+421:Becasso 1.4 détecté
+422:Ceci est une upgrade gratuite
+423:Pour vous enregistrer, merci de "monter" le CD ROM de Becasso 2.0
+424:Effectué
+425:Nom :
+426:Enregistrer
+427:Merci d'avoir fait l'acquisition de Becasso !
+428:Merci de vous enregistrer en saisissant votre nom.
+429:Ceci va activer la version complète
+430:Becasso 2.0 à été préinstallé,
+431:mais n'est enregistré pas.
+432:Veuillez patienter %d secondes
+433:(Ce delai disparaîtra une fois que
+434:vous vous serez enregistré.)
+435:Inverser la sélection toujours
+436:PowerPC hardware détecté
+437:Ceci est une version gratuite.
+#
+# Tip of the Day
+#
+500:Tip of the day
+501:Show tips at startup
+502:Next tip
+503:Welcome to Becasso!\nThis window will show you useful tips at startup,\nand it's recommended to read the tips at least once.
+504:Have you read the documentation? :-)\nIt's available via About Becasso.
+505:Right-clicking on a tool button opens its attributes (settings) window.
+506:Right-clicking on a color button opens an extensive color editor.
+507:The cursor shows you what mode you are in (a thin cross for drawing mode, a hollow cross for selection mode).
+508:You can tear off the menus from Becasso's main window.  Click on their buttons, then drag the mouse.  Becasso will remember their positions.
+509:Selections are not masks.  You can draw outside selections.
+510:Selections are not binary.  A pixel can be "a little" selected.  In 256 grades from "not selected at all" to "fully selected", in fact.
+511:To quickly grasp the concept of Becasso's selections, open a colorful image, paint a selection with the brush, and Shift-drag to copy/paste it.  You should see it's "fuzzy".
+512:Where it makes sense, add-ons can operate on the selected area as well as on the selection map itself (depending on the mode).  You can make gradiented selection maps this way.
+513:Use the Tab key to quickly switch between drawing mode and selection mode.
+514:In selection mode, the Fill tool is equivalent to a Magic Wand.
+515:The selection, by default, is inverted only when the mouse is over the canvas.  This behavior can be changed via the Preferences.
+516:Becasso can be used as an external editor from within other applications (such as Gobe Productive).
+517:If you have a fast machine, you can enlarge the filter preview area via the Preferences.
+518:Holding down the Option key turns your cursor into a color picker.
+519:For most tools, painting with the right mouse button exchanges the foreground and background colors.
+520:While a filter is open, you can drag the preview area by holding down the Command (Alt) key.
+521:The arrow keys move the cursor by one pixel.  Hold the Control key for faster movement.
+522:Holding both the Shift and Option keys turns the cursor into a grabbing hand.  You can then drag the canvas to scroll.
+523:The "WinGrab" capture add-on is ideal for writing software documentation.  It lets you screen-grab a single window.
+524:The "VideoGrabber" capture add-on in combination with a handycam is ideal for trying how a moustache would look on you.
+525:Becasso is scriptable.  It can be used, for example, to convert a bunch of images to a different format.
+526:Becasso comes with a Translator for its own format, so you can exchange Becasso images with other BeOS users even if they don't have the full version.
+527:A bit of history trivia: Becasso was the first commercially available paint program for the BeOS.
+528:When exporting to a low-fidelity file format (such as GIF), extracting the optimal color palette followed by quantizing can increase image quality immensely (see documentation for examples).
+529:Anyone can write Becasso add-ons!  The API and example code are included.
+530:The color picker works in the Magnify window too.
+531:Becasso comes with web-safe color palettes, which you can load via the Color Editor.  (Or you can drop them on the color buttons).
+532:The color editor accepts color drops from other applications, and can generate them too (drag off the color patches in the lower left corner).
+533:When dropping a color in an editor, the HTML hex representation of the color will be pasted.
+534:The BeOS desktop also accepts color drops.
+535:A color drop on a canvas will act as a Fill.
+536:The "Center Mouse" command (Command-M) is handy for drawing, say, concentric circles.

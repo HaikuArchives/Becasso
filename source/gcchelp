@@ -1,0 +1,118 @@
+Reading specs from /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/specs
+gcc version 2.9-beos-991026
+
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/cpp -lang-c -v -undef -D__GNUC__=2 -D__GNUC_MINOR__=9 -D__ELF__ -D__BEOS__ -D__INTEL__ -D_X86_=1 -D__stdcall=__attribute__((__stdcall__)) -D__cdecl=__attribute__((__cdecl__)) -D__declspec(x)=__attribute__((x)) -D__ELF__ -D__BEOS__ -D__INTEL__ -D_X86_=1 -D__stdcall=__attribute__((__stdcall__)) -D__cdecl=__attribute__((__cdecl__)) -D__declspec(x)=__attribute__((x)) -Asystem(beos) -Acpu(i386) -Amachine(i386) -Di386 -D__i386 -D__i386__ -Di586 -Dpentium -D__i586 -D__i586__ -D__pentium -D__pentium__ -D__PIC__ -D__pic__ --help help-dummy /tmp/ccNHYdnc.i
+GNU CPP version 2.9-beos-991026 (i386 BeOS/ELF)
+
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/cc1 /tmp/ccNHYdnc.i -fpic -Wno-multichar -quiet -dumpbase help-dummy.c -version --help -o /tmp/cccchOtg.s
+
+ as -V -Qy --help -o /tmp/ccDhctJm.o /tmp/cccchOtg.s
+GNU assembler version 2.9-beos-991026 (i586-beos) using BFD version 2.9-beos-991026
+
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/collect2 -o help-dummy -m elf_i386_be -shared -Bsymbolic --help /boot/develop/lib/x86/crti.o /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/crtbegin.o /boot/develop/lib/x86/start_dyn.o /boot/develop/lib/x86/init_term_dyn.o -L/boot/develop/lib/x86 -L/boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026 -L/boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/../../../../i586-beos/lib -L/boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/../../.. /tmp/ccDhctJm.o -lnet -lroot /boot/develop/tools/gnupro/lib/gcc-lib/i586-beos/2.9-beos-991026/crtend.o /boot/develop/lib/x86/crtn.o
+Usage: /boot/develop/tools/gnupro/bin/ld [options] file...
+Options:
+  -a KEYWORD                  Shared library control for HP/UX compatibility
+  -A ARCH, --architecture ARCH
+                              Set architecture
+  -b TARGET, --format TARGET  Specify target for following input files
+  -c FILE, --mri-script FILE  Read MRI format linker script
+  -d, -dc, -dp                Force common symbols to be defined
+  -e ADDRESS, --entry ADDRESS Set start address
+  -E, --export-dynamic        Export all dynamic symbols
+  -EB                         Link big-endian objects
+  -EL                         Link little-endian objects
+  -f SHLIB, --auxiliary SHLIB Auxiliary filter for shared object symbol table
+  -F SHLIB, --filter SHLIB    Filter for shared object symbol table
+  -g                          Ignored
+  -G SIZE, --gpsize SIZE      Small data size (if no size, same as --shared)
+  -h FILENAME, -soname FILENAME
+                              Set internal name of shared library
+  -l LIBNAME, --library LIBNAME
+                              Search for library LIBNAME
+  -L DIRECTORY, --library-path DIRECTORY
+                              Add DIRECTORY to library search path
+  -m EMULATION                Set emulation
+  -M, --print-map             Print map file on standard output
+  -n, --nmagic                Do not page align data
+  -N, --omagic                Do not page align data, do not make text readonly
+  -o FILE, --output FILE      Set output file name
+  -O                          Optimize output file
+  -Qy                         Ignored for SVR4 compatibility
+  -r, -i, --relocateable      Generate relocateable output
+  -R FILE, --just-symbols FILE
+                              Just link symbols (if directory, same as --rpath)
+  -s, --strip-all             Strip all symbols
+  -S, --strip-debug           Strip debugging symbols
+  -t, --trace                 Trace file opens
+  -T FILE, --script FILE      Read linker script
+  -u SYMBOL, --undefined SYMBOL
+                              Start with undefined reference to SYMBOL
+  -Ur                         Build global constructor/destructor tables
+  -v, --version               Print version information
+  -V                          Print version and emulation information
+  -x, --discard-all           Discard all local symbols
+  -X, --discard-locals        Discard temporary local symbols
+  -y SYMBOL, --trace-symbol SYMBOL
+                              Trace mentions of SYMBOL
+  -Y PATH                     Default search path for Solaris compatibility
+  -z KEYWORD                  Ignored for Solaris compatibility
+  -(, --start-group           Start a group
+  -), --end-group             End a group
+  -assert KEYWORD             Ignored for SunOS compatibility
+  -Bdynamic, -dy, -call_shared
+                              Link against shared libraries
+  -Bstatic, -dn, -non_shared, -static
+                              Do not link against shared libraries
+  -Bsymbolic                  Bind global references locally
+  --check-sections            Check section addresses for overlaps (default)
+  --no-check-sections         Do not check section addresses for overlaps
+  --cref                      Output cross reference table
+  --defsym SYMBOL=EXPRESSION  Define a symbol
+  --dynamic-linker PROGRAM    Set the dynamic linker to use
+  --embedded-relocs           Generate embedded relocs
+  --force-exe-suffix          Force generation of file with .exe suffix
+  --gc-sections               Remove unused sections (on some targets)
+  --no-gc-sections            Don't remove unused sections (default)
+  --help                      Print option help
+  --ignore-undefined          Ignore undefined symbols
+  -Map FILE                   Write a map file
+  --mpc860c0 [=WORDS]         Modify problematic branches in last WORDS (1-10, default 5) words of a page
+  --no-keep-memory            Use less memory and more disk I/O
+  --no-warn-mismatch          Don't warn about mismatched input files
+  --no-whole-archive          Turn off --whole-archive
+  --noinhibit-exec            Create an output file even if errors occur
+  --oformat TARGET            Specify target of output file
+  -qmagic                     Ignored for Linux compatibility
+  --relax                     Relax branches on certain targets
+  --retain-symbols-file FILE  Keep only symbols listed in FILE
+  -rpath PATH                 Set runtime shared library search path
+  -rpath-link PATH            Set link time shared library search path
+  -shared, -Bshareable        Create a shared library
+  --sort-common               Sort common symbols by size
+  --split-by-file             Split output sections for each file
+  --split-by-reloc COUNT      Split output sections every COUNT relocs
+  --stats                     Print memory usage statistics
+  --task-link SYMBOL          Do task level linking
+  --traditional-format        Use same format as native linker
+  -Tbss ADDRESS               Set address of .bss section
+  -Tdata ADDRESS              Set address of .data section
+  -Ttext ADDRESS              Set address of .text section
+  --verbose                   Output lots of information during link
+  --version-script FILE       Read version information script
+  --version-exports-section SYMBOL
+                              Take export symbols list from .exports, using SYMBOL as the version.
+  --warn-common               Warn about duplicate common symbols
+  --warn-constructors         Warn if global constructors/destructors are seen
+  --warn-multiple-gp          Warn if the multiple GP values are used
+  --warn-once                 Warn only once per undefined symbol
+  --warn-section-align        Warn if start of section changes due to alignment
+  --whole-archive             Include all objects from following archives
+  --wrap SYMBOL               Use wrapper functions for SYMBOL
+/boot/develop/tools/gnupro/bin/ld: supported targets: elf32-i386 pe-i386 pei-i386 elf32-little elf32-big srec symbolsrec tekhex binary ihex
+/boot/develop/tools/gnupro/bin/ld: supported emulations: elf_i386_be
+/boot/develop/tools/gnupro/bin/ld: emulation specific options:
+  no emulation specific options.
+
+
+Report bugs to bug-gnu-utils@gnu.org

@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+<TITLE>Becasso Tutorial</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td bgcolor="#306020">
+<font color="#ffffff" face="Verdana, Arial, Helvetica, Swiss" size=4>
+<b><i>&nbsp;Becasso Tutorial</i></b></font></td></tr></table><br>
+
+<br><br>
+<b><font face="Swiss, Helvetica, Sans-serif" size="6">
+Black/White-to-Color Gradient</font></b><p>
+
+<font face="Swiss, Helvetica, Sans-serif">
+This tutorial shows how to use the powerful Selection-to-Channel
+operations Becasso 1.1 offers, to yield an image that has a
+black-and-white background but with a smooth transition to a colorful
+region.<P>
+
+Note that this is an old tutorial, and the same effect can be achieved
+<i>much</i> easier now in Becasso 1.5 using the DuoTone add-on and a graded selection map.
+The tutorial is retained here for reference, and because it explains about
+pixel intensities and the "multiply" channel operation.<p>
+
+<h3>Step 1</h3>
+<img src="image1.jpg" align="left" hspace="4" vspace="4">
+Let's open a colorful image in Becasso.  The sports car used in
+this example is mainly red.  Simply replacing the <i>saturation</i>
+channel of the image with a gradient would throw away any saturation 
+information already there, so we will first save this information by 
+choosing <b>Edit &gt; Channel to Selection &gt; Saturation</b>.  This 
+copies the saturation channel into the selection map.
+<br clear="all"><br><br>
+
+<h3>Step 2</h3>
+<img src="image2.jpg" align="left" hspace="4" vspace="4">
+Now, we add a second layer to the image.  We want to 'extract' the 
+selected saturation information into a channel of the newly created layer.
+Let's take the green channel as this is nice and contrasty.  Selecting 
+<b>Edit &gt; Selection to Channel &gt; Green</b> yields no visible
+result however, since the alpha channel of the new layer is still zero
+everywhere (i.e. the image is there, only completely transparent).
+To visualize what we are doing, do an <b>Edit &gt; Select All</b>
+(<code>Alt-A</code>) and an <b>Edit &gt; Selection to Channel &gt;
+Alpha</b> to make the layer fully opaque.  There's our saturation
+channel!
+<br clear="all"><br><br>
+
+<h3>Step 3</h3>
+<img src="layers.gif" align="right" vspace="4" hspace="4">
+Now, we add a third layer containing our actual gradient, using the
+Gradient Generator add-on.
+In this case, 'white' will correspond to maximum color later, and
+'black' to 'black-and-white'.<p>
+
+We will now have to 'combine' the gradient and the original saturation
+information.  This is simply done by setting the gradient layer channel
+operation to 'Multiply', and merging the top two layers.  This works
+because multiplying with black yields zero, and multiplying with white
+yields the original information.<p>
+
+This results in a combined gradient ranging from the full original 
+saturation information in the top left, to no saturation outwards.
+<br clear="all"><br><br>
+
+<h3>Step 4</h3>
+<img src="image3.jpg" align="left" hspace="4" vspace="4">
+We will now copy this combined saturation information over the old
+saturation channel of the original image.  To do this, we use <b>Edit
+&gt; Channel to Selection &gt; Green</b>.  The selection map will 
+then contain a simple copy of the saturation information in the layer 
+we used as a 'scratch pad' for our multiplication.<p>
+
+Now we select the layer containing the original image.  Selecting <b>Edit
+&gt; Selection to Channel &gt; Saturation</b> replaces the original
+saturation information with our new gradiented version, yielding the
+desired result.
+<br clear="all"><br><br>
+</font>
+</BODY>
+</HTML>

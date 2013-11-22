@@ -1,0 +1,44 @@
+#include "Colors.h"
+
+// Note that I use Alpha = Opacity (The Only True Way!)
+
+rgb_color Grey0 = {0, 0, 0, 255};
+rgb_color Grey1 = {8, 8, 8, 255};
+rgb_color Grey2 = {16, 16, 16, 255};
+rgb_color Grey3 = {24, 24, 24, 255};
+rgb_color Grey4 = {32, 32, 32, 255};
+rgb_color Grey5 = {40, 40, 40, 255};
+rgb_color Grey6 = {48, 48, 48, 255};
+rgb_color Grey7 = {56, 56, 56, 255};
+rgb_color Grey8 = {64, 64, 64, 255};
+rgb_color Grey9 = {72, 72, 72, 255};
+rgb_color Grey10 = {80, 80, 80, 255};
+rgb_color Grey11 = {88, 88, 88, 255};
+rgb_color Grey12 = {96, 96, 96, 255};
+rgb_color Grey13 = {104, 104, 104, 255};
+rgb_color Grey14 = {112, 112, 112, 255};
+rgb_color Grey15 = {120, 120, 120, 255};
+rgb_color Grey16 = {128, 128, 128, 255};
+rgb_color Grey17 = {136, 136, 136, 255};
+rgb_color Grey18 = {144, 144, 144, 255};
+rgb_color Grey19 = {152, 152, 152, 255};
+rgb_color Grey20 = {160, 160, 160, 255};
+rgb_color Grey21 = {168, 168, 168, 255};
+rgb_color Grey22 = {176, 176, 176, 255};
+rgb_color Grey23 = {184, 184, 184, 255};
+rgb_color Grey24 = {192, 192, 192, 255};
+rgb_color Grey25 = {200, 200, 200, 255};
+rgb_color Grey26 = {208, 208, 208, 255};
+rgb_color Grey27 = {217, 217, 217, 255};
+rgb_color Grey28 = {226, 226, 226, 255};
+rgb_color Grey29 = {235, 235, 235, 255};
+rgb_color Grey30 = {245, 245, 245, 255};
+rgb_color Grey31 = {254, 254, 254, 255};
+rgb_color Black = {0, 0, 0, 255};
+rgb_color DarkGrey = {152, 152, 152, 255};
+rgb_color LightGrey = {217, 217, 217, 255};
+rgb_color White = {255, 255, 255, 255};
+rgb_color Red = {255, 0, 0, 255};
+rgb_color Green = {0, 255, 0, 255};
+rgb_color Blue = {0, 0, 255, 255};
+rgb_color Transparent = {255, 255, 255, 0};

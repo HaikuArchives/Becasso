@@ -1,0 +1,379 @@
+#
+# This is the Becasso strings file.
+# © 2001 ∑ Sum Software
+#
+# Traduzione italiana a cura di Guido Soranzio
+#
+###################
+#
+# About Window
+0:Info su Becasso
+1:Home Page
+2:Manuale
+3:Versione %s del %s
+4:Versione non registrata
+5:Inizializzazione degli Add-Ons...
+6:Attenzione: le icone delle palette esportate da Becasso vanno lasciate cadere sopra i pulsanti appositi o nella relativa finestra di modifica dei colori.
+7:Registrato a nome di:
+8:Il tuo file di registrazione risulta danneggiato
+9:Registra on-line
+# Main Window File menu
+10:File
+11:Nuova immagine…
+12:Apri file…
+13:Documenti recenti
+14:Importa
+15:Imposta stampante…
+16:Info su Becasso...
+18:Preferenze…
+17:Esci da Becasso
+# Names for MouseOver help
+#19:Modalità
+19:
+20:Disegno
+21:Selezione
+22:Pennello
+23:Gomma
+24:Riempimento
+25:Testo
+26:Aerografo
+27:Mano libera
+28:Linea
+29:Forma libera
+30:Poligono
+31:Rettangolo
+32:Ovale
+33:Cerchio
+34:Ellisse
+35:Clonazione
+#40:Strumento
+40:
+41:Colore primo piano
+42:Colore sfondo
+43:Motivo
+#
+# Canvas Window
+#
+# File Menu (uses File menu strings from Main Window
+50:Salva
+51:Salva con nome…
+52:Esporta…
+53:Stampa
+54:Chiudi
+55:Esci
+# Edit Menu
+60:Modifica
+61:Annulla
+62:Ripeti
+63:Taglia
+64:Copia
+65:Incolla
+403:Incolla in un nuovo livello
+404:Incolla in una nuova immagine
+66:Seleziona tutto
+67:Deseleziona tutto
+68:Inverti selezione
+69:Seleziona in base al colore
+70:Primo piano
+71:Sfondo
+72:Automaticamente
+73:Colora selezione
+74:Estrai Palette…
+75:Da canale a selezione
+76:Alpha
+77:Rosso
+78:Verde
+79:Blu
+80:Ciano
+81:Magenta
+82:Giallo
+83:Nero
+84:Tonalità
+85:Saturazione
+86:Valore
+87:Da selezione a canale
+88:Sposta
+89:Ruota
+90:Immagine
+91:Riduci alla dimensione della finestra
+92:Riduci alla selezione
+93:Riduci automaticamente
+94:Espandi e copri la finestra
+95:In alto a sinistra
+96:In alto a destra
+97:In basso a sinistra
+98:In basso a destra
+99:Al centro
+100:Ridimensiona secondo la finestra
+101:Conserva proporzioni
+102:Adatta proporzioni
+103:Filtra
+104:Trasforma
+105:Genera
+106:Colloca mouse al centro
+107:Ridimensiona a…
+108:Capovolgi
+400:In orizzontale
+401:In verticale
+# Window Menu
+110:Finestra
+111:Livelli
+112:Scala
+113:Zoom avanti
+114:Zoom indietro
+115:Adatta all'immagine
+116:Lente d'ingrandimento
+# Layer Menu
+120:Livello
+121:Aggiungi nuovo livello
+122:Inserisci nuovo livello
+123:Duplica
+124:Rimuovi
+125:Fondi
+126:Attiva superiore
+127:Attiva inferiore
+128:Seleziona
+129:Seleziona livello
+#
+# Various CanvasWindow strings
+#
+130:'%s' è un'immagine realizzata con una versione più recente di Becasso (%s).\nNon è possibile aprirla con questa versione di Becasso.
+131:Annulla
+132:'%s' è un'immagine realizzata con una versione più recente di Becasso (%s).\nVuoi tentare di aprirla ugualmente?
+133:Procedi
+134:Errore dipendente dal Translation Kit:\nimpossibile tradurre '%s'
+135:Aiuto
+136:OK
+137:Il file '%s' è di tipo '%s'.\nSembra un file grafico ma è impossibile aprirlo.\nProbabilmente non hai installato nel sistema il relativo Traduttore.
+138:Il file '%s' è di tipo '%s'.\nPenso non si tratti affatto di un file grafico.
+# 140 or 141 go at the first %s in 139, #142 or #143 at the last.
+139:%s che l'immagine '%s' utilizzi il canale alpha per la trasparenza anziché l'opacità.\n%s invertire il canale alpha.
+140:E' molto probabile
+141:E' possibile
+# Note the trailing space on the next two strings
+142:Se sullo schermo appare solamente un motivo a scacchiera,\nti consiglio di 
+143:E' comunque possibile che l'immagine contenga per lo più pixel trasparenti.  Nel caso appaiano strani effetti, tenta di 
+144:Lascia così
+145:Inverti
+146:Salvo le modifiche apportate a ‘%s’?
+147:Scarta
+148:Salva
+149:SenzaNome
+# Note the leading space in the next string
+405: (dettagli)
+# MIME help text
+150:Chiedo scusa per l'interruzione. Stavo vedendo come fare per suggerirti un'estensione appropriata al nome di questo file, ma nel tuo database MIME non ne ho trovato una adatta per '%s'.\nMediante il programma di preferenze FileTypes puoi aggiungere tu stesso un'estensione ma potrei tentare io stesso di suggerirtene altre.  Puoi comunque lasciar tranquillamente perdere l'imperativo ormai datato di dare un'estensione al nome del file, anche se molti altri sistemi operativi fanno affidamento su questo per poterli identificare.
+151:Tipo file
+152:Aggiorna database MIME
+153:Me la cavo da solo
+154:Probabilmente stai tentando di aprire un file grafico dal formato particolare che non rientra nel mio elenco dei tipi e delle estensioni riconosciuti internamente. Tenterò di indovinare educatamente l'identità del file ma, se non riesco proprio a riconoscerne il tipo, non apporterò alcuna modifica, soprattutto con i file il cui nome sia privo di un'estensione.\nPuoi comunque sempre metter mano ai miei interventi sui tipi di file utiizzando il programma di preferenze FileTypes.
+155:Scrittura dell'immagine…
+156: Si è verificato un errore non comune. Qualcosa non è andato per il verso giusto all'interno del Traduttore.\nSi potrebbe trattare di un conflitto di librerie condivise ma anche dell'esaurimento dello spazio libero su disco.
+157:Estrai palette
+158:Con questa versione dimostrativa di Becasso non è possibile salvare i file.\nVisita il sito http://www.sumware.demon.nl per conoscere le modalità d'acquisto della versione completa.\n\nGrazie per l'interesse dimostrato verso Becasso!
+159:Visita URL
+#
+# Layer Window
+160:Livelli in %s
+161:Livello senza nome
+162:Sfondo
+# Note leading space, #163 is appended when duplicating a layer
+163: copia
+164:Nasc.
+165:Fusione
+166:Moltiplica
+167:Operazione:
+# Menu in Layer Window
+170:Livello
+171:Aggiungi un nuovo livello
+172:Inserisci un nuovo livello
+173:Duplica livello
+174:Fondi livelli
+175:Rimuovi livello
+# Note trailing space:
+176:Nome: 
+#
+# Various small input windows
+180:Dimensione immagine
+181:Larghezza
+182:Altezza
+183:Crea
+186:Risoluzione
+187:pixel
+188:pollici
+189:cm
+184:Nr. Colori
+185:Tralascia il resto della palette
+402:Ridimensiona
+406:Colore: 
+407:Primo piano corrente
+408:Sfondo corrente
+409:Trasparente
+#
+# Color Editor
+#
+190:Salva palette…
+191:Carica palette…
+192:Genera palette
+193:Default
+194:Grigi
+195:Spettro
+196:Scala calorimetrica
+197:Modello RGB
+198:Modello HSV
+199:Tonalità (0–360)
+200:Saturazione (0–1)
+201:Valore (0–1)
+202:Canale Alpha
+203:Opacità
+204:Selettore colore
+205:Tolleranza RGB
+206:Corrente
+207:Approssima
+208:Selezione corrente
+209:Colore più prossimo nella palette
+210:(distanza RGB XXX)
+211:(distanza RGB: %3.1f)
+#
+#  Tool Attribute Windows
+#
+# General
+306:Nessun parametro
+# Brush
+300:Dim. orizz.
+301:Dim. vert.
+302:Angolo
+303:Forza
+304:Spaziatura
+305:Nitidezza
+# Circle
+310:Spessore
+311:Tipo
+312:Primo clic
+# Draw
+320:Copia
+321:Sovrapponi
+322:Cancella
+323:Minimo
+324:Massimo
+325:Inversione
+326:Addizione
+327:Differenza
+328:Fusione
+329:Modalità disegno:
+330:Tavoletta:
+331:Numero massimo annulli:
+# Eraser
+333:Forma
+334:Dim. orizz.
+335:Dim. vert.
+# Fill
+338:Tolleranza
+339:Distanza visiva
+340:Valori assoluti RGB
+341:Visiva
+342:RGB
+343:Fattori visivi:
+344:R: 0.213 G: 0.715 B: 0.072
+# Lines
+348:Arrotonda angoli
+# Ovals
+350:Angoli relativi
+351:Angoli assoluti
+352:Relativi
+353:Assoluti
+# Spray Can
+355:Dispersione
+356:Rapp. colori
+357:Flusso
+358:Smorza via via
+# Text
+360:Famiglia: 
+361:Stile: 
+362:Dimensione:
+363:Inclinazione:
+364:Rotazione:
+365:Anti Aliasing
+#
+# Add-on windows
+#
+370:Stop
+371:Info
+372:Applica
+#
+# Prefs window
+#
+380:Preferenze
+381:Ripristina
+382:Applica
+383:Numero di voci nel menù dei documenti recenti:
+384:Lingua:
+385:(Le modifiche avranno effetto al riavvio del programma)
+386:Dimensione anteprima filtri:
+387:Mostra suggerimenti all'avvio
+#
+# Magnify window
+410:Nessuna griglia
+411:Griglia nera
+412:Griglia bianca
+#
+# Registration Window
+#
+420:Registra Becasso 2.0
+421:Becasso 1.4 rilevato.
+422:Questo è un aggiornamento gratuito.
+423:Per procedere alla registrazione, inserire e montare il cd-rom di Becasso 2.0
+424:Fatto
+425:Nome:
+426:Registra
+427:Grazie per aver acquistato Becasso!
+428:Registrati digitando il tuo nome.
+429:Attiverai in questo modo tutte le funzionalità.
+430:Hai già installato in precedenza Becasso 2.0,
+431:ma non lo hai ancora registrato.
+432:Attendere prego per %d secondi…
+433:(Registrando Becasso queste schermate d'attesa vengono disattivate.)
+434:
+435:Inverti sempre la selezione
+436:Rilevato hardware PowerPC.
+437:Questa è una versione gratuita.
+#
+# Tip of the Day
+#
+500:Suggerimento del giorno
+501:Mostra suggerimenti all'avvio
+502:Successivo
+503:Benvenuto in Becasso!\nAd ogni avvio questa finestra ti mostrerà un nuovo suggerimento:\ dovrebbe valer la pena scorrere queste preziose dritte almeno una volta.
+504:Hai letto la documentazione? :-)\nPuoi sempre consultarla cliccando sul pulsante "Manuale" del pannello "Info su Becasso".
+505:Cliccando col tasto destro del mouse su uno strumento si apre una finestra da cui è possibile regolare i relativi attributi (parametri).
+506:Cliccando col tasto destro del mouse su una casella del colore si attiva un esteso editor dei colori.
+507:Il cursore cambia forma in base alla modalità operativa (una croce sottile per la modalità Disegno, una croce bordata per la modalità Selezione).
+508:E' possibile scorporare i menù dalla finestra principale di Becasso.  Basta cliccare su uno dei loro pulsanti e trascinarli col mouse verso l'esterno.  Becasso ne memorizza la posizione.
+509:Le selezioni non sono maschere.  E' possibile disegnare all'esterno delle selezioni.
+510:Le selezioni non sono binarie.  Un pixel può essere selezionato solo "parzialmente", passando per livelli di selezione che vanno da 0 (il pixel non viene in realtà selezionato) a 255 (selezione piena).
+511:Per comprendere appieno il concetto delle selezioni in  Becasso, apri un'immagine elaborata, traccia con il Pennello una selezione, trascinala tenendo premuto lo Shift e copiala/incollala.  Nota i bordi sfumati.
+512:Quando ha senso, gli add-on possono operare sia sull'area selezionata che sulla mappa di selezione stessa (dipende dalla modalità attiva).  In questo modo puoi creare mappe di selezione a gradiente.
+513:Premere il tasto Tab per commutare rapidamente tra la modalità Disegno e la modalità Selezione.
+514:Nella modalità Selezione lo strumento Riempimento equivale in pratica a quella che in altri programmi è convenzionalmente definita Bacchetta Magica.
+515:Di default, i colori delle selezioni vengono invertiti solo quando il mouse si trova nell'area dell'immagine.  Questo comportamento può essere modificato mediante le Preferenze.
+516:Becasso può essere utilizzato come editor esterno direttamente da applicazioni di terze parti (come ad esempio Gobe Productive).
+517:Se possiedi una macchina veloce, puoi aumentare le dimensioni del riquadro di anteprima dei filtri mediante le Preferenze.
+518:Quando si mantiene premuto il tasto Option il cursore si trasforma in una pipetta dei colori.
+519:Con la maggior parte degli strumenti di disegno, se si utilizza per dipingere il tasto destro del mouse, i colori di primo piano e di sfondo vengono scambiati.
+520:Quando è aperto il pannello di un filtro, puoi trascinare col mouse il riquadro d'anteprima tenendo premuto il tasto Command (Alt).
+521:I tasti cursore permettono di controllare finemente il movimento del cursore a passi di un pixel.  Tenere premuto il tasto Control per spostamenti più ampi.
+522:Premendo contemporaneamente i tasti Shift e Option il cursore si trasforma in una mano.  Puoi così "afferrare" l'immagine e trascinarla col mouse per farla scorrere all'interno della finestra.
+523:L'add-on di cattura "WinGrab" è lo strumento ideale per predisporre la documentazione di un programma.  Esso permette infatti di ghermire i pixel di una singola finestra.
+524:In combinazione ad una videocamera, l'add-on di cattura "VideoGrabber" si rivela lo strumento ideale per provare come ti starebbe un nuovo paio di baffi.
+525:Becasso può essere controllato via script.  Può essere impiegato, ad esempio, per convertire in blocco una serie di immagini da un formato ad un altro.
+526:Insieme a Becasso viene fornito un Traduttore per il suo formato proprietario. Puoi così scambiare immagini in formato Becasso anche con utenti che non dovessero possedere la versione completa.
+527:Intermezzo storico: Becasso è stato il primo programma commerciale di grafica per BeOS.
+528:Se per l'esportazione si sceglie un formato a bassa qualità (es. il GIF), si possono ottenere risultati molto migliori se prima si Estrae la palette ottimale e la si Quantizza (consulta la documentazione per esempi).
+529:Tutti possono contribuire a scrivere degli add-on per Becasso!  A corredo puoi trovare la documentazione delle API e codice d'esempio.
+530:La pipetta dei colori funziona anche nella finestra della Lente d'ingrandimento.
+531:Con Becasso viene fornita una palette di colori ottimizzata per il Web che puoi caricare dall'editor dei colori (o trascinare e lasciare cadere sopra una casella di colore).
+532:E' possibile trascinare col mouse le caselle colore di altri programmi e lasciarle cadere nell'editor di colori di Becasso e viceversa (le caselle di colore trascinabili sono quelle in basso a sinistra).
+533:Quando si trascina un colore col mouse e lo si lascia cadere in un editor di testo, verrà incollato il codice HTML corrispondente alla notazione esadecimale RGB di quel colore.
+534:Anche il Desktop di BeOS permette che vi si possano trascinare e lasciar cadere dei colori comodamente via mouse.
+535:Un colore trascinato col mouse e lasciato cadere su di un'immagine dà il via ad un'operazione di Riempimento.
+536:Il comando "Colloca mouse al centro" (Command-M) può venir in aiuto per disegnare, ad esempio, una serie di cerchi concentrici.

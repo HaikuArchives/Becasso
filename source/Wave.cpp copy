@@ -1,0 +1,527 @@
+// © 1998 Sum Software
+
+#include "BecassoAddOn.h"
+#include "AddOnWindow.h"
+#include "AddOnSupport.h"
+#include "Slider.h"
+#include <Box.h>
+#include <RadioButton.h>
+
+#define HORIZONTAL 0
+#define VERTICAL   1
+
+#define FOREGROUND  0
+#define BACKGROUND  1
+#define TRANSPARENT 2
+#define IMAGECOLOR  3
+
+class WaveWindow : public AddOnWindow
+{
+public:
+			 WaveWindow (BRect rect, becasso_addon_info *info) : AddOnWindow (rect, info)
+			 {
+			 	fPeriods = 1;
+			 	fAmplitude = 0.05;
+			 	fPhase = 0;
+			 	fDirection = 0;
+			 	fColor = BACKGROUND;
+			 }
+virtual		~WaveWindow () {}
+virtual void MessageReceived (BMessage *msg);
+float		 Periods () { return fPeriods; }
+float		 Amplitude () { return fAmplitude; }
+float		 Phase () { return fPhase; }
+int			 Direction () { return fDirection; }
+int			 Color () { return fColor; }
+
+private:
+typedef AddOnWindow inherited;
+float		 fPeriods;
+float		 fAmplitude;
+float		 fPhase;
+int			 fDirection;
+int			 fColor;
+};
+
+void WaveWindow::MessageReceived (BMessage *msg)
+{
+	switch (msg->what)
+	{
+	case 'wavP':
+		fPeriods = msg->FindFloat ("value");
+		break;
+	case 'wavA':
+		fAmplitude = msg->FindFloat ("value");
+		break;
+	case 'wavF':
+		fPhase = msg->FindFloat ("value");
+		break;
+	case 'dirH':
+		fDirection = HORIZONTAL;
+		break;
+	case 'dirV':
+		fDirection = VERTICAL;
+		break;
+	case 'colF':
+		fColor = FOREGROUND;
+		break;
+	case 'colB':
+		fColor = BACKGROUND;
+		break;
+	case 'colI':
+		fColor = IMAGECOLOR;
+		break;
+	case 'colT':
+		fColor = TRANSPARENT;
+		break;
+	default:
+		inherited::MessageReceived (msg);
+		return;
+	}
+	aPreview();
+}
+
+WaveWindow	*window;
+
+int addon_init (uint32 index, becasso_addon_info *info)
+{
+	strcpy (info->name, "Wave");
+	strcpy (info->author, "Sander Stoks");
+	strcpy (info->copyright, "© 1998 ∑ Sum Software");
+	strcpy (info->description, "Applies a sinusoid wave effect");
+	info->type				= BECASSO_TRANSFORMER;
+	info->index				= index;
+	info->version			= 1;
+	info->release			= 1;
+	info->becasso_version	= 1;
+	info->becasso_release	= 0;
+	info->does_preview		= PREVIEW_FULLSCALE;
+	window = new WaveWindow (BRect (100, 180, 100 + 188, 180 + 304), info);
+	Slider *aSlid = new Slider (BRect (8, 8, 180, 24), 60, "Amplitude", 0, 1, 0.01, new BMessage ('wavA'), B_HORIZONTAL, 30, "%3.2f");
+	Slider *pSlid = new Slider (BRect (8, 28, 180, 44), 60, "Periods", 0.25, 20, 0.25, new BMessage ('wavP'), B_HORIZONTAL, 30, "%4.2f");
+	Slider *fSlid = new Slider (BRect (8, 48, 180, 64), 60, "Phase", 0, 360, 1, new BMessage ('wavF'));
+	window->Background()->AddChild (aSlid);
+	window->Background()->AddChild (pSlid);
+	window->Background()->AddChild (fSlid);
+	aSlid->SetValue (0.05);
+	pSlid->SetValue (1);
+	fSlid->SetValue (0);
+	BBox *dir = new BBox (BRect (4, 70, 184, 126), "direction");
+	dir->SetLabel ("Direction");
+	window->Background()->AddChild (dir);
+	BRadioButton *dH = new BRadioButton (BRect (8, 13, 164, 30), "hor", "Horizontal", new BMessage ('dirH'));
+	BRadioButton *dV = new BRadioButton (BRect (8, 30, 164, 47), "ver", "Vertical", new BMessage ('dirV'));
+	dir->AddChild (dH);
+	dir->AddChild (dV);
+	dH->SetValue (true);
+	BBox *col = new BBox (BRect (4, 136, 184, 228), "color");
+	col->SetLabel ("Exposed Pixels");
+	window->Background()->AddChild (col);
+	BRadioButton *cF = new BRadioButton (BRect (8, 13, 164, 30), "hi", "Foreground Color", new BMessage ('colF'));
+	BRadioButton *cB = new BRadioButton (BRect (8, 30, 164, 47), "lo", "Background Color", new BMessage ('colB'));
+	BRadioButton *cT = new BRadioButton (BRect (8, 47, 164, 64), "tr", "Transparent", new BMessage ('colT'));
+	BRadioButton *cI = new BRadioButton (BRect (8, 64, 164, 88), "im", "Original Image", new BMessage ('colI'));
+	col->AddChild (cF);
+	col->AddChild (cB);
+	col->AddChild (cT);
+	col->AddChild (cI);
+	cB->SetValue (true);
+	window->Run();
+	return (0);
+}
+
+int addon_exit (void)
+{
+	return (0);
+}
+
+int addon_open (BWindow *client, const char *name)
+{
+	char title[B_FILE_NAME_LENGTH];
+	sprintf (title, "Wave %s", name);
+	window->Lock();
+	window->SetTitle (title);
+	if (window->IsHidden())
+		window->aShow (client);
+	else
+		window->aActivate (client);
+	window->aPreview();
+	window->Unlock();
+	return (0);
+}
+
+int addon_close ()
+{
+	window->aClose();
+	return (0);
+}
+
+int process (Layer *inLayer, Selection *inSelection, 
+			 Layer **outLayer, Selection **outSelection, int32 mode,
+			 BRect *frame, bool final, BPoint /* point */, uint32 /* buttons */)
+{
+	int error = ADDON_OK;
+	if (*outLayer == NULL && mode== M_DRAW)
+		*outLayer = new Layer (*inLayer);
+	if (mode == M_SELECT)
+	{
+		if (inSelection)
+			*outSelection = new Selection (*inSelection);
+		else	// No Selection to blur!
+			return (error);
+	}
+	if (*outLayer)
+		(*outLayer)->Lock();
+	if (*outSelection)
+		(*outSelection)->Lock();
+	
+	int firstRow = int (frame->top);
+	int lastRow  = int (frame->bottom);
+	int firstCol = int (frame->left);
+	int lastCol  = int (frame->right);
+	
+	int w = inLayer->Bounds().IntegerWidth() + 1;
+	int h = inLayer->Bounds().IntegerHeight() + 1;
+
+	if (final)
+	{
+		window->Lock();
+		window->Start();
+		window->Unlock();
+	}
+	
+	int direction = window->Direction();
+	float amplitude = window->Amplitude();
+	float phase = window->Phase()*M_PI/180.0;
+	float periods = window->Periods();
+
+	int row, col;
+	rgb_color c;
+	if (window->Color() == BACKGROUND)
+		c = lowcolor();
+	else if (window->Color() == FOREGROUND)
+		c = highcolor();
+	else
+		c.red = c.green = c.blue = c.alpha = 0;
+	
+	bool orig = (window->Color() == IMAGECOLOR);
+		
+	bgra_pixel bg = PIXEL (c.red, c.green, c.blue, c.alpha);
+
+	switch (mode)
+	{
+	case M_DRAW:
+	{
+		int pprs = inLayer->BytesPerRow()/4;
+		int pprd = (*outLayer)->BytesPerRow()/4;
+		bgra_pixel *s = (bgra_pixel *) inLayer->Bits() - 1;
+		bgra_pixel *d = (bgra_pixel *) (*outLayer)->Bits() - 1;
+
+		if (direction == 0)	/* Horizontal */
+		{
+			float delta = 100.0/(lastRow - firstRow);	// For the Status Bar.
+			float iamp = amplitude*(lastCol - firstCol);
+			float pfac = periods/(lastRow - firstRow)*M_PI*2;
+			
+			for (row = 0; row < firstRow; row++)
+				memcpy (d + 1 + row*pprd, s + 1 + row*pprs, pprs*4);
+				
+			for (row = firstRow; row <= lastRow; row++)
+			{
+				if (final)
+				{
+					window->Lock();
+					window->UpdateStatusBar (delta);
+					if (window->Stop())
+					{
+						error = ADDON_ABORT;
+						window->Unlock();
+						break;
+					}
+					window->Unlock();
+					float foffset = iamp*sin ((row - firstRow)*pfac + phase);
+					bgra_pixel *sl = s + row*pprs;
+					bgra_pixel *dl = d + row*pprd;
+					int offset = int (foffset);
+					uint8 ofac = uint8 (255*(foffset - offset));
+					if (foffset >= 0)	// Shift right
+					{
+						for (col = 0; col < firstCol; col++)
+							*(++dl) = *(++sl);
+						if (orig)
+						{
+							for (col = firstCol; col < firstCol + offset; col++)
+								*(++dl) = *(++sl);
+						}
+						else
+						{
+							for (col = firstCol; col < firstCol + offset; col++)
+								*(++dl) = bg;
+						}
+						bgra_pixel a, b;
+						if (orig)
+						{
+							a = *sl;
+							sl -= offset;
+						}
+						else
+							a = bg;
+						b = *(++sl);
+						for (col = firstCol + offset; col <= lastCol; col++)
+						{
+							*(++dl) = weighted_average (a, ofac, b, 255 - ofac);
+							a = b;
+							b = *(++sl);
+						}
+						sl += offset;
+						for (col = lastCol + 1; col < w; col++)
+							*(++dl) = *(++sl);
+					}
+					else// if (offset < 0)	// Shift left
+					{
+						for (col = 0; col < firstCol; col++)
+							*(++dl) = *(++sl);
+						
+						sl -= offset;
+						bgra_pixel a, b;
+						if (firstCol)
+							a = *(++sl);
+						else
+							a = *sl;
+						b = a;
+						for (col = firstCol; col < lastCol + offset; col++)
+						{
+							*(++dl) = weighted_average (a, ofac, b, 255 - ofac);
+							a = b;
+							b = *(++sl);
+						}
+						*(++dl) = weighted_average (a, ofac, bg, 255 - ofac);
+						if (orig)
+						{
+							for (col = lastCol + offset + 1; col < lastCol; col++)
+								*(++dl) = *(++sl);
+							sl += offset;
+						}
+						else
+						{
+							for (col = lastCol + offset + 1; col < lastCol; col++)
+							{
+								*(++dl) = bg;
+							}
+						}
+						for (col = lastCol; col < w; col++)
+							*(++dl) = *(++sl);
+					}
+//					else	// zero crossing
+//					{
+//						for (col = 0; col < w; col++)
+//							*(++dl) = *(++sl);
+//					}
+				}
+				else	// !final
+				{
+					int32 offset = int32 (iamp*sin ((row - firstRow)*pfac + phase));
+					bgra_pixel *sl = s + row*pprs;
+					bgra_pixel *dl = d + row*pprd;
+					if (offset > 0)	// Shift right
+					{
+						for (col = 0; col < firstCol; col++)
+							*(++dl) = *(++sl);
+						if (orig)
+						{
+							for (col = firstCol; col < firstCol + offset; col++)
+							{
+								*(++dl) = *(++sl);
+							}
+							sl -= offset;
+						}
+						else
+						{
+							for (col = firstCol; col < firstCol + offset; col++)
+							{
+								*(++dl) = bg;
+							}
+						}
+						/* Following breaks when firstCol > offset, actually... */
+						/* If this can happen, do something smart with max_c. */
+						for (col = firstCol + offset; col < lastCol; col++)
+						{
+							*(++dl) = *(++sl);
+						}
+						sl += offset;
+						for (col = lastCol; col < w; col++)
+						{
+							*(++dl) = *(++sl);
+						}
+					}
+					else	// Shift left
+					{
+						for (col = 0; col < firstCol; col++)
+							*(++dl) = *(++sl);
+					
+						sl -= offset;
+					
+						for (col = firstCol; col < lastCol + offset; col++)
+						{
+							*(++dl) = *(++sl);
+						}
+						if (orig)
+						{
+							for (col = lastCol + offset; col <= lastCol; col++)
+							{
+								*(++dl) = *(++sl);
+							}
+							sl += offset;
+						}
+						else
+						{
+							for (col = lastCol + offset; col < lastCol; col++)
+							{
+								*(++dl) = bg;
+							}
+						}
+						for (col = lastCol + offset; col < w; col++)
+						{
+							*(++dl) = *(++sl);
+						}
+					}
+				}
+			}
+			for (row = lastRow; row < h; row++)
+				memcpy (d + 1 + row*pprd, s + 1 + row*pprs, pprs*4);
+		}
+		else	/* Vertical */
+		{
+			float delta = 100.0/(lastCol - firstCol);	// For the Status Bar.
+			float iamp = amplitude*(lastRow - firstRow);
+			float pfac = periods/(lastCol - firstCol)*M_PI*2;
+			
+			for (col = firstCol; col <= lastCol + 1; col++)
+			{
+				if (final)
+				{
+					window->Lock();
+					window->UpdateStatusBar (delta);
+					if (window->Stop())
+					{
+						error = ADDON_ABORT;
+						window->Unlock();
+						break;
+					}
+					window->Unlock();
+					float foffset = -iamp*sin (col*pfac + phase);
+					bgra_pixel *sl = s + col;
+					bgra_pixel *dl = d + col;
+					int	offset = int (foffset);
+					uint8 ofac = uint8 (255*(foffset - offset));
+					if (foffset > 0)
+					{
+						for (row = firstRow; row < offset; row++)
+						{
+							*dl = bg;
+							dl += pprd;
+						}
+						bgra_pixel a, b;
+						a = bg;
+						b = *sl;
+						for (row = offset; row <= lastRow; row++)
+						{
+							*dl = weighted_average (a, ofac, b, 255 - ofac);
+							a = b;
+							b = *sl;
+							dl += pprd;
+							sl += pprs;
+						}
+					}
+					else if (foffset < 0)
+					{
+						sl -= offset*pprs;
+						bgra_pixel a, b;
+						a = *sl;
+						b = a;
+						sl += pprs;
+						for (row = firstRow; row < lastRow + offset; row++)
+						{
+							*dl = weighted_average (a, ofac, b, 255 - ofac);
+							a = b;
+							b = *sl;
+							dl += pprd;
+							sl += pprs;
+						}
+						*dl = weighted_average (a, ofac, bg, 255 - ofac);
+						dl += pprd;
+						for (row = lastRow + offset + 1; row <= lastRow; row++)
+						{
+							*dl = bg;
+							dl += pprd;
+						}
+					}
+					else
+					{
+						for (row = firstRow; row <= lastRow; row++)
+							*dl = *sl;
+							dl += pprd;
+							sl += pprs;
+					}
+				}
+				else
+				{
+					int32 offset = int32 (-iamp*sin (col*pfac + phase));
+					bgra_pixel *sl = s + col;
+					bgra_pixel *dl = d + col;
+					if (offset > 0)
+					{
+						for (row = 0; row < offset; row++)
+						{
+							*dl = bg;
+							dl += pprd;
+						}
+						for (row = offset; row <= lastRow; row++)
+						{
+							*dl = *sl;
+							dl += pprd;
+							sl += pprs;
+						}
+					}
+					else
+					{
+						sl -= offset*pprs;
+						for (row = 0; row < lastRow + offset; row++)
+						{
+							*dl = *sl;
+							dl += pprd;
+							sl += pprs;
+						}
+						for (row = lastRow + offset; row <= lastRow; row++)
+						{
+							*dl = bg;
+							dl += pprd;
+						}
+					}
+				}
+			}
+		}
+		break;
+	}
+	case M_SELECT:
+	{
+		break;
+	}
+	default:
+		fprintf (stderr, "Blur: Unknown mode\n");
+		error = ADDON_UNKNOWN;
+	}
+
+	if (*outSelection)
+		(*outSelection)->Unlock();
+	if (*outLayer)
+		(*outLayer)->Unlock();
+
+	if (final)
+	{
+		window->Lock();
+		window->Stopped();
+		window->Unlock();
+	}
+	return (error);
+}

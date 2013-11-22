@@ -1,0 +1,110 @@
+Becasso 1.4 Release Notes
+
+Below is a list of features new in version 1.4.
+
+Also included in this distribution are PNG, JPEG, GIF, EPS, and Becasso Translators.  Note that most of these use shared libraries and will only function from within other applications when these are in the correct place (~/config/lib).  The BeOS comes with JPEG and PNG translators, but these don't use shared libraries, and offer less adjustable parameters.  The GIF Translator is read/write but due to licensing issues, it only writes out uncompressed GIF files.  It is compatible with GIF89a transparency extensions though.  More information about the GIF compression can be found in the documentation to it (accessible via the Preferences/Datatranslations application).
+The EPS Translator is output-only (and outputs EPS bitmaps) unless Ghostscript is installed and libgs.so is in ~/config/lib, in which case it will detect this and allow reading of PS files (!).
+A BeOS port of Ghostscript can be found at <http://home.beoscentral.com/jehamby/>.
+Wacom Tablet support has now been moved to a separate input_server add-on which can be installed optionally.  This driver is very rudymentary and can be configured via the "Tablet" preferences app included with Becasso.
+
+
+New in version 1.4:
+
+* Localization: German version, French version
+   (thanks to Florian Effenberger, Charlie Clark and Raphael Moll)
+* Rudimentary preferences panel (mainly for language selection)
+* Better feedback for selection maps (by suggestion of Arvid Nilsson)
+* Selection now according to alpha level of background/foreground colors
+* Fixed bugs in selection dragging & center brush pixel
+* Use MouseMoved instead of polling
+* Moved Tablet support to input_server level (old behaviour through -t)
+* Use new libpng-1.0.3 for PNGTranslator
+* Added EPSTranslator
+* GIFTranslator bug fixed (Chris Van Buskirk)
+* Camera add-on (thanks to Fredrik Roubert)
+* Fixed a bug in bgra2cmyk on x86
+* Added "Open Recent" submenu
+* Window position is now saved
+* More feedback through mouse pointer shape (AN)
+* Color picker now continuous (AN)
+* Layer/Selection Translate/Rotate functionality added
+* Move mouse to last center/corner menu option
+* Fixed bug in printing
+* Improved Create canvas panel (resolution aware)
+* Improved AutoCrop
+* New add-ons: Solarize, Sepia, Negate, Palmcam, and ColorCurves (gamma correction)
+
+
+New in version 1.3:
+
+* Initial port to R4
+* Spray can tool improved again
+* Tertiary mouse button ends polyline
+* Improved MMX code (Up to twice as fast!)
+* Much better performance with big images
+* Fill tool fixed
+* Thumbnail preview in Open File Panel
+* new (anti-aliasing) Wave add-on
+* new Ripple add-on
+* Scale add-on improved
+* Help about not being able to open files.
+* Improved Slider (keyboard navigable)
+* Improved TabView (keyboard navigable)
+* Canvases accept drops from ShowImage as well as files from the Tracker
+* Dragging clippings onto Tracker works too
+* Extension suggested when exporting
+
+
+New in version 1.2 (not generally available):
+
+* Full Scripting support
+* Color and Pattern Menus now also tearable
+* Tablet support improved: every tool works with the tablet now
+   (with extensions where it makes sense -> Spraycan)
+* Fixed bug in serial port handling
+* Improved LayerNameWindow
+* Improved Spray Can (especially for selections)
+* Improved Colorize
+* Motion Blur add-on
+* Added MMX code optimizations
+* Spacing automatically co-adjusted with brush size
+* Tertiary mouse button closes Polygon
+* -c cli option to show the colors
+* Show version and build date on startup with -D1
+* AskForAlpha scripting switch
+
+
+New in version 1.1:
+
+* Port to Intel / R3
+* InterfaceElements BBP
+* Basic scripting support
+* Basic link with ImageElements
+* Symlinks
+* Capture import
+* Double click to access tool inspector / color editor
+* Channel operations
+* Layer merging
+* Layer menu accessible from canvas window
+* Preserve selection after cut/copy
+* More add-ons
+* Splash screen shows what Becasso is doing during launch
+* Hotkey to attach selection on mouse (Enter)
+* Hotkey to switch selection/drawing mode (Tab)
+* Better support for single-pixel editing in freehand tool
+* Wacom tablet support
+* Separate thread for mouse tracking.  Smoother operation.
+* Channel <-> Selection operations.
+* Accepts RRaster and Icon drops
+* Accepts command line file names and options
+* Single dynamic Tool/Mode inspector windows
+* Parametrizable brush
+* Tear off tool menus
+* More debugging output for add-on developers
+* Improved Undo functionality
+* Settable Anti-Aliasing in Text tool
+* Printing
+* Demo Version
+* [API] CutOrCopy with NULL selection
+* Now uses libz.so dynamically
+* Handles images (or braindead translators) using alpha = transparency better

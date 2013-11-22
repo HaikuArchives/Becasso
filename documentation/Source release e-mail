@@ -1,0 +1,99 @@
+Date: Wed, 20 Nov 2013 08:09:53 -0800
+From: scottmc <scottmc2@gmail.com>
+Subject: Fwd: EPS translator?
+In-reply-to: <68B5C572-3479-4B4E-843A-04C6DF799861@stoks.nl>
+To: Julian Harnath <julian.harnath@rwth-aachen.de>
+MIME-version: 1.0
+Content-type: multipart/alternative; boundary=001a11c1e980ea8f8904eb9e02a0
+
+--001a11c1e980ea8f8904eb9e02a0
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ----------
+From: Sander Stoks <sander@stoks.nl>
+Date: Wed, Sep 18, 2013 at 12:07 AM
+Subject: Re: EPS translator?
+To: scottmc <scottmc2@gmail.com>
+
+
+Hello Scott,
+
+I agree with putting the Becasso source code under MIT license.  I wish I
+had more time to work on interesting projects such as Haiku myself, but
+alas=85 :-(
+
+Regards,
+Sander
+
+On Sep 18, 2013, at 7:18 AM, scottmc <scottmc2@gmail.com> wrote:
+
+Sander,
+I have attached the Translators code to this Haiku trac ticket:
+https://dev.haiku-os.org/ticket/1244
+I've held off on posting the BeCasso code publicly yet, since I don't know
+how to handle the license issue.  With the Translators code I don't see
+anyone wanting to port that to another OS since it is so tied to the way
+BeOS/Haiku work, so I figure releasing that under MIT won't see you
+competing against yourself.  Although even if your old BeCasso code were
+released under MIT, sure someone could port it to MacOS but you already
+know that code and how to do it better so you'd already have an advantage
+competing against your old self... ;)
+Anyways we've started collecting a lot of old BeOS source code on GitHub:
+https://github.com/HaikuArchives/
+So far we've moved 82 projects there under  "HaikuArchives"
+
+Haiku will be adding package management any day now which will be a huge
+step forward for the OS and gets us one step closer to R1.
+
+Anyways if releasing under MIT would be ok for BeCasso just let me know and
+I'll move it forward.
+
+-scott
+
+--001a11c1e980ea8f8904eb9e02a0
+Content-Type: text/html; charset=windows-1252
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><br><br><div class=3D"gmail_quote">---------- Forwarde=
+d message ----------<br>From: <b class=3D"gmail_sendername">Sander Stoks</b=
+> <span dir=3D"ltr">&lt;<a href=3D"mailto:sander@stoks.nl">sander@stoks.nl<=
+/a>&gt;</span><br>
+Date: Wed, Sep 18, 2013 at 12:07 AM<br>Subject: Re: EPS translator?<br>To: =
+scottmc &lt;<a href=3D"mailto:scottmc2@gmail.com">scottmc2@gmail.com</a>&gt=
+;<br><br><br><div style=3D"word-wrap:break-word">Hello Scott,<div><br></div=
+>
+<div>I agree with putting the Becasso source code under MIT license. =A0I w=
+ish I had more time to work on interesting projects such as Haiku myself, b=
+ut alas=85 :-(</div><div><br></div><div>Regards,</div><div>Sander</div><div=
+>
+<br><div><div class=3D"im"><div>On Sep 18, 2013, at 7:18 AM, scottmc &lt;<a=
+ href=3D"mailto:scottmc2@gmail.com" target=3D"_blank">scottmc2@gmail.com</a=
+>&gt; wrote:</div><br></div><blockquote type=3D"cite"><div dir=3D"ltr">Sand=
+er,<div class=3D"im">
+<div>I have attached the Translators code to this Haiku trac ticket:</div><=
+div><a href=3D"https://dev.haiku-os.org/ticket/1244" target=3D"_blank">http=
+s://dev.haiku-os.org/ticket/1244</a><br></div><div>I&#39;ve held off on pos=
+ting the BeCasso code publicly yet, since I don&#39;t know how to handle th=
+e license issue. =A0With the Translators code I don&#39;t see anyone wantin=
+g to port that to another OS since it is so tied to the way BeOS/Haiku work=
+, so I figure releasing that under MIT won&#39;t see you competing against =
+yourself. =A0Although even if your old BeCasso code were released under MIT=
+, sure someone could port it to MacOS but you already know that code and ho=
+w to do it better so you&#39;d already have an advantage competing against =
+your old self... ;)</div>
+
+<div>Anyways we&#39;ve started collecting a lot of old BeOS source code on =
+GitHub:</div><div><a href=3D"https://github.com/HaikuArchives/" target=3D"_=
+blank">https://github.com/HaikuArchives/</a><br></div><div>So far we&#39;ve=
+ moved 82 projects there under =A0&quot;HaikuArchives&quot;</div>
+
+<div><br></div><div>Haiku will be adding package management any day now whi=
+ch will be a huge step forward for the OS and gets us one step closer to R1=
+.</div><div><br></div><div>Anyways if releasing under MIT would be ok for B=
+eCasso just let me know and I&#39;ll move it forward.</div>
+
+<div><br></div><div>-scott</div><div><br></div></div></div></blockquote></d=
+iv><br></div></div></div><br></div>
+
+--001a11c1e980ea8f8904eb9e02a0--

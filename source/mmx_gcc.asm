@@ -1,0 +1,881 @@
+; mmx_gcc.asm - assemble with NAsm.
+; By Sander
+		
+		BITS 32
+		GLOBAL mmx_available
+		GLOBAL mmx_alpha_blend_diff
+		GLOBAL mmx_alpha_blend_nodiff
+		GLOBAL mmx_alpha_blend_diff_ga
+		GLOBAL mmx_alpha_blend_nodiff_ga
+		GLOBAL mmx_scale_32_h
+		GLOBAL mmx_scale_32_v
+		GLOBAL m__gcd
+		
+		SECTION .data
+		
+	zero64:		times 8 db 0
+	ff64:		times 4 dw 0x00FF
+		
+		SECTION .bss
+		
+	scale_nb:	RESD	1
+	scale_nb_:	RESD	1
+	scale_md:	RESD	1
+	scale_ms:	RESD	1
+	scale_dms:	RESD	1
+	scale_smd:	RESD	1
+	scale_d:	RESD	1
+	scale_f:	RESD	1
+	scale_bpr:	RESD	1
+	sbpr:		RESD	1
+	dbpr:		RESD	1
+
+		SECTION .text
+
+; prototype: int mmx_available (void)
+
+mmx_available:
+
+		pusha
+		mov		eax,	1			; request for feature flags
+		cpuid						; check...
+		test	edx,	0x00800000	; test for MMX
+		jnz		present				; it's there
+		popa
+		mov		eax,	0			; say it ain't so
+		ret
+
+	present:
+		popa
+		mov		eax,	1			; rejoice!
+		ret
+
+; prototype: void mmx_alpha_blend_diff_ga (
+;		uint64 ga_64
+;		int32 *s, int32 *d, 
+;		int height, int difference, int width)
+
+mmx_alpha_blend_diff_ga:
+
+		push		ebp
+		mov			ebp,	esp
+
+		movq		mm0,	[ebp + 8]	; mm0 = 00ga 00ga 00ga 00ga
+		movq		mm1,	[ff64]		; mm1 = 00FF 00FF 00FF 00FF
+		mov			esi,	[ebp + 16]	; source pointer
+		mov			edi,	[ebp + 20]	; dest pointer
+		mov			ebx,	[ebp + 24]	; number of rows
+		mov			edx,	[ebp + 28]	; "makeup"
+
+	fullloop:
+		mov			ecx,	[ebp + 32]	; # pixels per row
+
+	rowloop:
+		mov			eax,	[esi]		; src pixel
+		
+		; Prepare alpha vector, source, and dest pixels
+		; The strange "interleaving" is to facilitate pairing (faster)
+		shr			eax,	16			; eax = 0000 sasr
+		cmp			ah,		0			; Fully transparent?
+		jz			transparent			; Skip the blending
+		movd		mm3,	[esi]		; mm3 = 0000 0000 sasr sgsb
+		mov			al,		ah			; eax = 0000 sasa
+		movd		mm4,	[edi]		; mm4 = 0000 0000 dadr dgdb
+		punpcklbw	mm3,	mm7			; mm3 = 00sa 00sr 00sg 00sb
+		shl			eax,	8			; eax = 00sa sa00
+		punpcklbw	mm4,	mm7			; mm4 = 00da 00dr 00dg 00db
+		mov			al,		ah			; eax = 00sa sasa
+		movq		mm5,	mm1			; mm5 = 00FF 00FF 00FF 00FF
+		shl			eax,	8			; eax = sasa sa00
+		mov			al,		ah			; eax = sasa sasa
+		movd		mm2,	eax			; mm6 = 0000 0000 sasa sasa
+		punpcklbw	mm2,	mm7			; mm2 = 00sa 00sa 00sa 00sa
+		pmullw		mm2,	mm0			; mm2 = global_alpha*local_alpha
+		psrlw		mm2,	8			; mm2 = ga*la/255 = alpha
+		pmullw		mm3,	mm2			; mm3 = src*alpha
+		psubw		mm5,	mm2			; mm5 = 1 - alpha
+		
+		; Calculate alpha*src + (255 - alpha)*dest
+		pmullw		mm4,	mm5			; mm4 = dest*(255 - alpha)
+		paddw		mm3,	mm4			; mm3 = 255*result
+		psrlw		mm3,	8			; mm3 ~ result
+		
+		; Store the resulting pixel
+		packuswb	mm3,	mm3			; mm3 = xxxx xxxx rarr rgrb
+
+		movd		[edi],	mm3			; store result
+
+	transparent:
+		add			edi,	4
+		add			esi,	4
+		loop		rowloop				; Finish this row
+		
+		add			esi,	edx
+		add			edi,	edx			; Add the Makeup
+		dec			ebx					; More rows?
+		jnz			fullloop			; do them...
+		
+	end:
+		emms
+		mov			esp,	ebp
+		pop			ebp
+		ret
+
+; prototype: void mmx_alpha_blend_nodiff_ga (
+;		uint64 ga_64,
+;		int32 *s, int32 *d,
+;		int size)
+
+mmx_alpha_blend_nodiff_ga:
+
+		push		ebp
+		mov			ebp,	esp
+
+		movq		mm0,	[ebp + 8]	; mm0 = 00ga 00ga 00ga 00ga
+		movq		mm1,	[ff64]		; mm1 = 00FF 00FF 00FF 00FF
+		movq		mm7,	[zero64]	; mm7 = 0000 0000 0000 0000
+		mov			esi,	[ebp + 16]	; source pointer
+		mov			edi,	[ebp + 20]	; dest pointer
+		mov			ecx,	[ebp + 24]	; total # of pixels
+
+	fullloop2:
+		mov			eax,	[esi]		; src pixel
+		
+		; Prepare alpha vector, source, and dest pixels
+		; The strange "interleaving" is to facilitate pairing (faster)
+		shr			eax,	16			; eax = 0000 sasr
+		cmp			ah,		0			; Fully transparent?
+		jz			transparent2		; Skip the blending
+		movd		mm3,	[esi]		; mm3 = 0000 0000 sasr sgsb
+		mov			al,		ah			; eax = 0000 sasa
+		movd		mm4,	[edi]		; mm4 = 0000 0000 dadr dgdb
+		punpcklbw	mm3,	mm7			; mm3 = 00sa 00sr 00sg 00sb
+		shl			eax,	8			; eax = 00sa sa00
+		punpcklbw	mm4,	mm7			; mm4 = 00da 00dr 00dg 00db
+		mov			al,		ah			; eax = 00sa sasa
+		movq		mm5,	mm1			; mm5 = 00FF 00FF 00FF 00FF
+		movd		mm2,	eax			; mm6 = 0000 0000 00sa sasa
+		punpcklbw	mm2,	mm7			; mm2 = 0000 00sa 00sa 00sa
+		pmullw		mm2,	mm0			; mm2 = global_alpha*local_alpha
+		psrlw		mm2,	8			; mm2 = ga*la/255 = alpha
+		pmullw		mm3,	mm2			; mm3 = src*alpha
+		psubw		mm5,	mm2			; mm5 = 1 - alpha
+		
+		; Calculate alpha*src + (255 - alpha)*dest
+		pmullw		mm4,	mm5			; mm4 = dest*(255 - alpha)
+		paddw		mm3,	mm4			; mm3 = 255*result
+		psrlw		mm3,	8			; mm3 ~ result
+		
+		; Store the resulting pixel
+		packuswb	mm3,	mm3			; mm3 = xxxx xxxx rarr rgrb
+
+		movd		[edi],	mm3			; store result
+	
+	transparent2:	
+		add			edi,	4
+		add			esi,	4
+		loop		fullloop2			; Next pixel
+		
+	end2:
+		emms
+		mov			esp,	ebp
+		pop			ebp
+		ret
+
+
+; Optimized cases for when global alpha == 255
+; (Otherwise, GCC generated, non-MMX code is about 15% _faster_ :-| )
+
+; prototype: void mmx_alpha_blend_diff (
+;		int32 *s, int32 *d, 
+;		int height, int difference, int width)
+
+mmx_alpha_blend_diff:
+
+		push		ebp
+		mov			ebp,	esp
+
+		movq		mm1,	[ff64]		; mm1 = 00FF 00FF 00FF 00FF
+		mov			esi,	[ebp + 8]	; source pointer
+		mov			edi,	[ebp + 12]	; dest pointer
+		mov			ebx,	[ebp + 16]	; number of rows
+		mov			edx,	[ebp + 20]	; "makeup"
+
+	fullloopnga:
+		mov			ecx,	[ebp + 24]	; # pixels per row
+
+	rowloopnga:
+		mov			eax,	[esi]		; src pixel
+		
+		; Prepare alpha vector, source, and dest pixels
+		; The strange "interleaving" is to facilitate pairing (faster)
+		shr			eax,	16			; eax = 0000 sasr
+		cmp			ah,		0			; Fully transparent
+		jz			transparentnga		; Skip the blending
+		movd		mm3,	[esi]		; mm3 = 0000 0000 sasr sgsb
+		cmp			ah,		255			; Fully opaque
+		jz			opaquenga			; Also skip the blending
+		movd		mm4,	[edi]		; mm4 = 0000 0000 dadr dgdb
+		mov			al,		ah			; eax = 0000 sasa
+		punpcklbw	mm3,	mm7			; mm3 = 00sa 00sr 00sg 00sb
+		shl			eax,	8			; eax = 00sa sa00
+		punpcklbw	mm4,	mm7			; mm4 = 00da 00dr 00dg 00db
+		mov			al,		ah			; eax = 00sa sasa
+		movq		mm5,	mm1			; mm5 = 00FF 00FF 00FF 00FF
+		shl			eax,	8			; eax = sasa sa00
+		mov			al,		ah			; eax = sasa sasa
+		movd		mm2,	eax			; mm6 = 0000 0000 sasa sasa
+		punpcklbw	mm2,	mm7			; mm2 = 00sa 00sa 00sa 00sa
+
+		pmullw		mm3,	mm2			; mm3 = src*alpha
+		psubw		mm5,	mm2			; mm5 = 1 - alpha
+		
+		; Calculate alpha*src + (255 - alpha)*dest
+		pmullw		mm4,	mm5			; mm4 = dest*(255 - alpha)
+		paddw		mm3,	mm4			; mm3 = 255*result
+		psrlw		mm3,	8			; mm3 ~ result
+		
+		; Store the resulting pixel
+		packuswb	mm3,	mm3			; mm3 = xxxx xxxx rarr rgrb
+
+	opaquenga:
+		movd		[edi],	mm3			; store result
+	
+	transparentnga:	
+		add			edi,	4
+		add			esi,	4
+		loop		rowloopnga			; Finish this row
+		
+		add			esi,	edx
+		add			edi,	edx			; Add the Makeup
+		dec			ebx					; More rows?
+		jnz			fullloopnga			; do them...
+		
+	endnga:
+		emms
+		mov			esp,	ebp
+		pop			ebp
+		ret
+
+; prototype: void mmx_alpha_blend_nodiff (
+;		int32 *s, int32 *d,
+;		int size)
+
+mmx_alpha_blend_nodiff:
+
+		push		ebp
+		mov			ebp,	esp
+
+		movq		mm1,	[ff64]		; mm1 = 00FF 00FF 00FF 00FF
+		movq		mm7,	[zero64]	; mm7 = 0000 0000 0000 0000
+		mov			esi,	[ebp + 8]	; source pointer
+		mov			edi,	[ebp + 12]	; dest pointer
+		mov			ecx,	[ebp + 16]	; total # of pixels
+
+	fullloop2nga:
+		mov			eax,	[esi]		; src pixel
+		
+		; Prepare alpha vector, source, and dest pixels
+		; The strange "interleaving" is to facilitate pairing (faster)
+		shr			eax,	16			; eax = 0000 sasr
+		cmp			ah,		0			; Fully transparent?
+		jz			transparent2nga		; Skip the blending
+		movd		mm3,	[esi]		; mm3 = 0000 0000 sasr sgsb
+		cmp			ah,		255			; Fully opaque?
+		jz			opaque2nga			; Also skip the blending!
+		movd		mm4,	[edi]		; mm4 = 0000 0000 dadr dgdb
+		mov			al,		ah			; eax = 0000 sasa
+		punpcklbw	mm3,	mm7			; mm3 = 00sa 00sr 00sg 00sb
+		shl			eax,	8			; eax = 00sa sa00
+		punpcklbw	mm4,	mm7			; mm4 = 00da 00dr 00dg 00db
+		mov			al,		ah			; eax = 00sa sasa
+		movq		mm5,	mm1			; mm5 = 00FF 00FF 00FF 00FF
+		movd		mm2,	eax			; mm6 = 0000 0000 00sa sasa
+		punpcklbw	mm2,	mm7			; mm2 = 0000 00sa 00sa 00sa
+		pmullw		mm3,	mm2			; mm3 = src*alpha
+		psubw		mm5,	mm2			; mm5 = 1 - alpha
+		
+		; Calculate alpha*src + (255 - alpha)*dest
+		pmullw		mm4,	mm5			; mm4 = dest*(255 - alpha)
+		paddw		mm3,	mm4			; mm3 = 255*result
+		psrlw		mm3,	8			; mm3 ~ result
+		
+		; Store the resulting pixel
+		packuswb	mm3,	mm3			; mm3 = xxxx xxxx rarr rgrb
+	opaque2nga:
+		movd		[edi],	mm3			; store result
+	
+	transparent2nga:	
+		add			edi,	4
+		add			esi,	4
+		loop		fullloop2nga		; Next pixel
+		
+	end2nga:
+		emms
+		mov			esp,	ebp
+		pop			ebp
+		ret
+
+; internal function: m__gcd
+; in: eax, ebx;  out: ebx = gcd (eax, ebx)
+
+m__gcd:
+
+	m__gcd_loop:
+		xor			edx,	edx
+		div			ebx					; eax = eax/ebx; edx = eax % ebx
+		cmp			edx,	0
+		jz			m__gcd_end			; why is there no retz? Tssk.
+		mov			eax,	ebx
+		mov			ebx,	edx
+		jmp			m__gcd_loop
+	
+	m__gcd_end:
+		ret
+
+;// NOTE:
+;	The following routines shouldn't be called if the scale factor would be
+;	1. The memcpy inside there won't work with a non-zero makeup.
+
+; prototype: void mmx_scale_32_h (
+;		int32 *s, int32 *d,
+;		int32 h, int32 sw, int32 dw, int32 dbpr);
+
+;	s and d are pointers into source and destination images,
+;	of sizes h x sw and h x diw, respectively.
+;	xscale = dw/sw, nb = gcd (dw, sw), md = dw/nb, ms = sw/nb
+;	LIMITATION: Scaling by a factor > ~250 will probably break.
+
+mmx_scale_32_h:
+
+		push		ebp
+		mov			ebp,	esp
+		pusha
+		movq		mm7,	[zero64]
+		mov			ebx,	[ebp + 20]	; sw
+		mov			eax,	[ebp + 24]	; dw
+		call		m__gcd;
+		mov			[scale_nb],	ebx		; [scale_nb] = gcd (dw, sw)
+		mov			eax,	[ebp + 20]	; sw
+		div			ebx					; eax = sw/nb
+		mov			[scale_ms],	eax
+		mov			eax,	[ebp + 24]	; dw
+		div			ebx					; eax = dw/nb
+		mov			[scale_md],	eax
+
+		mov			ebx,	[ebp + 20]	; sw
+		mov			eax,	[ebp + 24]	; dw
+		cmp			eax,	ebx			; dw >= sw?
+		jl			shrink_32_h			; simple jge expand would be out of reach (sigh)
+		jz			copy_32_h
+		jmp			expand_32_h
+
+;	// BROKEN AS OF DBW
+	copy_32_h:							; dw = sw => no scaling, just copy the image data
+		mov			esi,	[ebp + 8]	; source ptr
+		mov			edi,	[ebp + 12]	; dest ptr
+		mov			ebx,	[ebp + 16]	; height
+		mul			ebx					; eax = h*w
+		shl			eax,	2			; eax = 4*h*w = total size
+		mov			ecx,	eax			; counter
+		cld
+		rep			movsd				; copy the memory
+		jmp			end_scale_32_h
+
+	shrink_32_h:
+		mov			eax,	[scale_md]
+		shl			eax,	18			; eax = 262144*dw
+		mov			ecx,	[scale_ms]
+		div			ecx					; eax = 262144*f
+		mov			[scale_f],	eax		; save 262144*f
+		shr			eax,	10
+		movd		mm4,	eax			; mm4 = 0000 0000 0000 zzzz
+		punpcklwd	mm4,	mm4			; mm4 = 0000 0000 zzzz zzzz
+		punpcklwd	mm4,	mm4			; mm4 = zzzz zzzz zzzz zzzz
+		mov			eax,	0			; first pixel row
+		push		eax
+
+	.shrink_row_loop:
+		pop			eax					; row number
+		cmp			eax,	[ebp + 16]	; last row completed?
+		jnz			.shrink_cont
+		jmp			end_scale_32_h		; sigh... jz end_scale out of range...
+
+	.shrink_cont:
+		inc			eax
+		push		eax					; row number on the stack
+		dec			eax
+		push		eax
+		shl			eax,	2			; eax *= 4
+		mul			dword [ebp + 20]	; eax = y*4*sw
+		mov			esi,	[ebp + 8]	; source ptr
+		add			esi,	eax			; srcrow
+		pop			eax
+		mul			dword [ebp + 28]	; eax = y*dbpr
+		mov			edi,	[ebp + 12]	; dest ptr
+		add			edi,	eax
+		mov			ecx,	[scale_nb]	; init block loop
+		mov			[scale_nb_], ecx
+
+	.shrink_nb_loop:
+		movq		mm0,	[zero64]	; clear mm0 (build pixel in here)
+		mov			ebx,	1			; ebx = s
+		mov			eax,	1			; eax = d
+
+	.shrink_stillinblock:
+		mov			[scale_d],	eax		; save d
+		mul			dword [scale_ms]
+		mov			[scale_dms], eax	; d*ms
+		mov			eax,	ebx			; eax = s
+		mul			dword [scale_md]	; eax = s*md	// CLOBBERS EDX!
+
+	.shrink_buildup:					; while (s*md < d*ms)
+		cmp			eax,	[scale_dms]
+		jge			.shrink_buildup_done
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		inc			ebx					; s++
+		add			eax,	[scale_md]	; update eax = s*md
+		add			esi,	4			; next source pixel
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		pmullw		mm1,	mm4
+		psrlw		mm1,	8			; mm1 *= f
+		paddw		mm0,	mm1
+		jmp			.shrink_buildup
+
+	.shrink_buildup_done:
+		jz			.shrink_newpixel	; here: s*md != d*ms (i.e. fractional pixel)
+		mov			eax,	[scale_f]	; eax = 262144*f
+		mul			ebx					; eax = 262144*f*s
+		mov			edx,	[scale_d]	; edx = d
+		shl			edx,	18			; edx = 262144*d
+		sub			eax,	edx			; eax = 262144*(s*f - d) (= 262144*beta)
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	4			; next source pixel
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		movq		mm3,	mm1			; copy the source pixel
+		mov			ecx,	eax
+		shr			eax,	10
+		movd		mm5,	eax			; mm5 = 0000 0000 0000 beta
+		punpcklwd	mm5,	mm5			; mm5 = 0000 0000 beta beta
+		punpcklwd	mm5,	mm5			; mm5 = beta
+		mov			eax,	[scale_f]	; eax = 262144*f
+		sub			eax,	ecx			; eax = 262144*(f - beta) (= 262144*w)
+		shr			eax,	10
+		movd		mm2,	eax			; mm2 = alpha
+		punpcklwd	mm2,	mm2
+		punpcklwd	mm2,	mm2			; mm2 = wwww wwww wwww wwww
+		pmullw		mm1,	mm2			; mm1 = 256*src*alpha
+		psrlw		mm1,	8			; mm1 = src*alpha
+		paddw		mm0,	mm1			; Add the part of the pixel
+		packuswb	mm0,	mm0			; mm0 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm0			; store resulting pixel
+		add			edi,	4
+		movq		mm0,	mm5			; mm0 = 256*beta
+		pmullw		mm0,	mm3			; mm0 = 256*src*beta
+		psrlw		mm0,	8			; mm3 = src*beta
+		mov			eax,	[scale_d]
+		inc			eax					; d++ (stored after loop)
+		inc			ebx					; s++
+		jmp			.shrink_stillinblock
+
+	.shrink_newpixel:					; here: s*md == d*ms
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	4
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		pmullw		mm1,	mm4			; mm1 = 256*f*pixel
+		psrlw		mm1,	8			; mm1 = f*pixel
+		paddw		mm0,	mm1
+		packuswb	mm0,	mm0			; mm0 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm0			; store resulting average pixel
+		add			edi,	4
+
+	.shrink_block_looper:
+		dec			dword [scale_nb_]
+		jz			.shrink_cont2
+		jmp			.shrink_nb_loop
+
+	.shrink_cont2:
+		jmp			.shrink_row_loop	; next row
+
+	expand_32_h:	;/////////////////////
+		mov			eax,	[scale_md]
+		shl			eax,	18			; eax = 262144*dw
+		mov			ecx,	[scale_ms]
+		div			ecx					; eax = 262144*f
+		mov			[scale_f],	eax		; save 262144*f
+		mov			eax,	0			; first pixel row
+		push		eax
+
+	.expand_row_loop:
+		pop			eax					; row number
+		cmp			eax,	[ebp + 16]	; last row completed?
+		jnz			.expand_cont
+		jmp			end_scale_32_h		; sigh... jz end_scale out of range...
+
+	.expand_cont:
+		inc			eax
+		push		eax					; row number on the stack
+		dec			eax
+		push		eax					; row number in base 0
+		mul			dword [ebp + 20]	; eax = y*4*sw
+		shl			eax,	2			; eax *= 4
+		mov			esi,	[ebp + 8]	; source ptr
+		add			esi,	eax			; srcrow
+		pop			eax
+		mul			dword [ebp + 28]	; eax = y*dbpr
+		mov			edi,	[ebp + 12]	; dest ptr
+		add			edi,	eax
+		mov			ecx,	[scale_nb]	; init block loop
+		mov			[scale_nb_], ecx
+
+	.expand_nb_loop:
+		mov			eax,	1			; eax = d
+		mov			ebx,	1			; ebx = s
+
+	.expand_stillinblock:
+		mov			[scale_d], eax		; save d
+		mul			dword [scale_ms]
+		mov			[scale_dms], eax	; d*ms
+		mov			eax,	ebx			; s
+		mul			dword [scale_md]	; eax = s*md
+		mov			[scale_smd],	eax
+		mov			eax,	[scale_dms]
+
+	.expand_buildup:					; while (d*ms < s*md)
+		cmp			eax,	[scale_smd]
+		jge			.expand_buildup_done
+		mov			edx,	[esi]		; copy source pixel
+		mov			[edi],	edx
+		inc			dword [scale_d]		; d++
+		add			edi,	4			; next dest pixel
+		add			eax,	[scale_ms]	; update eax = d*ms
+		jmp			.expand_buildup
+
+	.expand_buildup_done:
+		jz			.expand_newpixel	; here: s*md != d*ms (i.e. fractional pixel)
+		mov			eax,	[scale_f]	; eax = 262144*f
+		mul			ebx					; eax = 262144*f*s
+		mov			edx,	eax
+		mov			eax,	[scale_d]
+		shl			eax,	18			; eax = 262144*d
+		sub			eax,	edx			; eax = 262144*(d - f*s) = 262144*beta
+		mov			ecx,	eax			; save it
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	4			; next source pixel
+		movd		mm3,	[esi]
+		punpcklbw	mm1,	mm7			; mm1 = 00aA 00rA 00gA 00bA
+		punpcklbw	mm3,	mm7			; mm3 = 00aB 00rB 00gB 00bB
+		mov			ecx,	eax
+		shr			eax,	10			; eax = 256*beta
+		movd		mm5,	eax			; mm5 = 0000 0000 0000 beta
+		punpcklwd	mm5,	mm5			; mm5 = 0000 0000 beta beta
+		punpcklwd	mm5,	mm5			; mm5 = beta
+		mov			eax,	262144
+		sub			eax,	ecx			; eax = 262144*(1 - beta) = 262144*alpha
+		shr			eax,	10			; eax = 256*alpha
+		movd		mm2,	eax			; mm2 = 256*alpha = w
+		punpcklwd	mm2,	mm2
+		punpcklwd	mm2,	mm2			; mm2 = wwww wwww wwww wwww
+		pmullw		mm1,	mm2			; mm1 = 256*srca*alpha
+		psrlw		mm1,	8			; mm1 = srca*alpha
+		pmullw		mm3,	mm5			; mm3 = 256*srcb*beta
+		psrlw		mm3,	8			; mm3 = srcb*beta
+		paddw		mm1,	mm3			; Add the parts of the pixel
+		packuswb	mm1,	mm1			; mm1 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm1			; store resulting pixel
+		add			edi,	4
+		mov			eax,	[scale_d]
+		inc			eax					; d++ (stored after loop)
+		inc			ebx					; s++
+		jmp			.expand_stillinblock
+
+	.expand_newpixel:					; here: s*md == d*ms
+		mov			edx,	[esi]
+		mov			[edi],	edx			; copy pixel
+		add			esi,	4
+		add			edi,	4
+	
+	.expand_block_looper:
+		dec			dword [scale_nb_]
+		jz			.expand_cont2
+		jmp			.expand_nb_loop
+	
+	.expand_cont2:
+		jmp			.expand_row_loop	; next row
+	
+	end_scale_32_h:			emms
+		popa
+		mov			esp,	ebp
+		pop			ebp
+		ret
+
+
+; prototype: void mmx_scale_32_v (
+;		int32 *s, int32 *d,
+;		int32 sw, int32 sh, int32 dh, int32 dbpr);
+
+;	s and d are pointers into source and destination images,
+;	of sizes sh x sw and dh x dw,
+;	respectively. yscale = dh/sh, nb = gcd (dh, sh), md = dh/nb, ms = sh/nb
+;	LIMITATION: Scaling by a factor > ~250 will probably break.
+
+mmx_scale_32_v:
+
+		push		ebp
+		mov			ebp,	esp
+		pusha
+		movq		mm7,	[zero64]
+		mov			ebx,	[ebp + 20]	; sh
+		mov			eax,	[ebp + 24]	; dh
+		call		m__gcd;
+		mov			[scale_nb],	ebx		; [scale_nb] = gcd (dh, sh)
+		mov			eax,	[ebp + 20]	; sh
+		div			ebx					; eax = sh/nb
+		mov			[scale_ms],	eax
+		mov			eax,	[ebp + 24]	; dh
+		div			ebx					; eax = dh/nb
+		mov			[scale_md],	eax
+
+		mov			eax,	[ebp + 16]	; width
+		shl			eax,	2			; width*4 = bytes per row of source
+		mov			[sbpr], eax
+		mov			eax,	[ebp + 28]	; dest bpr
+		mov			[dbpr],	eax
+
+		mov			ebx,	[ebp + 20]	; sh
+		mov			eax,	[ebp + 24]	; dh
+		cmp			eax,	ebx			; dh >= sh?
+		jl			shrink_32_v			; simple jge expand would be out of reach (sigh)
+		jz			copy_32_v
+		jmp			expand_32_v
+
+;	// BROKEN AS OF DW
+	copy_32_v:							; sh = dh => no scaling, just copy the image data
+		mov			esi,	[ebp + 8]	; source ptr
+		mov			edi,	[ebp + 12]	; dest ptr
+		mov			ebx,	[ebp + 16]	; width
+		mul			ebx					; eax = h*w
+		shl			eax,	2			; eax = 4*h*w = total size
+		mov			ecx,	eax			; counter
+		cld
+		rep			movsd				; copy the memory
+		jmp			end_scale_32_v
+
+	shrink_32_v:
+		mov			eax,	[scale_md]
+		shl			eax,	18			; eax = 262144*dh
+		mov			ecx,	[scale_ms]
+		div			ecx					; eax = 262144*f
+		mov			[scale_f],	eax		; save 262144*f
+		shr			eax,	10
+		movd		mm4,	eax			; mm4 = 0000 0000 0000 zzzz
+		punpcklwd	mm4,	mm4			; mm4 = 0000 0000 zzzz zzzz
+		punpcklwd	mm4,	mm4			; mm4 = zzzz zzzz zzzz zzzz
+		mov			eax,	0			; first pixel column
+		push		eax
+
+	.shrink_col_loop:
+		pop			eax					; col number
+		cmp			eax,	[ebp + 16]	; last col completed?
+		jnz			.shrink_cont
+		jmp			end_scale_32_v		; sigh... jz end_scale out of range...
+
+	.shrink_cont:
+		inc			eax
+		push		eax					; col number on the stack
+		dec			eax
+		shl			eax,	2
+		mov			esi,	[ebp + 8]	; source ptr
+		add			esi,	eax			; srccol
+		mov			edi,	[ebp + 12]	; dest ptr
+		add			edi,	eax			; destcol
+		mov			ecx,	[scale_nb]	; init block loop
+		mov			[scale_nb_], ecx
+
+	.shrink_nb_loop:
+		movq		mm0,	[zero64]	; clear mm0 (build pixel in here)
+		mov			ebx,	1			; ebx = s
+		mov			eax,	1			; eax = d
+
+	.shrink_stillinblock:
+		mov			[scale_d],	eax		; save d
+		mul			dword [scale_ms]
+		mov			[scale_dms], eax	; d*ms
+
+	.shrink_buildup:					; while (s*md < d*ms)
+		mov			eax,	ebx			; eax = s
+		mul			dword [scale_md]	; eax = s*md	// CLOBBERS EDX!
+		cmp			eax,	[scale_dms]
+		jge			.shrink_buildup_done
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		inc			ebx					; s++
+		add			esi,	[sbpr]		; next source pixel
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		pmullw		mm1,	mm4
+		psrlw		mm1,	8			; mm1 *= f
+		paddw		mm0,	mm1
+		jmp			.shrink_buildup
+
+	.shrink_buildup_done:
+		jz			.shrink_newpixel	; here: s*md != d*ms (i.e. fractional pixel)
+		mov			eax,	[scale_f]	; eax = 262144*f
+		mul			ebx					; eax = 262144*f*s
+		mov			edx,	[scale_d]	; edx = d
+		shl			edx,	18			; edx = 262144*d
+		sub			eax,	edx			; eax = 262144*(s*f - d) (= 262144*beta)
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	[sbpr]		; next source pixel
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		movq		mm3,	mm1			; copy the source pixel
+		mov			ecx,	eax
+		shr			eax,	10
+		movd		mm5,	eax			; mm5 = 0000 0000 0000 beta
+		punpcklwd	mm5,	mm5			; mm5 = 0000 0000 beta beta
+		punpcklwd	mm5,	mm5			; mm5 = beta
+		mov			eax,	[scale_f]	; eax = 262144*f
+		sub			eax,	ecx			; eax = 262144*(f - beta) (= 262144*w)
+		shr			eax,	10
+		movd		mm2,	eax			; mm2 = alpha
+		punpcklwd	mm2,	mm2
+		punpcklwd	mm2,	mm2			; mm2 = wwww wwww wwww wwww
+		pmullw		mm1,	mm2			; mm1 = 256*src*alpha
+		psrlw		mm1,	8			; mm1 = src*alpha
+		paddw		mm0,	mm1			; Add the part of the pixel
+		packuswb	mm0,	mm0			; mm0 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm0			; store resulting pixel
+		add			edi,	[dbpr]
+		movq		mm0,	mm5			; mm0 = 256*beta
+		pmullw		mm0,	mm3			; mm0 = 256*src*beta
+		psrlw		mm0,	8			; mm3 = src*beta
+		mov			eax,	[scale_d]
+		inc			eax					; d++ (stored after loop)
+		inc			ebx					; s++
+		jmp			.shrink_stillinblock
+	
+	.shrink_newpixel:					; here: s*md == d*ms
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	[sbpr]
+		punpcklbw	mm1,	mm7			; mm1 = 00aa 00rr 00gg 00bb
+		pmullw		mm1,	mm4			; mm1 = 256*f*pixel
+		psrlw		mm1,	8			; mm1 = f*pixel
+		paddw		mm0,	mm1
+		packuswb	mm0,	mm0			; mm0 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm0			; store resulting average pixel
+		add			edi,	[dbpr]
+	
+	.shrink_block_looper:
+		dec			dword [scale_nb_]
+		jz			.shrink_cont2
+		jmp			.shrink_nb_loop
+	
+	.shrink_cont2:
+		jmp			.shrink_col_loop	; next col
+	
+	expand_32_v:	;/////////////////////
+		mov			eax,	[scale_md]
+		shl			eax,	18			; eax = 262144*dw
+		mov			ecx,	[scale_ms]
+		div			ecx					; eax = 262144*f
+		mov			[scale_f],	eax		; save 262144*f
+		mov			eax,	0			; first pixel row
+		push		eax
+	
+	.expand_col_loop:
+		pop			eax					; col number
+		cmp			eax,	[ebp + 16]	; last col completed?
+		jnz			.expand_cont
+		jmp			end_scale_32_v		; sigh... jz end_scale out of range...
+	
+	.expand_cont:
+		inc			eax
+		push		eax					; col number on the stack
+		dec			eax
+		shl			eax,	2			; eax *= 4
+		mov			esi,	[ebp + 8]	; source ptr
+		add			esi,	eax			; srcrow
+		mov			edi,	[ebp + 12]	; dest ptr
+		add			edi,	eax
+		mov			ecx,	[scale_nb]	; init block loop
+		mov			[scale_nb_], ecx
+
+	.expand_nb_loop:
+		mov			eax,	1			; eax = d
+		mov			ebx,	1			; ebx = s
+
+	.expand_stillinblock:
+		mov			[scale_d], eax		; save d
+		mul			dword [scale_ms]
+		mov			[scale_dms], eax	; d*ms
+		mov			eax,	ebx			; s
+		mul			dword [scale_md]	; eax = s*md
+		mov			[scale_smd],	eax
+		mov			eax,	[scale_dms]
+
+	.expand_buildup:					; while (d*ms < s*md)
+		cmp			eax,	[scale_smd]
+		jge			.expand_buildup_done
+		mov			edx,	[esi]		; copy source pixel
+		mov			[edi],	edx
+		inc			dword [scale_d]		; d++
+		add			edi,	[dbpr]		; next dest pixel
+		add			eax,	[scale_ms]	; update eax = d*ms
+		jmp			.expand_buildup
+	
+	.expand_buildup_done:
+		jz			.expand_newpixel	; here: s*md != d*ms (i.e. fractional pixel)
+		mov			eax,	[scale_f]	; eax = 262144*f
+		mul			ebx					; eax = 262144*f*s
+		mov			edx,	eax
+		mov			eax,	[scale_d]
+		shl			eax,	18			; eax = 262144*d
+		sub			eax,	edx			; eax = 262144*(d - f*s) = 262144*beta
+		mov			ecx,	eax			; save it
+		movd		mm1,	[esi]		; mm1 = 0000 0000 aarr ggbb
+		add			esi,	[sbpr]		; next source pixel
+		movd		mm3,	[esi]
+		punpcklbw	mm1,	mm7			; mm1 = 00aA 00rA 00gA 00bA
+		punpcklbw	mm3,	mm7			; mm3 = 00aB 00rB 00gB 00bB
+		mov			ecx,	eax
+		shr			eax,	10			; eax = 256*beta
+		movd		mm5,	eax			; mm5 = 0000 0000 0000 beta
+		punpcklwd	mm5,	mm5			; mm5 = 0000 0000 beta beta
+		punpcklwd	mm5,	mm5			; mm5 = beta
+		mov			eax,	262144
+		sub			eax,	ecx			; eax = 262144*(1 - beta) = 262144*alpha
+		shr			eax,	10			; eax = 256*alpha
+		movd		mm2,	eax			; mm2 = 256*alpha = w
+		punpcklwd	mm2,	mm2
+		punpcklwd	mm2,	mm2			; mm2 = wwww wwww wwww wwww
+		pmullw		mm1,	mm2			; mm1 = 256*srca*alpha
+		psrlw		mm1,	8			; mm1 = srca*alpha
+		pmullw		mm3,	mm5			; mm3 = 256*srcb*beta
+		psrlw		mm3,	8			; mm3 = srcb*beta
+		paddw		mm1,	mm3			; Add the parts of the pixel
+		packuswb	mm1,	mm1			; mm1 = xxxx xxxx aarr ggbb
+		movd		[edi],	mm1			; store resulting pixel
+		add			edi,	[dbpr]
+		mov			eax,	[scale_d]
+		inc			eax					; d++ (stored after loop)
+		inc			ebx					; s++
+		jmp			.expand_stillinblock
+	
+	.expand_newpixel:					; here: s*md == d*ms
+		mov			edx,	[esi]
+		mov			[edi],	edx			; copy pixel
+		add			esi,	[sbpr]
+		add			edi,	[dbpr]
+	
+	.expand_block_looper:
+		dec			dword [scale_nb_]
+		jz			.expand_cont2
+		jmp			.expand_nb_loop
+	
+	.expand_cont2:
+		jmp			.expand_col_loop	; next col
+	
+	end_scale_32_v:
+		emms
+		popa
+		mov			esp,	ebp
+		pop			ebp
+		ret

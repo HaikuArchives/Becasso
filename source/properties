@@ -1,0 +1,25 @@
+Tool
+Mode
+Foreground
+Background
+TabletArea
+Size
+Name
+ExportFormat
+Scriptee
+Canvas
+
+'expt'
+	Name|Filename
+BBP_REQUEST_BBITMAP
+BBP_REPLACE_BBITMAP
+BBP_OPEN_BBITMAP
+
+
+
+Canvas:
+//Size
+Name (G)
+ActiveLayer (GS) Name, index
+Layer (C) Name(string)
+BBP

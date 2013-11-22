@@ -1,0 +1,368 @@
+#
+# This is the Becasso strings file.
+# © 2000 ∑ Sum Software
+#
+# Translation by Nikola Pižurica
+# with assistance of Dr. Sci. Mato Pižurica
+###################
+#
+# About Window
+0:O Becasso-u
+1:Sajt
+2:Uputstvo
+3:Verzija %s, od %s
+4:Neregistrovana verzija
+5:Inicijalizacija dodataka:
+6:Molimo Vas prevucite datoteke Becasso palete na odgovarajuće Boja dugme ili prozor Editora boja.
+7:Registerovan za:
+8:Vaš ključ je oštećen
+9:Registrujte online
+# Main Window File menu
+10:Datoteka
+11:Novi kanvas…
+12:Otvori datoteku…
+13:Otvori prethodne datoteke
+14:Capture
+15:Podešavanje štampanja…
+16:O Becasso-u
+18:Podešavanja…
+17:Napusti Becasso
+# Names for MouseOver help
+19:
+20:Crtanje
+21:Selektovanje
+22:Četkica
+23:Gumica
+24:Punjenje
+25:Tekst
+26:Sprej kantica
+27:Crtanje slobodnom rukom
+28:Linije
+29:Slobodni oblici
+30:Poligoni
+31:Pravougaonici
+32:Ovali
+33:Krugovi
+34:Elipse
+40:
+41:Boja nanosa
+42:Boja pozadine
+43:Šara
+#
+# Canvas Window
+#
+# File Menu (uses File menu strings from Main Window
+50:Snimi
+51:Snimi kao...
+52:Izvezi…
+53:Štampaj
+54:Zatvori
+55:Izađi
+# Edit Menu
+60:Izmeni
+61:Opovrgni
+62:Ponovi
+63:Seci
+64:Kopiraj
+65:Prenesi
+403:Prenesi u novi sloj
+404:Prenesi u novi kanvas
+66:Izaberi sve
+67:Poništi izbor
+68:Izaberi suprotno
+69:Izaberi po boji
+70:Nanos
+71:Pozadina
+72:Automatski
+73:Oboji izabrano
+74:Izdvoj paletu…
+75:Kanal pretvori u izbor
+76:Alfa
+77:Crvena
+78:Zelena
+79:Plava
+80:Cijan
+81:Magenta
+82:Žuta
+83:Crna
+84:Nijansa
+85:Zasićenost
+86:Vrednost
+87:Izbor pretvori u kanal
+88:Pretvori
+89:Rotiraj
+90:Ceo kanvas
+91:Iseci na veličinu prozora
+92:Iseci na veličinu kanvasa
+93:automatsko sečenje
+94:Postavi u prozor
+95:Levi gornji
+96:Desni gornji
+97:Levi donji
+98:Desni donji
+99:Centar
+100:Povećaj do veličine prozora
+101:Sačuvaj proporcije
+102:Izmeni proporcije
+103:Filter
+104:Transformiši
+105:Generiši
+106:Centriraj miša
+107:Povećaj do…
+108:Okreni
+400:Horizontalno
+401:Vertikalno
+# Window Menu
+110:Prozor
+111:Slojevi
+112:Skaliraj
+113:Približi
+114:Udalji
+115:Prikaži da stane u prozor
+116:Uvećaj
+# Layer Menu
+120:Sloj
+121:Dodaj novi
+122:Ubaci novi
+123:Umnoži
+124:Ukloni
+125:Spoj
+126:Za jedan gore
+127:Za jedan dole
+128:Izaberi
+129:Izaberi sloj
+#
+# Various CanvasWindow strings
+#
+130:‘%s’ je slika kreirana novijom verzijom Becaso-a (%s).\nNe možete učitati ove datoteke ovom verzijom.
+131:Odustani
+132:‘%s’ je slika je kreirana nocijom verzijom Becasso-a (%s).\nDa svejedno pokušam da učitam?
+133:Nastavi
+134:Translation Kit greška:\nPrevođenje nije bilo moguće `%s'
+135:Pomoć
+136:U redu
+137:Datoteka '%s' je tipa '%s'.\nOvo mi ne liči na format slike.This does look like an image format to me.\nMožda niste instalirali odgovarajući translator?
+138:Datoteka '%s' je tipa '%s'.\nNe čini mi se da je u pitanju slika.
+# 140 or 141 go at the first %s in 139, #142 or #143 at the last.
+139:%s slika `%s' koristi alfa kao transparenciju umesto providnosti.\n%s invertovatuje alfa kanal.
+140:Vrlo sam siguran da
+141:Sumnjam da
+# Note the trailing space on the next two strings
+142:Ako vidite samo kvadratnu šaru,\nI savetujem 
+143:Ili to, ili ova slika ima jako puno providnih tačaka. Ako izgleda čudno, probajte da 
+144:Sačuvaj kao čto je sad
+145:Invertuj
+146:Snimi izmene ‘%s’?
+147:Napusti
+148:Snimi
+149:Bez imena
+# Note the leading space in the next string
+405: (detalj)
+# MIME help text
+150:Izvinjavam se što upadam. Hteo bih da sugerišem odgovarajću ekstenziju za ovu datoteku, ali nisam uspeo da nađem ni jednu u Vašoj MIME bazi za '%s'.\nMožete sami dodati ove ekstenzije pomoću FileTypes podešavanja, ili ću ja biti srećan da sam to uradim.  Takođe možete jednostavno zaboraviti na prevaziđeni koncept ekstenzija, iako na njemu zavisi prepoznavanje datoteka na mnogo drugih operativnih sistema.
+151:Tip datoteke
+152:Osveži MIME
+153:Nemoj da mi pametuješ
+154:Ja imam listu tipičnih tipova datoteka za slike i njihove ekstenzije ali Vi mođda imate neke egzotične tipove za koje ja ne znam. U tom slučaju probaću da pogodim, i ako ništa ne uspem da uradim, jednostavno ću preskočiti taj tip. Takođe ću za sada ostati po strani od tipova datoteka koji nemaju podešene ekstenzije.\nUvek mođete ručno promeniti moje sugestije pomoću FileTypes podešavanja.
+155:Snimanje slike…
+156:Ovo je retka greška. Došlo je do greške u Translatoru.\nIt može biti posledica dijapazona grešaka, od konflikta biblioteka do nedostatka prostora na disku.
+157:Izdvoj paletu
+158:Snimanje je onemogućeno u demo verziji Becasso-a.\nNa adresi http://www.sumware.demon.nl možete naći informacije o načinu dobavljanja pune verzije programa.\n\nHvala na interesovanju zaBecasso!
+159:Posetite URL
+#
+# Layer Window
+160:Slojevi u %s
+161:Bezimeni sloj
+162:Pozadina
+# Note leading space, #163 is appended when duplicating a layer
+163: kopija
+164:Sakrij
+165:Pomešaj
+166:Umnoži
+167:Operacije:
+# Menu in Layer Window
+170:Sloj
+171:Dodaj novi sloj
+172:Ubaci novi sloj
+173:Dupliraj sloj
+174:Spoj slojeve
+175:Ukloni sloj
+# Note trailing space:
+176:Ime: 
+#
+# Various small input windows
+180:Veličina kanvasa
+181:Širina
+182:Visina
+183:Kreiraj
+186:Rezolucija
+187:pixela
+188:in
+189:cm
+402:Promeni veličinu
+184:# Boje
+185:Razbij ostale palete
+#
+# Editor boja
+#
+190:Snimi paletu…
+191:Učitaj paletu…
+192:Generiši paletu
+193:Osnovna
+194:Siva
+195:Spektar
+196:Skala topline
+197:RGB model
+198:HSV model
+199:Nijansa (0–360)
+200:Zasićenje (0–1)
+201:Vrednost (0–1)
+202:Alfa kanal
+203:Providnost
+204:Pipeta za boje
+205:RGB tolerancija
+206:Tekući
+207:Najsličniji
+208:Trenutni izbor
+209:Najsličije u paleti
+210:(RGB udaljenost XXX)
+211:(RGB udaljenost: %3.1f)
+#
+#  Tool Attribute Windows
+#
+# General
+306:Bez parametara
+# Četkica
+300:X-veličina
+301:Y-veličina
+302:Ugao
+303:Jačina
+304:Razmak
+305:Čvrstoća
+# Krug
+310:Ivica
+311:Tip
+312:Prvi klik
+# Crtanje
+320:Kopiraj
+321:Preko
+322:Obriši
+323:Min
+324:Maks
+325:Obrni
+326:Dodaj
+327:Oduzmi
+328:Spoj
+329:Način crtanja:
+330:Tablet:
+331:Maksimum # izmena
+# Gumica
+333:Oblik
+334:širina
+335:visina
+# Punjenje
+338:Tolerancija
+339:Vizuelna udaljenost
+340:Apsolutni RGB
+341:Vizuelni
+342:RGB
+343:Vizuelni faktori:
+344:R: 0.213 G: 0.715 B: 0.072
+# Linije
+348:Napuni uglove
+# Ovali
+350:Relativni uglovi
+351:Apsolutni uglovi
+352:Relativni
+353:Apsolutni
+# Sprej
+355:Sigma
+356:Odnos boja
+357:Protok
+358:Ublaži ivice
+# Tekst
+360:Familija: 
+361:Stil: 
+362:Veličina:
+363:Shear:
+364:Rotacija:
+365:Anti Aliasing
+#
+# Add-on windows
+#
+370:Stop
+371:Info
+372:Primeni
+#
+# Prefs window
+#
+380:Podešavanja
+381:Vrati
+382:Primeni
+383:Broj stavki u Otvori datoteku... meniju:
+384:Jezik :
+385:(Promene će stupiti po ponovnom pokretanju)
+#
+# Prozor za uvećanje
+410:Mreža uključena
+411:Mreža crna
+412:Mreža bela
+#
+# Prozor za registraciju 
+#
+420:Registrujte Becasso 2.0
+421:Becasso 1.4 detektovan.
+422:Ovo je besplatna nadogradnja.
+423:Za registraciju: molim Vas mount-ujte Becasso 2.0 CD-ROM
+424:Urađeno
+425:Ime:
+426:Registrujte
+427:Hvala Vam na kupovini Becasso-a!
+428:Molim vas unesite ime.
+429:ovo će otklučati punu verziju.
+430:Becasso 2.0 je preinstaliran,
+431:ali još uvek nije registrovan.
+432:Molim Vas sačekajte %d sekundi…
+433:(Ova pauza će nestati kada registrujete Becasso.)
+434:
+435:Uvek ubaci selekciju
+#
+# Tip of the Day
+#
+500:Tip of the day
+501:Show tips at startup
+502:Next tip
+503:Welcome to Becasso!\nThis window will show you useful tips at startup,\nand it's recommended to read the tips at least once.
+504:Have you read the documentation? :-)\nIt's available via About Becasso.
+505:Right-clicking on a tool button opens its attributes (settings) window.
+506:Right-clicking on a color button opens an extensive color editor.
+507:The cursor shows you what mode you are in (a thin cross for drawing mode, a hollow cross for selection mode).
+508:You can tear off the menus from Becasso's main window.  Click on their buttons, then drag the mouse.  Becasso will remember their positions.
+509:Selections are not masks.  You can draw outside selections.
+510:Selections are not binary.  A pixel can be "a little" selected.  In 256 grades from "not selected at all" to "fully selected", in fact.
+511:To quickly grasp the concept of Becasso's selections, open a colorful image, paint a selection with the brush, and Shift-drag to copy/paste it.  You should see it's "fuzzy".
+512:Where it makes sense, add-ons can operate on the selected area as well as on the selection map itself (depending on the mode).  You can make gradiented selection maps this way.
+513:Use the Tab key to quickly switch between drawing mode and selection mode.
+514:In selection mode, the Fill tool is equivalent to a Magic Wand.
+515:The selection, by default, is inverted only when the mouse is over the canvas.  This behavior can be changed via the Preferences.
+516:Becasso can be used as an external editor from within other applications (such as Gobe Productive).
+517:If you have a fast machine, you can enlarge the filter preview area via the Preferences.
+518:Holding down the Option key turns your cursor into a color picker.
+519:For most tools, painting with the right mouse button exchanges the foreground and background colors.
+520:While a filter is open, you can drag the preview area by holding down the Command (Alt) key.
+521:The arrow keys move the cursor by one pixel.  Hold the Control key for faster movement.
+522:Holding both the Shift and Option keys turns the cursor into a grabbing hand.  You can then drag the canvas to scroll.
+523:The "WinGrab" capture add-on is ideal for writing software documentation.  It lets you screen-grab a single window.
+524:The "VideoGrabber" capture add-on in combination with a handycam is ideal for trying how a moustache would look on you.
+525:Becasso is scriptable.  It can be used, for example, to convert a bunch of images to a different format.
+526:Becasso comes with a Translator for its own format, so you can exchange Becasso images with other BeOS users even if they don't have the full version.
+527:A bit of history trivia: Becasso was the first commercially available paint program for the BeOS.
+528:When exporting to a low-fidelity file format (such as GIF), extracting the optimal color palette followed by quantizing can increase image quality immensely (see documentation for examples).
+529:Anyone can write Becasso add-ons!  The API and example code are included.
+530:The color picker works in the Magnify window too.
+531:Becasso comes with web-safe color palettes, which you can load via the Color Editor.  (Or you can drop them on the color buttons).
+532:The color editor accepts color drops from other applications, and can generate them too (drag off the color patches in the lower left corner).
+533:When dropping a color in an editor, the HTML hex representation of the color will be pasted.
+534:The BeOS desktop also accepts color drops.
+535:A color drop on a canvas will act as a Fill.
+536:The "Center Mouse" command (Command-M) is handy for drawing, say, concentric circles.

@@ -1,0 +1,1020 @@
+<html>
+<head>
+<title>Becasso Add-On API Documentation</title>
+<h1>The Becasso Add-On API</h1>
+</head>
+<a name="Introduction"><h2>Introduction</h2></a>
+
+This document describes the API for designing add-ons for
+<b><i>Becasso</i></b>, <i>Sum Software</i>'s Paint and Imaging
+application for the BeOS.<p>
+
+Add-ons are loaded and linked to <i>Becasso</i> at run time.
+<i>Becasso</i> knows four types of add-ons: <i>Filters</i>,
+<i>Generators</i>, <i>Transformers</i>, and <i>Capture Add-ons</i>.
+There is no structural difference between the first three types, and it is
+up to the add-on itself to identify itself as either of these types at
+initialization time.  This will allow <i>Becasso</i> to place the add-on
+under the corresponding menu item, and take appropriate action when the
+user selects the add-on.<p>
+
+There are, of course, <i>functional</i> differences between these
+three types of add-ons.  <i>Filters</i> are probably the most common
+type of add-ons, comprising conventional blurring filters, Gaussian
+blurring filters, contrast enhancing filters, spread filters,
+despeckle filters, etc.  <i>Generators</i> are add-ons that fill a
+given selection of the canvas with a new image, not necessarily as a
+function of the previous contents of the canvas.  Examples would be a
+color gradient generator, a fractal generator, a plasma generator,
+or a simple texture painting add-on.  <i>Transformers</i>, finally,
+generate a new image by performing some kind of operation on the existing
+canvas, not necessarily in the local way in which a <i>filter</i> does.
+Examples include add-ons that zoom or shrink a given selection, rotate
+it, flip it, or warp it in some special way.<p>
+
+One special feature of the way <i>Becasso</i> interacts with its add-ons is
+that it opens the way to <i>interactive operation</i> of the add-ons.
+With most other image processing software, the user has to go through
+a process of setting parameters, waiting for the result to compute,
+decide whether it is as desired, and if not, adjusting the parameters
+and re-entering the cycle.  <i>Becasso</i> tries to shorten this
+process by showing the effects of a change in parameters directly on
+the canvas, if only in a 'preview' version.<p>
+
+When a <i>filters</i> is opened by the user, for example, a small
+rectangle is shown on the canvas, the contents of which are
+continuously fed through the filter.  If the filter comprises lengthy
+calculations that would hurt responsiveness, it can supply a 'preview'
+version of its algorithm and only use the 'real' one when the user is
+satisfied with the settings.<p>
+
+To give another example, the Gradient <i>generator</i> can generate
+color gradients continuously as the user drags the mouse over the
+canvas and can visually determine when the gradient is placed just
+right.<p>
+
+Especially for add-on developers, there are command line options for
+<i>Becasso</i> which respectively disable add-on loading alltogether
+(the <code>-x</code> switch) or to enable "verbose" add-on loading
+(the <code>-v</code> switch).  When launched from a terminal,
+<i>Becasso</i> will print out the names of each add-on loaded, and 
+print out a report on the initialization of each.<p>
+
+<a name="Structure"><h2>Structure of a <i>Becasso</i> Add-On</h2></a>
+
+A <i>Becasso</i> add-on needs to export the following five
+functions:
+
+<pre>
+int addon_init (uint32 index, becasso_addon_info *info);
+int addon_exit (void);
+int addon_open (BWindow *client, const char *name);
+int addon_close (void);
+int process (Layer  *inLayer,  Selection  *inSelection,
+             Layer **outLayer, Selection **outSelection, 
+             int32 mode, BRect *frame, bool final, BPoint point, uint32 buttons);
+</pre>
+
+A <i>Capture Add-On</i> has a somewhat different structure in that it
+must export
+<pre>
+BBitmap *bitmap (char *title);
+</pre>
+
+instead of the <code>process()</code> function.
+
+It is easiest to take one of the example add-ons and work from there
+as a framework.  There is probably lots of code you can simply leave
+in place as some tasks are shared by all add-ons.
+
+<a name="Day"><h2>A Day in the Life of an Add-On</h2></a>
+
+When an add-on is first loaded into memory (which is one of the first
+things <i>Becasso</i> does when it is launched), it's
+<code>addon_init()</code> function is called by <i>Becasso</i>.
+The <code>index</code> parameter is a unique number for each add-on.
+It is used in further 'correspondence' with <i>Becasso</i>.  The
+<code>info</code> parameter is a special <code>struct</code> that
+needs to be filled in with all kinds of information about the add-on.
+The <code>becasso_addon_info</code> <code>struct</code> is defined as follows:
+
+<a name="becasso_addon_info">
+<pre>
+typedef struct
+{
+    char   name[80];         // The name as it appears in the menu
+    uint32 index;            // A unique index assigned at init time
+    int    type;             // Filter, Transformer or Generator
+    int    version;          // Version of the add-on
+    int    release;          // Release of the add-on
+    int    becasso_version;  // Required Becasso version (other won't load)
+    int    becasso_release;  // Written for release (older will warn)
+    char   author[128];      // Author (company) of the add-on
+    char   copyright[128];   // Copyright notice
+    char   description[128]; // Explains what the add-on does
+    uint8  does_preview;     // bitmask for various preview notifications
+    uint32 reserved;         // You never know...
+} becasso_addon_info;
+</pre></a>
+
+So the typical <code>addon_init()</code> function of an add-on looks
+like this:
+
+<pre>
+int addon_init (uint32 index, becasso_addon_info *info)
+{
+    strcpy (info->name, "Blur");
+    strcpy (info->author, "Sander Stoks");
+    strcpy (info->copyright, "(c) 1997 Sum Software");
+    strcpy (info->description, "Applies a 3x3 blur kernel convolution");
+    info->type            = BECASSO_FILTER;
+    info->index           = index;
+    info->version         = 1;
+    info->release         = 0;
+    info->becasso_version = 1;
+    info->becasso_release = 0;
+    info->does_preview    = PREVIEW_FULLSCALE;
+    window = new BlurWindow (BRect (100, 180, 100 + 188, 180 + 72), info);
+    window->Run();
+    return (0);
+}
+</pre>
+
+Most entires in the <code>addon_info</code> structure are
+self-explanatory.  The <code>does_preview</code> can be set to a
+bitmask of <code>NULL</code>, <code>PREVIEW_FULLSCALE</code>, 
+<code>PREVIEW_2x2</code>, and <code>PREVIEW_MOUSE</code>.  The 
+<code>PREVIEW_2x2</code> code should be used for very computationally
+expensive add-ons, although small-scale previewing is not implemented
+yet in <i>Becasso</i> 1.1.  Whenever the <code>PREVIEW_MOUSE</code>
+bit is set, <i>Becasso</i> will pass mouse events on to the add-on
+(for interactive previewing, like in the Gradient add-on).<p>
+
+The <code>addon_init()</code> function is also the correct place to
+initialize the window for the addon settings.  You derive this window
+from the generic <a href="#AddOnWindow"><code>AddOnWindow</code></a>, 
+described in more detail below.  Note that you start the window thread
+in the <code>addon_init()</code> function by calling
+<code>Run()</code> on it, <i>not</i> <code>Show()</code>.<p>
+
+When you manage to complete your initialization successfully, you
+signal this to <i>Becasso</i> by returning zero.  If anything else is
+returned, <i>Becasso</i> will print a warning message and leave
+the add-on alone.<p>
+
+Next time the add-on hears from <i>Becasso</i> is when the user
+selects it from the menu.  In that case, <i>Becasso</i> will call
+<code>addon_open()</code>, notifying the add-on that it should get
+ready to do some work.  A typical implementation of
+<code>addon_open()</code> looks like this:
+
+<pre>
+int addon_open (BWindow *client, const char *name)
+{
+    char title[B_FILE_NAME_LENGTH];
+    sprintf (title, "Blur %s", name);
+    window->Lock();
+    window->SetTitle (title);
+    if (window->IsHidden())
+        window->aShow (client);
+    else
+        window->aActivate (client);
+    window->Unlock();
+    return (0);
+}
+</pre>
+
+When <i>Becasso</i> calls this function, it will pass a
+<code>client</code> parameter pointing to the window from which the
+user selected the add-on.  The <code>name</code> parameter points to
+the name of that window.  The add-on should put this name somewhere
+visible (preferably in the title of its window) so the user can easily
+see which canvas a given add-on is going to operate on.<p>
+
+The add-on does not need to keep track of its <code>client</code>,
+because the <a href="#AddOnWindow"><code>AddOnWindow</code></a> will
+do that for it.<p>
+
+When <i>Becasso</i> calls the <code>addon_close()</code> function, the
+add-on needs to temporarily go away (for instance because the user has
+clicked the closer gadget of its window, or because another add-on of
+the same type was selected).  Typically, <code>addon_close()</code>
+looks like this:
+
+<pre>
+int addon_close ()
+{
+    window->aClose();
+    return (0);
+}
+</pre>
+
+which is nothing really fancy.  The add-on can go back to sleep now
+until it is opened again.<p>
+
+When <i>Becasso</i> exits, it calls the <code>addon_exit()</code>
+function of each add-on.  Most add-ons can simply <code>return
+0</code> here, but this provision is for add-ons that allocate local
+data in <code>addon_init()</code>; this is the place to get rid of it.
+You don't have to clear the <code>becasso_addon_info</code>
+<code>struct</code>.
+
+Of course, the <i>real</i> action happens when the user actually
+<i>uses</i> the add-on.  There are various scenarios for that, but
+they all have in common that <i>Becasso</i> calls the
+<code>process()</code> function.  This function has quite an array of
+parameters, which are detailed below:<p>
+
+<table>
+<tr>
+<td valign=top><code><a href="#Layer">Layer</a> *inLayer</code><p></td>
+<td>The current layer of the canvas.<p></td>
+</tr>
+<tr>
+<td valign=top><code><a href="#Selection">Selection</a> *inSelection</code><p></td>
+<td>The current selection map, if a selection is made, and
+<code>NULL</code> it there isn't.  In that case, the default action of
+an add-on is to operate on the entire canvas.<p></td>
+</tr>
+<tr>
+<td valign=top><code><a href="#Layer">Layer</a> **outLayer</code><p></td>
+<td>This can point to a valid <a href="#Layer"><code>Layer</code></a>, or be
+<code>NULL</code>.  In the first case, the add-on should write its
+results in the given layer.  If it is <code>NULL</code>, the add-on
+can choose whether it allocates a new <a
+href="#Layer"><code>Layer</code></a>, points
+<code>outLayer</code> to <code>inLayer</code> or overwrite the data in
+<code>inLayer</code> directly and leave <code>outLayer</code>
+<code>NULL</code>.  <i>Becasso</i> will handle each of these
+cases.<p></td>
+</tr>
+<tr>
+<td valign=top><code><a href="#Selection">Selection</a> **outSelection</code><p></td>
+<td>Ditto as above.<p></td>
+</tr>
+<tr>
+<td valign=top><code>int32 mode</code><p></td>
+<td>The current drawing mode of <i>Becasso</i>.  This is either
+<code>M_DRAW</code> or <code>M_SELECT</code>, when <i>Becasso</i> is
+in drawing or selection mode, respectively.  An add-on should modify
+the part of the layer that corresponds to the selection map only when
+<code>mode</code> is <code>M_DRAW</code>, and modify the selection map
+itself when <code>mode</code> is <code>M_SELECT</code>.<p></td>
+</tr>
+<tr>
+<td valign=top><code>BRect *frame</code><p></td>
+<td>This contains the minimal rectangle in which the current selection
+fits, or the entire bounds of the canvas when there is no selection
+made.  Most add-ons can ignore <code>frame</code> as it is mainly
+useful for speedups, since not the entire selection map needs to be
+checked.  Note that it is the responsability of the add-on that
+<code>frame</code> contains the 'dirty' rectangle upon exit, as only
+that part of the canvas will be refreshed.  The add-on can also alter
+<code>frame</code> when it has changed the minimal rectangle, for
+instance when a <i>transformer</i> has enlarged part of the
+canvas.<p></td>
+</tr>
+<tr>
+<td valign=top><code>bool final</code><p></td>
+<td>This variable controls whether the add-on should try to save time
+by using a 'preview version' of its algorithm (a.k.a.
+'quick-and-dirty').  For example, anti-aliasing of the result should
+be switched off then <code>final</code> is <code>false</code>.  A more
+detailed description of what should be done when is given below.<p></td>
+</tr>
+<tr>
+<td valign=top><code>BPoint point</code><p></td>
+<td>In interactive operation of the add-on, this contains the current
+mouse position.<p></td>
+</tr>
+<tr>
+<td valign=top><code>uint32 buttons</code><p></td>
+<td>In interactive operation of the add-on, this contains the current
+state of the mouse buttons.<p></td>
+</tr>
+</table>
+
+As always, the return value should be zero unless something strange
+happened underway.
+
+<a name="Scenarios"><h2>Calling Scenarios</h2></a>
+
+Under different circumstances, the <code>process()</code> function of
+an add-on is called with different parameter meanings.  Most of the
+information about the desired behavior can be extracted out of the
+<code>inSelection</code>, <code>mode</code>, and <code>buttons</code>
+parameters.<p>
+
+When <code>inSelection</code> is <code>NULL</code>, this means that
+the user hasn't made a selection.  The default operation of an add-on
+is to apply to the entire canvas.<p>
+
+When <code>final</code> is <code>false</code>, the add-on is asked to
+provide a quick-and-dirty 'preview' of its working.<p>
+
+When the add-on is operated interactively, it depends on the type of
+add-on what happens.  For <i>filters</i>, simply a small portion of the
+current layer is passed to <code>process()</code>, and the <code>final</code>
+flag is set to <code>false</code>.  This happens everytime the user
+moves the preview rectangle by ALT-dragging the mouse across the
+canvas, or whenever the contents of the preview rectangle are changed
+(for instance when the user draws through it with a drawing tool).<p>
+
+For <i>generators</i> and <i>transformers</i>, the interactive
+operation is more elaborate.  The add-on then receives a continuous
+stream of <code>process()</code> calls with the current mouse position
+in <code>point</code> and the button mask in <code>buttons</code>.
+During this time, the <code>final</code> flag is set to
+<code>false</code>.  When the user releases the mouse button, a final
+call to <code>process()</code> is made with <code>buttons</code> set
+to zero but <code>final</code> still <code>false</code>.  This allows
+for a three-way granularity in image quality: when a generator or
+transformer is very time-consuming, it might be better not to 
+start the calculation in final quality until the user clicks the
+Apply button on its window.<p>
+
+To preserve the orthogonality of the user interface of <i>Becasso</i>,
+add-ons should be prepared to operate on either the current layer or
+the current selection.  Sometimes it is more intuitive to operate on
+both (for instance when a <i>transformer</i> rotates the selected part
+of the canvas, it should also rotate the selection itself).<p>
+
+Since filter calculations can sometimes be quite complex and lengthy, 
+it is good practise to keep the user informed of what's going on.
+<i>Becasso</i> will signal activity by means of the rotating crosshair
+cursor, but this only signals that work is being done, not how much
+longer the user needs to wait for the result.<br>
+Add-on windows contain a progress bar, which is a standard 
+<code>BStatusBar</code> object.  Furthermore, there is a
+&quot;Stop&quot; button which the user can press if (s)he finds the
+calculations to take too long, and the add-on should check
+whether this button is pressed every now and then (for instance, at
+the same time as the progress bar is updated).  This button starts out
+in disabled state (since there is nothing to stop!) so the add-on should
+signal when it starts a complex and lengthy calculation by calling the
+<a href="#AddOnWindow::Start"><code>Start()</code><a> function of the <a
+href="#AddOnWindow"><code>AddOnWindow</code></a> (or your own derivative).
+The window needs to be locked for this.<br>
+
+The progress bar can be updated simply by calling the
+<a href="#AddOnWindow::UpdateStatusBar"><code>UpdateStatusBar
+(delta)</code><a> function, where
+<code>delta</code> is a <code>float</code> that determines the amount
+of work done since the last call.<br>
+If the user has clicked the &quot;Stop&quot; button in the meantime,
+the <a href="#AddOnWindow::Stop"><code>Stop()</code></a> function of
+the <code>AddOnWindow</code> will return <code>true</code>.
+The best place for the update/checking is in the outermost loop of the
+calculation.  Don't update the bar for every pixel calculated, as this
+would have far too much overhead.  And also don't use the progress bar
+if <code>process()</code> is called with <code>final</code> set to
+<code>false</code>, otherwise the bar would be flickering constantly
+as the user moves the preview rectangle across the canvas.<br>
+
+Lastly, when the add-on is finished, the add-on should call <a
+href="#AddOnWindow::Stopped"><code>Stopped()</code></a> to reset the
+progres bar and disable the &quot;Stop&quot; button.  The add-on can
+also reset the progress bar itself by calling <a
+href="#AddOnWindow::ResetStatusBar"><code>ResetStatusBar()</code></a>.<p>
+
+In summary, a typical <code>process()</code> function of a
+<i>filter</i> addon would look something like this:
+
+<pre>
+int process (Layer *inLayer, Selection *inSelection, 
+             Layer **outLayer, Selection **outSelection, int32 mode,
+             BRect *frame, bool final, BPoint point, uint32 buttons)
+{
+    int error = ADDON_OK;
+    if (*outLayer == NULL && mode == M_DRAW)
+        *outLayer = new Layer (*inLayer);
+
+    if (*outSelection == NULL && mode == M_SELECT)
+        *outSelection = new Selection (inLayer->Bounds());
+
+    if (*outLayer) (*outLayer)->Lock();
+    if (*outSelection) (*outSelection)->Lock();
+
+    int h = frame->Height();
+    int w = frame->Width();
+
+    float delta = 100.0/h;  // For the progress bar
+
+    if (final)
+    {
+        window->Lock();
+        window->Start();
+        window->Unlock();
+    }
+
+    switch (mode)
+    {
+    case M_DRAW:
+        for (int y = 0; y &#60; h; y++)
+        {
+            if (final)
+            {
+                window->Lock();
+                window->UpdateStatusBar (delta);
+                if (window->Stop())
+                {
+                    error = ADDON_ABORT;
+                    window->Unlock();
+                    break;
+                }
+                window->Unlock();
+            }
+	    for (int x = 0; x &#60; w; x++)
+	    	do_the_calculation();
+        }
+        break;
+    case M_SELECT:
+	// Likewise...
+        break;
+    default:
+        fprintf (stderr, "MyAddOn: Invalid mode\n");
+        error = ADDON_UNKNOWN;
+        break;
+    }
+
+    if (*outSelection) (*outSelection)->Unlock();
+    if (*outLayer) (*outLayer)->Unlock();
+
+    if (final)
+    {
+        window->Lock();
+        window->Stopped();
+        window->Unlock();
+    }
+    return (error);
+}
+</pre>
+
+For a <i>generator</i> or a <i>transformer</i> add-on, there would be
+code like
+
+<pre>
+int process (...)
+{
+    static BPoint firstpoint = BPoint (0, 0);
+    static BPoint lastpoint  = BPoint (0, 0);
+    static bool entry = false;
+
+    if (!entry && buttons && !final)  // First entry of a realtime drag
+    {
+        firstpoint = point;
+        entry = true;
+    }
+    if (!final && !buttons)  // Exit a realtime drag (buttons released)
+    {
+        lastpoint = point;
+        entry = false;
+    }
+
+    // Lots of code
+
+    if (final)           // Apply clicked
+        slow_generator (firstpoint, lastpoint);
+    else if (!buttons)   // End of a realtime drag
+        medium_generator (firstpoint, lastpoint);
+    else                 // We're in a realtime drag here...
+        fast_generator (firstpoint, point);
+
+    // Some more code
+}
+</pre>
+
+<a name="Support"><h2><i>Becasso</i> Support for Add-Ons</h2></a>
+
+Add-ons link against a copy of the <i>Becasso</i> executable,
+renamed <code>_APP_</code>.  <i>Becasso</i> exports a number of
+classes and useful functions for use in your add-ons.<p>
+
+<a name="AddOnWindow"><h3><code>AddOnWindow</code></h3></a>
+An <code>AddOnWindow</code> is derived from <code>BWindow</code> and
+is an easy way for add-ons to get consistent-looking windows.
+
+<blockquote>
+Defined in: <code>AddOnWindow.h</code>
+<b><pre>
+AddOnWindow (BRect frame, becasso_addon_info *info)
+</pre></b>
+
+where <code>frame</code> has the same meaning as with the original
+<code>BWindow</code> constructor, and <code>info</code> is a
+<i>filled</i> <code>becasso_addon_info</code> <code>struct</code>.
+You should derive the specific window for your add-on from
+<code>AddOnWindow</code> and not directly from <code>BWindow</code>.
+After constructing the window (which typically happens in
+<code>addon_init()</code>), you start its thread by calling
+<code>AddOnWindow::Run()</code>, <i>not</i> <code>Show()</code>.
+Add-on windows are only <i>really</i> closed when <i>Becasso</i>
+exits.  When they are 'closed', they are actually hidden.<p>
+
+Add-on windows automatically have an <code>Info</code> and an
+<code>Apply</code> button in the lower right corner.  Clicking on the
+<code>Info</code> button will display the appropriate information from
+the <code>becasso_addon_info</code> <code>struct</code> in an alert
+box.  Clicking <code>Apply</code> will result in <i>Becasso</i>
+calling the <code>process()</code> function with <code>final</code>
+set to <code>true</code>.
+
+<b><pre>
+BView *Background ()
+</pre></b>
+
+Since the add-on window already has a <code>BView</code> attached to
+it and you might want to add your own radio buttons or input fields to
+it, this function will return a pointer to the background
+<code>BView</code> of the window.
+
+<b><pre>
+virtual void SetClient (BWindow *client)
+</pre></b>
+
+This function is used to 'link' the add-on to a client window.  You
+almost never need to call this function yourself, as there are
+specialized variants to the normal <code>Show()</code> and
+<code>Activate()</code> functions that take the client window as an
+argument.
+
+<b><pre>
+virtual void aShow (BWindow *client)
+</pre></b>
+
+Normally called from within <code>addon_open()</code>, this function
+puts the add-on window on screen after setting its client to
+<code>client</code>.
+
+<b><pre>
+virtual void aActivate (BWindow *client)
+</pre></b>
+
+Also normally called from within <code>addon_open()</code>.  Remember
+that an add-on can only be 'owned' by a single canvas at a time, so
+when the add-on is alreay 'in use', it will simply override the
+previous owner and update it with the new <code>client</code>.
+
+<b><pre>
+virtual void aPreview ()
+</pre></b>
+
+Calling this method will result in <i>Becasso</i> calling the add-ons
+<code>process()</code> function with <code>final</code> set to
+<code>false</code>.  You can use this method to force <i>Becasso</i>
+to take a look at you, for instance when your settings are changed by
+the user.  It is thus typically called from within a
+<code>MessageReceived()</code> method.
+
+<a name="AddOnWindow::Start"><b><pre>
+void Start ()
+</pre></b></a>
+
+This method signals the start of the main calculation of the add-on.
+As a result, the &quot;Stop&quot; button will be enabled.
+
+<a name="AddOnWindow::Stop"><b><pre>
+bool Stop ()
+</pre></b></a>
+
+When the user has clicked the &quot;Stop&quot; button on the add-on
+window, this method will return <code>true</code>.  The add-on should
+then clean up and return <code>ADDON_ABORT</code>.  <i>Becasso</i>
+will then restore the original canvas and discard the partially
+processed result.
+
+<a name="AddOnWindow::Stopped"><b><pre>
+void Stopped ()
+</pre></b></a>
+
+This method resets the progress bar and disables the &quot;Stop&quot;
+button.
+
+<a name="AddOnWindow::UpdateStatusBar"><b><pre>
+void UpdateStatusBar (float delta, const char *text = NULL, 
+                      const char *trailingText = NULL)
+</pre></b></a>
+
+This method simply calls the same method of the <code>BStatusBar</code>
+object in the add-on window.  The meaning of the parameters is
+unaltered.  The default &quot;width&quot; of the bar is 100.0, so the
+add-on should calculate appropriate values for <code>delta</code>,
+typically something like <code>(100.0/height)*y</code>.
+
+<a name="AddOnWindow::ResetStatusBar"><b><pre>
+void ResetStatusBar (const char *label = NULL, 
+                     const char *trailingLabel = NULL)
+</pre></b></a>
+
+This resets the progress bar in the add-on window.  It is called
+automatically when <code>Stopped</code> is called, so you rarely have
+to call this yourself.
+
+</blockquote>
+
+<a name="Layer"><h3><code>Layer</code></h3></a>
+
+A layer is in fact nothing more than a <code>BBitmap</code> in the
+<code>B_RGB_32_BIT</code> color space, along with some additional
+variables.  There are more methods in the <code>Layer</code> class
+than are explained below, for instance for setting whether the layer
+is hidden or visible, but these should not be called from within
+an add-on.
+
+<blockquote>
+Defined in: <code>Layer.h</code>
+
+<b><pre>
+Layer (BRect bounds, const char *name)
+Layer (const Layer& layer)
+</pre></b>
+
+The first constructor takes a rectangle for size and a name as it will
+appear in the Layer Manager window of <i>Becasso</i>.  The second
+version takes an existing <code>Layer</code> and models the new one
+after it (i.e. copy the name, size, and all other settings).  Note
+that there is no color space parameter; <i>Becasso</i> layers are
+always 32 bit BGRA bitmaps.  For convenience,
+<code>AddOnSupport.h</code> defines <code>bgra_pixel</code> as the
+type for the pixels in a <code>Layer</code>.<br>
+Note that the order in which the channels are stored is blue, green, red, 
+alpha, i.e. not RGBA!
+
+</blockquote>
+<a name="Selection"><h3><code>Selection</code></h3></a>
+
+A <code>Selection</code> is a <code>BBitmap</code> in
+<code>B_COLOR_8_BIT</code> color space, although the values are not
+meant to represent colors in the BeOS palette.  It was
+<code>B_GREYSCALE_8_BIT</code> in <i>Becasso</i> 1.0, but due to a bug
+introduced in BeOS R3 this was changed.  Being an 8bit bitmap means
+that its width in pixels need not necessarily be the same as its
+width in bytes, due to padding.  Be sure to take this into account
+when using the raw bitmap data!  <i>Becasso</i> more or less treats
+a <code>Selection</code> map as a separate alpha channel.  When a
+given pixel is non-zero, the corresponding pixel in the current layer
+is selected.  <i>Becasso</i> does not use a simple binary selection
+map, so every pixel can have 255 values of 'selectedness', which come
+into play for instance when the selection is cut and pasted.  An add-on
+should also take this into account whenever appropriate, i.e. a value
+of 0 stands for 'leave the corresponding pixel as it was', and 255 means
+'maximum appliance of the filter'.
+
+<blockquote>
+Defined in: <code>Selection.h</code>
+
+<b><pre>
+Selection (BRect bounds)
+Selection (const Selection &selection)
+</pre></b>
+
+<code>AddOnSupport.h</code> defines <code>grey_pixel</code> as a type
+for the pixels in a selection map.
+
+</blockquote>
+
+<a name="Slider"><h3><code>Slider</code></h3></a>
+
+<i>Becasso</i> also exports a <code>Slider</code> class, which is
+convenient for settings in an add-on window.  Since R3, the BeOS also
+has a slider class (and a TabView, see below) but these classes were
+added to <i>Becasso</i> before that, and should still be used to keep
+the same look and feel across add-ons.
+
+<blockquote>
+Defined in: <code>Slider.h</code>
+
+<b><pre>
+Slider (BRect frame, float sep, const char *name, 
+        float min, float max, float step, 
+	BMessage *msg, orientation posture = B_HORIZONTAL,
+        int size = 0, const char *fmt = "%.0f")
+</pre></b>
+
+<code>Slider</code> is derived from <code>BView</code>.  The
+<code>frame</code> parameter is self-explanatory; the <code>sep</code>
+parameter is the width in pixels that will be taken by the text label
+<code>name</code>.  The minimum and maximum values are designated by
+<code>min</code> and <code>max</code>, and <code>step</code> is the
+minimum change of value.  Whenever the value of the slider is changed
+by the user, either by dragging or by clicking next to the knob, the
+given <code>msg</code> will be sent, with a <code>float</code> entry 
+with the name &quot;<code>value</code>&quot;.  Although the presence
+of a <code>B_HORIZONTAL</code> default suggests the possibility of
+vertical sliders, this is presently unimplemented.  The parameter
+<code>size</code> designates the size of the slider knob.  If zero
+(the default) it is adjusted to the maximum value.  The final
+parameter is a format string, like in the <code>printf</code>
+argument, which designates how the value should be written in the
+knob.
+
+<b><pre>
+float Value ()
+</pre></b>
+
+This returns the current value of the slider.
+
+<b><pre>
+void SetValue (float v)
+</pre></b>
+
+With this method, you can set the value of the slider from within your
+code.  The slider defaults to the minimum position.  Calling
+<code>SetValue</code> does <i>not</i> result in a message being sent.
+
+</blockquote>
+
+<a name="TabView"><h3><code>TabView</code></h3></a>
+
+A <code>TabView</code> is the set of &quot;overlaying&quot; views as
+visible in, for instance, the Fill tool attribute window.  You can use
+these tabviews in your own add-on windows as well.
+
+<blockquote>
+Defined in: <code>TabView.h</code>
+
+<b><pre>
+TabView (BRect frame, const char *name, 
+         uint32 resizingMode = B_FOLLOW_LEFT | B_FOLLOW_TOP)
+</pre></b>
+
+<code>TabView</code> is derived from <code>BView</code>.  The
+parameters are the same as with a normal <code>BView</code>.
+To aid in the layout of your views, there is a value
+<code>TAB_HEIGHT</code> defined which is the extra height you should
+take into account, which is taken by the tabs themselves.
+
+<b><pre>
+void AddView (BView *view, const char *tab)
+</pre></b>
+
+This method adds the <code>view</code> to the <code>TabView</code>.
+The <code>tab</code> parameter designates the name to be drawn in the
+tab; it should not be more than <code>MAX_TAB</code> characters in
+length.
+
+<b><pre>
+void RaiseView (int n)
+</pre></b>
+
+By calling this method, you can &quot;raise&quot; one of the tabviews
+manually, but this is seldom needed.  Once added to the tabview,
+everything is handled fully automatically.  The tabs are numbered in
+the order in which they are added.
+
+</blockquote>
+
+<a name="Miscellaneous"><h3>Miscellaneous</h3></a>
+
+<i>Becasso</i> exports a variety of convenient functions for add-ons.
+They are defined in the <code>AddOnSupport.h</code> file and are
+documented below.
+
+<b><pre>
+bgra_pixel average4 (bgra_pixel a, bgra_pixel b, bgra_pixel c, bgra_pixel d)
+
+bgra_pixel average6 (bgra_pixel a, bgra_pixel b, bgra_pixel c,
+                     bgra_pixel d, bgra_pixel e, bgra_pixel f)
+
+bgra_pixel average9 (bgra_pixel a, bgra_pixel b, bgra_pixel c,
+                     bgra_pixel d, bgra_pixel e, bgra_pixel f, 
+                     bgra_pixel g, bgra_pixel h, bgra_pixel i)
+</pre></b>
+<blockquote>
+Since pixel data packed in a 32 bit integer cannot simply be
+manipulated with the normal operators, <i>Becasso</i> offers these
+functions for the often-used case of averaging entire pixel values.
+The Blur filter code uses these functions quite extensively.  These
+functions are highly optimized.  See the <a href="#Tips">Tips and
+Tricks Department</a> below.
+</blockquote>
+
+<b><pre>
+bgra_pixel pixelblend (bgra_pixel d, bgra_pixel s)
+</pre></b>
+<blockquote>
+This function returns an <code>bgra_pixel</code> in which the two
+arguments are blended, taking the alpha channel of <code>s</code> into 
+account.  An alpha value of 0 means that <code>s</code> is fully
+transparent, so the result will be <code>d</code>.  When the alpha
+value of <code>s</code> is 255, it is fully opaque, so there won't be
+any <code>d</code> shining through.  Any intermediate value results in
+the corresponding mixing of the colors.
+</blockquote>
+
+<b><pre>
+uint8 clip8 (int32 c)
+</pre></b>
+<blockquote>
+Returns the value of <code>c</code>, clipped to the range
+<code>0..255</code>.
+</blockquote>
+
+<b><pre>
+rgb_color highcolor (void)
+rgb_color lowcolor (void)
+</pre></b>
+<blockquote>
+Return the currently selected high and low colors (in the
+corresponding menu buttons of the <i>Becasso</i> main menu).
+</blockquote>
+
+<b><pre>
+rgb_color contrastingcolor (rgb_color a, rgb_color b)
+</pre></b>
+<blockquote>
+Returns a color that contrasts with both <code>a</code> and
+<code>b</code>.  An illustration of its use is given in the Gradient
+generator example code, where a color is needed to contrast with both
+'end points' of the gradient.  The default color is red, unless one
+(or both) of <code>a</code> and <code>b</code> is 'reddish', in which
+case either black or white is returned, depending on the average
+'brightness' of <code>a</code> and <code>b</code>.
+</blockquote>
+
+<b><pre>
+bgra_pixel weighted_average     (bgra_pixel a, uint8 wa, bgra_pixel b, uint8 wb)
+bgra_pixel weighted_average_rgb (rgb_color  a, uint8 wa, rgb_color  b, uint8 wb)
+</pre></b>
+<blockquote>
+These functions return a color that is the weighted average of
+<code>a</code> and <code>b</code>, via the formula 
+<blockquote><i>result = (a*wa + b*wb)/(wa + wb)</i>,</blockquote>
+naturally taking the separate color channels into account.
+</blockquote>
+
+<b><pre>
+int Scale (BBitmap *src, BBitmap *srcmap, BBitmap *dest, BBitmap *destmap)
+</pre></b>
+<blockquote>
+This function performes an anti-aliased scaling.  <code>src</code> and
+<code>dest</code> are <code>BBitmap</code>s in
+<code>B_RGB_32_BIT</code> color space, and <code>srcmap</code> and
+<code>destmap</code> are <code>BBitmap</code>s in
+<code>B_COLOR_8_BIT</code> color space.  Either <code>src</code> and
+<code>dest</code>, or <code>srcmap</code> and <code>destmap</code> can
+be <code>NULL</code>, in which case only the other bitmap is
+scaled.  If all arguments are non-<code>NULL</code>, a 32 bit bitmap
+and an 8 bit bitmap (for instance a <a href="#Layer">Layer</a> and its 
+corresponding <a href="#Selection">Selection</a>) can be scaled with
+one call.<p>
+
+This function can handle arbitrary scaling factors, both enlarging or
+shrinking, and with different horizontal and vertical factors.  See
+the Scale add-on sample code for an example.  Note that the
+Be-supplied <code>DrawBitmap</code> call offers similar functionality,
+but that this one does <i>not</i> anti-alias, which has considerable
+impact on the result.  Anti-aliasing does slow the process down
+considerably, so for realtime preview it is recommended you use the
+method with <code>DrawBitmap</code>.
+</blockquote>
+
+<b><pre>
+void AddWithAlpha (BBitmap *src, BBitmap *dest, long x, long y)
+</pre></b>
+<blockquote>
+Both <code>src</code> and <code>dest</code> must be 32 bit
+<code>BBitmap</code>s.  The <code>dest</code> bitmap is alpha blended
+on the <code>src</code> bitmap, at the coordinates (<code>x</code>,
+<code>y</code>) in the coordinate space of <code>src</code>.  The
+bitmaps need not be of the same size and <code>dest</code> need not be
+contained within <code>src</code>, i.e. the necessary clipping is
+performed.<p>
+This function is actually used by <i>Becasso</i> to paste a selection.
+</blockquote>
+
+<b><pre>
+void CutOrCopy (BBitmap *src, BBitmap *dest, BBitmap *selection, 
+                long offx, long offy, bool cut)
+</pre></b>
+<blockquote>
+This function expects <code>src</code> and <code>dest</code> to be 32
+but <code>BBitmap</code>s, and <code>selection</code> to be an 8 bit
+selection map.  It copies <code>src</code> selectively into
+<code>dest</code> via the selection map, i.e. the resulting alpha
+channel is taken from the selection map.  The copying starts at offset
+(<code>offx</code>, <code>offy</code>) and fills the entire
+<code>dest</code> bitmap.  If <code>cut</code> is <code>true</code>,
+the selection is also 'cut' (i.e. deleted) from <code>src</code>.<p>
+This function is actually used by <i>Becasso</i> to cut/copy a
+selection.  If <code>selection == NULL</code>, <i>Becasso</i> assumes a full
+selection.
+</blockquote>
+
+<b><pre>
+rgb_color hsv2rgb (hsv_color c)
+rgb_color bgra2rgb (bgra_pixel c)
+rgb_color cmyk2rgb (cmyk_pixel c)
+hsv_color rgb2hsv (rgb_color c)
+hsv_color bgra2hsv (bgra_pixel c)
+hsv_color cmyk2hsv (cmyk_pixel c)
+bgra_pixel cmyk2bgra (cmyk_pixel c)
+bgra_pixel rgb2bgra (rgb_color c)
+bgra_pixel hsv2bgra (hsv_color c)
+cmyk_pixel bgra2cmyk (bgra_pixel c)
+cmyk_pixel rgb2cmyk (rgb_color c)
+cmyk_pixel hsv2cmyk (hsv_color c)
+</pre></b>
+<blockquote>
+These functions convert pixels between various color spaces.  The
+types <code>bgra_pixel</code> and <code>cmyk_pixel</code> are actually
+<code>uint32</code>'s, with the color components in there as indicated
+by the name.
+</blockquote>
+
+<b><pre>
+float diff (rgb_color a, rgb_color b)
+</pre></b>
+<blockquote>
+Returns the luminance distance between the two given colors, as used
+for example to determine the closest match in the palette.
+</blockquote>
+
+<b><pre>
+uchar clipchar (float x)
+float clipone (float x)
+float clipdegr (float x)
+</pre></b>
+<blockquote>
+These functions return the value passed in, clipped to the given
+range.  I.e. 0 &lt;= <code>clipchar (x)</code> &lt;= 255, 0 &lt;=
+<code>clipone (x)</code> &lt;= 1, and 0 &lt;=
+<code>clipdegr(x)</code> &lt;
+360</code>.
+</blockquote>
+
+<i>Becasso</i> further exports a number of <code>rgb_color</code>
+definitions, so that after including <code>Colors.h</code>, you can
+use <code>Red</code>, <code>Green</code>, <code>Blue</code>,
+<code>Black</code>, <code>White</code>, and several others.
+
+<a name="Tips"><h2>Tips and Tricks Department</h2></a>
+
+Apart from the usual optimizations (like putting the smallest loop of
+two nested loops on the outside), there are a number of specific tricks 
+that can speed up your code dramatically.  The example filters do not make 
+heavy use of these kind of tricks since they often obfuscate the code.  
+The functions exported by <i>Becasso</i>, as mentioned above, are quite 
+optimized and some of the tricks might be handy for your own use.<p>
+
+<h3>Extracting color channels out of a <code>bgra_pixel</code></h3>
+
+It is not very wise to cast a <code>bgra_pixel</code> pointer to a
+<code>char</code> pointer and extract the channel data this way,
+because this would result in four consecutive byte memory reads.  On
+most modern processors, extracting a single longword on a 4-byte
+aligned memory address is much faster.  Unfortunately, the shifting
+and masking required to extract the color channels from a single
+32-bit longword is CPU-specific.  <i>Becasso</i> offers a set of
+macros that take care of this.
+You can then get at the respective color channels like so:
+<pre>
+   bgra_pixel pixel = *pixelpointer;
+   uint8 red   = RED (pixel);
+   uint8 green = GREEN (pixel);
+   uint8 blue  = BLUE (pixel);
+   uint8 alpha = ALPHA (pixel);
+</pre>
+
+These are actually macros, defined in <code>BecassoAddOn.h</code>,
+which take care of the Endianness issue when creating code that should
+compile on both Intel Architecture and PowerPC machines.  Take a look
+in that header file for a lot more helpful macros.
+
+<h3>Avoid casting float &lt;--&gt; integer</h3>
+
+Whereas on modern processors there need not be any principal 'fear'
+for floating point arithmetic, it <i>is</i> very costly to constantly
+cast between floats and integers.
+
+<h3>On PPC, pre-increment is faster than post-increment</h3>
+
+Although a little bit less clear to read, it is a good idea to use
+pre-increment on PPC chips instead of post-increment, since the PPC
+can execute the pre-increment 'for free'.  So it is smart to change
+your loops from
+<pre>
+   bgra_pixel *src  = (bgra_pixel *) inLayer->Bits();
+   bgra_pixel *dest = (bgra_pixel *) outLayer->Bits();
+   for (uint32 i = 0; i < layer->BitsLength()/4; i++)
+   {
+      *dest++ = do_something_with_pixel (*src++);
+   }
+</pre>
+to
+<pre>
+   bgra_pixel *src  = (bgra_pixel *) inLayer->Bits() - 1; // Note the -1 !
+   bgra_pixel *dest = (bgra_pixel *) outLayer->Bits() - 1;
+   for (uint32 i = 0; i < layer->BitsLength()/4; i++)
+   {
+      *(++dest) = do_something_with_pixel (*(++src));
+   }
+</pre>
+
+<hr>
+<font size=2>
+This documentation is &copy; 1998, <a href="http://www.sumware.demon.nl"><i>Sum Software</i></a>.<br>
+Last modification: 20 October 1998.<br>
+Trademarks used herein belong to their respective owners.
+</font>
+</html>

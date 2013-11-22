@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+<TITLE>Becasso Tutorial</TITLE>
+</HEAD>
+<table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td bgcolor="#306020">
+<font color="#ffffff" face="Verdana, Arial, Helvetica, Swiss" size=4>
+<b><i>&nbsp;Becasso Tutorial</i></b></font></td></tr></table><br>
+
+<br><br>
+<b><font face="Swiss, Helvetica, Sans-serif" size="6">
+Aqua Text Effect (bumpmap tutorial)</font></b><p>
+
+<font face="Swiss, Helvetica, Sans-serif">
+
+This tutorial shows how you can make a quite good-looking text effect rather easily using
+a single add-on and some selection tricks.<p>
+
+<h3>Step 1</h3>
+<img src="image1.jpg" align="left" hspace="4" vspace="4">
+Pick a suitable background image.  In the example we have simply used
+the <b>Generate &gt; Tile</b> add-on to fill a blank new canvas with a cloud pattern,
+although you could just as well have loaded an existing image.
+<br clear="all"><br><br>
+
+<h3>Step 2</h3>
+<img src="image2.jpg" align="left" hspace="4" vspace="4">
+Switch to selection mode and use the text tool to make type your text.
+For this particular effect, a "round" font gives the best-looking results (we've used
+VAG Rounded in the example).  Note that the bumpmap add-on (which we'll use later on to
+create the effect) is by
+no means limited to text selections, but its effect is easiest to demonstrate using text.
+<br clear="all"><br><br>
+
+<h3>Step 3</h3>
+<img src="image3.jpg" align="left" valign="top" vspace="4" hspace="4">
+The bumpmap add-on uses the selection map as a "height map" and then "lights" the image under
+an adjustable angle and elevation.  The selection as it stands after Step 2 changes quite "abruptly"
+(apart from anti-aliasing effects) so using it as a bumpmap directly would result in very
+"sharp" transitions.  To change this, we use the Gaussian Blur add-on to make the selection map more
+"fuzzy".  So after this step, the selection (to be used as a bump map) can be thought of as having
+the "steep steps" smoothed out into gradual slopes.
+<p>
+<br clear="all"><br><br>
+
+<h3>Step 4</h3>
+<img src="image4.jpg" align="left" hspace="4" vspace="4">
+Switching back to Drawing mode and fiddling with the various parameters of the
+bumpmap add-on yields the end result.  The "Angle" and "Elevation" sliders in the add-on
+are for positioning the position of the virtual light source; the "Specular" slider can be
+thought of as controlling the type of "material" the canvas is made of - a matte material
+(such as paper) has almost no specular reflection properties, whereas a "shiny" material (such as
+glass or plastic) has a high specular reflection.  The particular "translucent" effect is
+achieved by setting the "Translucent" slider to a nonzero value, and setting the light
+color to light cyan.<br clear="all"><br><br>
+
+</font>
+</BODY>
+</HTML>

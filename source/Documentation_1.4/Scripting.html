@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Becasso Scripting API Documentation</title>
+<h1>The <i>Becasso</i> Scripting API</h1>
+</head>
+<body bgcolor="#ffffff">
+<a name="Introduction"><h2>Introduction</h2></a>
+
+This document describes the API for scripting
+<i>Becasso</i>, <i>Sum Software</i>'s Paint and Imaging
+application for the BeOS.<p>
+
+Like all well-behaved BeOS applications, <i>Becasso</i> implements scripting 
+in the form of a set of messages.  The examples in this document use
+Attila Mezei's freely avaiable scripting application called
+<code>hey</code>, version 1.2 or greater.  <code>Hey</code> is
+available from <a href="http://w3.datanet.hu/~mezeia">Attila's web
+site</a>.
+
+<a name="General"><h2>Scripting General Settings</h2>
+
+The five buttons visible in <i>Becasso</i>'s main window show the
+various features of the settings <i>Becasso</i> is currently using.
+They show the <i>mode</i>, <i>tool</i>, <i>foreground color</i>,
+<i>background color</i>, and <i>pattern</i>, respectively.  The first
+four of these can be scripted.<p>
+
+The four scriptable properties can be both set and queried:
+<font color="blue">
+<pre>    hey Becasso get Mode
+</pre></font>
+returns the current mode (either <code>Draw</code> or
+<code>Select</code>) as property named <code>result</code>.
+The <code>Mode</code> and <code>Tool</code> properties can be set
+either by index or by name.<p>
+
+<blockquote>
+<font color="red"><b>Note:</b></font>
+When the sender of the scripting message is waiting for a reply (as
+<code>hey</code> does), <i>Becasso</i> will only send a reply message.
+If it isn't, <i>Becasso</i> will print the reply as a readable string
+to <code>stderr</code> on the terminal it was launched from.
+</blockquote>
+
+The possible names of the <code>Mode</code> property are
+<code>Draw</code> and <code>Select</code>; the <code>Tool</code> can
+be either <code>Brush</code>, <code>Eraser</code>, <code>Fill</code>,
+<code>Text</code>, <code>Spray Can</code>, <code>Freehand</code>,
+<code>Lines</code>, <code>Free Shape</code>, <code>Polygons</code>,
+<code>Rectangles</code>, <code>Ovals</code>, <code>Circles</code>, or
+<code>Ellipses</code>.  These names are the names displayed in the
+<i>Becasso</i> main window as help text when the mouse pointer is
+moved over the icons.  <i>Becasso</i> is case insensitive, so
+<font color="blue">
+<pre>    hey Becasso set tool to "spray can"
+    hey Becasso set Tool to "Spray Can"
+</pre></code>
+are equivalent.<p>
+
+The foreground and background colors are scripted through the properties
+<code>Foreground</code> and <code>Background</code>, respectively.
+Querying <i>Becasso</i> for the current colors always yields them as
+a <code>B_RGB_COLOR_TYPE</code> entry named <code>result</code> in the
+reply message.
+<blockquote>
+<font color="red"><b>Note:</b></font>
+This is different from the <code>Mode</code> and
+<code>Tool</code> properties, because these can also function as
+specifiers when scripting mode or tool parameters (see 
+<a href="#Parameters">Scripting Tool Parameters</a>,
+below).
+</blockquote>
+Setting the colors, however, can be done by either specifying the
+components of an <code>rgb_color</code>, or by color name, i.e.
+<font color="blue">
+<pre>    hey Becasso set Foreground to "rgb_color(85,107,47,255)"
+    hey Becasso set Foreground to DarkOliveGreen
+</pre></font>
+are equivalent.<p>
+
+The color names are matched case-insensitively and also allow for
+variants with spaces, so
+<font color="blue">
+<pre>    hey Becasso set background to lightslategrey
+    hey Becasso set Background to "Light Slate Grey"
+    hey Becasso set Background to LightSlateGrey"
+    hey Becasso set Background to "Light slate GREY"
+</pre></font>
+are equivalent.  Also, <i>Becasso</i> tries not to be pedantic about 
+spelling, so <code>Grey</code> and <code>Gray</code> are considered 
+equivalent.
+
+<blockquote>
+<font color="red"><b>Note:</b></font>
+To find out all the names <i>Becasso</i> recognizes as colors, run
+<i>Becasso</i> from a terminal with the command line switch
+<code>-c</code>, i.e.
+<font color="blue">
+<pre>    Becasso -c
+</pre></font>
+and it will print out all the color names to the terminal, preceded by
+the red, green, and blue components.  Note that there are 752 entries,
+so the list is quite long.  The color names are the ones that are in
+the file <code>rgb.txt</code> in most XWindow distributions.
+</blockquote>
+
+<a name="Parameters"><h2>Scripting Tool Parameters</h2>
+
+Every tool parameter can be set through scripting calls.  The syntax is is as in the following
+example:
+<font color="blue">
+<pre>    hey Becasso set ColorRatio of Tool Spraycan to 0.5
+</pre></font>
+The following table lists all tool parameter names.<p>
+
+<center>
+<table border="0" border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#FFFFCB"><th>Tool</th><th>Parameter</th><th>Type</th><th>Valid Range</th></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Brush</td>
+	<td>Strength<br>Angle<br>Width (XSize)<sup>2</sup><br>Height (YSize)<br>Spacing</td>
+	<td>int<br>float<sup>1</sup><br>int<br>int<br>float</td>
+	<td>0 .. 255<br>0 .. 45<br>1 .. 40<br>1 .. 40<br>1 .. 64</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Eraser</td>
+	<td>XSize (Width, HSize)<br>YSize (Height, VSize)<br>Shape (Type)</td>
+	<td>float<br>float<br>string</td>
+	<td>1 .. 50<br>1 .. 50<br>Ellipse, Rectangle</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Fill</td>
+	<td>ToleranceType (Type)<br>Tolerance (Visual)<br>Red<br>Green<br>Blue</td>
+	<td>string<br>float<br>int<br>int<br>int</td>
+	<td>Visual, Absolute (RGB)<br>0 .. 255<br>0 .. 255<br>0 .. 255<br>0 .. 255</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Text</td>
+	<td>Family<br>Style<br>PtSize (Size)<br>Shear<br>Rotation<br>AntiAliasing</td>
+	<td>string<br>string<br>float<br>float<br>float<br>bool</td>
+	<td><i>Family Name</i><sup>3</sup><br><i>Style Name</i><br>4 .. 144<br>45 .. 135<br>0 .. 360<br>true, false</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Spray Can</td>
+	<td>Sigma<br>Ratio (ColorRatio)<br>Rate (FlowRate)<br>Fade</td>
+	<td>float<br>float<br>float<br>bool</td>
+	<td>1 .. 25<br>0 .. 1<br>1 .. 20<br>true, false</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Freehand</td>
+	<td>PenSize</td>
+	<td>float</td>
+	<td>0 .. 50</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Lines</td>
+	<td>PenSize<br>Corners (FillCorners)</td>
+	<td>float<br>bool</td>
+	<td>0 .. 50<br>true, false</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Free Shape</td>
+	<td>PenSize<br>ShapeType (Type)</td>
+	<td>float<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Polygons</td>
+	<td>PenSize<br>ShapeType (Type)</td>
+	<td>float<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Rectangles</td>
+	<td>PenSize<br>ShapeType (Type)</td>
+	<td>float<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Ovals</td>
+	<td>PenSize<br>ShapeType (Type)<br>RelativeWidth (RelX)<br>RelativeHeight (RelY)<br>AbsoluteWidth (AbsX)<br>AbsoluteHeight (AbsY)<br>Corners</td>
+	<td>float<br>string<br>float<br>float<br>float<br>float<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline<br>0 .. 0.5<br>0 .. 0.5<br>0 .. 200<br>0 .. 200<br>Relative, Absolute</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Circles</td>
+	<td>PenSize<br>ShapeType (Type)<br>FixPoint (FirstClick)</td>
+	<td>float<br>string<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline<br>Center, Perimeter</td></tr>
+<tr bgcolor="#FFFFCB"><td valign="top">Ellipses</td>
+	<td>PenSize<br>ShapeType (Type)</td>
+	<td>float<br>string</td>
+	<td>0 .. 50<br>FilledOutline, Filled, Outline</td></tr>
+</table>
+</center>
+
+<sup>1</sup>Where it makes sense, <b>Becasso</b> also looks for integers in the
+scripting message, because <code>hey</code> defaults to integers for values without
+a decimal point.</br>
+<sup>2</sup>Names in brackets denote optional other names for the same parameter.<br>
+<sup>3</sup>Partial matches are supported, i.e. &quot;Dutch&quot; for &quot;Dutch801 RM BT&quot;.
+<p>
+All option names are case independent.
+
+<a name="Gliobals"><h2>Other Global Properties</h2></a>
+
+Apart from the <code>Tool</code> and <code>Mode</code> properties (and all 
+their settings), the </code>Foreground</code> and <code>Background</code>
+colors, <b>Becasso</b> has a notion of the <code>TabletArea</code>, 
+<code>ExportFormat</code>, and <code>Scriptee</code> properties.<p>
+
+The <code>TabletArea</code> is a <code>BRect</code> that specifies the rectangle
+and aspect ratio to be used by <b>Becasso</b>'s internal Wacom tablet code.  You can ask for
+the current active table area with
+<font color="blue">
+<pre>    hey Becasso get TabletArea
+</pre></font>
+For example, the default for an UltraPad A5 the values are (0.0, 0.0, 10240.0, 7680.0).
+You can change it with
+<font color="blue">
+<pre>    hey Becasso set TabletArea to 'BRect(l,t,r,b)'
+</pre></font>
+Note that TabletArea represents the area in tablet coordinates, which will
+be mapped onto the canvas coordinates.  So if you have a square canvas,
+setting the TabletArea to something like (0,0,7680,7680) will give you
+maximum tablet use while keeping a 1:1 aspect ratio.
+<p>
+
+To prevent the Export Format Window from popping up during scripted export of a canvas
+to a non-native format, <b>Becasso</b> uses a default export format which can be set
+via the <code>ExportFormat</code> property:
+<font color="blue">
+<pre>    hey Becasso set ExportFormat to image/jpeg
+    hey Becasso set ExportFormat to 'JPG '
+</pre></font>
+The default export format can be specified by its type code or its MIME type.  Asking for it will return
+the type code.
+<p>
+To actually have <b>Becasso</b> export the canvas, send it an <code>'expt'</code> message:
+<font color="blue">
+<pre>    hey Becasso 'expt' with Name=foo.jpg
+</pre></font>
+
+If the format hasn't been set, <b>Becasso</b> will save in its native format.
+If there is no name given, <b>Becasso</b> will default to the canvas title (i.e.
+the window title, minus the (100%) part).  If the path is not absolute,
+<b>Becasso</b> will default to the current working directory.  If there is no
+path at all, it will default to the user's home directory (using the
+canvas title).<p>
+As a more elaborate example, the following snippet will convert all JPEG images in the current
+directory to PNG:
+<font color="blue">
+<pre>    hey Becasso set ExportFormat to image/png
+    for x in *.jpg
+    do
+        hey Becasso load file\($x\)
+        hey Becasso 'expt' with Name=${x%.jpg}.png
+    done
+</pre></font>
+The reason <b>Becasso</b> knows <i>which</i> canvas to export, even though you are
+in fact sending the <code>'expt'</code> messages to the main application, is that <b>Becasso</b>
+keeps track of a &quot;current scriptee&quot; to which it will forward all relevant scripting messages.
+This scriptee is automatically set to the last opened canvas, but can be set manually to any other window:
+<font color="blue">
+<pre>    hey Becasso set Scriptee to 'foobar (100%)'
+    hey Becasso set Scriptee to 6
+</pre></font>
+The scriptee can either be set through its window title or its window index.  Note that there are quite
+a few windows (possibly hidden) when <b>Becasso</b> is running, which are not necessarily
+canvas windows.  You can also ask for the current scriptee.  This will return a BMessenger, so it 
+will hardly be useful from the command line.  For a better alternative, see 
+<a href="#Canvases">Canvases</a>, below.<p>
+
+Normally when <b>Becasso</b> loads a file, it performs a sanity check on the alpha channel of
+the new image.  Many Translator add-ons have in the past used the alpha channel to denote 
+transparency instead of opacity (even some by Be themselves), and images originating
+from other systems might suffer from the same inconvenient inversion of the alpha channel.  
+<b>Becasso</b> uses a simple heuristic to guess whether a newly loaded image file might have
+this inversion of the alpha channel, and pops up an alert box offering to invert it for you.  You can
+prevent <b>Becasso</b> from popping up that alert, if for example you want to minimize the risk
+of a script blocking on user input, by specifying the <code>AskForAlpha</code> flag:
+<font color="blue">
+<pre>    hey Becasso load file[foo.png] with AskForAlpha=bool[false]
+</pre></font>
+
+
+<a name="Canvases"><h2>Canvases</h2></a>
+
+The preceding scriptable properties each have a global effect on <b>Becasso</b>.  However, 
+also the properties of a specific canvas can be targeted.  To have <b>Becasso</b> open a new 
+canvas with the name &quot;foo&quot;, dimensions 200 pixel high and 300 pixels wide, and placed 
+on screen with the left top of the window at (100, 150), one would say
+<font color="blue">
+<pre>    hey Becasso create Canvas with Name=foo and Size=BRect'(100,150,400,350)'
+</pre></font>
+Especially to avoid confusion with all the non-canvas windows of <b>Becasso</b>, it
+is also allowed to use the <code>Canvas</code> as a specifier instead of the normal 
+<code>Window</code> specifier:
+<font color="blue">
+<pre>    hey Becasso set Look of Canvas "Untitled 1" to 20
+</pre></code><p>
+Canvases have <code>Layer</code> as sub-specifier, so you can say
+<font color="blue">
+<pre>    hey Becasso create Layer of Canvas "foo" with Name=MyLayer
+</pre></font>
+You can select the currently active layer:
+<font color="blue">
+<pre>    hey Becasso set ActiveLayer of Canvas "foo" to MyLayer
+</pre></font>
+Removing a layer is straightforward:
+<font color="blue">
+<pre>    hey Becasso delete Layer "Bar" of Canvas "foo"
+</pre></font>
+
+A <code>Layer</code> can be used as a specifier as well.  You can set the global alpha level of
+a given layer with the <code>GlobalAlpha</code> property.  For example, the following gives
+a fade-in effect:
+<font color="blue">
+<pre>    for x in 0 50 100 150 200 255
+    do
+        hey Becasso set GlobalAlpha of Layer Background of Canvas foo to $x
+    done
+</pre></font>
+
+You can also set the contents of a given layer to an image by setting its <code>Contents</code>
+property:
+<font color="blue">
+<pre>    hey Becasso set Contents of Layer "bar" of Canvas "foo" to file[image.jpg]
+</pre></font>
+The image wil be stretched to fit.
+
+<a name="Future Directions"><h2>Future Directions</h2></a>
+
+We plan to add the possibility of querying <b>Becasso</b> for all tool parameters too.
+Scripting on BeOS is very powerful, and if you have any suggestions for further scripting support
+in <b>Becasso</b>, please don't hesitate to contact us at <a href="mailto:becasso@sumware.demon.nl">
+becasso@sumware.demon.nl</a>.
+
+<hr>
+<font size=2>
+This documentation is &copy; 1999, <a href="http://www.sumware.demon.nl"><i>Sum
+Software</i></a>.<br>
+Last modification: 2 February 1999.<br>
+Be and the BeOS are registered trademarks of Be, Incorporated.
+Trademarks used herein belong to their respective owners.
+</font>
+</body>
+</html>

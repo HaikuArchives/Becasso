@@ -1,0 +1,82 @@
+Becasso 1.3 Release Notes
+
+Below is a list of features new in version 1.3.
+
+Becasso 2.0 will be an Adamation product, as announced at the March '98 Be Developer Conference.  However, this 1.2 version is not an Adamation product!  Please direct all support questions to becasso@sumware.demon.nl and not to Adamation.
+
+Also included in this distribution are PNG, JPEG, and Becasso Translators.  Note that all of these use shared libraries and will only function from within other applications when these are in the correct place (~/config/lib).  The BeOS comes with a JPEG translator, but that one doesn't use shared libraries, is statically linked to a less recent JPEG library, and offers less adjustable parameters.
+
+
+New in version 1.3:
+
+* Initial port to R4
+* Spray can tool improved again
+* Tertiary mouse button ends polyline
+* Improved MMX code (Up to twice as fast!  Whoopee!)
+* Much better performance with big images
+* Fill tool fixed
+* Thumbnail preview in Open File Panel
+* new (anti-aliasing) Wave add-on
+* new Ripple add-on
+* Scale add-on improved
+* Help about not being able to open files.
+* Improved Slider (keyboard navigable)
+* Improved TabView (keyboard navigable)
+* Canvases accept drops from ShowImage as well as files from the Tracker
+* Dragging clippings onto Tracker works too
+* Extension suggested when exporting
+
+
+New in version 1.2 (not generally available):
+
+* Full Scripting support
+* Color and Pattern Menus now also tearable
+* Tablet support improved: every tool works with the tablet now
+   (with extensions where it makes sense -> Spraycan)
+* Fixed bug in serial port handling
+* Improved LayerNameWindow
+* Improved Spray Can (especially for selections)
+* Improved Colorize
+* Motion Blur add-on
+* Added MMX code optimizations
+* Spacing automatically co-adjusted with brush size
+* Tertiary mouse button closes Polygon
+* -c cli option to show the colors
+* Show version and build date on startup with -D1
+* AskForAlpha scripting switch
+
+
+New in version 1.1:
+
+* Port to Intel / R3
+* InterfaceElements BBP
+* Basic scripting support
+* Basic link with ImageElements
+* Symlinks
+* Capture import
+* Double click to access tool inspector / color editor
+* Channel operations
+* Layer merging
+* Layer menu accessible from canvas window
+* Preserve selection after cut/copy
+* More add-ons
+* Splash screen shows what Becasso is doing during launch
+* Hotkey to attach selection on mouse (Enter)
+* Hotkey to switch selection/drawing mode (Tab)
+* Better support for single-pixel editing in freehand tool
+* Wacom tablet support
+* Separate thread for mouse tracking.  Smoother operation.
+* Channel <-> Selection operations.
+* Accepts RRaster and Icon drops
+* Accepts command line file names and options
+* Single dynamic Tool/Mode inspector windows
+* Parametrizable brush
+* Tear off tool menus
+* More debugging output for add-on developers
+* Improved Undo functionality
+* Settable Anti-Aliasing in Text tool
+* Printing
+* Demo Version
+* [API] CutOrCopy with NULL selection
+* Now uses libz.so dynamically
+* Handles images (or braindead translators) using alpha = transparency better

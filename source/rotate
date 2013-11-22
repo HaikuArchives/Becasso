@@ -1,0 +1,281 @@
+		float normrad;
+		if (0 <= rad && rad < M_PI/2)
+			normrad = rad;
+		else if (M_PI/2 <= rad && rad < M_PI)
+			normrad = rad - M_PI/2;
+		else if (-M_PI <= rad && rad < -M_PI/2)
+			normrad = rad + M_PI;
+		else
+			normrad = rad + M_PI/2;
+
+		float s135  = .707*sin (normrad + .75*M_PI);
+		float c135  = .707*cos (normrad + .75*M_PI);
+		float s45   = .707*sin (normrad + .25*M_PI);
+		float c45   = .707*cos (normrad + .25*M_PI);
+		float sm45  = .707*sin (normrad - .25*M_PI);
+		float cm45  = .707*cos (normrad - .25*M_PI);
+		float sm135 = .707*sin (normrad - .75*M_PI);
+		float cm135 = .707*cos (normrad - .75*M_PI);
+//		float rc = tan (rad);
+		
+
+				BPoint a, b, c, d;
+				// always: A = leftmost, B = topmost, C = rightmost, D = lowermost corner
+				a.x = ix + c135;
+				a.y = iy - s135;
+				b.x = ix + c45;
+				b.y = iy - s45;
+				c.x = ix + cm45;
+				c.y = iy - sm45;
+				d.x = ix + cm135;
+				d.y = iy - sm135;
+
+
+				if (d.y <= fiy + 1	// top two rows
+				&&  c.x <= fix + 1)	// top left 4
+				{
+					if (b.x <= fix)
+					{
+						w = fix - b.x;
+						h = fiy - b.y;
+						A1 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - fix;
+						h = fiy - c.y;
+						A2 = w*h + (w*w - h*h)*sr/2;
+						w = fix - a.x;
+						h = a.y - fiy;
+						A4 = w*h + (w*w - h*h)*sr/2;
+						w = d.x - fix;
+						h = d.y - fiy;
+						A5 = w*h + (h*h - w*w)*sr/2;
+					}
+					else
+					{
+						w = fix - a.x;
+						h = fiy - a.y;
+						A1 = w*h + (w*w - h*h)*sr/2;
+						w = b.x - fix;
+						h = fiy - b.y;
+						A2 = w*h + (h*h - w*w)*sr/2;
+						w = fix - d.x;
+						h = d.y - fiy;
+						A4 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - fix;
+						h = c.y - fiy;
+						A5 = w*h + (w*w - h*h)*sr/2;
+					}
+				}
+				else if (d.y <= fiy + 1
+					 &&  a.x >= fix)// top right 4
+				{
+					if (b.x <= fix + 1)
+					{
+						w = fix  + 1 - b.x;
+						h = fiy - b.y;
+						A1 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - (fix + 1);
+						h = fiy - c.y;
+						A2 = w*h + (w*w - h*h)*sr/2;
+						w = fix + 1 - a.x;
+						h = a.y - fiy;
+						A4 = w*h + (w*w - h*h)*sr/2;
+						w = d.x - (fix + 1);
+						h = d.y - fiy;
+						A5 = w*h + (h*h - w*w)*sr/2;
+					}
+					else
+					{
+						w = fix + 1 - a.x;
+						h = fiy - a.y;
+						A2 = w*h + (w*w - h*h)*sr/2;
+						w = b.x - (fix + 1);
+						h = fiy - b.y;
+						A3 = w*h + (h*h - w*w)*sr/2;
+						w = fix  + 1 - d.x;
+						h = d.y - fiy;
+						A5 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - (fix + 1);
+						h = c.y - fiy;
+						A6 = w*h + (w*w - h*h)*sr/2;
+					}
+				}
+				else if (b.y >= fiy
+					 &&  c.x <= fix + 1)	// bottom left 4	
+				{
+					if (b.x <= fix)
+					{
+						w = fix - b.x;
+						h = fiy  + 1 - b.y;
+						A1 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - fix;
+						h = fiy + 1 - c.y;
+						A2 = w*h + (w*w - h*h)*sr/2;
+						w = fix - a.x;
+						h = a.y - (fiy + 1);
+						A4 = w*h + (w*w - h*h)*sr/2;
+						w = d.x - fix;
+						h = d.y - (fiy + 1);
+						A5 = w*h + (h*h - w*w)*sr/2;
+					}
+					else
+					{
+						w = fix - a.x;
+						h = fiy + 1 - a.y;
+						A4 = w*h + (w*w - h*h)*sr/2;
+						w = b.x - fix;
+						h = fiy + 1 - b.y;
+						A5 = w*h + (h*h - w*w)*sr/2;
+						w = fix - d.x;
+						h = d.y - (fiy + 1);
+						A7 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - fix;
+						h = c.y - (fiy + 1);
+						A8 = w*h + (w*w - h*h)*sr/2;
+					}
+				}
+				else if (b.y >= fiy
+					 &&  a.x >= fix)		// bottom right 4
+				{
+					if (b.x <= fix + 1)
+					{
+						w = fix + 1 - b.x;
+						h = fiy + 1 - b.y;
+						A1 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - (fix + 1);
+						h = fiy + 1 - c.y;
+						A2 = w*h + (w*w - h*h)*sr/2;
+						w = fix + 1 - a.x;
+						h = a.y - (fiy + 1);
+						A4 = w*h + (w*w - h*h)*sr/2;
+						w = d.x - (fix + 1);
+						h = d.y - (fiy + 1);
+						A5 = w*h + (h*h - w*w)*sr/2;
+					}
+					else
+					{
+						w = fix + 1 - a.x;
+						h = fiy + 1 - a.y;
+						A5 = w*h + (w*w - h*h)*sr/2;
+						w = b.x - (fix + 1);
+						h = fiy + 1 - b.y;
+						A6 = w*h + (h*h - w*w)*sr/2;
+						w = fix + 1 - d.x;
+						h = d.y - (fiy + 1);
+						A8 = w*h + (h*h - w*w)*sr/2;
+						w = c.x - (fix + 1);
+						h = c.y - (fiy + 1);
+						A9 = w*h + (w*w - h*h)*sr/2;
+					}
+				}
+				else				// center 9 (perhaps 6)
+				{
+					// corners
+					w = fix - ((fiy - a.y)/rc + a.x);
+					h = fiy - (rc*(fix - a.x) + a.y);
+					if (w > 0 && h > 0)
+						A1 = w*h/2;
+					else
+						A1 = 0;
+	//				if (i == 100 && j == 100)
+	//					printf ("%.3f, %.3f => A1 = %f\n", w, h, A1);
+					if (A1 >= 1) printf ("A1 = %f*%f/2 = %f\n", w, h, A1);
+					w = -rc*(fiy - b.y) + b.x - (fix + 1);
+					h = fiy - (((fix + 1) - b.x)/-rc + b.y);
+					if (w > 0 && h > 0)
+						A3 = w*h/2;
+					else
+						A3 = 0;
+	//				if (i == 100 && j == 100)
+	//					printf ("%.3f, %.3f => A3 = %f\n", w, h, A3);
+					if (A3 >= 1) printf ("A3 = %f\n", A3);
+					w = fix - (-rc*((fiy + 1) - a.y) + a.x);
+					h = ((fix - a.x)/-rc + a.y) - (fiy + 1);
+					if (w > 0 && h > 0)
+						A7 = w*h/2;
+					else
+						A7 = 0;
+	//				if (i == 100 && j == 100)
+	//					printf ("%.3f, %.3f => A7 = %f\n", w, h, A7);
+					if (A7 >= 1) printf ("A7 = %f\n", A7);
+					w = ((fiy + 1) - d.y)/rc + d.x - (fix + 1);
+					h = (rc*((fix + 1) - d.x) + d.y) - (fiy + 1);
+					if (w > 0 && h > 0)
+						A9 = w*h/2;
+					else
+						A9 = 0;
+	//				if (i == 100 && j == 100)
+	//					printf ("%.3f, %.3f => A9 = %f\n", w, h, A9);
+					if (A9 >= 1) printf ("A9 = %f\n", A9);
+					// sides
+					w = -rc*((fiy + 1) - b.y) + b.x - (((fiy - a.y)/rc) + a.x);
+					h = fiy - b.y;
+					if (w > 0 && h > 0)
+						A2 = w*h/2 - A1 - A3;
+					else
+						A2 = 0;
+					if (A2 >= 1) printf ("A2 = %f\n", A2);
+					h = (fix - a.x)*(1/-rc + rc);
+					w = (fix - a.x);
+					if (w > 0 && h > 0)
+						A4 = w*h/2 - A1 - A7;
+					else
+						A4 = 0;
+					if (A4 >= 1) printf ("A4 = %f\n", A4);
+					h = ((fix + 1) - b.x)/-rc + b.y - (rc*((fix + 1) - d.x) + d.y);
+					w = c.x - (fix + 1);
+					if (w > 0 && h > 0)
+						A6 = w*h/2 - A3 - A9;
+					else
+						A6 = 0;
+					if (A6 >= 1) printf ("A6 = %f\n", A6);
+					w = (fiy + 1 - d.y)/rc + d.x - (-rc*(fiy - a.y) + a.x);
+					h = d.y - (fiy + 1);
+					if (w > 0 && h > 0)
+						A8 = w*h/2 - A7 - A9;
+					else
+						A8 = 0;
+					if (A8 >= 1) printf ("A8 = %f\n", A8);
+					// center
+					A5 = 1 - A1 - A2 - A3 - A4 - A6 - A7 - A8 - A9;
+					A1 = A2 = A3 = A4 = A6 = A7 = A8 = A9 = 0;
+					A5 = 1;
+				}
+
+
+
+				if (c.x < fix + 1 && d.y < fiy + 1)		// TLC
+				{
+					w = ix - fix;
+					h = iy - fiy;
+					A1 = clipone (.25 - w*h);
+					A2 = clipone (.25 + w*(.5 - h));
+					A3 = clipone (.25 + h*(.5 - w));
+					A5 = clipone (1 - A1 - A2 - A4);
+				}
+				else if (a.x > fix && d.y < fiy + 1)	// TRC
+				{
+					w = fix + 1 - ix;
+					h = iy - fiy;
+					A3 = clipone (.25 - w*h);
+					A2 = clipone (.25 + w*(.5 - h));
+					A6 = clipone (.25 + h*(.5 - w));
+					A5 = clipone (1 - A3 - A2 - A6);
+				}
+				else if (c.x < fix + 1 && b.y > fiy)	// BLC
+				{
+					w = ix - fix;
+					h = fiy + 1 - iy;
+					A7 = clipone (.25 - w*h);
+					A8 = clipone (.25 + w*(.5 - h));
+					A4 = clipone (.25 + h*(.5 - w));
+					A5 = clipone (1 - A7 - A8 - A4);
+				}
+				else if (a.x > fix && b.y > fiy)		// BRC
+				{
+					w = fix + 1 - ix;
+					h = fiy + 1 - iy;
+					A9 = clipone (.25 - w*h);
+					A8 = clipone (.25 + w*(.5 - h));
+					A6 = clipone (.25 + h*(.5 - w));
+					A5 = clipone (1 - A9 - A8 - A6);
+				}

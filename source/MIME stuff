@@ -1,0 +1,124 @@
+const char* ArpAppSig = "application/x-vnd.ARP-ArpTelnet";
+const char* ArpTelnetConfigMime = "application/x-vnd.ARP.ArpTelnetConfig";
+
+static void InstallDescription(BMimeType& type, const char* sdescr, const
+char* ldescr)
+{
+    char cur[B_MIME_TYPE_LENGTH];
+    if( sdescr ) {
+        cur[0] = 0;
+        printf("Checking short description...\n");
+        status_t err = type.GetShortDescription(cur);
+        if( err != B_OK || cur[0] == 0 ) {
+            type.SetShortDescription(sdescr);
+            printf("Installing mine.\n");
+        }
+        printf("Req short description: err=%ld, string=%s\n", err, &cur[0]);
+    }
+    if( ldescr ) {
+        cur[0] = 0;
+        printf("Checking long description...\n");
+        status_t err = type.GetLongDescription(cur);
+        if( err != B_OK || cur[0] == 0 ) {
+            type.SetLongDescription(ldescr);
+            printf("Installing mine.\n");
+        }
+        printf("Req long description: err=%ld, string=%s\n", err, &cur[0]);
+    }
+}
+
+static void InstallPrefApp(BMimeType& type, const char* app)
+{
+    char cur[B_MIME_TYPE_LENGTH];
+    cur[0] = 0;
+    printf("Checking preferred app...\n");
+    status_t err = type.GetPreferredApp(cur);
+    if( err != B_OK || cur[0] == 0 ) {
+        type.SetPreferredApp(app);
+        printf("Installing mine.\n");
+    }
+    printf("Req preferred app: err=%ld, string=%s\n", err, &cur[0]);
+}
+
+static void InstallAppHint(BMimeType& type, const entry_ref* ref)
+{
+    entry_ref cur;
+    printf("Checking application hint...\n");
+    status_t err = type.GetAppHint(&cur);
+    if( err != B_OK || cur == entry_ref() ) {
+        type.SetAppHint(ref);
+        printf("Installing mine.\n");
+    }
+    printf("Req app hint: err=%ld, leaf=%s\n",
+            err, cur.name ? cur.name : "<NULL");
+}
+
+static void InstallAppIcon(BMimeType& type, const char* file_type,
+                            icon_size size, const entry_ref* app)
+{
+    BBitmap* cur = new BBitmap(BRect(0,0,size-1,size-1), B_CMAP8);
+    printf("Checking %s %dx%d bitmap...\n", file_type, size, size);
+    status_t err = type.GetIconForType(file_type, cur, size);
+    if( err != B_OK ) {
+        printf("Need to install my icon.\n");
+        BFile file(app, B_READ_ONLY);
+        BAppFileInfo afi(&file);
+        if( (err=afi.InitCheck()) == B_OK ) {
+            BBitmap* icon = new BBitmap(BRect(0,0,size-1,size-1), B_CMAP8);
+            if( (err=afi.GetIcon(icon, size)) == B_OK ) {
+                err = type.SetIconForType(file_type, icon, size);
+                printf("Installed.\n");
+            }
+            delete icon;
+        }
+    }
+    printf("Req small bitmap: err=%ld\n", err);
+    delete cur;
+}
+                            
+static void InstallAppIcon(BMimeType& type, const char* file_type,
+                            const entry_ref* app)
+{
+    InstallAppIcon(type, file_type, B_MINI_ICON, app);
+    InstallAppIcon(type, file_type, B_LARGE_ICON, app);
+}
+
+void MainApp::AddMimeTypes()
+{
+    BMimeType mt;
+    
+    mt.SetTo(ArpTelnetConfigMime);
+    printf("Setting up config MIME type...\n");
+    if( mt.InitCheck() == B_OK ) {
+        if( !mt.IsInstalled() ) {
+            printf("Installing config type.\n");
+            DB(DBALL, cdb << "Config type not installed, installing it." <<
+endl);
+            mt.Install();
+        }
+        InstallDescription(mt, "ArpTelnet Configuration",
+                           "BMessage archive of ArpTelnet program settings.");
+        InstallPrefApp(mt, ArpAppSig);
+    }
+    mt.Unset();
+    
+    mt.SetTo(ArpAppSig);
+    printf("Updating application MIME type...\n");
+    if( mt.InitCheck() == B_OK ) {
+        if( !mt.IsInstalled() ) {
+            // This shouldn't happen, I don't think..."
+            printf("Installing application type.\n");
+            DB(DBALL, cdb << "Application type not installed, installing it."
+<< endl);
+            mt.Install();
+        }
+        InstallDescription(mt, "ArpTelnet", 0);
+        InstallPrefApp(mt, ArpAppSig);
+        app_info ai;
+        be_app->GetAppInfo(&ai);
+        InstallAppHint(mt, &ai.ref);
+        InstallAppIcon(mt, ArpTelnetConfigMime, &ai.ref);
+        InstallAppIcon(mt, ArpTelnetURLMime, &ai.ref);
+    }
+    mt.Unset();
+}

@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>Becasso Scripting API Documentation</title>
+<h1>The <i>Becasso</i> Scripting API</h1>
+</head>
+<body bgcolor="#ffffff">
+<a name="Introduction"><h2>Introduction</h2></a>
+
+This document describes the API for scripting
+<i>Becasso</i>, <i>Sum Software</i>'s Paint and Imaging
+application for the BeOS.<p>
+
+Like all well-behaved BeOS applications, <i>Becasso</i> implements scripting 
+in the form of a set of messages.  The examples in this document use
+Attila Mezei's freely avaiable scripting application called
+<code>hey</code>, version 1.2 or greater.  <code>Hey</code> is
+available from <a href="http://w3.datanet.hu/~amezei">Attila's web
+site</a>.
+
+<a name="General"><h2>Scripting General Settings</h2>
+
+The five buttons visible in <i>Becasso</i>'s main window show the
+various features of the settings <i>Becasso</i> is currently using.
+They show the <i>mode</i>, <i>tool</i>, <i>foreground color</i>,
+<i>background color</i>, and <i>pattern</i>, respectively.  The first
+four of these can be scripted.<p>
+
+The four scriptable properties can be both set and queried:
+<font color="blue">
+<pre>    hey Becasso get Mode
+</pre></font>
+returns the current mode (either <code>Draw</code> or
+<code>Select</code>) as property named <code>result</code>.
+The <code>Mode</code> and <code>Tool</code> properties can be set
+either by index or by name.<p>
+
+<blockquote>
+<font color="red"><b>Note:</b></font>
+When the sender of the scripting message is waiting for a reply (as
+<code>hey</code> does), <i>Becasso</i> will only send a reply message.
+If it isn't, <i>Becasso</i> will print the reply as a readable string
+to <code>stderr</code> on the terminal it was launched from.
+</blockquote>
+
+The possible names of the <code>Mode</code> property are
+<code>Draw</code> and <code>Select</code>; the <code>Tool</code> can
+be either <code>Brush</code>, <code>Eraser</code>, <code>Fill</code>,
+<code>Text</code>, <code>Spray Can</code>, <code>Freehand</code>,
+<code>Lines</code>, <code>Free Shape</code>, <code>Polygons</code>,
+<code>Rectangles</code>, <code>Ovals</code>, <code>Circles</code>, or
+<code>Ellipses</code>.  These names are the names displayed in the
+<i>Becasso</i> main window as help text when the mouse pointer is
+moved over the icons.  <i>Becasso</i> is case insensitive, so
+<font color="blue">
+<pre>    hey Becasso set tool to "spray can"
+    hey Becasso set Tool to "Spray Can"
+</pre></code>
+are equivalent.<p>
+
+The foreground and background colors are scripted through the properties
+<code>Foreground</code> and <code>Background</code>, respectively.
+Querying <i>Becasso</i> for the current colors always yields them as
+a <code>B_RGB_COLOR_TYPE</code> entry named <code>result</code> in the
+reply message.
+<blockquote>
+<font color="red"><b>Note:</b></font>
+This is different from the <code>Mode</code> and
+<code>Tool</code> properties, because these can also function as
+specifiers when scripting mode or tool parameters (see 
+<a href="#Parameters">Scripting Tool Parameters</a>,
+below).
+</blockquote>
+Setting the colors, however, can be done by either specifying the
+components of an <code>rgb_color</code>, or by color name, i.e.
+<font color="blue">
+<pre>    hey Becasso set Foreground to "rgb_color(85,107,47,255)"
+    hey Becasso set Foreground to DarkOliveGreen
+</pre></font>
+are equivalent.<p>
+
+The color names are matched case-insensitively and also allow for
+variants with spaces, so
+<font color="blue">
+<pre>    hey Becasso set background to lightslategrey
+    hey Becasso set Background to "Light Slate Grey"
+    hey Becasso set Background to LightSlateGrey"
+    hey Becasso set Background to "Light slate GREY"
+</pre></font>
+are equivalent.  Also, <i>Becasso</i> tries not to be pedantic about 
+spelling, so <code>Grey</code> and <code>Gray</code> are considered 
+equivalent.
+
+<blockquote>
+<font color="red"><b>Note:</b></font>
+To find out all the names <i>Becasso</i> recognizes as colors, run
+<i>Becasso</i> from a terminal with the command line switch
+<code>-c</code>, i.e.
+<font color="blue">
+<pre>    Becasso -c
+</pre></font>
+and it will print out all the color names to the terminal, preceded by
+the red, green, and blue components.  Note that there are 752 entries,
+so the list is quite long.  The color names are the ones that are in
+the file <code>rgb.txt</code> in most XWindow distributions.
+</blockquote>
+
+<a name="Parameters"><h2>Scripting Tool Parameters</h2>
+
+<commands>
+
+<hr>
+<font size=2>
+This documentation is &copy; 1998, <a href="http://www.sumware.demon.nl"><i>Sum
+Software</i></a>.<br>
+Last modification: 20 October 1998.<br>
+Trademarks used herein belong to their respective owners.
+</font>
+</body>
+</html>

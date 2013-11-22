@@ -1,0 +1,6 @@
+#if defined (__POWERPC__)
+#   include "BeHeaders"
+#else
+#   include "BeHeadersx86"
+#endif
+#define BUILDING_BECASSO

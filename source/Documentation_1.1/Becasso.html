@@ -1,0 +1,746 @@
+<html>
+<head>
+<title>Becasso</title>
+</head>
+<body bgcolor=#e0e0e0>
+<table><tr><td><img src="Images/sumsmall.gif" alt="By Sum"></td>
+<td><img src="Images/becassologo.jpg" alt="Becasso" 
+hspace="20"></td>
+<td width="100%" bgcolor=#a0a0a0 valign="center">
+<center><font size=6 color=#ffffff><i>Paint & Imaging Software<br>
+For the </i></font><u><b><font color=#050075 size=6>B</font><font
+color=#e1152f size=6>e</font><font size=6>OS</font></b></u>
+</center>
+</tr></table>
+&copy; 1998, <i>Sum Software</i><p>
+
+<h1>Contents</h1>
+<ul>
+<li><a href="#Overview">Overview</a>
+<li><a href="#Launching">Launching</a>
+<li><a href="#The Main Window">The Main Window</a>
+    <ul>
+    <li><a href="#The Mouse and the Main Window">The Mouse and the Main
+        Window</a>
+    <li><a href="#The Main File Menu">The File Menu</a>
+    <li><a href="#The Mode Selector">The Mode Selector</a>
+    <li><a href="#The Tool Selector">The Tool Selector</a>
+    <li><a href="#The Color Selectors">The Color Selectors</a>
+    <li><a href="#The Pattern Selector">The Pattern Selector</a>
+    </ul>
+<li><a href="#The Color Editor">The Color Editor</a>
+<li><a href="#The Canvas Window">The Canvas Window</a>
+    <ul>
+    <li><a href="#Selections">Selections</a>
+    <li><a href="#Picking Colors">Picking Colors</a>
+    <li><a href="#The Canvas File Menu">The File Menu</a>
+    <li><a href="#The Canvas Edit Menu">The Edit Menu</a>
+    <li><a href="#Add-Ons">Add-Ons</a>
+    <li><a href="#The Window Menu">The Window Menu</a>
+    </ul>
+<li><a href="#Layers">Layers</a>
+<li><a href="#Modifier Overview">Modifier Overview</a>
+<li><a href="#Credits">Credits</a>
+</ul>
+
+<a name="Overview"><h1>Overview</h1></a>
+<b>Becasso</b> by <i>Sum</i> is a combined paint/image editing application
+featuring alpha channel support, layering, multi-level undo/redo, add-on
+architecture for external filters, transformators and generators, an
+orthogonal user interface, and import/export of numerous file formats
+via Datatypes.<p>
+
+<a name="Launching"><h1>Launching</h1></a>
+<b>Becasso</b> can be launched by either double-clicking on its
+icon, dropping one or more files of a supported type on its icon, or
+double-clicking the icon of a supported file type.  You can use the
+FileTypes application to select <b>Becasso</b> as the preferred handler
+for any image type for which you have installed a Datatype handler.
+When launched via one of the latter two methods, <b>Becasso</b> will
+open the file(s) at startup.<p>
+
+<a name="Main Window"><h1>The Main Window</h1></a>
+<img src="Images/mainwindow.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="10">
+One of the main characteristics of <b>Becasso</b> is a clear and simple
+user interface that doesn't get in your way and only shows what you want
+it to.  The main window shows a <i>File</i> menu, five square buttons, and
+a short description of the button the mouse is currently over.  From left
+to right, these buttons are the Mode Selector, the Tool Selector, two
+Color Selectors for the foreground and background colors, respectively,
+and a Pattern Selector.</td></tr></table>
+
+<a name="The Mouse and the Main Window"><h2>The Mouse and the Main 
+Window</h2></a>
+When over one of the selector buttons, the left mouse button is used
+to open a popup menu to select the mode, tool, color, or pattern.
+Since version 1.1, the menus are so-called <i>tear-off menus</i>,
+meaning they will &quot;stick&quot; to the mouse while dragging, and
+can be placed anywhere on the screen.
+A right mouse button click on a button opens an Attribute Window
+for the corresponding selection.  For users with a one-button mouse,
+a right-click can consistently be emulated in <b>Becasso</b> by holding the
+Control key while clicking.  As a special shortcut, double-clicking on a
+tool button also opens the corresponding attribute window.  You can have
+any number of attribute windows open at any time, allowing quick access
+to the ones you regularly use.<p>
+
+<a name="The Main File Menu"><h2>The File Menu</h2></a>
+The <i>New Canvas...</i> menu option opens a dialog window in which the
+dimensions of the new canvas can be adjusted.  With <i>Open File...</i>,
+you can open any image file for which you have the corresponding Datatype
+handler installed, as well as <b>Becasso</b>'s own file format.  You can
+also open files by dropping them on the main window, or by double-clicking
+them in the Tracker when you have set <b>Becasso</b> to be the preferred
+handler for their type.<p>
+
+<i>Capture</i> is a new feature in version 1.1.  With it, you can
+access special add-ons for various hardware (like scanners or digital
+cameras) and capture still images from them.<p>
+
+<i>Print Setup</i> opens the standard BeOS page setup dialog, which
+can be used to setup various properties of the printer.<p>
+
+<i>About Becasso</i> opens a window with information about the current
+version of <b>Becasso</b> and two buttons that act as shortcuts
+to viewing the present documentation, or <i>Sum Software</i>'s home
+page, respectively.  <i>Quit</i> iterates over any open canvas windows,
+checks whether their contents have been modified since the last save, asks
+for an acknowledgement if so, and closes them.  After that, <b>Becasso</b>
+will exit.
+
+<a name="The Mode Selector"><h2>The Mode Selector</h2></a>
+
+<img src="Images/modes.gif" alt="" padding="2" align="left" 
+border="0" vspace="1" hspace="10">
+The leftmost button in the main window is for selecting the current
+mode of operation of <b>Becasso</b>.  One of the most apparent features of
+<b>Becasso</b> is the orthogonality of the tool set, which means that any
+tool can be used both for drawing and for selecting.  The drawing mode
+is depicted by a pencil icon, the selection mode by a pointing hand
+icon.  The Drawing Mode Attribute Window, which pops up on a right
+click (or a Control-click) on the drawing mode icon, allows setting
+the current drawing mode via a popup menu.  The drawing modes in this
+popup are the standard BeOS drawing modes.
+The <i>Tablet</i> popup can be used to select on which serial port an
+optional Wacom tablet is connected.  <b>Becasso 1.1</b> offers limited
+tablet support for some Wacom serial tablets (including erasing and
+pressure sensitivity).<p>
+Furthermore, the maximum
+number of undo buffers can be adjusted.  <b>Note:</b> The memory usage of
+<b>Becasso</b> is largely dependent on this setting.  It is recommended
+you keep this number within reasonable accordance with the available
+RAM/virtual memory on your machine.<br>
+The Selection Mode does not have any options.<p>
+You can quickly switch between Drawing and Selection mode when a <a
+href="#The Canvas Window">canvas window</a> is active with the
+<code>TAB</code> key.<p>
+
+<a name="The Tool Selector"><h2>The Tool Selector</h2></a>
+
+The second button is used to select the current tool.  For each of the
+selected tools, the associated Attribute Window appears upon a right
+click (or Control-click) on the button.<br>
+
+In order of appearance, the tools are a Brush tool, an Eraser tool, a
+Fill tool, a Text tool, a Spray Can tool, a Freehand tool, a Line
+tool, a Free Shape tool, a Polygon tool, a Rectangle tool, an Oval
+tool, a Circle tool, and an Ellipse tool.<p>
+
+<i><b>The Brush Tool</b></i><br>
+<img src="Images/brushtool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+A Brush in <b>Becasso</b> is an 8 bit alpha map.  The Brush Attribute
+Window allows adjustment of the brush dimensions and angle, as well as
+the strength with which it will draw.
+The Spacing slider
+adjusts the spacing in pixels between adjacent applications of the brush
+during a brush stroke.  In selection mode, you can use the brush to make
+&quot;fuzzy&quot; selections.  When the drawing mode is set to Copy or
+Over, the brush is alpha blended to the background image, in all the
+other modes the corresponding BeOS drawing mode is used to draw the
+brush as a greyscale bitmap in the selected foreground color.<p>
+
+<i><b>The Eraser Tool</b></i><br>
+<img src="Images/erasertool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+With the eraser, you can reset parts of the canvas to the background.
+When erasing the background layer itself (see the section on layers,
+below), the result will be that the canvas will be completely transparent
+at that place.  When there is no opacity, <b>Becasso</b> shows a light
+grey / dark grey checkerboard pattern.  This is not an actual part of
+the canvas.<br>
+
+In the Eraser Attribute Window, the shape of the eraser can be
+selected and its dimensions adjusted.<p>
+
+<i><b>The Fill Tool</b></i><br>
+<img src="Images/filltool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+With this tool, you can change the color of an area of (approximately)
+the same color to the selected pattern (see the Pattern Selector
+section, below).  Clicking on a pixel will paint all adjacent pixels
+of the same color (within an adjustable tolerance).  The Fill
+Attribute Window allows adjustment of this tolerance, either by
+directly specifying the maximum deviance of each of the Red, Green,
+and Blue channels, or by specifying the maximum visual distance of the
+pixels.  This visual distance takes into account the fact that the
+human eye is not equally sensitive to every color, and weighs the
+separate color channels accordingly.<br>
+In selection mode, the fill tool doubles as a &quot;magic wand&quot;,
+selecting all pixels of an area with (approximately) the same color.
+The tolerance is reflected in the selection map, so that color nuances
+are preserved.<p>
+
+<i><b>The Text Tool</b></i><br>
+<img src="Images/texttool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+When the text tool is active, you can specify the place on the canvas
+to add text by clicking.  This will open a text control at the
+specified location on the canvas, into which you can type your text.
+Closing with the Enter key, the text is painted onto the canvas.
+Note: For best results, make sure the Drawing Mode is set to Over.
+This will blend the text with the background.<br>
+The Text Attribute Window allows selection of the font family and
+style, as well as adjustment of the point size, shear, and rotation.
+In selection mode, you can use this tool to make a selection in the
+shape of the text.<p>
+
+<i><b>The Spray Can Tool</b></i><br>
+<img src="Images/spraytool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+The Spray can deposits a steady flow of random pixels onto the canvas
+via a Gaussian spread function.  The Spray Can Attribute Window allows
+adjustment of the spread in pixel units, flow rate, and color ratio.
+A color ratio of 0.0 only deposits pixels in the foreground color, a
+ratio of 1.0 only background colored pixels.  Any value in between
+&quot;mixes&quot; the colors.  The &quot;Fade with Distance&quot; checkbox
+lets the pixels be lighter (less opaque) when farther away from the
+cursor.  Operating the spray can tool with the right mouse button (or
+via the Control key) inverts this ratio.<p>
+
+<i><b>The Freehand Tool</b></i><br>
+<img src="Images/freehandtool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+This tool allows freehand drawing.  The Freehand Attribute Window has
+only the single parameter of the pen size.  The pen uses the current
+pattern, or its inverse when operated with the right mouse button (or
+via the Control key).<p>
+
+<i><b>The Lines Tool</b></i><br>
+<img src="Images/linestool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+There are two major paradigms on the user interface for specifying
+lines on a canvas.  The first (&quot;click-drag-release&quot;) lets the
+user fix the starting point of the line by clicking, and while the
+user holds down the mouse button and drags the cursor, a
+&quot;rubber&quot; line will stick to the mouse cursor, following the
+movements of the user.  Releasing the mouse button will fix the end
+point.<br>
+The second (&quot;click-move-click&quot;) is less common because it is
+thought to break the general mouse usage paradigm as used throughout
+the OS, but it allows multiple-vertex lines by having the user fix the
+vertices by clicking, while a &quot;rubber&quot; line follows the cursor
+even when the mouse button is up.<p>
+<b>Becasso</b> offers both paradigms and uses a simple algorithm to detect
+which one the user is currently applying.  When the user moves the
+mouse while the button is still down, <b>Becasso</b> will use the
+click-drag-release paradigm, ending the line when the user releases
+the mouse.  When the user releases the mouse on the same spot as where
+the line was initiated, <b>Becasso</b> will switch to the click-move-click
+paradigm.  Whenever the user presses the left mouse button, a line
+segment from the previous vertex to the current cursor position will
+be painted in the current pattern, or in the inverted pattern when a
+vertex is fixed with the right mouse button (or via the Control key).
+The user can end adding points by activating any other window (not
+necessarily a <b>Becasso</b> window.<br>
+The Line Attribute Window has a checkbox for determining whether
+vertices should be filled to give a smooth line.  This is only of
+significance with larger pen sizes.<p>
+
+<i><b>The Shape Tools</b></i><br>
+The following six tools are shape tools.  Their Attribute Windows all
+have two general options in common, namely the pen size and the
+general shape type.  This is one of: Shape filled with the current
+pattern, with an outline in the current pen size and current
+foreground color (or all these inverted when operated with the right
+mouse button), shape filled with the current pattern, no outline, or an
+outline only, painted with the current pen size and in the current
+pattern.<p>
+
+<i><b>The Free Shape Tool</b></i><br>
+<img src="Images/freeshapetool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+This tool allows the user to draw any shape on the canvas.  This tool
+only uses the click-drag-release paradigm.  When the mouse button is
+released, the shape is closed.<br>
+In selection mode, this tool mimics a &quot;lasso selection
+tool&quot;.<p>
+
+<i><b>The Polygon Tool</b></i><br>
+<img src="Images/polygontool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+This tool uses the click-move-click paradigm to fix vertices of the
+polygon.  The last point of the polygon is designated by using the
+right mouse button (or the Control key).   More precisely, it is
+designated by clicking with the other mouse button then was used to
+fix the first vertex.  You can cancel the operation by activating any
+other window (not necessarily a <b>Becasso</b> window).<p>
+
+<i><b>The Rectangle Tool</b></i><br>
+<img src="Images/recttool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+The Rectangle tool (as well as the remaining three tools) can use both
+the click-drag-release and the click-move-click paradigms to fix the
+diagonally opposite corners of a rectangle.  In selection mode, this
+tool is equivalent to the normal selection tool of conventional
+graphic software without <b>Becasso</b>s orthogonality.<p>
+
+<i><b>The Oval Tool</b></i><br>
+<img src="Images/ovaltool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+In this context, an oval is a rectangle with rounded corners.  The
+radii of the corners can be set in the Oval Attribute Window, offering
+the option of either fixed radii (the &quot;Absolute Corners&quot; radio
+button; the number of pixels in x- and y-directions can be adjusted
+with the corresponding sliders in the &quot;Absolute&quot; tab view) or
+variable radii (the &quot;Relative Corners&quot; radio button; the ratio
+of the radii to the total dimensions of the oval can be adjusted with
+the corresponding sliders in the &quot;Relative&quot; tab view).<p>
+
+<i><b>The Circle Tool</b></i><br>
+<img src="Images/circletool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+Circles can be painted on the canvas by either fixing the center of
+the circle and moving the mouse outward to adjust the radius (again,
+by either of the two paradigms) or by fixing a point on the perimeter
+and having the center of the circle coincide with the mouse cursor.
+Which of these methods is to be used can be selected from the Circles
+Attribute Window.<p>
+
+<i><b>The Ellipse Tool</b></i><br>
+<img src="Images/ellipsetool.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+Either of the paradigms can be used to define the diagonally opposite
+corners of a rectangle circumscribing the ellipse, i.e. defining a square 
+yields a circle.<p><br>
+
+<a name="The Color Selectors"><h2>The Color Selectors</h2></a>
+
+The third and fourth button on the <b>Becasso</b> main window are used to
+select the current foreground and background colors, respectively.
+When a color selector is pressed with the left mouse button, a palette
+pops up, containing 256 color entries.  Although the palette defaults
+to the BeOS system palette, it is not limited to this and can in fact
+contain any choice of colors.  The foreground and background color
+selectors maintain separate palettes.<br>
+Clicking on a color selector with the right mouse button (or with the
+Control modifier key held down) will pop up an extensive <a href="#The
+Color Editor">Color Editor</a> window.<br>
+Note that in the current version, the palette popups are not dithered
+on 8 bit screens.  With the default palette this is not noticeable
+since the colors exactly match the 256 available colors in 8 bit
+screens, but when a palette contains altered colors, this might not be
+apparent from the popup.  The color selectors themselves are dithered
+on 8 bit screens.<p>
+
+<a name="The Pattern Selector"><h2>The Pattern Selector</h2></a>
+
+The rightmost selector on the main window is for selection of the
+current pattern.  In the present version of <b>Becasso</b>, there is no
+Attribute Window for Patterns yet, but in a future version there will
+be a pattern editor, allowing you to design your own patterns.
+For most tools, operating them with the left mouse button will paint
+in the current pattern, and operating them with the right mouse button
+(or with the Control key) in the inverse of that pattern (i.e. with
+the foreground and background colors switched around).  The top right
+pattern is a solid low color, which is especially convenient in
+combination with outlined, filled shape tools to draw shapes with a
+solid background color and an outline in the foreground color.<p>
+<a name="The Color Editor"><h3>The Color Editor</h3></a>
+
+The Attribute Window of the color selectors contains an extensive
+color editor, featuring both RGB and HSV models.  On 8 bit screens,
+the color areas are dithered to most accurately represent the color
+shades.<p>
+
+<img src="Images/coloreditor.jpg" alt="" padding="2" align="right" 
+border="0" vspace="5" hspace="5">
+<i><b>The File Menu</b></i><br>
+Palettes can be saved and loaded.  The <b>Becasso</b> palette file format is
+human readable.  You can also load palettes by dropping them on the
+appropriate color selector button. or on the corresponding color
+editor window.<br>
+Furthermore, <b>Becasso</b> can generate palettes.<p>
+
+<i><b>RGB Model</b></i><br>
+In this model, the user can select which of the three color components
+Red, Green, or Blue should be placed in the color column on the left
+of the tab view, by selecting the corresponding radio button.  The
+other two colors will span the 2D area to the right.  Clicking (or
+dragging) the mouse inside either of these two color areas will ajdust
+the corresponding color values.  You can also set the color components
+directly by entering a value between 0 (no color) and 255 (full
+intensity) into the corresponding text control.<p>
+
+<i><b>HSV Model</b></i><br>
+The Hue, Saturation, Value model for color selection uses a color
+wheel on the right, in which the hue (0 - 360, as angle from the
+horizontal) and the saturation (0 - 1, the distance from the center of
+the wheel) can be selected, as well as an intensity selector on the
+left, with which the Vaule (0 - 1) can be set.  You can also set the
+components directly by entering the correct value in the corresponding
+text control.<p>
+
+<i><b>Alpha Channel</b></i><br>
+The alpha channel determines the opacity of a color.  With the slider,
+the alpha value can be adjusted from 0 (fully transparent) to 255
+(fully opaque).  The setting of this slider determines the alpha value
+of all subsequent color selections; you need not set the alpha value
+for each of the colors in the palette.<p>
+
+<i><b>Color Selection</b></i><br>
+At the bottom part of the color editor, two color patches are visible.
+The first shows the current color selection, the second the closest
+match in the current palette, along with the visual distance between
+them.  Pressing the &quot;Current&quot; button on the right (or pressing
+Enter) will replace the currently selected color in the color selector
+with the currently selected color in the color editor.  The &quot;Best
+Match&quot; button tries to locate the closest match in the current
+palette within a certain tolerance, and replaces that if it is found,
+or the currently selected color if not.  The tolorance is expressed in
+actual visual distance (see the explanation under the Fill Tool,
+above), and can be adjusted with the &quot;Color Picker&quot; slider in
+the color editor.  This tolerance is also used when picking colors
+from the canvas (see Color Picking, below).<p>
+
+<i><b>Color Drops</b></i><br>
+<b>Becasso</b> is fully compatible with r&ouml;Designs r&ouml;Colour
+drops.  You can use r&ouml;Colour to generate the correct color and
+drop this on either of the Color Selector buttons in the
+<b>Becasso</b> Main Window, or anywhere on the Color Editor
+Window.<br>
+Apart from <i>receiving</i> these color drops, <b>Becasso</b> also
+<i>generates</i> them.  You can initiate a color drop by clicking on
+either of the color patches in the lower left corner of the Color
+Editor window, and dragging to the desired location.<p>
+
+
+<a name="The Canvas Window"><h1>The Canvas Window</h1></a>
+
+Opening an existing image on disk or a new canvas will open a Canvas
+Window.  The title will show the file name (or &quot;Untitled
+<i>n</i>&quot; in the case of a new canvas) and the current scale
+factor in percentage.  The contents of the canvas are dithered on 8
+bit screens to most closely match the actual colors. Note that this
+happens in real time as you draw, and dragging the canvas window from
+one workspace to another with a different bit depth will  cause the
+dithering to automatically be adjusted.<br>
+Left of the bottom scroll bar, the current mouse coordinates are shown.
+
+<a name="Selections"><h2>Selections</h2></a>
+
+Selections are shown by inverting the selected pixels whenever the
+mouse is in the canvas view.  Selections can be of any shape, and you
+can use any tool in selection mode to add areas to the selection.
+Furthermore, a selection is actually an alpha map, allowing for
+&quot;fuzzy&quot; selections as made with the brush tool.  You can copy
+and paste selections between different windows of <b>Becasso</b>.  You can
+also initiate a drag-and-drop sequence by holding the Shift key while
+clicking on the canvas in selection mode.  Clicking the left mouse
+button will copy the selection into the buffer, while the right mouse
+button (or a Shift-Control-click) will also cut it from the canvas.
+You can drag the selection around, during which it will be alpha
+blended in real time, and drop it by releasing the mouse button.<p>
+Note that you can quicky change between drawing and selection mode by
+use of the <code>TAB</code> key shortcut.
+
+<a name="Picking Colors"><h2>Picking Colors</h2></a>
+
+During the operation of any tool, holding the Option key while
+clicking somewhere on the canvas activates a Color Picker tool.
+Clicking the left mouse button picks the foreground color, clicking
+the right mouse button (or Control-Option-clicking) will select the
+background color.  The color picker tool will look for the closest
+match in the current palette of the selected color (foreground or
+background) and replace that with the color under the mouse cursor if
+it is within the tolerance (which can be adjusted in the corresponding
+color editor window), or replace the currently selected color if it is
+not.
+
+<a name="The Canvas File Menu"><h2>The File Menu</h2></a>
+
+The <i>File Menu</i> offers an extended subset of the <i>File</i> menu
+in the Becasso main window.  Opening a file from this menu will open a
+new canvas window with the contents of that file.<br> <i>Save</i> and
+<i>Save As...</i> will save the current canvas image in <b>Becasso</b>s
+own format, storing information about layers and settings as well.
+<b>Becasso</b> also permits exporting the image to other formats via the
+Datatypes library.  Selecting Export... from the menu will open a window
+with all the formats for which you have Datatype handlers installed on
+your system, from which you can pick which format to use.  Some formats
+offer various settings; these can be adjusted in the bottom part of
+the window.  When you click the &quot;Use&quot; button, a File Panel
+will pop up, allowing you to select a file name as usual.
+<i>Close</i> first checks whether the contents of the window were saved.
+If not, the user is warned and given the choice to cancel the closing,
+save the file, or discard any changes and abandon the file.  After this,
+the window is closed.  The same can be effected by clicking on the closer
+gadget in the window title.<br> 
+<i>Quit</i> performs the same actions as <i>Close</i> on all windows of
+<b>Becasso</b>. The same can be effected by selecting <i>Quit</i> from
+the main window, or pressing its closer gadget.<p>
+
+<a name="The Canvas Edit Menu"><h2>The Edit Menu</h2></a>
+
+<b>Becasso</b> offers multiple undo/redo, which are accessible from
+the <i>Edit</i> menu.  The maximum number of undo buffers can be selected 
+from the Drawing Mode Attribute Window.<br>
+The <i>Edit</i> menu also offers the usual range of cut, copy and
+paste operations.  When a selection is drawn, the relevant menu options
+are active.  <i>Select All</i> makes a selection of the entire canvas,
+<i>Deselect All</i> clears the selection map.  <i>Invert Selection</i>
+switches the selection map to its inverse.  The <i>Select by Color</i>
+submenu allows for quickly making a selection map according to a given
+color.  The <i>Automatic</i> option tries to guess what the background
+color of the present image is, and selects according to it.  This can
+be a valuable shortcut to select an image on a more-or-less
+flat-colored background.<br>
+<i>Colorize Selection</i> colors the canvas according to the selection
+map.<br>
+The <i>Channel to Selection</i> menu items will copy the given color
+channel into the selection map, and <i>Selection to Channel</i> will
+replace the given color channel with the current selection.<p>
+More about selections and the various ways of generating and using them, 
+below.<br>
+The <i>Entire Canvas</i> submenu offers a number of operations that can
+be performed on the canvas as a whole.  <i>Crop to Window</i> is active
+(selectable) when the window is smaller than the canvas, and cuts off
+any parts not visible.  <i>Crop to Selection</i> is active whenever
+there is a selection, and crops the canvas to the minimal rectangle
+circumscribing the selection.  <i>Autocrop</i> crops the canvas to
+the smallest rectangle containing the picture.<br>
+When the window is larger than the canvas, you can pad the canvas to the 
+window size.  This &quot;adds canvas&quot; to the original canvas, thus 
+enlarging it, without altering the original contents.<br> 
+<i>Resize to Window</i> accomplishes the same by streching or shrinking
+of the original canvas, offering the choice to keep the same ratio
+between width and height as in the original (thus, probably, not filling
+the entire window), or filling the entire window with the canvas, thus
+altering the aspect ratio when needed.<br>
+<i>Rotate</i> offers the possibility to rotate the entire canvas in 90 
+degrees steps.<br>
+<b><i>Note:</i></b> In the current version of <b>Becasso</b>, you
+cannot undo operations that change the size of the canvas.<p>
+The <i>Filter</i>, <i>Transform</i>, and <i>Generate</i> submenus offer 
+access to add-on modules.<p>
+
+<a name="Add-Ons"><h2>Add-Ons</h2></a>
+
+<b>Becasso</b> does not have any filters built in, but instead uses BeOS'
+advanced add-on capabilities to load separate modules at startup.  These are
+placed in the <code>add-ons/</code> directory.<br>
+<b>Becasso</b> discriminates three kinds of add-ons: <i>Filters</i>, 
+<i>Transformers</i>, and <i>Generators</i>.
+<b>Becasso</b> tries to extend the orthogonality principle to the
+add-ons as well, in that add-ons take the current mode (either drawing
+mode or selection mode) into account wherever this makes sense.  In
+drawing mode, a given add-on operates on the selected part of the
+canvas (or on the entire canvas if there is no selection).  In
+selection mode, the add-on operates <i>on the selection map itself</i>.
+This might seem strange at first (and cumbersome to have to switch
+back to drawing mode after making a selection to apply the add-on to
+the selected part of the canvas) but it allows for some extraordinary
+effects.  For instance, generating a selection map with a gradient in
+it and subsequently copy/pasting it makes blending of a selection with
+the background very easy.<p>
+Most add-ons have their own window, even if they don't have any
+settings.  These windows show a progress bar, a &quot;Stop&quot;
+button, an &quot;Info&quot; button, and an &quot;Apply&quot; button.
+The progress bar in the add-on window is updated as the calculation
+proceeds.  Lengthy calculations can be interrupted by clicking the
+&quot;Stop&quot; button.  The canvas will then be left unmodified.<p>
+
+Some add-ons can be operated interactively by &quot;direct
+manipulation&quot; of the canvas (like the Gradient Generator), others 
+&quot;block&quot; while they are active (like the Tile Generator).  A
+blocking add-on provides feedback in the form of a modified cursor.<p>
+
+Note to the add-on developers:  see the separate <a href="API.html">API 
+documentation</a>.<p>
+
+<i><b>Filters</b></i><br>
+This class of add-ons comprises the effects most often found in other
+image editing applications, like (Gaussian) blur filters, de-speckling
+filters, color/contrast enhancing filters, etc.  Most of these filters
+have a set of parameters controlling their operation on the canvas,
+which are sometimes difficult to optimize for your particular desired
+effect.  <b>Becasso</b> wouldn't be worthy of the BeOS if it would not 
+offer <i>real time preview</i> of the effects of a given set of parameter 
+settings.  Selecting a filter from the menu opens its parameter window
+and simultaneously displays a small (64x64 pixel) rectangle on the
+canvas, which is continuously updated with a preview of what the
+filter does.  This preview area can be dragged across the canvas while
+holding down the <code>ALT</code> (or <code>Command</code>) modifier
+to inspect the effect of the current settings on any part of the
+canvas.  It also reflects any changes you make to the parameters of the 
+filter immediately.  When the effect is as desired, you can apply the
+filter to the entire canvas (or its selected part if available) by
+clicking the &quot;Apply&quot; button in the add-on window.<p>
+
+<i><b>Transformers</b></i><br>
+A <i>transformer</i> add-on modifies the canvas in a different kind.
+Examples of <i>transformers</i> are add-ons that scale a selected part
+of the canvas, rotate it, project it on a sphere, skew it, flip it,
+etc.  Some of these (simple) transformations (like flipping) are not
+interactive (nor would that make any sense) but others can be operated
+in real time by dragging the mouse over the canvas.<p>
+Since many transformations involve complex calculations, these may
+offer a lower-quality &quot;preview&quot; mode while dragging (to keep
+the process responsive).  When the transformation is as desired, 
+releasing the mouse will render the transformation on the canvas in high 
+quality.<p>
+
+<i><b>Generators</b></i><br>
+This class of add-ons generates an image.  It <i>may</i> use the
+current contents of the canvas and generate a new image as a function
+of it (e.g. to generate a selection of all pixels with an intensity 
+above a given threshold, or all pixels of a given color) but it does
+not need to.
+<img src="Images/gradient.gif" alt="" padding="2" align="left" 
+border="0" vspace="5" hspace="5">
+The image at the side, for instance, shows the
+<i>Gradient Generator</i> in action.  First, a selection in the form
+of a text was generated (simply by typing the text in selection mode),
+after which <b>Becasso</b> was switched back to drawing mode.  Then,
+the Gradient Generator add-on was opened by selecting it from the
+<i>Edit</i> menu.  The Gradient Generator generates a color gradient
+from the currently selected high color to the low color, offering a
+variety of types of gradient (linear/circular, with different shapes
+of the gradient &quot;ramp&quot;) and is operated by dragging
+the mouse.  The white line visible in the canvas
+shows the current direction of the gradient, which is updated in
+real time as you drag.  Note that only the selected part of the canvas
+(i.e. the text) is affected.  When the gradient is as desired, releasing
+the mouse will render it (without the guide line of course) on the
+canvas.<br> Note that the add-on &quot;remembers&quot; the position
+of this guide line, so that you can generate a gradient with the same
+characteristics, even on a new canvas and with different colors, by
+clicking the &quot;Apply&quot; button on the Gradient Generator add-on
+window.<p>
+
+<a name="The Window Menu"><h2>The Window Menu</h2></a>
+
+From the bottom up, the Window menu offers an item to resize the
+window to fit the canvas (or fill the entire screen, whichever is
+smallest), and a submenu to set the current magnification of the
+canvas.  There are shortcuts for zooming in and out.  
+Every tool wil work in any magnification.<br>
+The <i>Layers</i> menu item opens the Layer Manager for the current
+canvas.<p>
+
+<a name="The Layer Menu"><h2>The Layer Menu</h2><a>
+The layer menu offers shortcuts to some of the functionality of the
+Layer Manager, so you don't have to keep that open while working, and
+you can switch between layers with a simple keypress.
+
+<a name="Layers"><h1>Layers</h1></a>
+
+<img src="Images/layers.jpg" alt="" padding="2" align="right" 
+border="0" vspace="5" hspace="5">
+<b>Becasso</b> uses the concept of <i>layers</i> in a canvas.  A layer
+can best be thought of as a transparent sheet onto which you draw.
+The opacity/transparency of the current colors can be adjusted with the
+alpha channel slider in the color editor window.  When there are only
+transparent pixels in a certain region of the canvas (for example when
+you use the eraser on the background layer), <b>Becasso</b> will show these as a
+light grey/dark grey checkerboard pattern.  This pattern is not part of
+the actual image.  The first layer in a new canvas is somewhat special as
+it is pre-filled with a white background color.  New layers will be fully
+transparent upon creation.  The Layer Manager shows the current layer
+layout of the canvas.  The layers are depicted with a thumbnail image
+(which is updated in real time as you draw) and can be given a name by
+double-clicking on it.  The currently active layer (which is modified
+when you draw) is shown in  a darker grey.  You can add new layers
+on top, insert new layers above the current layer, duplicate layers
+(i.e. insert a copy of the current layer) or remove layers.  You can
+select which layers to view by use of the &quot;Hide&quot; checkboxes in each
+layer.  Layers can be re-arranged by dragging them to their new position.
+Note that imported images from different formats often have their alpha
+channel set to completely opaque, which means that any layer under such
+an image will be hidden by it.  You can modify the &quot;global&quot; 
+alpha level of an entire layer with the slider.  With the
+&quot;Operation&quot; popup menu you can select the way layers should
+be merged on top of each other.  <b>Becasso 1.1</b> offers <i>Blend</i>
+and <i>Multiply</i>.  Blend mode simply superimposes the present layer
+onto all layers beneath it, whereas in Multiply mode, each color
+channel of each pixel is multiplied with the result so far.  This mode
+can be used to &quot;filter&quot; certain colors.  For example, putting 
+an all-red layer in multiply mode on top of an image filters out only 
+the red components.<p>
+
+When exporting a picture, it is exported exactly as shown on screen,
+i.e. layers which have been hidden by selecting their &quot;Hide&quot;
+buttons will also not be visible in the exported picture.<p>
+
+
+<a name="Modifier Overview"><h1>Modifier Overview</h1></a>
+
+Since <b>Becasso</b> uses so many different key modifier combinations, below
+is a short summary.<p>
+
+<table cellpadding="4"><tr>
+<td><code>Control</code></td>
+<td>Consistently emulates the right mouse button</td></tr>
+<tr><td><code>Command</code></td>
+<td>Add-on operating; moving the filter preview area.</td></tr>
+<tr><td><code>Shift</code></td>
+<td>Copy (left mouse button)/Cut (right mouse button)/Paste</td></tr>
+<tr><td><code>Option</code></td>
+<td>Color Picker (left = foreground color, right = background
+color)</td></tr>
+</table>
+
+<a name="Credits"><h1>Credits</h1></a>
+
+During the development of <b>Becasso</b>, the following people were of
+invaluable help:
+
+<ul>
+<li> William Bull (advice on GUI and architecture)
+<li> The BeDevTalk mailing list for numerous tips, and especially Jon
+     W&auml;tte (Datatypes library and many tips) and Chris Herborth (color 
+     tips, beta testing)
+<li> DuBeUs, especially Gertjan van Ratingen (mouse tracking), Edmund
+     Vermeulen (OutputFormatWindow) and Marco Nelissen (beta testing)
+<li> Raphael Moll (extensive beta testing, add-on development, and many tips)
+<li> Thomas Fletcher for add-on development and tips.
+<li> Christophe Droulers and Jean Calmon for their enthousiastic
+     reaction to my demonstration at the Apple Expo Paris
+<li> Michael Hopwood for bugging me for a release.
+<li> Becasso uses the zlib library by Jean-loup Gailly and Mark Adler.
+<li> The alpha blending and Floyd-Steinberg dithering code were
+     adapted from code by Tinic Uro.
+<li> Ingmar Krusch for his excellent articles on C++ exceptions.
+<li> Loren Petrich for some tips and ideas.
+<li> Everybody who pre-registered <b>Becasso</b> for their trust in 
+     <i>Sum Software</i>!
+</ul>
+
+<b>Becasso</b> uses the <code>zlib</code> compression library by
+Jean-loup Gailly and Mark Adler.<p>
+
+<i>Sum Software</i>, June 1998<p>
+
+The author can be reached at <a
+href="mailto:sanders@sumware.demon.nl">sanders@sumware.demon.nl</a>.<p>
+
+<hr>
+<font size=2>
+This documentation is &copy; 1998, <a href="http://www.sumware.demon.nl"><i>Sum
+Software</i></a>.<br>
+Last modification: 29 June 1998.<br>
+Trademarks used herein belong to their respective owners.
+</font>
+</body>
+</html>
