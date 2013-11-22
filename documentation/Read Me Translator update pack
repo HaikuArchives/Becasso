@@ -1,0 +1,41 @@
+Add-on and Translator update pack for Becasso 1.5
+
+29 January 2001
+
+This is an update pack containing updated add-ons for Becasso 1.5 as well as two new ones ("WinGrab" and "VideoGrabber"), four updated Translators (for BMP, EPS, JPEG, and PNG), and updated language files for Becasso, including a new Italian translation by Guido Soranzio.
+
+
+Installation instructions
+
+• Unzip the included update.zip file into your Becasso/data directory 
+   (this will automatically put the new Italian strings in the correct place).
+• Double-click install.sh
+   This will install the correct add-ons (depending on your CPU type, it will install 
+   add-ons optimized for Pentium or PentiumPro class CPU's)
+
+For the Translators:
+
+• Open the Translators directory
+• Drag the Translators onto the "drag Translators here" link, which will place them in
+   /boot/home/config/add-ons/Translators.
+
+
+Release notes
+
+• The JPEG Translator should now work with Gobe Productive again
+• The PNG Translator has "progressive decoding" fixed, and another bug which
+   would sometimes hang NetPositive
+• The BMP Translator has a bug fixed in decoding 8 bit images
+• The EPS Translator now has options for anti-aliasing, when it detects
+    Ghostscript 6.50 (http://www.bebits.com/app/1765) and Michael Pfeiffer's
+    anti-aliasing BeOS drivers.  It supports 2x2 and 4x4 resampling, as well as a nifty
+    mode to only anti-alias text and not graphics.
+
+• Various bug fixes in Becasso add-ons, most notably OilPaint and ColorCurves
+• New WinGrab add-on which allows you to capture a single window screen shot
+   (great for making documentation for an application!)
+• New VideoGrabber add-ons which captures single frames from the standard
+   video input (as long as it's sending out raw video, i.e. Bt848 cards should be
+   supported, but DV over Firewire isn't (yet)).
+
+Questions, suggestions: becasso@sumware.demon.nl
