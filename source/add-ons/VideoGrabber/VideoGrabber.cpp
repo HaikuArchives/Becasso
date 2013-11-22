@@ -10,6 +10,8 @@
 #include <Alert.h>
 #include "VideoConsumer.h"
 
+#include <string.h>
+
 class CaptureWindow : public BWindow
 {
 public:
@@ -67,13 +69,13 @@ BBitmap *CaptureWindow::Grab()
 status_t CaptureWindow::SetUpNodes()
 {
 	status_t status = B_OK;
-	
+
 	/* find the media roster */
 	fMediaRoster = BMediaRoster::Roster(&status);
 	if (status != B_OK) {
 		ErrorAlert("Can't find the media roster", status);
 		return status;
-	}	
+	}
 	/* find the time source */
 	status = fMediaRoster->GetTimeSource(&fTimeSourceNode);
 	if (status != B_OK) {
@@ -94,7 +96,7 @@ status_t CaptureWindow::SetUpNodes()
 		ErrorAlert("Can't create a video window", B_ERROR);
 		return B_ERROR;
 	}
-	
+
 	/* register the node */
 	status = fMediaRoster->RegisterNode(fVideoConsumer);
 	if (status != B_OK) {
@@ -102,7 +104,7 @@ status_t CaptureWindow::SetUpNodes()
 		return status;
 	}
 //	fPort = fVideoConsumer->ControlPort();
-	
+
 	/* find free producer output */
 	int32 cnt = 0;
 	status = fMediaRoster->GetFreeOutputsFor(fProducerNode, &fProducerOut, 1,  &cnt, B_MEDIA_RAW_VIDEO);
@@ -126,8 +128,8 @@ status_t CaptureWindow::SetUpNodes()
 	format.type = B_MEDIA_RAW_VIDEO;
 	media_raw_video_format vid_format = media_raw_video_format::wildcard;
 	//	{ 0, 2, 0, VIDEO_SIZE_Y - 1, B_VIDEO_TOP_LEFT_RIGHT, 1, 1, {B_RGB32, VIDEO_SIZE_X, VIDEO_SIZE_Y, VIDEO_SIZE_X*4, 0, 0}};
-	format.u.raw_video = vid_format; 
-	
+	format.u.raw_video = vid_format;
+
 	/* connect producer to consumer */
 	status = fMediaRoster->Connect(fProducerOut.source, fConsumerIn.destination,
 				&format, &fProducerOut, &fConsumerIn);
@@ -135,20 +137,20 @@ status_t CaptureWindow::SetUpNodes()
 		ErrorAlert("Can't connect the video source to the video window", status);
 		return status;
 	}
-	
+
 	/* set time sources */
 	status = fMediaRoster->SetTimeSourceFor(fProducerNode.node, fTimeSourceNode.node);
 	if (status != B_OK) {
 		ErrorAlert("Can't set the timesource for the video source", status);
 		return status;
 	}
-	
+
 	status = fMediaRoster->SetTimeSourceFor(fVideoConsumer->ID(), fTimeSourceNode.node);
 	if (status != B_OK) {
 		ErrorAlert("Can't set the timesource for the video window", status);
 		return status;
 	}
-	
+
 	/* figure out what recording delay to use */
 	bigtime_t latency = 0;
 	status = fMediaRoster->GetLatencyFor(fProducerNode, &latency);
@@ -158,13 +160,13 @@ status_t CaptureWindow::SetUpNodes()
 	bigtime_t initLatency = 0;
 	status = fMediaRoster->GetInitialLatencyFor(fProducerNode, &initLatency);
 	if (status < B_OK) {
-		ErrorAlert("error getting initial latency for fCaptureNode", status);	
+		ErrorAlert("error getting initial latency for fCaptureNode", status);
 	}
 	initLatency += estimate_max_scheduling_latency();
-	
+
 	BTimeSource *timeSource = fMediaRoster->MakeTimeSourceFor(fProducerNode);
 	bool running = timeSource->IsRunning();
-	
+
 	/* workaround for people without sound cards */
 	/* because the system time source won't be running */
 	bigtime_t real = BTimeSource::RealTime();
@@ -186,7 +188,7 @@ status_t CaptureWindow::SetUpNodes()
 
 	bigtime_t perf = timeSource->PerformanceTimeFor(real + latency + initLatency);
 	timeSource->Release();
-	
+
 	/* start the nodes */
 	status = fMediaRoster->StartNode(fProducerNode, perf);
 	if (status != B_OK) {
@@ -198,7 +200,7 @@ status_t CaptureWindow::SetUpNodes()
 		ErrorAlert("Can't start the video window", status);
 		return status;
 	}
-	
+
 	return status;
 
 }
@@ -209,20 +211,20 @@ void CaptureWindow::TearDownNodes ()
 		return;
 	if (fVideoConsumer)
 	{
-		/* stop */	
+		/* stop */
 		// printf ("stopping nodes!\n");
 		fMediaRoster->StopNode(fVideoConsumer->Node(), 0, true);
-	
+
 		/* disconnect */
 		fMediaRoster->Disconnect(fProducerOut.node.node, fProducerOut.source,
 								fConsumerIn.node.node, fConsumerIn.destination);
-								
+
 		if (fProducerNode != media_node::null) {
 			// printf ("Grabber releasing fProducerNode\n");
 			fMediaRoster->ReleaseNode(fProducerNode);
 			fProducerNode = media_node::null;
 		}
-		fMediaRoster->ReleaseNode(fVideoConsumer->Node());		
+		fMediaRoster->ReleaseNode(fVideoConsumer->Node());
 		fVideoConsumer = NULL;
 	}
 }

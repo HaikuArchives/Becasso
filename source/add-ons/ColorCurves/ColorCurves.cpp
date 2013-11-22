@@ -11,6 +11,7 @@
 #include <MenuItem.h>
 #include <RadioButton.h>
 #include <Button.h>
+#include <StringView.h>
 #include "Slider.h"
 #include "TabView.h"
 #include "Colors.h"
@@ -77,7 +78,7 @@ void		 SetGamma (float gamma)
 			 	else
 			 		fGamma[fCurrent] = gamma;
 			 }
-float		 Gamma (int c = -1) 
+float		 Gamma (int c = -1)
 			 {
 			 	if (c == -1)
 			 		c = fCurrent;
@@ -123,7 +124,7 @@ public:
 				graphBox = new BBox (BRect (8, 8, 272, 298), "graph tabs");
 				AddChild (graphBox);
 				AddChild (controlsBox);
-				
+
 				cspacePU = new BPopUpMenu ("ColorSpace");
 				cspacePU->AddItem (new BMenuItem ("RGBA", new BMessage ('cspR')));
 				cspacePU->AddItem (new BMenuItem ("CMYK", new BMessage ('cspC')));
@@ -133,7 +134,7 @@ public:
 				cspaceMF = new BMenuField (BRect (4, 264, 104, 278), "cspaceMF", "", cspacePU);
 				cspaceMF->SetDivider (0);
 				graphBox->AddChild (cspaceMF);
-				
+
 #if 0
 				graphPU = new BPopUpMenu ("Graphed");
 				graphPU->AddItem (new BMenuItem ("Red", new BMessage ('RspR')));
@@ -147,40 +148,40 @@ public:
 #else
 				graphMF = NULL;
 #endif
-				
+
 				typeBox = new BBox (BRect (8, 8, 134, 66), "typeBox");
 				typeBox->SetLabel ("Correction");
 				controlsBox->AddChild (typeBox);
-				
+
 				freeRB = new BRadioButton (BRect (8, 16, 118, 32), "freeRB", "Free Function", new BMessage ('Tfre'));
 				gammaRB = new BRadioButton (BRect (8, 34, 118, 50), "gammaRB", "Gamma", new BMessage ('Tgam'));
 				typeBox->AddChild (freeRB);
 				typeBox->AddChild (gammaRB);
 				freeRB->SetValue (B_CONTROL_ON);
-				
+
 				addB = new BButton (BRect (8, 72, 132, 88), "addB", "Add Point", new BMessage ('addP'));
 				removeB = new BButton (BRect (8, 100, 132, 128), "removeB", "Remove Point", new BMessage ('delP'));
 				controlsBox->AddChild (addB);
 				controlsBox->AddChild (removeB);
 				removeB->SetEnabled (false);
-				
+
 				graphTypeBox = new BBox (BRect (8, 138, 134, 198), "graphTypeBox");
 				graphTypeBox->SetLabel ("Curve Type");
 				controlsBox->AddChild (graphTypeBox);
-				
+
 				linesRB = new BRadioButton (BRect (8, 16, 118, 32), "linesRB", "Straight Lines", new BMessage ('Glin'));
 				smoothRB = new BRadioButton (BRect (8, 34, 118, 50), "smoothRB", "Smooth Fit", new BMessage ('Gfit'));
 				graphTypeBox->AddChild (linesRB);
 				graphTypeBox->AddChild (smoothRB);
 				linesRB->SetValue (B_CONTROL_ON);
-				
+
 				gCurve = new CurveView (BRect (4, 4, 259, 259), "curve");
 				graphBox->AddChild (gCurve);
-			
+
 				gammaS = new Slider (BRect (8, 206, 134, 224), 50, "Gamma", 0, 3, 0.01, new BMessage ('gamC'), B_HORIZONTAL, 0, "%1.2f");
 				gammaS->SetValue (gCurve->Gamma());
 				controlsBox->AddChild (gammaS);
-				
+
 				BButton *pc2mac = new BButton (BRect (8, 230, 68, 254), "pc2mac", "PC » Mac", new BMessage ('gp2m'));
 				BButton *mac2pc = new BButton (BRect (74, 230, 134, 254), "mac2pc", "Mac » PC", new BMessage ('gm2p'));
 				controlsBox->AddChild (pc2mac);
@@ -221,7 +222,7 @@ void CurveView::Draw (BRect update)
 		chan = 0;
 	else
 		chan = fCurrent;
-	
+
 	MovePenTo (BPoint (0, 255 - wct[chan][0]));
 	for (int i = 1; i < 256; i++)
 		StrokeLine (BPoint (i, 255 - wct[chan][i]));
@@ -288,7 +289,7 @@ void CurveView::do_FillTable (int channel)
 		{
 			float a, b, c, d;
 			float yprime, ynprime;
-			
+
 			// First section: quadratic function
 //			ynprime = (float (points[1].y - points[0].y)/(points[1].x - points[0].x)*(points[2].x - points[1].x)
 //					+ float (points[2].y - points[1].y)/(points[2].x - points[1].x)*(points[1].x - points[0].x))
@@ -299,7 +300,7 @@ void CurveView::do_FillTable (int channel)
 			c = points[channel][0].y;
 			for (int j = 0; j <= points[channel][1].x; j++)
 				wct[channel][j] = clipchar (a*j*j + b*j + c);
-			
+
 			// Middle sections: cubic
 			for (int i = 1; i < npoints[channel] - 2; i++)
 			{
@@ -323,7 +324,7 @@ void CurveView::do_FillTable (int channel)
 					wct[channel][j] = clipchar (a*x*x*x + b*x*x + c*x + d);
 				}
 			}
-			
+
 			// Last section: quadratic again
 			float xt = points[channel][npoints[channel] - 1].x - points[channel][npoints[channel] - 2].x;
 			a = float (points[channel][npoints[channel] - 1].y - ynprime*xt - points[channel][npoints[channel] - 2].y)/(xt*xt);
@@ -334,7 +335,7 @@ void CurveView::do_FillTable (int channel)
 				float x = j - points[channel][npoints[channel] - 2].x;
 				wct[channel][j] = clipchar (a*x*x + b*x + c);
 			}
-		}	
+		}
 		break;
 	}
 	case GT_GAMMA:
@@ -399,7 +400,7 @@ void CurveView::do_AddPoint (int channel)
 		added[channel][npoints[channel]++] = ind;
 		for (int i = npoints[channel] - 1; i > ind; i--)
 			points[channel][i] = points[channel][i - 1];
-		
+
 		points[channel][ind].x = (points[channel][ind + 1].x + points[channel][ind - 1].x)/2;
 		points[channel][ind].y = wct[channel][points[channel][ind].x];
 //		printf ("New point at (%d, %d)\n", points[ind].x, points[ind].y);
@@ -418,7 +419,7 @@ void CurveView::AddPoint ()
 		do_AddPoint (fCurrent);
 	FillTable (fCurrent);
 	addon_preview();
-	Invalidate();	
+	Invalidate();
 }
 
 void CurveView::do_RemovePoint (int channel)
@@ -470,7 +471,7 @@ void CurveView::MouseDown (BPoint point)
 						points[1][i].y = clipchar (255 - point.y);
 						points[2][i].x = clipchar (point.x);
 						points[2][i].y = clipchar (255 - point.y);
-						
+
 						if (i == 0)
 						{
 							points[0][i].x = 0;
@@ -486,7 +487,7 @@ void CurveView::MouseDown (BPoint point)
 							if (points[2][i].x <= points[2][i - 1].x)
 								points[2][i].x = points[2][i - 1].x + 1;
 						}
-								
+
 						if (i == npoints[0] - 1)
 						{
 							points[0][i].x = 255;
@@ -502,7 +503,7 @@ void CurveView::MouseDown (BPoint point)
 							if (points[2][i].x >= points[2][i + 1].x)
 								points[2][i].x = points[2][i + 1].x - 1;
 						}
-							
+
 						FillTable (fCurrent);
 						addon_preview();
 						Draw (Bounds());
@@ -530,19 +531,19 @@ void CurveView::MouseDown (BPoint point)
 					{
 						points[fCurrent][i].x = clipchar (point.x);
 						points[fCurrent][i].y = clipchar (255 - point.y);
-						
+
 						if (i == 0)
 							points[fCurrent][i].x = 0;
 						else
 							if (points[fCurrent][i].x <= points[fCurrent][i - 1].x)
 								points[fCurrent][i].x = points[fCurrent][i - 1].x + 1;
-								
+
 						if (i == npoints[fCurrent] - 1)
 							points[fCurrent][i].x = 255;
 						else
 							if (points[fCurrent][i].x >= points[fCurrent][i + 1].x)
 								points[fCurrent][i].x = points[fCurrent][i + 1].x - 1;
-							
+
 						FillTable (fCurrent);
 						addon_preview();
 						Draw (Bounds());
@@ -775,7 +776,7 @@ status_t addon_make_config (BView **view, BRect rect)
 
 #define wct gCurve->wct
 
-status_t process (Layer *inLayer, Selection *inSelection, 
+status_t process (Layer *inLayer, Selection *inSelection,
 				  Layer **outLayer, Selection **outSelection, int32 mode,
 				  BRect * /* frame */, bool final, BPoint /* point */, uint32 /* buttons */)
 {
@@ -814,7 +815,7 @@ status_t process (Layer *inLayer, Selection *inSelection,
 	if (final)
 		addon_start();
 	float delta = 100.0/h;	// For the Status Bar.
-	
+
 	switch (mode)
 	{
 	case M_DRAW:
@@ -898,7 +899,7 @@ status_t process (Layer *inLayer, Selection *inSelection,
 		{
 			grey_pixel *sbits = mapbits;
 			grey_pixel *dbits = (grey_pixel *) (*outSelection)->Bits();
-			
+
 			for (uint32 y = 0; y < h; y++)
 			{
 				if (final)
@@ -929,9 +930,9 @@ status_t process (Layer *inLayer, Selection *inSelection,
 		(*outSelection)->Unlock();
 	if (*outLayer)
 		(*outLayer)->Unlock();
-	
+
 	if (final)
 		addon_done();
-		
+
 	return (error);
 }
