@@ -1,0 +1,4 @@
+SubDir TOP data ;
+
+SubInclude TOP data strings ;
+SubInclude TOP data Palettes ;

@@ -7,3 +7,5 @@ LINKFLAGS on MultiGradient = -nostart -Xlinker -soname=MultiGradient ;
 Main MultiGradient :
 	MultiGradient.cpp
 	;
+
+InstallBin target/add-ons : MultiGradient ;

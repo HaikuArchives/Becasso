@@ -9,3 +9,5 @@ Main Palmcam :
 	dc1000.c
 	dsc.c
 	;
+
+InstallBin target/add-ons : Palmcam ;

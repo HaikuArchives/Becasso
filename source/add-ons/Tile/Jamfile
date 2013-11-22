@@ -7,3 +7,5 @@ LINKFLAGS on Tile = -nostart -Xlinker -soname=Tile ;
 Main Tile :
 	Tile.cpp
 	;
+
+InstallBin target/add-ons : Tile ;

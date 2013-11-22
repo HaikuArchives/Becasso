@@ -7,3 +7,5 @@ LINKFLAGS on Mandelbrot = -nostart -Xlinker -soname=Mandelbrot ;
 Main Mandelbrot :
 	mandelbrot.cpp
 	;
+
+InstallBin target/add-ons : Mandelbrot ;

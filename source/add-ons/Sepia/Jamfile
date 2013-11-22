@@ -7,3 +7,5 @@ LINKFLAGS on Sepia = -nostart -Xlinker -soname=Sepia ;
 Main Sepia :
 	Sepia.cpp
 	;
+
+InstallBin target/add-ons : Sepia ;

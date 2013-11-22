@@ -7,3 +7,5 @@ LINKFLAGS on Jim = -nostart -Xlinker -soname=Jim ;
 Main Jim :
 	Jim.cpp
 	;
+
+InstallBin target/add-ons : Jim ;

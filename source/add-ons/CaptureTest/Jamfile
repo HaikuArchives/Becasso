@@ -7,3 +7,5 @@ LINKFLAGS on CaptureTest = -nostart -Xlinker -soname=CaptureTest ;
 Main CaptureTest :
 	CaptureTest.cpp
 	;
+
+InstallBin target/add-ons : CaptureTest ;

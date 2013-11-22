@@ -7,3 +7,5 @@ LINKFLAGS on WinGrab = -nostart -Xlinker -soname=WinGrab ;
 Main WinGrab :
 	WinGrab.cpp
 	;
+
+InstallBin target/add-ons : WinGrab ;

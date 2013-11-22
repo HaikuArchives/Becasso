@@ -8,3 +8,5 @@ Main VideoGrabber :
 	VideoGrabber.cpp
 	VideoConsumer.cpp
 	;
+
+InstallBin target/add-ons : VideoGrabber ;

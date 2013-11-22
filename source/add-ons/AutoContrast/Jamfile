@@ -7,3 +7,5 @@ LINKFLAGS on AutoContrast = -nostart -Xlinker -soname=AutoContrast ;
 Main AutoContrast :
 	AutoContrast.cpp
 	;
+
+InstallBin target/add-ons : AutoContrast ;

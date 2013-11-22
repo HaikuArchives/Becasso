@@ -7,3 +7,5 @@ LINKFLAGS on Noise = -nostart -Xlinker -soname=Noise ;
 Main Noise :
 	Noise.cpp
 	;
+
+InstallBin target/add-ons : Noise ;

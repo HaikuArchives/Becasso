@@ -7,3 +7,5 @@ LINKFLAGS on ImageElements = -nostart -Xlinker -soname=ImageElements ;
 Main ImageElements :
 	ImageElements.cpp
 	;
+
+InstallBin target/add-ons : ImageElements ;

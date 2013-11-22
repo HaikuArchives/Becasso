@@ -7,3 +7,5 @@ LINKFLAGS on Translate = -nostart -Xlinker -soname=Translate ;
 Main Translate :
 	Translate.cpp
 	;
+
+InstallBin target/add-ons : Translate ;

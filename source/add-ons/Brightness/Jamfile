@@ -7,3 +7,5 @@ LINKFLAGS on Brightness = -nostart -Xlinker -soname=Brightness ;
 Main Brightness :
 	Brightness.cpp
 	;
+
+InstallBin target/add-ons : Brightness ;

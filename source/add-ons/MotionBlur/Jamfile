@@ -7,3 +7,5 @@ LINKFLAGS on MotionBlur = -nostart -Xlinker -soname=MotionBlur ;
 Main MotionBlur :
 	MotionBlur.cpp
 	;
+
+InstallBin target/add-ons : MotionBlur ;

@@ -7,3 +7,5 @@ LINKFLAGS on Chromakey = -nostart -Xlinker -soname=Chromakey ;
 Main Chromakey :
 	Chromakey.cpp
 	;
+
+InstallBin target/add-ons : Chromakey ;

@@ -7,3 +7,5 @@ LINKFLAGS on BumpMap = -nostart -Xlinker -soname=BumpMap ;
 Main BumpMap :
 	BumpMap.cpp
 	;
+
+InstallBin target/add-ons : BumpMap ;

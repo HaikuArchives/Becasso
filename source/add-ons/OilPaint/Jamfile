@@ -7,3 +7,5 @@ LINKFLAGS on OilPaint = -nostart -Xlinker -soname=OilPaint ;
 Main OilPaint :
 	OilPaint.cpp
 	;
+
+InstallBin target/add-ons : OilPaint ;

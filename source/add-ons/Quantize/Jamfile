@@ -7,3 +7,5 @@ LINKFLAGS on Quantize = -nostart -Xlinker -soname=Quantize ;
 Main Quantize :
 	Quantize.cpp
 	;
+
+InstallBin target/add-ons : Quantize ;

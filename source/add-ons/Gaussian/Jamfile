@@ -7,3 +7,5 @@ LINKFLAGS on Gaussian = -nostart -Xlinker -soname=Gaussian ;
 Main Gaussian :
 	Gaussian.cpp
 	;
+
+InstallBin target/add-ons : Gaussian ;

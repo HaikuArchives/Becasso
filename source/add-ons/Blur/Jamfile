@@ -7,3 +7,5 @@ LINKFLAGS on Blur = -nostart -Xlinker -soname=Blur ;
 Main Blur :
 	Blur.cpp
 	;
+
+InstallBin target/add-ons : Blur ;

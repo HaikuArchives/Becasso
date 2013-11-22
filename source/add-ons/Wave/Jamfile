@@ -7,3 +7,5 @@ LINKFLAGS on Wave = -nostart -Xlinker -soname=Wave ;
 Main Wave :
 	Wave.cpp
 	;
+
+InstallBin target/add-ons : Wave ;

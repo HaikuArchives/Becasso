@@ -1,0 +1,6 @@
+SubDir TOP data Palettes ;
+
+InstallFile target/Palettes : default.pal ;
+InstallFile target/Palettes : websafe.pal ;
+InstallFile target/Palettes : websafe_hue.pal ;
+InstallFile target/Palettes : websafe_value.pal ;

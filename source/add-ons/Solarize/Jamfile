@@ -7,3 +7,5 @@ LINKFLAGS on Solarize = -nostart -Xlinker -soname=Solarize ;
 Main Solarize :
 	Solarize.cpp
 	;
+
+InstallBin target/add-ons : Solarize ;

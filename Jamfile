@@ -1,4 +1,5 @@
 SubDir TOP ;
 
+SubInclude TOP data ;
 SubInclude TOP source ;
 SubInclude TOP source add-ons ;

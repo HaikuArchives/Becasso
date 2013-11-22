@@ -7,3 +7,5 @@ LINKFLAGS on Diffuse = -nostart -Xlinker -soname=Diffuse ;
 Main Diffuse :
 	Diffuse.cpp
 	;
+
+InstallBin target/add-ons : Diffuse ;

@@ -10,3 +10,5 @@ Main ColorCurves :
 	ColorCurves.cpp
 	Colorcurves_x86.asm
 	;
+
+InstallBin target/add-ons : ColorCurves ;

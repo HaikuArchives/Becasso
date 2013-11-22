@@ -7,3 +7,5 @@ LINKFLAGS on Scale = -nostart -Xlinker -soname=Scale ;
 Main Scale :
 	Scale.cpp
 	;
+
+InstallBin target/add-ons : Scale ;

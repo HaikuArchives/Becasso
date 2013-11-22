@@ -7,3 +7,5 @@ LINKFLAGS on Ripple = -nostart -Xlinker -soname=Ripple ;
 Main Ripple :
 	Ripple.cpp
 	;
+
+InstallBin target/add-ons : Ripple ;

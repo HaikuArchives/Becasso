@@ -1,0 +1,8 @@
+SubDir TOP data strings ;
+
+InstallFile target/data/strings : Croatian ;
+InstallFile target/data/strings : Dansk ;
+InstallFile target/data/strings : Deutsch ;
+InstallFile target/data/strings : English ;
+InstallFile target/data/strings : Français ;
+InstallFile target/data/strings : Italiano ;

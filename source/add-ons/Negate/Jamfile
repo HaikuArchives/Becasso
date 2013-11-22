@@ -7,3 +7,5 @@ LINKFLAGS on Negate = -nostart -Xlinker -soname=Negate ;
 Main Negate :
 	Negate.cpp
 	;
+
+InstallBin target/add-ons : Negate ;
