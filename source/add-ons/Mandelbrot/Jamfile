@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Mandelbrot ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Mandelbrot = -nostart -Xlinker -soname=Mandelbrot ;
+
+Main Mandelbrot :
+	mandelbrot.cpp
+	;

@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Diffuse ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Diffuse = -nostart -Xlinker -soname=Diffuse ;
+
+Main Diffuse :
+	Diffuse.cpp
+	;

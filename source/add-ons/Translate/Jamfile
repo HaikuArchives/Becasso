@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Translate ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Translate = -nostart -Xlinker -soname=Translate ;
+
+Main Translate :
+	Translate.cpp
+	;

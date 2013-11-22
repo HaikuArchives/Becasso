@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Wave ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Wave = -nostart -Xlinker -soname=Wave ;
+
+Main Wave :
+	Wave.cpp
+	;

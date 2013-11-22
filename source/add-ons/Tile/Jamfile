@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Tile ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Tile = -nostart -Xlinker -soname=Tile ;
+
+Main Tile :
+	Tile.cpp
+	;

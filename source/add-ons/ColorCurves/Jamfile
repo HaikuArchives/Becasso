@@ -1,0 +1,12 @@
+SubDir TOP source add-ons ColorCurves ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on ColorCurves = -nostart -Xlinker -soname=ColorCurves ;
+
+AS = nasm -f elf32 ;
+
+Main ColorCurves :
+	ColorCurves.cpp
+	Colorcurves_x86.asm
+	;

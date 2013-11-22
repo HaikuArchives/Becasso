@@ -1,0 +1,9 @@
+SubDir TOP source add-ons ImageElements ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on ImageElements = -nostart -Xlinker -soname=ImageElements ;
+
+Main ImageElements :
+	ImageElements.cpp
+	;

@@ -1,0 +1,9 @@
+SubDir TOP source add-ons OilPaint ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on OilPaint = -nostart -Xlinker -soname=OilPaint ;
+
+Main OilPaint :
+	OilPaint.cpp
+	;

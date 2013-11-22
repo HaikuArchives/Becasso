@@ -1,0 +1,10 @@
+SubDir TOP source add-ons VideoGrabber ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on VideoGrabber = -nostart -Xlinker -soname=VideoGrabber ;
+
+Main VideoGrabber :
+	VideoGrabber.cpp
+	VideoConsumer.cpp
+	;

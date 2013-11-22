@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Quantize ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Quantize = -nostart -Xlinker -soname=Quantize ;
+
+Main Quantize :
+	Quantize.cpp
+	;

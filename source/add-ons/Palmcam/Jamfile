@@ -1,0 +1,11 @@
+SubDir TOP source add-ons Palmcam ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Palmcam = -nostart -Xlinker -soname=Palmcam ;
+
+Main Palmcam :
+	Palmcam.cpp
+	dc1000.c
+	dsc.c
+	;

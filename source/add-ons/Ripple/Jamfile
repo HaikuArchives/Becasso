@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Ripple ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Ripple = -nostart -Xlinker -soname=Ripple ;
+
+Main Ripple :
+	Ripple.cpp
+	;

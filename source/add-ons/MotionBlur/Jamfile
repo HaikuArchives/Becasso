@@ -1,0 +1,9 @@
+SubDir TOP source add-ons MotionBlur ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on MotionBlur = -nostart -Xlinker -soname=MotionBlur ;
+
+Main MotionBlur :
+	MotionBlur.cpp
+	;

@@ -1,0 +1,9 @@
+SubDir TOP source add-ons MultiGradient ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on MultiGradient = -nostart -Xlinker -soname=MultiGradient ;
+
+Main MultiGradient :
+	MultiGradient.cpp
+	;

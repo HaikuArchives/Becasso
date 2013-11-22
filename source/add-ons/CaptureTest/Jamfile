@@ -1,0 +1,9 @@
+SubDir TOP source add-ons CaptureTest ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on CaptureTest = -nostart -Xlinker -soname=CaptureTest ;
+
+Main CaptureTest :
+	CaptureTest.cpp
+	;

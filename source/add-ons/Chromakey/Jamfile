@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Chromakey ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Chromakey = -nostart -Xlinker -soname=Chromakey ;
+
+Main Chromakey :
+	Chromakey.cpp
+	;

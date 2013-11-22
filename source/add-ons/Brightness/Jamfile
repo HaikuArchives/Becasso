@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Brightness ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Brightness = -nostart -Xlinker -soname=Brightness ;
+
+Main Brightness :
+	Brightness.cpp
+	;

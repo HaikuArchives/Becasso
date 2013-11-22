@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Solarize ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Solarize = -nostart -Xlinker -soname=Solarize ;
+
+Main Solarize :
+	Solarize.cpp
+	;

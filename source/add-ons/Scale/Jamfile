@@ -1,0 +1,9 @@
+SubDir TOP source add-ons Scale ;
+
+SubDirHdrs $(TOP) source ;
+
+LINKFLAGS on Scale = -nostart -Xlinker -soname=Scale ;
+
+Main Scale :
+	Scale.cpp
+	;
