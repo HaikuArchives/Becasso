@@ -1,2 +1,6 @@
 C++ = g++ ;
 
+actions AddResources {
+	xres -o $(1) $(2)
+	mimeset -f $(1)
+}

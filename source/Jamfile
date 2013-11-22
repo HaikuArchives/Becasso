@@ -92,3 +92,5 @@ Main Becasso :
 	AddOnSupport.cpp
 	mmx_gcc.asm
 	;
+
+AddResources Becasso : Becasso.rsrc ;
