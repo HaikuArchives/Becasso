@@ -1,0 +1,94 @@
+SubDir TOP source ;
+
+LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice ;
+LINKFLAGS on Becasso = -Xlinker -soname=_APP_ ;
+
+AS = nasm -f elf32 ;
+
+Main Becasso :
+	TabView.cpp
+	Slider.cpp
+	Colors.cpp
+	PicMenuButton.cpp
+	PicMenu.cpp
+	PicItem.cpp
+	PicMenuView.cpp
+	ColorMenuButton.cpp
+	ColorMenu.cpp
+	ColorItem.cpp
+	ColorMenuView.cpp
+	PatternMenuButton.cpp
+	PatternMenu.cpp
+	PatternItem.cpp
+	PatternMenuView.cpp
+	ColorWindow.cpp
+	ColorView.cpp
+	HSVSquare.cpp
+	RGBSquare.cpp
+	hsv.cpp
+	Becasso.cpp
+	MainWindow.cpp
+	BecassoMain.cpp
+	SplashWindow.cpp
+	AboutView.cpp
+	AboutWindow.cpp
+	HelpView.cpp
+	Settings.cpp
+	RegWindow.cpp
+	TOTDWindow.cpp
+	AttribBrush.cpp
+	AttribCircle.cpp
+	AttribDraw.cpp
+	AttribEllipse.cpp
+	AttribEraser.cpp
+	AttribFill.cpp
+	AttribFreehand.cpp
+	AttribLines.cpp
+	AttribPolyblob.cpp
+	AttribPolygon.cpp
+	AttribRect.cpp
+	AttribRoundRect.cpp
+	AttribSelect.cpp
+	AttribSpraycan.cpp
+	AttribClone.cpp
+	AttribText.cpp
+	AttribView.cpp
+	AttribWindow.cpp
+	SizeWindow.cpp
+	NagWindow.cpp
+	ResizeWindow.cpp
+	PrefsWindow.cpp
+	XpalWindow.cpp
+	LayerItem.cpp
+	LayerNameWindow.cpp
+	LayerView.cpp
+	LayerWindow.cpp
+	CanvasView.cpp
+	CanvasTools.cpp
+	CanvasWindow.cpp
+	PosView.cpp
+	MagView.cpp
+	MagWindow.cpp
+	BitmapView.cpp
+	BitmapStuff.cpp
+	ThumbnailFilePanel.cpp
+	debug.cpp
+	mmx.c
+	sfx.cpp
+	Brush.cpp
+	Tablet.cpp
+	SView.cpp
+	SBitmap.cpp
+	BGView.cpp
+	Position.cpp
+	PointStack.cpp
+	Selection.cpp
+	Layer.cpp
+	MetaLayer.cpp
+	ProgressiveBitmapStream.cpp
+	OutputFormatWindow.cpp
+	AddOn.cpp
+	AddOnWindow.cpp
+	AddOnSupport.cpp
+	mmx_gcc.asm
+	;
