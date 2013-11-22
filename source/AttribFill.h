@@ -3,6 +3,7 @@
 
 #include "AttribView.h"
 #include <Message.h>
+#include <RadioButton.h>
 #include "Slider.h"
 
 #define FILLTOL_TOL	0
@@ -36,4 +37,4 @@ Slider		 *sT, *sR, *sG, *sB;
 int			 fCurrentProperty;
 };
 
-#endif 
+#endif

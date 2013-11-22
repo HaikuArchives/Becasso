@@ -22,6 +22,7 @@
 #include <DataIO.h>
 #include <Window.h>
 #include <Invoker.h>
+#include <translation/TranslatorFormats.h>
 #include "OutputFormatWindow.h"
 
 
@@ -90,7 +91,7 @@ private:
 	void RecursiveSetMode(BView *view);
 	BInvoker *selected_invoker;
 	bool message_sent;				// --SS
-	BTranslatorRoster *the_roster;	// switched to avoid compiler warning 
+	BTranslatorRoster *the_roster;	// switched to avoid compiler warning
 	BListView *list_view;
 	BScrollView *scroll_view;
 	BButton *cancel_button;
@@ -231,7 +232,7 @@ OutputFormatView::OutputFormatView(
 		uint32 in_type = in_info.type;
 		uint32 in_group = in_info.group;
 //		printf ("in_type %c%c%c%c, in_group %c%c%c%c\n",
-//			((char *) &in_type)[0], ((char *) &in_type)[1], ((char *) &in_type)[2], ((char *) &in_type)[3], 
+//			((char *) &in_type)[0], ((char *) &in_type)[1], ((char *) &in_type)[2], ((char *) &in_type)[3],
 //			((char *) &in_group)[0], ((char *) &in_group)[1], ((char *) &in_group)[2], ((char *) &in_group)[3]);
 
 		translator_info *info_list = 0;
@@ -266,7 +267,7 @@ OutputFormatView::OutputFormatView(
 								OutputFormat *new_list = new OutputFormat[max_formats];
 								for (int32 k = 0; k < output_count; ++k)
 									new_list[k] = output_list[k];
-	
+
 								delete[] output_list;
 								output_list = new_list;
 							}
@@ -279,9 +280,9 @@ OutputFormatView::OutputFormatView(
 						}
 //						else
 //		printf ("rejected in_type %c%c%c%c, in_group %c%c%c%c\n",
-//			((char *) &format_list[j].type)[0], ((char *) &format_list[j].type)[1], ((char *) &format_list[j].type)[2], ((char *) &format_list[j].type)[3], 
+//			((char *) &format_list[j].type)[0], ((char *) &format_list[j].type)[1], ((char *) &format_list[j].type)[2], ((char *) &format_list[j].type)[3],
 //			((char *) &format_list[j].group)[0], ((char *) &format_list[j].group)[1], ((char *) &format_list[j].group)[2], ((char *) &format_list[j].group)[3]);
-						
+
 					}
 				}
 			}

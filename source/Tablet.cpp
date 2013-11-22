@@ -5,7 +5,7 @@
 
 Tablet::Tablet (const char *port)
 {
-	openlog ("TabletDriver", LOG_THID, LOG_USER);
+//	openlog ("TabletDriver", LOG_THID, LOG_USER);
 	strcpy (fPortName, port);
 	fValid = false;
 	fPort = new BSerialPort ();
@@ -32,7 +32,7 @@ bool Tablet::Init ()
 	///////////////////////
 	if (strlen (fPortName) < 1)
 		return false;
-	
+
 	syslog (LOG_DEBUG, "Checking for Tablet at %s\n", fPortName);
 	fPort->SetDataRate (B_9600_BPS);
 	fPort->SetFlowControl (B_NOFLOW_CONTROL);
@@ -98,7 +98,7 @@ status_t Tablet::Update ()
  *  data structure, signalling GetLine() to end the input there!!
  *  Since 13 is also Xoff, I spent a lot of time looking in entirely the
  *  wrong direction as to what was going wrong...
-*/ 
+*/
 	/*int32 num = */fPort->Read (fBuffer, 7);
 	/*printf ("Read %d bytes... ", num);*/ fflush (stdout);
 	if (convertpositiontostruct (fBuffer, fPos, fTabletType) == B_ERROR)
@@ -115,15 +115,15 @@ status_t convertinfotostruct (const uint32 * /*data */, tablet_info & /*info*/)
 }
 
 status_t convertpositiontostruct (const char *data, tablet_position &info, uint32 tablet_type)
-{	
+{
 	int mid;
-	
+
 	if (!(data[0] & kSyncBitMask))
 	{
 		// printf("convertpositiontostruct - early return, no sync bit\n");
 		return B_ERROR;
 	}
-	
+
 	info.proximity = data[0] & kProximityBitMask;
 	info.stylus = data[0] & kPointerBitMask;
 	info.buttonflag = data[0] & kButtonBitMask;
@@ -131,13 +131,13 @@ status_t convertpositiontostruct (const char *data, tablet_position &info, uint3
 	info.x = (data[0] & 0x3)*16384;
 	info.x += (data[1] & 0x7f)*128;
 	info.x += (data[2] & 0x7f);
-	
+
 	info.buttons = (data[3] & 0x78) >> 3;
-	
+
 	info.y = (data[3] & 0x3)*16384;
 	info.y += (data[4] & 0x7f)*128;
 	info.y += (data[5] & 0x7f);
-		
+
 	info.pressuresign = (data[6] & kPressureSignBitMask) >> kPressureSignBit;
 	info.pressuredata = (data[6] & 0x3f) << 1 | ((data[4] & kP0BitMask) >> kP0Bit);
 	if (tablet_type == ET_TABLET)
@@ -153,7 +153,7 @@ status_t convertpositiontostruct (const char *data, tablet_position &info, uint3
 		info.pressure = mid + info.pressuredata;
 	if (!info.proximity)
 		info.pressure = 0;
-	
+
 	return B_NO_ERROR;
 }
 
@@ -164,15 +164,15 @@ status_t convertpositiontostruct (const char *data, tablet_position &info, uint3
 int GetLine (BSerialPort *port, char *buff, const long buffLen)
 {
 	//return;
-	
+
 	bool done = false;
 	char *ptr = buff;
 	long totalread = 0;
-	
+
 #if 0
-	
+
 	totalread = port->Read (ptr, buffLen);
-	
+
 #else
 
 	uint8 aChar;

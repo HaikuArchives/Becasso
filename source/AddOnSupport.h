@@ -6,6 +6,8 @@
 #include "Build.h"
 #include <support/SupportDefs.h>
 #include <interface/GraphicsDefs.h>
+#include <Entry.h>
+#include <Bitmap.h>
 
 typedef uint32 bgra_pixel;
 typedef uint32 cmyk_pixel;
@@ -58,4 +60,4 @@ extern "C" IMPEXP uchar clipchar (float x);
 extern "C" IMPEXP float clipone (float x);
 extern "C" IMPEXP float clipdegr (float x);
 
-#endif 
+#endif

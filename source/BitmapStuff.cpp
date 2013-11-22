@@ -1,7 +1,7 @@
 #include "BitmapStuff.h"
 #include "Brush.h"
 #include "hsv.h"
-#include "zlib.h"
+#include <zlib.h>
 #include "ProgressiveBitmapStream.h"
 #include "BecassoAddOn.h"
 #include <stdio.h>
@@ -16,6 +16,7 @@
 #include "SView.h"
 #include "SBitmap.h"
 #include <Debug.h>
+#include <Node.h>
 
 #define bzero(p,n) memset(p,0,n)
 
@@ -29,7 +30,7 @@
 #endif
 
 // Note: This is a design mistake, discovered when 1.3 was already being released.
-// The "Merge" function should have been in here from day one; this is a copy of 
+// The "Merge" function should have been in here from day one; this is a copy of
 // the same method in CanvasView.
 
 void Merge (BBitmap *a, Layer *b, BRect update, bool doselect, bool preserve_alpha);
@@ -215,7 +216,7 @@ void InsertGlobalAlpha (Layer *layer[], int numLayers)		// Watermark all layers 
 	demoView->Sync();
 	tmp->RemoveChild (demoView);
 	delete demoView;
-	
+
 	for (int i = 0; i < numLayers; i++)
 	{
 		layer[i]->Lock();
@@ -294,7 +295,7 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 					fread (layer[i]->Bits(), layer[i]->BitsLength(), 1, fp);
 				}
 				break;
-			case 1:                        
+			case 1:
 			{
 				uchar *tmpzbuf = NULL;
 				z_streamp zstream = new z_stream;
@@ -358,12 +359,12 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 				delete [] tmpzbuf;
 				delete zstream;
 				break;
-		
+
 				if (watermarked)
 					InsertGlobalAlpha(layer, numLayers);
-		
+
 			}
-			case 2:                        
+			case 2:
 			{
 				uchar *tmpzbuf = NULL;
 				z_streamp zstream = new z_stream;
@@ -427,17 +428,17 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 				delete [] tmpzbuf;
 				delete zstream;
 				break;
-		
+
 				if (watermarked)
 					InsertGlobalAlpha(layer, numLayers);
-		
+
 			}
 			default:	// This should never happen
 				fprintf (stderr, "Hmm, somehow a newer version file got through to the actual loading routine.\n");
 			}
 			fclose (fp);
 			// OK, we've got the layers.  Now blend them into a BBitmap.
-			
+
 //			lFrame.PrintToStream();
 			map = new BBitmap (lFrame, B_RGBA32, false);
 //			ulong h = height;
@@ -455,7 +456,7 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 			src += rt*sbpr + rl;
 			uint32 *dest =  (uint32 *) map->Bits() + (rt*w + rl) - 1;
 //				ulong brl = rl;
-		
+
 			// printf ("Background layer: [%ld, %ld, %ld, %ld]\n", rl, rt, rr, rb);
 			// printf ("3"); fflush (stdout);
 			#if defined (__POWERPC__)
@@ -507,7 +508,7 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 				// Error translating...
 				char errstring[B_FILE_NAME_LENGTH + 64];
 				sprintf (errstring, "Datatypes error:\nCouldn't translate `%s'", fName);
-				BAlert *alert = new BAlert ("", errstring, "OK", NULL, NULL, 
+				BAlert *alert = new BAlert ("", errstring, "OK", NULL, NULL,
 					B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				alert->Go();
 			}
@@ -531,7 +532,7 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 	{
 		char errstring[B_FILE_NAME_LENGTH + 64];
 		sprintf (errstring, "Translation Kit error:\nCouldn't translate '%s'", path.Path());
-		BAlert *alert = new BAlert ("", errstring, "Help", "OK", NULL, 
+		BAlert *alert = new BAlert ("", errstring, "Help", "OK", NULL,
 			B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		uint32 button = alert->Go();
 		if (button == 0)
@@ -541,14 +542,14 @@ BBitmap *entry2bitmap (BEntry entry, bool silent)
 			filetype [node.ReadAttr ("BEOS:TYPE", 0, 0, filetype, 80)] = 0;
 			if (!strncmp (filetype, "image/", 6))
 			{
-				sprintf (errstring, 
-					"The file '%s' is of type '%s'.\nThis does look like an image format to me.\nMaybe you haven't installed the corresponding Translator?", 
+				sprintf (errstring,
+					"The file '%s' is of type '%s'.\nThis does look like an image format to me.\nMaybe you haven't installed the corresponding Translator?",
 					path.Path(), filetype);
 			}
 			else
 			{
-				sprintf (errstring, 
-					"The file '%s' is of type '%s'.\nI don't think this is an image at all.", 
+				sprintf (errstring,
+					"The file '%s' is of type '%s'.\nI don't think this is an image at all.",
 					path.Path(), filetype);
 			}
 			alert = new BAlert ("", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
@@ -609,13 +610,13 @@ void BlendWithAlpha (BBitmap *src, BBitmap *dest, long x, long y, int /* strengt
 	{
 		return;
 	}
-	
+
 	// Clipping
 	int minx = max_c (x, 0);
 	int maxx = min_c (x + src_w + 1, dest_w + 1);
 	int miny = max_c (y, 0);
 	int maxy = min_c (y + src_h + 1, dest_h + 1);
-	
+
 	ulong src_bprdiff = src_bpr - (maxx - minx);
 	ulong dest_bprdiff = dest_bpr - (maxx - minx);
 
@@ -625,7 +626,7 @@ void BlendWithAlpha (BBitmap *src, BBitmap *dest, long x, long y, int /* strengt
 		src_data -= x;
 
 	dest_data += miny*dest_bpr + minx;
-	
+
 	dest_data--;	// Note: On PPC, pre-increment is faster.
 	src_data--;
 	for (int j = miny; j < maxy; j++)
@@ -696,13 +697,13 @@ void AddWithAlpha (BBitmap *src, BBitmap *dest, long x, long y, int strength)
 	{
 		return;
 	}
-	
+
 	// Clipping
 	int minx = max_c (x, 0);
 	int maxx = min_c (x + src_w + 1, dest_w + 1);
 	int miny = max_c (y, 0);
 	int maxy = min_c (y + src_h + 1, dest_h + 1);
-	
+
 	ulong src_bprdiff = src_bpr - (maxx - minx);
 	ulong dest_bprdiff = dest_bpr - (maxx - minx);
 
@@ -712,7 +713,7 @@ void AddWithAlpha (BBitmap *src, BBitmap *dest, long x, long y, int strength)
 		src_data -= x;
 
 	dest_data += miny*dest_bpr + minx;
-	
+
 	dest_data--;	// Note: On PPC, pre-increment is faster.
 	src_data--;
 	if (strength == 255)
@@ -888,7 +889,7 @@ void InvertWithInverseAlpha (BBitmap *src, BBitmap *selection)
 	long src_bpr = src->BytesPerRow();
 	long sel_bpr = selection->BytesPerRow();
 	long sel_bprdif = sel_bpr - w - 1;
-	
+
 	src_data--;
 	sel_data--;
 	if (src->ColorSpace() == B_RGBA32)
@@ -947,13 +948,13 @@ void AddToSelection (Brush *src, BBitmap *dest, long x, long y, int strength)
 	{
 		return;
 	}
-	
+
 	// Clipping
 	long minx = max_c (x, 0);
 	long maxx = min_c (x + src_w + 1, dest_w + 1);
 	long miny = max_c (y, 0);
 	long maxy = min_c (y + src_h + 1, dest_h + 1);
-	
+
 	ulong src_bprdiff = src_bpr - (maxx - minx);
 	ulong dest_bprdiff = dest_bpr - (maxx - minx);
 
@@ -963,7 +964,7 @@ void AddToSelection (Brush *src, BBitmap *dest, long x, long y, int strength)
 		src_data -= x;
 
 	dest_data += miny*dest_bpr + minx;
-	
+
 	dest_data--;
 	src_data--;
 	if (strength == 255)
@@ -974,13 +975,13 @@ void AddToSelection (Brush *src, BBitmap *dest, long x, long y, int strength)
 			{
 				int sa = *(++src_data);
 //				int da = 255 - sa;
-				*dest_data = clipchar (int (*(++dest_data) + sa));	
+				*dest_data = clipchar (int (*(++dest_data) + sa));
 			}
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
 	}
-	else 
+	else
 	{
 		for (long j = miny; j < maxy; j++)
 		{
@@ -988,7 +989,7 @@ void AddToSelection (Brush *src, BBitmap *dest, long x, long y, int strength)
 			{
 				int sa = *(++src_data) * strength/255;
 //				int da = 255 - sa;
-				*dest_data = clipchar (int (*(++dest_data) + sa));	
+				*dest_data = clipchar (int (*(++dest_data) + sa));
 			}
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
@@ -1019,13 +1020,13 @@ void CopyWithTransparency (BBitmap *src, BBitmap *dest, long x, long y)
 	{
 		return;
 	}
-	
+
 	// Clipping
 	long minx = max_c (x, 0);
 	long maxx = min_c (x + src_w + 1, dest_w + 1);
 	long miny = max_c (y, 0);
 	long maxy = min_c (y + src_h + 1, dest_h + 1);
-	
+
 	ulong src_bprldiff = src_bprl - (maxx - minx);
 	ulong dest_bprldiff = dest_bprl - (maxx - minx);
 
@@ -1035,7 +1036,7 @@ void CopyWithTransparency (BBitmap *src, BBitmap *dest, long x, long y)
 		src_data -= x;
 
 	dest_data += miny*dest_bprl + minx;
-	
+
 	src_data--;
 	for (long j = miny; j < maxy; j++)
 	{
@@ -1076,17 +1077,17 @@ BRect GetSmallestRect (BBitmap *b)
 					res.left = j;
 				if (j > res.right)
 					res.right = j;
-				
+
 			}
 		}
 		data += bprdif;
 	}
 
 	b->Unlock();
-	
+
 	if (res.right < res.left || res.bottom < res.top)
 		res = BRect (0, 0, w, h);
-	
+
 	return (res);
 }
 
@@ -1180,7 +1181,7 @@ void FastCopy (BBitmap *src, BBitmap *dest)
 void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 // Foley & Van Dam, pp 572.
 // Own note:  Probably the errors in the different color channels should be weighted
-//            according to visual sensibility.  But this version is primarily meant to 
+//            according to visual sensibility.  But this version is primarily meant to
 //            be quick.
 {
 	uint32 width	 = place.IntegerWidth() + 1;
@@ -1193,26 +1194,26 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 	int32 ddif		 = dbpr - width;
 	uint8 *xpal		 = (uint8 *) system_colors()->index_map;
 	const rgb_color *sysc = system_colors()->color_list;
-	
+
 	int *nera		 = new int[width];
 	int *nega		 = new int[width];
 	int *neba		 = new int[width];
 	int *cera		 = new int[width];
 	int *cega		 = new int[width];
 	int *ceba		 = new int[width];
-	
+
 	bzero (nera, width*sizeof(int));
 	bzero (nega, width*sizeof(int));
 	bzero (neba, width*sizeof(int));
 	bzero (cera, width*sizeof(int));
 	bzero (cega, width*sizeof(int));
 	bzero (ceba, width*sizeof(int));
-	
+
 	int r, g, b, er, eg, eb, per, peg, peb;
 	uint8 appr;
 	uint32 x, y;
 	rgb_color a;
-	
+
 	for (y = uint32 (place.top); y < uint32 (place.bottom); y++)
 	{
 		x = 0;
@@ -1222,27 +1223,27 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 		r = clip8 (RED (s)   + cera[0]);
 		g = clip8 (GREEN (s) + cega[0]);
 		b = clip8 (BLUE (s)  + ceba[0]);
-		
+
 		cera[0] = 0;
 		cega[0] = 0;
 		ceba[0] = 0;
-		
+
 		// Find the nearest match in the palette and write it out
 		appr = xpal[((r << 7) & 0x7C00)|((g << 2) & 0x03E0)|((b >> 3) & 0x001F)];
 		*(++dest) = appr;
-		
+
 		// And the corresponding RGB color
 		a = sysc[appr];
-		
+
 		// Calculate the error terms
 		er = r - a.red;
 		eg = g - a.green;
 		eb = b - a.blue;
-		
+
 		per = 7*er/16;
 		peg = 7*eg/16;
 		peb = 7*eb/16;
-		
+
 		// Put all the remaining error in the pixels down and down-right
 		// (since there is no pixel down-left...)
 		nera[x]     += er/2;
@@ -1251,37 +1252,37 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 		nera[x + 1] += er/16;
 		nega[x + 1] += eg/16;
 		neba[x + 1] += eb/16;
-		
+
 		for (x = 1; x < width - 1; x++)
 		{
 			// Get one source pixel
 			s = *(++src);
-			
+
 			// Get color components and add errors from previous pixel
 			r = clip8 (RED (s)   + per + cera[x]);
 			g = clip8 (GREEN (s) + peg + cega[x]);
 			b = clip8 (BLUE (s)  + peb + ceba[x]);
-			
+
 			cera[x] = 0;
 			cega[x] = 0;
 			ceba[x] = 0;
-			
+
 			// Find the nearest match in the palette and write it out
 			appr = xpal[((r << 7) & 0x7C00)|((g << 2) & 0x03E0)|((b >> 3) & 0x001F)];
 			*(++dest) = appr;
-			
+
 			// And the corresponding RGB color
 			a = sysc[appr];
-			
+
 			// Calculate the error terms
 			er = r - a.red;
 			eg = g - a.green;
 			eb = b - a.blue;
-			
+
 			per = 7*er/16;
 			peg = 7*eg/16;
 			peb = 7*eb/16;
-			
+
 			nera[x - 1] += 3*er/16;
 			nega[x - 1] += 3*eg/16;
 			neba[x - 1] += 3*eb/16;
@@ -1294,28 +1295,28 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 		}
 		// Special case: Last pixel
 		s = *(++src);
-		
+
 		// Get color components and add errors from previous pixel
 		r = clip8 (RED (s)   + per + cera[x]);
 		g = clip8 (GREEN (s) + peg + cega[x]);
 		b = clip8 (BLUE (s)  + peb + ceba[x]);
-		
+
 		cera[x] = 0;
 		cega[x] = 0;
 		ceba[x] = 0;
-		
+
 		// Find the nearest match in the palette and write it out
 		appr = xpal[((r << 7) & 0x7C00)|((g << 2) & 0x03E0)|((b >> 3) & 0x001F)];
 		*(++dest) = appr;
-		
+
 		// And the corresponding RGB color
 		a = sysc[appr];
-		
+
 		// Calculate the error terms
 		er = r - a.red;
 		eg = g - a.green;
 		eb = b - a.blue;
-		
+
 		// Put all the error in the pixels down and down-left
 		nera[x - 1] += er/2;
 		nega[x - 1] += eg/2;
@@ -1323,13 +1324,13 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 		nera[x]     += er/2;
 		nega[x]     += eg/2;
 		neba[x]     += eb/2;
-		
+
 		// Switch the scratch data
 		int *tmp;
 		tmp = cera; cera = nera; nera = tmp;
 		tmp = cega; cega = nega; nega = tmp;
 		tmp = ceba; ceba = neba; neba = tmp;
-		
+
 		dest += ddif;
 		src  += sdif;
 	}
@@ -1338,24 +1339,24 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 	er = 0;
 	eg = 0;
 	eb = 0;
-	
+
 	for (x = 0; x < width - 1; x++)
 	{
 		// Get one source pixel
 		bgra_pixel s = *(++src);
-		
+
 		// Get color components and add errors from previous pixel
 		r = clip8 (RED (s)   + er + cera[x]);
 		g = clip8 (GREEN (s) + eg + cega[x]);
 		b = clip8 (BLUE (s)  + eb + ceba[x]);
-		
+
 		// Find the nearest match in the palette and write it out
 		appr = xpal[((r << 7) & 0x7C00)|((g << 2) & 0x03E0)|((b >> 3) & 0x001F)];
 		*(++dest) = appr;
-		
+
 		// And the corresponding RGB color
 		a = sysc[appr];
-		
+
 		// Calculate the error terms
 		er = r - a.red;
 		eg = g - a.green;
@@ -1363,11 +1364,11 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 	}
 	// Last but not least, the bottom right pixel.
 	bgra_pixel s = *(++src);
-	
+
 	r = clip8 (RED (s) + er + cera[x]);
 	g = clip8 (GREEN (s) + eg + cega[x]);
 	b = clip8 (BLUE (s) + eb + ceba[x]);
-	
+
 	*(++dest) = xpal[((r << 7) & 0x7C00)|((g << 2) & 0x03E0)|((b >> 3) & 0x001F)];
 
 	delete [] nera;
@@ -1388,7 +1389,7 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 
 /*
  *	Does a floyd alike dithering to a BBitmap
- * 
+ *
  *	in_data		= input data in BGRA format
  *	in_width	= width of the picture (== bytes per row!)
  *	in_height	= height of the picture
@@ -1411,11 +1412,11 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
  */
 	ulong in_width	 = place.Width() + 1;
 	ulong in_height	 = place.Height() + 1;
-	uint32 *in_data	 = (uint32 *) b32->Bits() 
-					 + ulong (place.top)*b32->BytesPerRow()/4 
+	uint32 *in_data	 = (uint32 *) b32->Bits()
+					 + ulong (place.top)*b32->BytesPerRow()/4
 					 + ulong (place.left) - 1;
 	char   *delta	 = new char[(in_width)*2*4];
-	uchar  *dstb	 = (uchar *) b8->Bits() 
+	uchar  *dstb	 = (uchar *) b8->Bits()
 					 + ulong (place.left) - 1;
 	uchar  *xpal	 = (uchar *) system_colors()->index_map;
 	ulong  *cpal	 = (ulong *) system_colors()->color_list;
@@ -1427,24 +1428,24 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 	long	switcher = 0;
 
 	bzero (delta, in_width*2*4);
-	
+
 	for (int y = place.top; y <= int (place.bottom); y++)
 	{
 		long rdlast	= 0;
 		long gdlast	= 0;
 		long bdlast	= 0;
 		uchar *dst = dstb + y*xmod;
-		
+
 		for (int x = place.left; x <= int (place.right); x++)
 		{
 			// get 1 pixel from the input buffer
-			
-			ulong 	p  = *(++in_data);			
-			
+
+			ulong 	p  = *(++in_data);
+
 			// add corrections from previous pixels.
-			
+
 			ulong	cread_data = *(++cread);
-			
+
 #if defined (__POWERPC__)
 			long	b  =  (p>>24)       + ((*(++cread) + bdlast)/2);
 			long	g  = ((p>>16)&0xFF) + ((*(++cread) + gdlast)/2);
@@ -1454,23 +1455,23 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 			long	g  = ((p>> 8)&0xFF) + ((*(++cread) + gdlast)/2);
 			long	r  = ((p>>16)&0xFF) + ((*(++cread) + rdlast)/2);
 #endif
-			
+
 			// fix high and low values
-			
+
 			r = r > 255 ? 255 : (r < 0 ? 0 : r);
 			g = g > 255 ? 255 : (g < 0 ? 0 : g);
 			b = b > 255 ? 255 : (b < 0 ? 0 : b);
-			
+
 			// lets see which color we get from the BeOS palette.
 			uchar 	q = xpal[((r<<7)&0x7C00)|((g<<2)&0x03E0)|((b>>3)&0x001F)];
 			ulong 	s = cpal[q];
-			
+
 			// output the pixel
-			
+
 			*(++dst) = q;
-			
+
 			// save the differences to the requested color
-			
+
 #if defined (__POWERPC__)
 			*(++cwrite) = rdlast = r - (s>>24);
 			*(++cwrite) = gdlast = g - ((s>>16)&0xFF);
@@ -1481,7 +1482,7 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 			*(++cwrite) = bdlast = b -  (s     &0xFF);
 #endif
 		}
-		
+
 		if (switcher)
 		{
 			cwrite	 = delta - 1;
@@ -1493,7 +1494,7 @@ void FSDither (BBitmap *b32, BBitmap *b8, BRect place)
 			cread	 = delta - 1;
 			cwrite	 = fcwrite - 1;
 			switcher = 1;
-		}				
+		}
 		in_data += smod;
 	}
 	delete [] delta;
@@ -1541,7 +1542,7 @@ int Scale (BBitmap *src, BBitmap *srcmap, BBitmap *dest, BBitmap *destmap)
 	int mdy = dh/nby;
 	int msx = sw/nbx;
 	int msy = sh/nby;
-    
+
     BRect horiRect = srcRect;
 	double xscale = (destRect.Width() + 1)/(srcRect.Width() + 1);
 	double yscale = (destRect.Height() + 1)/(srcRect.Height() + 1);
@@ -1592,7 +1593,7 @@ int Scale (BBitmap *src, BBitmap *srcmap, BBitmap *dest, BBitmap *destmap)
 								r += ((pixel & 0x0000FF00) >> 8)*f;
 								g += ((pixel & 0x00FF0000) >> 16)*f;
 								b += (pixel >> 24)*f;
-								a += (pixel & 0x000000FF)*f; 
+								a += (pixel & 0x000000FF)*f;
 							}
 							if (s*mdx != d*msx)
 							{
@@ -1621,7 +1622,7 @@ int Scale (BBitmap *src, BBitmap *srcmap, BBitmap *dest, BBitmap *destmap)
 								r += ((pixel & 0x0000FF00) >> 8)*f;
 								g += ((pixel & 0x00FF0000) >> 16)*f;
 								b += (pixel >> 24)*f;
-								a += (pixel & 0x000000FF)*f; 
+								a += (pixel & 0x000000FF)*f;
 								*(destline++)	= (uint8 (b) << 24)
 												+ (uint8 (g) << 16)
 												+ (uint8 (r) << 8)
@@ -2109,7 +2110,7 @@ void Rotate (SBitmap *s, Layer *d, BPoint o, float rad, bool hiq)
 				int iiy = int (iy);
 				float fix = (float) iix;
 				float fiy = (float) iiy;
-				
+
 				bgra_pixel a1 = 0, a2 = 0, a3 = 0, a4 = 0, a5 = 0, a6 = 0, a7 = 0, a8 = 0, a9 = 0;
 				if (iix >= 0 && iix <= bw && iiy >= 0 && iiy <= bh)
 					a5 = *(sp + iiy*bpr + iix);
@@ -2177,7 +2178,7 @@ void Rotate (SBitmap *s, Layer *d, BPoint o, float rad, bool hiq)
 				{
 					A5 = ALPHA(a5);
 				}
-				
+
 				uint8 red, green, blue, alpha;
 				red = clipchar (float ((RED(a1)*A1
 					+ RED(a2)*A2
@@ -2262,7 +2263,7 @@ void Rotate (SBitmap *s, Selection *d, BPoint o, float rad, bool hiq)
 				int iiy = int (iy);
 				float fix = (float) iix;
 				float fiy = (float) iiy;
-				
+
 				grey_pixel a1 = 0, a2 = 0, a3 = 0, a4 = 0, a5 = 0, a6 = 0, a7 = 0, a8 = 0, a9 = 0;
 				if (iix >= 0 && iix <= bw && iiy >= 0 && iiy <= bh)
 					a5 = *(sp + iiy*bpr + iix);
@@ -2330,7 +2331,7 @@ void Rotate (SBitmap *s, Selection *d, BPoint o, float rad, bool hiq)
 				{
 					A5 = a5;
 				}
-				
+
 				uint8 alpha = clipchar (float (A1 + A2 + A3 + A4 + A5 + A6 + A7 + A8 + A9));
 				*(++dl) = alpha;
 				ix += cr;
@@ -2370,12 +2371,12 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 		memcpy (d->Bits(), s->Bits(), s->BitsLength());
 		return;
 	}
-	
+
 	if (p.x > s->Bounds().right || p.x < -s->Bounds().right)
 		return;
 	if (p.y > s->Bounds().bottom || p.y < -s->Bounds().bottom)
 		return;
-	
+
 	if (p.x >= 0)
 	{
 		if (p.y >= 0)
@@ -2384,7 +2385,7 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = 4*(rr - rl + 1);
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2399,7 +2400,7 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = 4*(rr - rl + 1);
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2417,7 +2418,7 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = -int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = 4*(rr - rl + 1);
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2432,7 +2433,7 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = -int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = 4*(rr - rl + 1);
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2447,22 +2448,22 @@ void SBitmapToLayer (SBitmap *s, Layer *d, BPoint &p)
 void SBitmapToLayer (SBitmap *s, Layer *d, BRect &r)
 {
 	ASSERT (s->BytesPerPixel() == 4);
-	
+
 	if (s->Bounds() == d->Bounds() && d->Bounds() == r)
 	{
 		memcpy (d->Bits(), s->Bits(), s->BitsLength());
 		return;
 	}
-	
+
 	int32 rt = max_c (0, int32 (r.top));
 	int32 rb = min_c (int32 (d->Bounds().bottom), max_c (int32 (s->Bounds().bottom), int32 (r.bottom)));
 	int32 rl = max_c (0, int32 (r.left));
 	int32 rr = min_c (int32 (d->Bounds().right), max_c (int32 (s->Bounds().right), int32 (r.right)));
-	
+
 	int32 bpr = 4*(rr - rl + 1);
 	if (bpr <= 0)
 		return;
-	
+
 	for (int32 y = rt; y <= rb; y++)
 	{
 		uint32 *sp = (uint32 *) s->Bits() + y*s->BytesPerRow()/4 + rl;
@@ -2480,12 +2481,12 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 		memcpy (d->Bits(), s->Bits(), s->BitsLength());
 		return;
 	}
-	
+
 	if (p.x > s->Bounds().right || p.x < -s->Bounds().right)
 		return;
 	if (p.y > s->Bounds().bottom || p.y < -s->Bounds().bottom)
 		return;
-	
+
 	if (p.x >= 0)
 	{
 		if (p.y >= 0)
@@ -2494,7 +2495,7 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = rr - rl + 1;
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2509,7 +2510,7 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = rr - rl + 1;
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2527,7 +2528,7 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = -int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = rr - rl + 1;
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2542,7 +2543,7 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 			int32 rb = int32 (s->Bounds().bottom);
 			int32 rl = -int32 (p.x);
 			int32 rr = int32 (s->Bounds().right);
-			
+
 			int32 bpr = rr - rl + 1;
 			for (int32 y = rt; y <= rb; y++)
 			{
@@ -2557,22 +2558,22 @@ void SBitmapToSelection (SBitmap *s, Selection *d, BPoint &p)
 void SBitmapToSelection (SBitmap *s, Selection *d, BRect &r)
 {
 	ASSERT (s->BytesPerPixel() == 1);
-	
+
 	if (s->Bounds() == d->Bounds() && d->Bounds() == r)
 	{
 		memcpy (d->Bits(), s->Bits(), s->BitsLength());
 		return;
 	}
-	
+
 	int32 rt = max_c (0, int32 (r.top));
 	int32 rb = min_c (int32 (d->Bounds().bottom), max_c (int32 (s->Bounds().bottom), int32 (r.bottom)));
 	int32 rl = max_c (0, int32 (r.left));
 	int32 rr = min_c (int32 (d->Bounds().right), max_c (int32 (s->Bounds().right), int32 (r.right)));
-	
+
 	int32 bpr = (rr - rl + 1);
 	if (bpr <= 0)
 		return;
-		
+
 	for (int32 y = rt; y <= rb; y++)
 	{
 		uint8 *sp = (uint8 *) s->Bits() + y*s->BytesPerRow() + rl;

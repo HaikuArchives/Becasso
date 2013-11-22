@@ -3,6 +3,7 @@
 
 #include <Window.h>
 #include <Messenger.h>
+#include <CheckBox.h>
 #include "Slider.h"
 
 class XpalWindow : public BWindow

@@ -17,7 +17,7 @@
 #include "Brush.h"
 #include "BitmapStuff.h"
 #include "BGView.h"
-#include "zlib.h"
+#include <zlib.h>
 #include "Tablet.h"
 #include "BecassoAddOn.h"
 #include "debug.h"
@@ -73,7 +73,7 @@ CanvasView::CanvasView (const BRect frame, const char *name, BBitmap *map, rgb_c
 	layer[0] = new Layer (bitmapRect, lstring (162, "Background"));
 	fCurrentLayer = 0;
 	fNumLayers = 1;
-	
+
 	drawView = new SView (bitmapRect, name, B_FOLLOW_NONE, uint32 (NULL));
 	layer[0]->Lock();
 	layer[0]->AddChild (drawView);
@@ -92,7 +92,7 @@ CanvasView::CanvasView (const BRect frame, const char *name, BBitmap *map, rgb_c
 			int32 numrows = map->Bounds().IntegerHeight() + 1;
 			int32 numcolumns = map->Bounds().IntegerWidth() + 1;
 			uint8 pixelb;
-			
+
 			for (y = 0; y < numrows; y++)
 			{
 				sourceptrb = rowptr - 1;
@@ -137,7 +137,7 @@ CanvasView::CanvasView (const BRect frame, const char *name, FILE *fp)
 	BRect bitmapRect;
 	bitmapRect.Set (0, 0, frame.Width(), frame.Height());
 	fCanvasFrame = bitmapRect;
-	
+
 	rewind (fp);
 	char line[81];
 	do
@@ -171,7 +171,7 @@ CanvasView::CanvasView (const BRect frame, const char *name, FILE *fp)
 			fread (layer[i]->Bits(), layer[i]->BitsLength(), 1, fp);
 		}
 		break;
-	case 1:                        
+	case 1:
 	{
 		uchar *tmpzbuf = NULL;
 		z_streamp zstream = new z_stream;
@@ -234,13 +234,13 @@ CanvasView::CanvasView (const BRect frame, const char *name, FILE *fp)
 		}
 		delete [] tmpzbuf;
 		delete zstream;
-		
+
 		if (watermarked)
 			InsertGlobalAlpha (layer, fNumLayers);
-		
+
 		break;
 	}
-	case 2:                        
+	case 2:
 	{
 		uchar *tmpzbuf = NULL;
 		z_streamp zstream = new z_stream;
@@ -303,17 +303,17 @@ CanvasView::CanvasView (const BRect frame, const char *name, FILE *fp)
 		}
 		delete [] tmpzbuf;
 		delete zstream;
-		
+
 		if (watermarked)
 			InsertGlobalAlpha (layer, fNumLayers);
-		
+
 		break;
 	}
 	default:	// This should never happen
 		fprintf (stderr, "Hmm, somehow a newer version file got through to the actual loading routine.\n");
 	}
 	fclose (fp);
-	
+
 	drawView = new SView (bitmapRect, name, B_FOLLOW_NONE, B_SUBPIXEL_PRECISE);
 	currentLayer()->AddChild (drawView);
 	RestOfCtor ();
@@ -399,7 +399,7 @@ CanvasView::~CanvasView ()
 
 	for (int i = 0; i < fNumLayers; i++)
 		delete layer[i];
-	
+
 	if (screenbitmap->ColorSpace() != B_RGBA32)
 		delete screenbitmap32;
 	delete screenbitmap;
@@ -790,8 +790,8 @@ void CanvasView::duplicateLayer (int index)
 	for (int i = fNumLayers; i > index; i--)
 		layer[i] = layer[i - 1];
 	fNumLayers++;
-	layer[index + 1] = new Layer (fCanvasFrame, name);	
-	fCurrentLayer = index + 1;	
+	layer[index + 1] = new Layer (fCanvasFrame, name);
+	fCurrentLayer = index + 1;
 	memcpy (currentLayer()->Bits(), layer[index]->Bits(), layer[index]->BitsLength());
 	AttachCurrentLayer();
  	BMessage *msg = new BMessage ('lChg');
@@ -951,14 +951,14 @@ void CanvasView::flipLayer (int hv, int index)
 {
 	extern PicMenuButton *mode;
 	int m = mode->selected();
-	
+
 	SetupUndo (m);
-	
+
 	if (m == M_DRAW)
 	{
 		if (index == -1)
 			index = fCurrentLayer;
-	
+
 		Layer *l = layer[index];
 		bgra_pixel *p = (bgra_pixel *) l->Bits();
 		uint32 ppr = l->BytesPerRow()/4;
@@ -1086,7 +1086,7 @@ void CanvasView::removeLayer (int index)
 	extern int DebugLevel;
 	if (DebugLevel)
 		printf ("Removing layer %i\n", index);
-	
+
 	snooze (20000);	// ahem.
 	fIndex2 = index;
 	SetupUndo (M_DELLAYER);
@@ -1236,7 +1236,7 @@ void CanvasView::setLayerContentsToBitmap (int index, BBitmap *map, int32 resize
 	if (map->Bounds() != fCanvasFrame && resize == STRETCH_TO_FIT)
 	{
 		verbose (1, "Stretching bitmap to fit\n");
-		Scale (map, NULL, currentLayer(), NULL);
+		::Scale (map, NULL, currentLayer(), NULL);
 	}
 	else
 	{
@@ -1292,7 +1292,7 @@ void CanvasView::AutoCrop ()
 	uint32 trans = PIXEL (border.red, border.green, border.blue, border.alpha);
 	//(border.blue << 24) | (border.green << 16) | (border.red << 8) | border.alpha;
 //	printf ("%lx\n", trans);
-	
+
 	uint32 *data = (uint32 *) currentLayer()->Bits();
 //	long bpr = currentLayer()->BytesPerRow();
 	long h = fCanvasFrame.IntegerHeight();
@@ -1531,7 +1531,7 @@ void CanvasView::resizeTo (int32 w, int32 h)
 		tmp->AddChild (drawView);
 		tmp->Lock();
 		drawView->SetDrawingMode (B_OP_COPY);
-		Scale (layer[i], NULL, tmp, NULL);
+		::Scale (layer[i], NULL, tmp, NULL);
 		// Ugly scaling...
 		//drawView->DrawBitmap (layer[i], layer[i]->Bounds(), newrect);
 		drawView->Sync();
@@ -1546,7 +1546,7 @@ void CanvasView::resizeTo (int32 w, int32 h)
 	selection->Lock();
 	selectionView->ResizeTo (newrect.Width(), newrect.Height());
 	Selection *newselection = new Selection (fCanvasFrame);
-	Scale (NULL, selection, NULL, newselection);
+	::Scale (NULL, selection, NULL, newselection);
 	delete selection;
 	selection = newselection;
 	AttachSelection();
@@ -1671,7 +1671,7 @@ void CanvasView::RotateCanvas (uint32 what)
 					*(++dest) = *src;
 					src += bpr;
 				}
-			}		
+			}
 			break;
 		case 'r180':
 			src--;
@@ -1691,7 +1691,7 @@ void CanvasView::RotateCanvas (uint32 what)
 					*(++dest) = *src;
 					src -= bpr;
 				}
-			}		
+			}
 			break;
 		default:
 			fprintf (stderr, "CanvasView::RotateCanvas: Invalid angle\n");
@@ -1728,7 +1728,7 @@ void CanvasView::RotateCanvas (uint32 what)
 				src += sbpr;
 			}
 			dest += ddif;
-		}		
+		}
 		break;
 	}
 	case 'r180':
@@ -1762,7 +1762,7 @@ void CanvasView::RotateCanvas (uint32 what)
 				src -= sbpr;
 			}
 			dest += ddif;
-		}		
+		}
 		break;
 	}
 	default:
@@ -1925,7 +1925,7 @@ void CanvasView::OpenAddon (AddOn *addon, const char *name)
 	{
 		Transform (transformerOpen, 1);
 	}
-			
+
 	if (addon->DoesPreview() && !(addon->DoesPreview() & PREVIEW_MOUSE))
 	{
 		Invalidate (fPreviewRect);
@@ -2083,12 +2083,12 @@ void CanvasView::Transform (AddOn *addon, uint8 preview)
 		// We're here for a second (...) time, so restore the previous state
 		// of the canvas.
 		// I'm not too happy with this because it causes quite an overhead for
-		// large pictures, but otherwise translators got their own previous result 
+		// large pictures, but otherwise translators got their own previous result
 		// back, which wasn't good.
 		Undo (false);
 	}
 	transformerSaved = preview;
-	
+
 	if (!preview) mainapp->setBusy();
 	currentLayer()->Lock();
 	selection->Lock();
@@ -2163,7 +2163,7 @@ void CanvasView::Generate (AddOn *addon, uint8 preview)
 		Undo (false);
 	}
 	generatorSaved = preview;
-	
+
 	if (!preview) mainapp->setBusy();
 	currentLayer()->Lock();
 	selection->Lock();
@@ -2264,7 +2264,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 	if (!transformerSaved)	// There's no undo buffer setup yet.
 	{
 		SetupUndo (mode->selected());	// Save now.
-		// But we're `just' previewing (interactively here), there's no need to 
+		// But we're `just' previewing (interactively here), there's no need to
 		// flush the undo buffer, so we shouldn't save next time we come here.
 		transformerSaved = true;
 	}
@@ -2272,7 +2272,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 	{
 		Undo (false);
 	}
-	
+
 	currentLayer()->Lock();
 	selection->Lock();
 	Layer *newlayer = new Layer (*currentLayer());
@@ -2294,14 +2294,14 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 	{
 		if (prev != point)
 		{
-			
+
 			dirty = prevRect | pRect;
 			//dirty.PrintToStream();
 			drawView->DrawBitmap (newlayer, B_ORIGIN /*, dirty, dirty */);
 			selectionView->DrawBitmap (newselection, B_ORIGIN /*, dirty, dirty*/);
 			drawView->Sync();
 			selectionView->Sync();
-			transformerOpen->Process (newlayer, sel ? newselection : NULL, 
+			transformerOpen->Process (newlayer, sel ? newselection : NULL,
 							&cLayer, &selection,
 							mode->selected(), &pRect, false, point, buttons);
 			Invalidate (pRect | dirty);
@@ -2312,7 +2312,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 		ScrollIfNeeded (point);
 		myWindow->Lock();
 		myWindow->posview->Pulse();
-		myWindow->Unlock();	
+		myWindow->Unlock();
 		GetMouse (&point, &buttons, true);
 	}
 	drawView->DrawBitmap (newlayer, B_ORIGIN /* dirty, dirty */);
@@ -2320,7 +2320,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 	drawView->Sync();
 	selectionView->Sync();
 	inAddOn = false;
-	transformerOpen->Process (newlayer, sel ? newselection : NULL, 
+	transformerOpen->Process (newlayer, sel ? newselection : NULL,
 					&cLayer, &selection,
 					mode->selected(), &pRect, false, point, buttons);
 //	AttachSelection();
@@ -2366,7 +2366,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 			SetupUndo (M_DRAW_SELECT);
 		else
 			SetupUndo (mode->selected());	// Save now.
-		// But we're `just' previewing (interactively here), there's no need to 
+		// But we're `just' previewing (interactively here), there's no need to
 		// flush the undo buffer, so we shouldn't save next time we come here.
 		transformerSaved = true;
 	}
@@ -2396,7 +2396,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 		tr2x2Layer->RemoveChild (tmpView);
 		delete tmpView;
 	}
-	
+
 //	currentLayer()->Lock();
 //	selection->Lock();
 	Layer *newlayer = NULL;
@@ -2456,7 +2456,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				}
 				first = false;
 //				printf ("Calling Process (%f, %f)\n", point.x, point.y);
-				transformerOpen->Process (tr2x2Layer, sel ? tr2x2Selection : NULL, 
+				transformerOpen->Process (tr2x2Layer, sel ? tr2x2Selection : NULL,
 								&newlayer, &newselection,
 								mode->selected(), &pRect, false, point, buttons);
 				if (newlayer && newlayer != tr2x2Layer)
@@ -2470,7 +2470,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				}
 				else
 					hascreatednewlayer = false;
-	
+
 				if (newselection && newselection != tr2x2Selection)
 				{
 //					printf ("newselection\n");
@@ -2487,7 +2487,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				AttachCurrentLayer();
 				drawView->DrawBitmap (tr2x2Layer, halfsize, fCanvasFrame);
 				DetachCurrentLayer();
-				
+
 //				printf ("Invalidating...\n");
 				Invalidate ();
 			}
@@ -2545,7 +2545,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				}
 				first = false;
 //				printf ("Calling Process\n");
-				transformerOpen->Process (currentLayer(), sel ? selection : NULL, 
+				transformerOpen->Process (currentLayer(), sel ? selection : NULL,
 								&newlayer, &newselection,
 								mode->selected(), &pRect, false, point, buttons);
 				if (newlayer && newlayer != currentLayer())
@@ -2559,7 +2559,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				}
 				else
 					hascreatednewlayer = false;
-	
+
 				if (newselection && newselection != selection)
 				{
 //					printf ("newselection\n");
@@ -2571,7 +2571,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 				}
 				else
 					hascreatednewselection = false;
-	
+
 //				printf ("Invalidating...\n");
 				Invalidate ();
 			}
@@ -2609,7 +2609,7 @@ void CanvasView::eTransform (BPoint point, uint32 buttons)
 		}
 	}
 //	printf ("Calling Process (%f, %f) again for final preview\n", point.x, point.y);
-	transformerOpen->Process (currentLayer(), sel ? selection : NULL, 
+	transformerOpen->Process (currentLayer(), sel ? selection : NULL,
 					&newlayer, &newselection,
 					mode->selected(), &pRect, false, point, buttons);
 //	printf ("Done.\n");
@@ -2662,11 +2662,11 @@ void CanvasView::eGenerate (BPoint point, uint32 buttons)
 	if (!generatorSaved)	// There's no undo buffer setup yet.
 	{
 		SetupUndo (mode->selected());	// Save now.
-		// But we're `just' previewing (interactively here), there's no need to 
+		// But we're `just' previewing (interactively here), there's no need to
 		// flush the undo buffer, so we shouldn't save next time we come here.
 		generatorSaved = true;
 	}
-	
+
 	currentLayer()->Lock();
 	selection->Lock();
 	Layer *newlayer = new Layer (*currentLayer());
@@ -2690,7 +2690,7 @@ void CanvasView::eGenerate (BPoint point, uint32 buttons)
 	{
 		if (prev != point)
 		{
-			generatorOpen->Process (newlayer, sel ? newselection : NULL, 
+			generatorOpen->Process (newlayer, sel ? newselection : NULL,
 							&cLayer, &selection,
 							mode->selected(), &pRect, false, point, buttons);
 			Invalidate ();
@@ -2704,7 +2704,7 @@ void CanvasView::eGenerate (BPoint point, uint32 buttons)
 		GetMouse (&point, &buttons, true);
 	}
 	inAddOn = false;
-	generatorOpen->Process (newlayer, sel ? newselection : NULL, 
+	generatorOpen->Process (newlayer, sel ? newselection : NULL,
 					&cLayer, &selection,
 					mode->selected(), &pRect, false, point, buttons);
 	AttachSelection();
@@ -2758,7 +2758,7 @@ void CanvasView::Print ()
 			verbose (2, "Print job configured\n");
 			if (!printSetup)
 				printf ("HUH?!\n");
-			
+
 			delete printSetup;
 			printSetup = job.Settings();
 			job.BeginJob();
@@ -2783,7 +2783,7 @@ void CanvasView::ConstructCanvas (BBitmap *bitmap, BRect update, bool doselect, 
 		selection->Lock();
 	update = update & bitmap->Bounds();		// This used not to be necessary, but somehow R3 can crash if you
 											// go (too far) outside the bitmap.  Strange that PR2 didn't!
-	
+
 #if 0
 	BPoint po = fPreviewRect.LeftTop();
 	fPreviewRect = PreviewRect();
@@ -2798,7 +2798,7 @@ void CanvasView::ConstructCanvas (BBitmap *bitmap, BRect update, bool doselect, 
 	}
 	fPreviewRect.OffsetTo (po);
 #endif
-	
+
 //	ulong h = fCanvasFrame.IntegerHeight() + 1;	// Note the + 1 ! Really!
 	ulong w = fCanvasFrame.IntegerWidth() + 1;
 //	ulong sbbpr = bitmap->BytesPerRow();
@@ -2904,7 +2904,7 @@ void CanvasView::ConstructCanvas (BBitmap *bitmap, BRect update, bool doselect, 
 		else
 			printf ("Whoa, big trouble.\n");
 	}
-	
+
 	extern int gGlobalAlpha;	// == registered
 	if (do_export && !gGlobalAlpha)
 	{
@@ -3526,7 +3526,7 @@ void CanvasView::Save (BEntry entry)
 	}
 	for (int i = 0; i < fNumLayers; i++)
 	{
-		sprintf (line, "%.0f %.0f %.0f %.0f %i %i %i %i %s\n", 
+		sprintf (line, "%.0f %.0f %.0f %.0f %i %i %i %i %s\n",
 			layer[i]->Bounds().left,
 			layer[i]->Bounds().top,
 			layer[i]->Bounds().right,
@@ -3566,7 +3566,7 @@ void CanvasView::Save (BEntry entry)
 void CanvasView::Pulse ()
 {
 	extern BLocker *clipLock;
-	
+
 	if (clipLock->LockWithTimeout (500000) != B_OK)
 	{
 		printf ("Still switching windows..? %s\n", myWindow->Name());
@@ -3615,7 +3615,7 @@ void CanvasView::Pulse ()
 		{
 			if (fPicking)
 				mainapp->setPicker (false);
-			
+
 			mainapp->setGrab (true, buttons);
 			if (!fDragScroll & buttons)
 			{
@@ -3625,7 +3625,7 @@ void CanvasView::Pulse ()
 //				printf ("New drag: ");
 //				fPoint.PrintToStream();
 			}
-				
+
 			fDragScroll = true;
 			fPicking = false;
 		}
@@ -3633,7 +3633,7 @@ void CanvasView::Pulse ()
 		{
 			if (fDragScroll)
 				mainapp->setGrab (false);
-				
+
 			mainapp->setPicker (true);
 			fPicking = true;
 			fDragScroll = false;
@@ -3651,7 +3651,7 @@ void CanvasView::Pulse ()
 			mainapp->setGrab (false);
 			fDragScroll = false;
 		}
-			
+
 		if (mouse_on_canvas && !buttons)
 			mainapp->FixCursor();	// Otherwise: Few pixels off!!  (BeOS bug w.r.t. hot spot of cursors ...)
 	}
@@ -3783,7 +3783,7 @@ BHandler *CanvasView::ResolveSpecifier (BMessage *message, int32 index, BMessage
 		fCurrentProperty = PROP_NAME;
 		return this;
 	}
-	
+
 	return inherited::ResolveSpecifier (message, index, specifier, command, property);
 }
 
@@ -3842,7 +3842,7 @@ void CanvasView::MessageReceived (BMessage *msg)
 			const char *name;
 			if (msg->FindString ("data", &name) == B_OK && fLayerSpecifier != -1)
 			{
-				
+
 			}
 			fLayerSpecifier = -1;
 			break;
@@ -3918,7 +3918,7 @@ void CanvasView::MessageReceived (BMessage *msg)
 					msg->SendReply (&error);
 				}
 				else
-					fprintf (stderr, "%s\n", errstring); 
+					fprintf (stderr, "%s\n", errstring);
 			}
 			fLayerSpecifier = -1;
 			end = clock();
@@ -3997,7 +3997,7 @@ void CanvasView::MessageReceived (BMessage *msg)
 		}
 		else
 			SimpleData (msg);
-	
+
 		break;
 	}
 	case B_COPY_TARGET:
@@ -4079,7 +4079,7 @@ void CanvasView::SimpleData (BMessage *message)
 		}
 //		printf ("\nPrevious:\n");
 //		prev->PrintToStream();
-		
+
 		// DON'T !!   delete message;
 		message = prev;
 	}
@@ -4174,7 +4174,7 @@ void CanvasView::SimpleData (BMessage *message)
 			BFile input;
 			if (input.SetTo (&ref, O_RDONLY))
 				goto err;
-			if (BTranslatorRoster::Default()->Translate (&input, NULL, NULL, &output, B_TRANSLATOR_BITMAP)) 
+			if (BTranslatorRoster::Default()->Translate (&input, NULL, NULL, &output, B_TRANSLATOR_BITMAP))
 				goto err;
 			if (output.DetachBitmap (&drop_map))
 				goto err;
@@ -4199,7 +4199,7 @@ void CanvasView::SimpleData (BMessage *message)
 			extern int DebugLevel;
 			if (DebugLevel > 2)
 				message->PrintToStream();
-			
+
 			BMessage reply (B_COPY_TARGET);
 			int32 numTypes;
 			type_code typeFound;
@@ -4291,7 +4291,7 @@ void CanvasView::CopyTarget (BMessage *message)
 		printf ("B_COPY_TARGET\n");
 		message->PrintToStream();
 	}
-	
+
 	extern bool gGlobalAlpha;
 	if (!gGlobalAlpha)
 	{
@@ -4372,7 +4372,7 @@ void CanvasView::MouseDown (BPoint point)
 	if (!fTranslating && !fRotating)
 		SetMouseEventMask (B_POINTER_EVENTS, B_SUSPEND_VIEW_FOCUS | B_NO_POINTER_HISTORY);
 		// Hmmm, ik krijg toch een pointer history zo!
-	
+
 	uint32 buttons = Window()->CurrentMessage()->FindInt32 ("buttons");
 //	printf ("buttons = %lx\n", buttons);
 	Position position;
@@ -4410,7 +4410,7 @@ void CanvasView::MouseUp (BPoint /*point*/)
 	fMouseDown = false;
 	if (!entry)
 		myWindow->posview->SetPoint (-1, -1);
-		
+
 	extern PicMenuButton *tool;
 	extern Becasso *mainapp;
 	int32 currentTool = tool->selected();
@@ -4448,7 +4448,7 @@ void CanvasView::MouseMoved (BPoint point, uint32 transit, const BMessage *msg)
 //		GetMouse (&point, &buttons, false);
 
 //		fMouseDown = false;
-		
+
 //		printf ("%sinDrag, %sinPaste\n", inDrag ? "" : "!", inPaste ? "" : "!");
 		extern PicMenuButton *tool;
 		int32 currentTool = tool->selected();
@@ -4472,7 +4472,7 @@ void CanvasView::MouseMoved (BPoint point, uint32 transit, const BMessage *msg)
 //			printf ("Drawing started outside...\n");
 //			MouseDown (point);
 		}
-			
+
 		Invalidate();
 	}
 	else
@@ -4482,7 +4482,7 @@ void CanvasView::MouseMoved (BPoint point, uint32 transit, const BMessage *msg)
 			return;
 		}
 //		MouseDown (point);
-			
+
 		fMouseDown = buttons;
 		if (fMouseDown && Window()->IsActive()
 			 && !msg // Don't draw inside a drag!
@@ -4808,7 +4808,7 @@ void CanvasView::KeyDown (const char *bytes, int32 numBytes)
 			uint32 buttons;
 			BPoint point;
 			GetMouse (&point, &buttons);
-			
+
 			Position position;
 			position.fPoint     = BPoint (point.x*fScale, point.y*fScale);
 			position.fButtons   = (modifiers() & B_SHIFT_KEY) ? B_SECONDARY_MOUSE_BUTTON : B_PRIMARY_MOUSE_BUTTON;
@@ -4930,7 +4930,7 @@ void CanvasView::SetupUndo (int32 mode)
 		undo[i].sbitmap = NULL;
 	}
 	maxIndexUndo = indexUndo;
-	
+
 	undo_entry &u = undo[indexUndo];	// alias to save typing.
 //	printf ("Copying the data\n");
 	if (type == UNDO_SELECT)
@@ -5073,7 +5073,7 @@ void CanvasView::Undo (bool advance, bool menu)
 			indexUndo--;
 			maxIndexUndo--;
 		}
-		
+
 		// Copy the bitmap into the undo buffer
 		undo_entry &u = undo[indexUndo]; // Alias to save typing
 		if (type == UNDO_SELECT)
@@ -5246,7 +5246,7 @@ void CanvasView::Redo (bool menu)
 	else if (u.type == UNDO_MERGE)
 	{
 		Merge (layer[u.layer], layer[u.next], fCanvasFrame, false);
-		do_removeLayer (u.next);		
+		do_removeLayer (u.next);
 	}
 	else if (u.type == UNDO_LDEL)
 	{
@@ -5273,7 +5273,7 @@ void CanvasView::Cut ()
 		clip->Lock();
 		delete clip;
 	}
-	
+
 	uint32 buttons;
 	BPoint point;
 	GetMouse (&point, &buttons, true);
@@ -5319,7 +5319,7 @@ void CanvasView::Copy ()
 		clip->Lock();
 		delete clip;
 	}
-	
+
 	uint32 buttons;
 	BPoint point;
 	GetMouse (&point, &buttons, true);
@@ -5373,7 +5373,7 @@ void CanvasView::Paste (bool winAct)
 	{
 		printf ("%s: Paste (%s); inPaste = %s, inDrag = %s\n",
 				Window()->Title(),
-				winAct ? "true" : "false", 
+				winAct ? "true" : "false",
 				inPaste ? "true" : "false",
 				inDrag ? "true" : "false");
 	}
@@ -5397,7 +5397,7 @@ void CanvasView::Paste (bool winAct)
 	if (!clip)
 	{
 		if (be_clipboard->Lock())
-		{	
+		{
 			BMessage *clipper = be_clipboard->Data();
 			BMessage clipmsg;
 			if (clipper->FindMessage ("image/x-be-bitmap", &clipmsg) == B_OK)
@@ -5416,11 +5416,11 @@ void CanvasView::Paste (bool winAct)
 			}
 		}
 	}
-	
+
 //	if (!winAct)		// dunno why I did this. Hmmm.  It breaks cross-window pastes
 						// and drops from Tracker - 1dec2000
 		SetupUndo (M_DRAW);
-	
+
 	currentLayer()->Lock();
 	clip->Lock();
 	prevPaste = clip->Bounds();
@@ -5449,7 +5449,7 @@ void CanvasView::Paste (bool winAct)
 		extern int DebugLevel;
 		if (DebugLevel >= 1)
 			printf ("%s... Drag to ext. window\n", Window()->Title());
-	
+
 		currentLayer()->Lock();
 		AddWithAlpha (clip, currentLayer(), int (point.x + pasteX), int (point.y + pasteY));
 		ePaste (point, buttons);
@@ -5570,7 +5570,7 @@ status_t GetExportingTranslators (BMessage *inHere)
 
 	/* done with list of installed translators */
 	delete[] trans;
-	
+
 	return B_OK;
 }
 
@@ -5714,7 +5714,7 @@ void CanvasView::eDrag (BPoint point, uint32 buttons)
 		set_mouse_position (int (sp.x + 1), int (sp.y));
 		set_mouse_position (int (sp.x), int (sp.y));
 	}
-		
+
 	BMessage *dragMessage = new BMessage (B_SIMPLE_DATA);
 	bool tmp = true;
 	dragMessage->AddBool ("becasso", tmp);
@@ -5741,7 +5741,7 @@ void CanvasView::eDrag (BPoint point, uint32 buttons)
 		printf ("Dragging Message:\n");
 		dragMessage->PrintToStream();
 	}
-	
+
 	if ((fCurrentLayer == fNumLayers - 1)	// i.e. Top layer is active
 	 && (fScale == 1))
 	{
@@ -5766,13 +5766,13 @@ void CanvasView::eDrag (BPoint point, uint32 buttons)
 		bhi = fCanvasFrame.IntegerHeight();
 		twi = clipBounds.IntegerWidth();
 		thi = clipBounds.IntegerHeight();
-	
+
 		dragMessage->AddBool ("not_top", tmp);
 		DragMessage (dragMessage, dragRect);
-	
+
 		inPaste = true;
 		inDrag = true;
-		
+
 		BBitmap *cl = currentLayer();
 		cutView->DrawBitmap (cl, BPoint (-point.x - pasteX, -point.y - pasteY));
 		drawView->SetDrawingMode (B_OP_COPY);
@@ -6144,7 +6144,7 @@ void CanvasView::SelectionToChannel (uint32 what)
 				if (h.hue != HUE_UNDEF)
 					h.saturation = *(++s_data)/255.0;
 				else
-					++s_data;				
+					++s_data;
 				*(c_data) = hsv2bgra (h);
 			}
 			s_data += sdif;
@@ -6354,13 +6354,13 @@ void CanvasView::FastAddWithAlpha (long x, long y, int strength)
 		// printf ("Totally out of bounds - returning\n");
 		return;
 	}
-	
+
 	// Clipping
 	int minx = max_c (x, 0);
 	int maxx = min_c (x + twi + 1, bwi + 1);
 	int miny = max_c (y, 0);
 	int maxy = min_c (y + thi + 1, bhi + 1);
-	
+
 	ulong src_bprdiff = tlpr - (maxx - minx);
 	ulong dest_bprdiff = blpr - (maxx - minx);
 
@@ -6370,7 +6370,7 @@ void CanvasView::FastAddWithAlpha (long x, long y, int strength)
 		src_data -= x;
 
 	dest_data += miny*blpr + minx;
-	
+
 //	printf ("Alpha_src = %i, Alpha_dest = %i\n", src_data[3], dest_data[3]); // ON PPC!
 	dest_data--;	// Note: On PPC, pre-increment is faster.
 	src_data--;
@@ -6420,11 +6420,11 @@ void CanvasView::FastAddWithAlpha (long x, long y, int strength)
 				}
 				else
 				{
-				
+
 //					*dest_data = ((((destpixel & 0x0000FF00)*da + (srcpixel & 0x0000FF00)*sa)/255) & 0x0000FF00) |
 //								 ((((destpixel & 0x00FF00FF)*da + (srcpixel & 0x00FF00FF)*sa)/255) & 0x00FF00FF) |
 //								    (clipchar (sa + int (destpixel >> 24)) << 24);
-				
+
 					*dest_data = ((((((destpixel & 0x00FF0000) >> 1)*da + ((srcpixel & 0x00FF0000) >> 1)*sa)/ta) << 1) & 0x00FF0000) |
 								   ((((destpixel & 0x0000FF00)*da + (srcpixel & 0x0000FF00)*sa)/ta) & 0x0000FF00) |
 								   ((((destpixel & 0x000000FF)*da + (srcpixel & 0x000000FF)*sa)/ta) & 0x000000FF) |
@@ -6573,13 +6573,13 @@ void CanvasView::FastBlendWithAlpha (long x, long y, int /* strength */)
 	{
 		return;
 	}
-	
+
 	// Clipping
 	int minx = max_c (x, 0);
 	int maxx = min_c (x + twi + 1, bwi + 1);
 	int miny = max_c (y, 0);
 	int maxy = min_c (y + thi + 1, bhi + 1);
-	
+
 	ulong src_bprdiff = tbpr - 4*(maxx - minx);
 	ulong dest_bprdiff = bbpr - 4*(maxx - minx);
 
@@ -6589,7 +6589,7 @@ void CanvasView::FastBlendWithAlpha (long x, long y, int /* strength */)
 		src_data -= x*4;
 
 	dest_data += miny*bbpr + 4*minx;
-	
+
 //	printf ("Alpha_src = %i, Alpha_dest = %i\n", src_data[3], dest_data[3]);
 	dest_data--;	// Note: On PPC, pre-increment is faster.
 	src_data--;
@@ -6633,7 +6633,7 @@ void CanvasView::WindowActivated (bool active)
 
 	extern bool inPaste;
 	extern BLocker *clipLock;
-	
+
 	if (clipLock->LockWithTimeout (500000) != B_OK)
 	{
 		printf ("Couldn't get clipLock to %sactivate %s\n", active ? "" : "in", myWindow->Name());
