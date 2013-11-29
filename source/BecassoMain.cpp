@@ -69,7 +69,9 @@ void generate_alphabuffer (char *alpha)
 		reg = REG_HAS_14;
 	fclose (db);
 #endif
-
+#if defined (__HAIKU__)
+	reg = REG_HAIKU;
+#endif
 	// Other possibility: Preinstalled Becasso
 	if (reg == REG_NONE)
 	{
