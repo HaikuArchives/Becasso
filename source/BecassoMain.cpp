@@ -108,21 +108,30 @@ void generate_alphabuffer (char *alpha)
 	if (reg == REG_NONE)
 		return;
 	
-	RegWindow *rw = new RegWindow (BRect (100, 100, 440, 240), lstring (420, "Register Becasso 2.0"), reg);
-	int val = rw->Go();
-	rw->Lock();
-	rw->Quit();
+	extern char gAlphaBuffer[256];
+	extern char gAlphaMask[128];
 	
-	if (val == 0)
-		return;
+	if (reg == REG_HAIKU)
+	{
+		strcat(gAlphaMask, "Haiku");
+	}
+	else
+	{
+		RegWindow *rw = new RegWindow (BRect (100, 100, 440, 240), lstring (420, "Register Becasso 2.0"), reg);
+		int val = rw->Go();
+		rw->Lock();
+		rw->Quit();
 	
+		if (val == 0)
+			return;
+	}
+
+
+
 	if (reg == REG_PREINST)
 	{
 		system ("rm -rf /boot/home/config/settings/Becasso/Preinstalled");
 	}
-	
-	extern char gAlphaBuffer[256];
-	extern char gAlphaMask[128];
 	
 	int i;
 	for (i = 0; i <= strlen (gAlphaMask); i++)
