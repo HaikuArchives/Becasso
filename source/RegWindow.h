@@ -10,6 +10,7 @@
 #define REG_ESD		 2
 #define REG_PREINST	 3
 #define REG_PPC		 4
+#define REG_HAIKU	 5
 #define REG_HAS_14	14
 #define REG_HAS_15	15
 

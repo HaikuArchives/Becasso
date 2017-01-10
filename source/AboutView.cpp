@@ -60,10 +60,14 @@ void SAboutView::Draw (BRect updateRect)
 		else
 		{
 			SetHighColor (Grey8);
+			#if defined(__HAIKU__)
+			DrawString ("Released under the MIT license", BPoint (85, 152));
+			#else
 			DrawString (lstring (7, "Registered to"), BPoint (85, 152));
 			SetHighColor (Black);
 			SetFontSize (12);
 			DrawString (gAlphaMask, BPoint (85, 168));
+			#endif
 		}
 	//	DrawString ("Add-On developers beta version", BPoint (85, 158));
 	//	DrawString ("This is a ", BPoint (85, 158));

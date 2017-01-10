@@ -69,7 +69,9 @@ void generate_alphabuffer (char *alpha)
 		reg = REG_HAS_14;
 	fclose (db);
 #endif
-
+#if defined (__HAIKU__)
+	reg = REG_HAIKU;
+#endif
 	// Other possibility: Preinstalled Becasso
 	if (reg == REG_NONE)
 	{
@@ -106,21 +108,30 @@ void generate_alphabuffer (char *alpha)
 	if (reg == REG_NONE)
 		return;
 	
-	RegWindow *rw = new RegWindow (BRect (100, 100, 440, 240), lstring (420, "Register Becasso 2.0"), reg);
-	int val = rw->Go();
-	rw->Lock();
-	rw->Quit();
+	extern char gAlphaBuffer[256];
+	extern char gAlphaMask[128];
 	
-	if (val == 0)
-		return;
+	if (reg == REG_HAIKU)
+	{
+		strcat(gAlphaMask, "Haiku");
+	}
+	else
+	{
+		RegWindow *rw = new RegWindow (BRect (100, 100, 440, 240), lstring (420, "Register Becasso 2.0"), reg);
+		int val = rw->Go();
+		rw->Lock();
+		rw->Quit();
 	
+		if (val == 0)
+			return;
+	}
+
+
+
 	if (reg == REG_PREINST)
 	{
 		system ("rm -rf /boot/home/config/settings/Becasso/Preinstalled");
 	}
-	
-	extern char gAlphaBuffer[256];
-	extern char gAlphaMask[128];
 	
 	int i;
 	for (i = 0; i <= strlen (gAlphaMask); i++)
@@ -168,6 +179,11 @@ void setup_alphabuffer ();
 // You guessed it: This actually does registration checking.
 void setup_alphabuffer ()
 {
+	extern int gGlobalAlpha;
+	#if defined(__HAIKU__)
+	gGlobalAlpha = 1;	
+	strcat(gAlphaMask, "Haiku");
+	#else	
 	char buffer[256];
 	BPath p;
 	char path[B_FILE_NAME_LENGTH];
@@ -175,7 +191,6 @@ void setup_alphabuffer ()
 	strcpy (path, p.Path());
 	strcat (path, "/Becasso/Keyfile");
 	FILE *kf = fopen (path, "rb");
-	extern int gGlobalAlpha;
 	if (!kf)
 	{
 		fclose (kf);
@@ -238,6 +253,7 @@ void setup_alphabuffer ()
 		// Note that the keyfile contains more:  The registered version, kind of registration,
 		// and the date of registration.  Who knows whether this will be interesting at one point.
 	}
+	#endif
 }
 
 int main (int argc, char **argv)
