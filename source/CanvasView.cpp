@@ -5378,7 +5378,7 @@ void CanvasView::Paste (bool winAct)
 				inDrag ? "true" : "false");
 	}
 	BPoint point;
-	ulong buttons;
+	uint32 buttons;
 	GetMouse (&point, &buttons, true);
 	if (inPaste)
 	{

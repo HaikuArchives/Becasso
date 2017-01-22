@@ -36,7 +36,7 @@ VideoConsumer::VideoConsumer(
 	const char * name,
 	BView *view,
 	BMediaAddOn *addon,
-	const uint32 internal_id) :
+	const int32 internal_id) :
 	
 	BMediaNode(name),
 	BMediaEventLooper(),
@@ -61,7 +61,7 @@ VideoConsumer::VideoConsumer(
 	for (uint32 j = 0; j < 3; j++)
 	{
 		mBitmap[j] = NULL;
-		mBufferMap[j] = 0;
+		mBufferMap[j] = NULL;
 	}
 	
 	SetPriority(B_DISPLAY_PRIORITY);
@@ -94,7 +94,7 @@ VideoConsumer::~VideoConsumer()
 //---------------------------------------------------------------
 
 BMediaAddOn *
-VideoConsumer::AddOn(long *cookie) const
+VideoConsumer::AddOn(int32 *cookie) const
 {
 	// do the right thing if we're ever used with an add-on
 	*cookie = mInternalID;
@@ -260,7 +260,7 @@ VideoConsumer::CreateBuffers(
 		for (int j = 0; j < 3; j++)
 			if (buffList[j] != NULL)
 			{
-				mBufferMap[j] = (uint32) buffList[j];
+				mBufferMap[j] = buffList[j];
 //				PROGRESS(" j = %d buffer = %08lx\n", j, mBufferMap[j]);
 			}
 			else
@@ -493,7 +493,7 @@ VideoConsumer::HandleEvent(
 				uint32 index = 0;
 				mOurBuffers = true;
 				while(index < 3)
-					if ((uint32)buffer == mBufferMap[index])
+					if (buffer == mBufferMap[index])
 						break;
 					else
 						index++;

@@ -2,7 +2,7 @@ SubDir TOP source add-ons Noise ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Noise = -nostart -Xlinker -soname=Noise ;
+LINKFLAGS on Noise = -shared -Xlinker -soname=Noise ;
 
 Main Noise :
 	Noise.cpp

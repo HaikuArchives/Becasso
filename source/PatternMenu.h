@@ -11,6 +11,8 @@
 
 #define MAX_PATTERNS 20
 
+class PatternMenuButton;
+
 class PatternMenu : public BMenu
 {
 friend class PatternMenuButton;
@@ -40,4 +42,4 @@ BView				*view;
 float				 hs, vs;
 };
 
-#endif 
+#endif

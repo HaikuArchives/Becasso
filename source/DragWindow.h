@@ -3,6 +3,7 @@
 
 #include <Window.h>
 #include <stdio.h>
+#include <string.h>
 #include "Settings.h"
 
 class DragWindow : public BWindow
@@ -42,4 +43,4 @@ private:
 char		 fKind[64];
 };
 
-#endif 
+#endif

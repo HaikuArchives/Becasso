@@ -12,12 +12,7 @@
 
 class BView;
 
-// The following is for exporting the necessary symbols.
-#if !defined (BUILDING_BECASSO) || defined (BUILDING_ADDON)
-#   define ADDON_EXPORT __declspec(dllexport)
-#else
-#   define ADDON_EXPORT __declspec(dllimport)
-#endif
+#   define ADDON_EXPORT
 
 // Undefined Hue - some of the HSV functions from Becasso can return this.
 #define HUE_UNDEF -1.0

@@ -2,7 +2,7 @@ SubDir TOP source add-ons Blur ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Blur = -nostart -Xlinker -soname=Blur ;
+LINKFLAGS on Blur = -shared -Xlinker -soname=Blur ;
 
 Main Blur :
 	Blur.cpp

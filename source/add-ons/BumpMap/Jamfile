@@ -2,7 +2,7 @@ SubDir TOP source add-ons BumpMap ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on BumpMap = -nostart -Xlinker -soname=BumpMap ;
+LINKFLAGS on BumpMap = -shared -Xlinker -soname=BumpMap ;
 
 Main BumpMap :
 	BumpMap.cpp

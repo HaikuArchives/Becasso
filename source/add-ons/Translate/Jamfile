@@ -2,7 +2,7 @@ SubDir TOP source add-ons Translate ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Translate = -nostart -Xlinker -soname=Translate ;
+LINKFLAGS on Translate = -shared -Xlinker -soname=Translate ;
 
 Main Translate :
 	Translate.cpp

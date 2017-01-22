@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define bzero(p,n) memset(p,0,n)
-
 Selection::Selection (BRect bounds)
 : BBitmap (bounds, B_BITMAP_ACCEPTS_VIEWS, B_GRAYSCALE_8_BIT)
 {

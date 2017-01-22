@@ -2,6 +2,7 @@
 #include "Colors.h"
 #include <Application.h>
 #include <stdio.h>
+#include <string.h>
 #include "Settings.h"
 
 SAboutView::SAboutView (BRect rect, BBitmap *becasso, BBitmap *sum, bool startup)

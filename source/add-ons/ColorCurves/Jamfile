@@ -2,13 +2,19 @@ SubDir TOP source add-ons ColorCurves ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on ColorCurves = -nostart -Xlinker -soname=ColorCurves ;
+LINKFLAGS on ColorCurves = -shared -Xlinker -soname=ColorCurves ;
 
 AS = nasm -f elf32 ;
 
+local have64bits = [ GLOB /system : kernel_x86_64 ] ;
+x86_sources = 	Colorcurves_x86.asm ;
+if $(have64bits) {
+	x86_sources = ;
+}
+
 Main ColorCurves :
 	ColorCurves.cpp
-	Colorcurves_x86.asm
+	$(x86_sources)
 	;
 
 InstallBin target/add-ons : ColorCurves ;

@@ -23,13 +23,13 @@ public:
 							const char * name,
 							BView * view,
 							BMediaAddOn *addon,
-							const uint32 internal_id);
+							const int32 internal_id);
 						~VideoConsumer();
 	
 /*	BMediaNode */
 public:
 	
-	virtual	BMediaAddOn	*AddOn(long *cookie) const;
+	virtual	BMediaAddOn	*AddOn(int32 *cookie) const;
 	
 protected:
 
@@ -109,7 +109,7 @@ public:
 
 private:
 
-	uint32				mInternalID;
+	int32				mInternalID;
 	BMediaAddOn			*mAddOn;
 
 	bool					mConnectionActive;
@@ -122,7 +122,7 @@ private:
 	BBitmap					*mBitmap[3];
 	bool					mOurBuffers;
 	BBufferGroup			*mBuffers;
-	uint32					mBufferMap[3];	
+	BBuffer					*mBufferMap[3];
 	
 	bigtime_t				mRate;
 	uint32					mImageFormat;

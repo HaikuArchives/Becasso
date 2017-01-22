@@ -3,6 +3,7 @@
 
 #include <device/SerialPort.h>
 #include "Wacom.h"
+#include <string.h>
 #include <Point.h>
 #include <Rect.h>
 
@@ -46,4 +47,4 @@ float			 fMaxPressure;
 int32			 fTabletType;
 };
 
-#endif 
+#endif

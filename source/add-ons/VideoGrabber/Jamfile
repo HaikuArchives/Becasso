@@ -2,7 +2,7 @@ SubDir TOP source add-ons VideoGrabber ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on VideoGrabber = -nostart -Xlinker -soname=VideoGrabber ;
+LINKFLAGS on VideoGrabber = -shared -Xlinker -soname=VideoGrabber ;
 
 Main VideoGrabber :
 	VideoGrabber.cpp

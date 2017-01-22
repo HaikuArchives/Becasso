@@ -42,6 +42,12 @@ void mmx_alpha_blend_nodiff_ga (uint64 ga_64, uint32 *s, uint32 *d, int size);
 void mmx_alpha_blend_diff (uint32 *s, uint32 *d, int height, int difference, int width);
 void mmx_alpha_blend_nodiff (uint32 *s, uint32 *d, int size);
 #endif
+#if defined (__GNUC__) && defined (__x86_64__)
+void mmx_alpha_blend_diff_ga (uint64 ga_64, uint32 *s, uint32 *d, int height, int difference, int width) {};
+void mmx_alpha_blend_nodiff_ga (uint64 ga_64, uint32 *s, uint32 *d, int size)  {};
+void mmx_alpha_blend_diff (uint32 *s, uint32 *d, int height, int difference, int width)  {};
+void mmx_alpha_blend_nodiff (uint32 *s, uint32 *d, int size)  {};
+#endif
 
 void mmx_alpha_blend (bgra_pixel *src, bgra_pixel *dest, int ga, int w, int l, int t, int r, int b)
 // src and dest point to 32 bit pixel bitmaps, of equal width (w).

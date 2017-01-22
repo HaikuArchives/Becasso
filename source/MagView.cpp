@@ -67,7 +67,7 @@ void MagView::MouseDown (BPoint point)
 	extern ColorMenuButton *locolor, *hicolor;
 	BPoint p = BPoint (int (point.x/zoom), int (point.y/zoom));
 	BRect pix;
-	ulong buttons = Window()->CurrentMessage()->FindInt32 ("buttons");
+	uint32 buttons = Window()->CurrentMessage()->FindInt32 ("buttons");
 	rgb_color hi;
 	if (modifiers() & B_OPTION_KEY)
 	{

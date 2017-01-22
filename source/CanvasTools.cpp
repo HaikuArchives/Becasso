@@ -3071,8 +3071,8 @@ inline bool CanvasView::inbounds (LPoint p)
 
 inline bool CanvasView::isfillcolor0 (LPoint point)
 {
-	uint32 *addr = bbitsl + bbprl*point.y + point.x;
-	return (*addr == fill32 || (!(fill32 & ALPHA_MASK) && !(*addr & ALPHA_MASK)));
+	ulong *addr = bbitsl + bbprl*point.y + point.x;
+	return (*(uint32*)addr == fill32 || (!(fill32 & ALPHA_MASK) && !(*addr & ALPHA_MASK)));
 }
 
 inline bool CanvasView::isfillcolorrgb (LPoint point, uchar *t)
@@ -3158,7 +3158,7 @@ void CanvasView::tFill (int32 mode, BPoint point, uint32 buttons, rgb_color *c)
 	tbits = (uchar *) temp->Bits();
 	tbpr = temp->BytesPerRow();
 	tbprl = tbpr/4;
-	bbitsl = (uint32 *) currentLayer()->Bits();
+	bbitsl = (ulong *) currentLayer()->Bits();
 	bbits = (uchar *) bbitsl;
 	bbpr = currentLayer()->BytesPerRow();
 	bbprl = bbpr/4;

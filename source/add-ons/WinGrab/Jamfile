@@ -2,7 +2,7 @@ SubDir TOP source add-ons WinGrab ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on WinGrab = -nostart -Xlinker -soname=WinGrab ;
+LINKFLAGS on WinGrab = -shared -Xlinker -soname=WinGrab ;
 
 Main WinGrab :
 	WinGrab.cpp

@@ -2,6 +2,7 @@
 #include "Colors.h"
 #include "BitmapView.h"
 #include "Settings.h"
+#include <string.h>
 #include <View.h>
 #include <CheckBox.h>
 #include <Button.h>

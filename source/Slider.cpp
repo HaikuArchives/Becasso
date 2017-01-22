@@ -163,7 +163,7 @@ void Slider::MouseDown (BPoint point)
 		
 	BPoint knobpos = BPoint (float (value - min)/(max - min)*(width - knobsize), 1);
 	knob = BRect (knobpos.x + 1, knobpos.y + 1, knobpos.x + knobsize - 2, knobpos.y + height - 2);
-	ulong buttons;
+	uint32 buttons;
 	buttons = Window()->CurrentMessage()->FindInt32 ("buttons");
 	float px = -1;
 	bool dragging = false;

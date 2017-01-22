@@ -2,7 +2,7 @@ SubDir TOP source add-ons AutoContrast ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on AutoContrast = -nostart -Xlinker -soname=AutoContrast ;
+LINKFLAGS on AutoContrast = -shared -Xlinker -soname=AutoContrast ;
 
 Main AutoContrast :
 	AutoContrast.cpp

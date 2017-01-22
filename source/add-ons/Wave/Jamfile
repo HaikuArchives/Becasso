@@ -2,7 +2,7 @@ SubDir TOP source add-ons Wave ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Wave = -nostart -Xlinker -soname=Wave ;
+LINKFLAGS on Wave = -shared -Xlinker -soname=Wave ;
 
 Main Wave :
 	Wave.cpp

@@ -2,7 +2,7 @@ SubDir TOP source add-ons Sepia ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Sepia = -nostart -Xlinker -soname=Sepia ;
+LINKFLAGS on Sepia = -shared -Xlinker -soname=Sepia ;
 
 Main Sepia :
 	Sepia.cpp

@@ -2,7 +2,7 @@ SubDir TOP source add-ons Negate ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Negate = -nostart -Xlinker -soname=Negate ;
+LINKFLAGS on Negate = -shared -Xlinker -soname=Negate ;
 
 Main Negate :
 	Negate.cpp

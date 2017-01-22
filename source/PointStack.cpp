@@ -1,5 +1,6 @@
 #include "PointStack.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 PointStack::PointStack ()
 {

@@ -1,4 +1,5 @@
 #include "HelpView.h"
+#include <string.h>
 
 HelpView::HelpView (const BRect frame, const char *name)
 : BView (frame, name, B_FOLLOW_LEFT, B_WILL_DRAW)

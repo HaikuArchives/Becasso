@@ -26,15 +26,18 @@ AttribPolygon::AttribPolygon ()
 	BBox *type = new BBox (BRect (18, 32, 130, 82), "type");
 	type->SetLabel (lstring (311, "Type"));
 	AddChild (type);
-	
+
+	BPoint pointArray[] = {
+		BPoint ( 2,  8),
+		BPoint ( 9,  2),
+		BPoint (27, 12),
+		BPoint (19, 28),
+		BPoint (14, 20),
+		BPoint ( 9, 26)
+		};
 	BPolygon *poly = new BPolygon();
-	poly->AddPoints (&BPoint ( 2,  8), 1);
-	poly->AddPoints (&BPoint ( 9,  2), 1);
-	poly->AddPoints (&BPoint (27, 12), 1);
-	poly->AddPoints (&BPoint (19, 28), 1);
-	poly->AddPoints (&BPoint (14, 20), 1);
-	poly->AddPoints (&BPoint ( 9, 26), 1);
-	
+	poly->AddPoints(pointArray, 6);
+
 	BWindow *picWindow = new BWindow (BRect (0, 0, 100, 100), "Temp Pic Window", B_BORDERED_WINDOW, uint32 (NULL), uint32 (NULL));
 	BView *bg = new BView (BRect (0, 0, 100, 100), "Temp Pic View", uint32 (NULL), uint32 (NULL));
 	picWindow->AddChild (bg);

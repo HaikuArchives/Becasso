@@ -11,6 +11,7 @@
 #include "PrefsWindow.h"
 #include "Colors.h"
 #include <stdio.h>
+#include <string.h>
 #include "Settings.h"
 #include <Path.h>
 #include <Entry.h>

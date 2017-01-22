@@ -2,7 +2,7 @@ SubDir TOP source add-ons Gradient ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Gradient = -nostart -Xlinker -soname=Gradient ;
+LINKFLAGS on Gradient = -shared -Xlinker -soname=Gradient ;
 
 Main Gradient :
 	Gradient.cpp

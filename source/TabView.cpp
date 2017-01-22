@@ -1,6 +1,7 @@
 #include "TabView.h"
 #include "Colors.h"
 #include <stdio.h>
+#include <string.h>
 #include <InterfaceDefs.h>
 
 #define _HTABHEIGHT (TAB_HEIGHT/2)

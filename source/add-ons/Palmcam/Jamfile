@@ -2,7 +2,7 @@ SubDir TOP source add-ons Palmcam ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Palmcam = -nostart -Xlinker -soname=Palmcam ;
+LINKFLAGS on Palmcam = -shared -Xlinker -soname=Palmcam ;
 
 Main Palmcam :
 	Palmcam.cpp

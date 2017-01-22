@@ -3,6 +3,7 @@
 #include "ThumbnailFilePanel.h"
 #include "Colors.h"
 #include <stdio.h>
+#include <string.h>
 #include "BitmapStuff.h"
 #include <Node.h>
 #include <NodeInfo.h>

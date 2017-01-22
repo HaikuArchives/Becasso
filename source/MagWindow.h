@@ -22,6 +22,7 @@ virtual void MenusBeginning ();
 float		 menubarHeight ();
 
 private:
+typedef BWindow inherited;
 MagView		*magView;
 BScrollBar	*h, *v;
 BMenuBar	*menubar;

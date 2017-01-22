@@ -2,6 +2,7 @@
 
 #include "SBitmap.h"
 #include <stdlib.h>
+#include <string.h>
 #include <Debug.h>
 
 SBitmap::SBitmap (BBitmap *src)

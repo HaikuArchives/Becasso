@@ -236,9 +236,9 @@ void ColorWindow::MessageReceived (BMessage *msg)
 	case 'SetC':
 	{
 		char s[16];
-		c.red = msg->FindInt32 ("color", 0L);
-		c.green = msg->FindInt32 ("color", 1L);
-		c.blue = msg->FindInt32 ("color", 2L);
+		c.red = msg->FindInt32 ("color", 0);
+		c.green = msg->FindInt32 ("color", 1);
+		c.blue = msg->FindInt32 ("color", 2);
 		int32 alpha;
 		if (msg->FindInt32 ("alpha", &alpha) == B_OK)
 		{
@@ -312,9 +312,9 @@ void ColorWindow::MessageReceived (BMessage *msg)
 	case 'CSQc':
 	{
 		char s[16];
-		c.red = msg->FindInt32 ("color", 0L);
-		c.green = msg->FindInt32 ("color", 1L);
-		c.blue = msg->FindInt32 ("color", 2L);
+		c.red = msg->FindInt32 ("color", 0);
+		c.green = msg->FindInt32 ("color", 1);
+		c.blue = msg->FindInt32 ("color", 2);
 		sprintf (s, "%i", c.red);
 		rTC->SetText (s);
 		sprintf (s, "%i", c.green);
@@ -328,9 +328,9 @@ void ColorWindow::MessageReceived (BMessage *msg)
 	{
 		char s[16];
 		hsv_color h;
-		h.hue = msg->FindFloat ("color", 0L);
-		h.saturation = msg->FindFloat ("color", 1L);
-		h.value = msg->FindFloat ("color", 2L);
+		h.hue = msg->FindFloat ("color", 0);
+		h.saturation = msg->FindFloat ("color", 1);
+		h.value = msg->FindFloat ("color", 2);
 		sprintf (s, "%3.0f", h.hue);
 		hTC->SetText (s);
 		sprintf (s, "%1.3f", h.saturation);

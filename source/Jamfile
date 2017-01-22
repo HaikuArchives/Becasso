@@ -1,9 +1,15 @@
 SubDir TOP source ;
 
-LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice ;
+LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice -lstdc++ ;
 LINKFLAGS on Becasso = -Xlinker -soname=_APP_ ;
 
 AS = nasm -f elf32 ;
+
+local have64bits = [ GLOB /system : kernel_x86_64 ] ;
+x86_sources = 	mmx_gcc.asm ;
+if $(have64bits) {
+	x86_sources = ;
+}
 
 Main Becasso :
 	TabView.cpp
@@ -90,7 +96,7 @@ Main Becasso :
 	AddOn.cpp
 	AddOnWindow.cpp
 	AddOnSupport.cpp
-	mmx_gcc.asm
+	$(x86_sources)
 	;
 
 AddResources Becasso : Becasso.rsrc ;

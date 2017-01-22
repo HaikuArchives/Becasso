@@ -2,7 +2,7 @@ SubDir TOP source add-ons Jim ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Jim = -nostart -Xlinker -soname=Jim ;
+LINKFLAGS on Jim = -shared -Xlinker -soname=Jim ;
 
 Main Jim :
 	Jim.cpp

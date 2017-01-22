@@ -1,4 +1,5 @@
-typedef unsigned long bgra_pixel;
+#include <stdint.h>
+typedef uint32_t bgra_pixel;
 
 #if defined (__cplusplus)
 extern "C"

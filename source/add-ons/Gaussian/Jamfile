@@ -2,7 +2,7 @@ SubDir TOP source add-ons Gaussian ;
 
 SubDirHdrs $(TOP) source ;
 
-LINKFLAGS on Gaussian = -nostart -Xlinker -soname=Gaussian ;
+LINKFLAGS on Gaussian = -shared -Xlinker -soname=Gaussian ;
 
 Main Gaussian :
 	Gaussian.cpp

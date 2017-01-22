@@ -942,7 +942,7 @@ void Becasso::MessageReceived (BMessage *message)
 					canvas *current = (canvas *) canvases.ItemAt (i);
 					if (its_looper == current->its_looper)
 					{
-						delete (canvases.RemoveItem (i));
+						delete ((canvas *) canvases.RemoveItem (i));
 						break;
 					}
 				}

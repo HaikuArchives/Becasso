@@ -24,27 +24,30 @@ AttribPolyblob::AttribPolyblob ()
 	type->SetLabel (lstring (311, "Type"));
 	AddChild (type);
 	
+	BPoint pointArray[] = {
+		BPoint ( 2,  8),
+		BPoint ( 3,  4),
+		BPoint ( 6,  3),
+		BPoint ( 9,  2),
+		BPoint (12,  3),
+		BPoint (20,  5),
+		BPoint (23,  7),
+		BPoint (27, 12),
+		BPoint (26, 15),
+		BPoint (24, 20),
+		BPoint (22, 23),
+		BPoint (19, 28),
+		BPoint (18, 28),
+		BPoint (16, 23),
+		BPoint (15, 20),
+		BPoint (13, 21),
+		BPoint (11, 23),
+		BPoint ( 6, 22),
+		BPoint ( 4, 15),
+		BPoint ( 3, 10)
+		};
 	BPolygon *poly = new BPolygon();
-	poly->AddPoints (&BPoint ( 2,  8), 1);
-	poly->AddPoints (&BPoint ( 3,  4), 1);
-	poly->AddPoints (&BPoint ( 6,  3), 1);
-	poly->AddPoints (&BPoint ( 9,  2), 1);
-	poly->AddPoints (&BPoint (12,  3), 1);
-	poly->AddPoints (&BPoint (20,  5), 1);
-	poly->AddPoints (&BPoint (23,  7), 1);
-	poly->AddPoints (&BPoint (27, 12), 1);
-	poly->AddPoints (&BPoint (26, 15), 1);
-	poly->AddPoints (&BPoint (24, 20), 1);
-	poly->AddPoints (&BPoint (22, 23), 1);
-	poly->AddPoints (&BPoint (19, 28), 1);
-	poly->AddPoints (&BPoint (18, 28), 1);
-	poly->AddPoints (&BPoint (16, 23), 1);
-	poly->AddPoints (&BPoint (15, 20), 1);
-	poly->AddPoints (&BPoint (13, 21), 1);
-	poly->AddPoints (&BPoint (11, 23), 1);
-	poly->AddPoints (&BPoint ( 6, 22), 1);
-	poly->AddPoints (&BPoint ( 4, 15), 1);
-	poly->AddPoints (&BPoint ( 3, 10), 1);
+	poly->AddPoints(pointArray, 20);
 
 	BWindow *picWindow = new BWindow (BRect (0, 0, 100, 100), "Temp Pic Window", B_BORDERED_WINDOW, uint32 (NULL), uint32 (NULL));
 	BView *bg = new BView (BRect (0, 0, 100, 100), "Temp Pic View", uint32 (NULL), uint32 (NULL));
