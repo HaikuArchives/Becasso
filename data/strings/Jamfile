@@ -6,3 +6,4 @@ InstallFile target/data/strings : Deutsch ;
 InstallFile target/data/strings : English ;
 InstallFile target/data/strings : Français ;
 InstallFile target/data/strings : Italiano ;
+InstallFile target/data/strings : US-English ;

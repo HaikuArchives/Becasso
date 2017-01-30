@@ -169,7 +169,7 @@ PrefsLoader::PrefsLoader ()
 	g_settings_lock.Lock();
 
 	// defaults:
-	strcpy (g_settings.language, "US English");
+	strcpy (g_settings.language, "US-English");
 	g_settings.recents = 10;
 	g_settings.origin[0] = BPoint (100, 100);
 	g_settings.max_undo = 8;
