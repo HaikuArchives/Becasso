@@ -1,6 +1,12 @@
 SubDir TOP source ;
 
-LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice -lstdc++ ;
+local haver4stdc++ = [ GLOB /system/lib : libstdc++.r4.so ] ;
+STDCPPLIBS = -lstdc++ ;
+if $(haver4stdc++) {
+	STDCPPLIBS = -lstdc++.r4 ;
+}
+
+LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice $(STDCPPLIBS) ;
 LINKFLAGS on Becasso = -Xlinker -soname=_APP_ ;
 
 AS = nasm -f elf32 ;

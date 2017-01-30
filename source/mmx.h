@@ -1,5 +1,7 @@
 #include <stdint.h>
-typedef uint32_t bgra_pixel;
+#include <support/SupportDefs.h>
+
+typedef uint32 bgra_pixel;
 
 #if defined (__cplusplus)
 extern "C"
