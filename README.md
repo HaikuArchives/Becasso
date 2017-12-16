@@ -12,4 +12,3 @@ To compile, simply run jam:
 
 Then you can run jam install to copy binaries and data files to subdirectory "target":
 	$> jam install
-![Becasso](becasso.png)
