@@ -4,6 +4,7 @@
 #include <View.h>
 #include <Button.h>
 #include <PopUpMenu.h>
+#include <LayoutBuilder.h>
 #include <MenuField.h>
 #include <StringView.h>
 #include "SizeWindow.h"
@@ -12,7 +13,7 @@
 #include "Settings.h"
 
 SizeWindow::SizeWindow (int32 _h, int32 _w, int32 _c)
-: BWindow (BRect (100, 100, 300, 272), "", B_MODAL_WINDOW, B_NOT_RESIZABLE)
+: BWindow (BRect (100, 100, 300, 272), "", B_MODAL_WINDOW, B_NOT_RESIZABLE| B_AUTO_UPDATE_SIZE_LIMITS)
 {
 	char hS[16], wS[16], rD[16];
 	fRez = 72;
@@ -21,67 +22,72 @@ SizeWindow::SizeWindow (int32 _h, int32 _w, int32 _c)
 	fColor = _c;
 	fHUnit = UNIT_PIXELS;
 	fVUnit = UNIT_PIXELS;
-	BRect bgFrame, cancelFrame, openFrame, textFrame, heightFrame, widthFrame, rezFrame;
-	bgFrame = Bounds();
-	BView *bg = new BView (bgFrame, "SW bg", B_FOLLOW_ALL, B_WILL_DRAW);
-	bg->SetViewColor (LightGrey);
-	AddChild (bg);
 
-	textFrame.Set (8, 8, 192, 102);
-	BBox *text = new BBox (textFrame, "SW box");
+	BBox *text = new BBox ("SW box");
 	text->SetLabel (lstring (180, "Canvas Size"));
-	bg->AddChild (text);
-	
+
 	sprintf (hS, "%li", _h);
 	sprintf (wS, "%li", _w);
 	sprintf (rD, "%li", fRez);
-	widthFrame.Set (8, 15, 120, 33);
-	heightFrame.Set (8, 39, 120, 57);
-	rezFrame.Set (8, 63, 120, 81);
-	newWidth = new BTextControl (widthFrame, "NewWidth", lstring (181, "Width"), wS, new BMessage ('Swdt'));
-	newHeight = new BTextControl (heightFrame, "NewHeight", lstring (182, "Height"), hS, new BMessage ('Shgt'));
-	rDPI = new BTextControl (rezFrame, "rez", lstring (186, "Resolution"), rD, new BMessage ('Srez'));
+
+	newWidth = new BTextControl ("NewWidth", lstring (181, "Width"), wS, new BMessage ('Swdt'));
+	newHeight = new BTextControl ("NewHeight", lstring (182, "Height"), hS, new BMessage ('Shgt'));
+	rDPI = new BTextControl ("rez", lstring (186, "Resolution"), rD, new BMessage ('Srez'));
+
 	newHeight->SetAlignment (B_ALIGN_RIGHT, B_ALIGN_LEFT);
 	newWidth->SetAlignment (B_ALIGN_RIGHT, B_ALIGN_LEFT);
 	rDPI->SetAlignment (B_ALIGN_RIGHT, B_ALIGN_LEFT);
-	BStringView *dpiV = new BStringView (BRect (rezFrame.right + 4, rezFrame.top, rezFrame.right + 40, rezFrame.bottom),
-		"dpiV", "dpi");
+	BStringView *dpiV = new BStringView ("dpiV", "dpi");
 	BPopUpMenu *hPU = new BPopUpMenu ("");
 	hPU->AddItem (new BMenuItem (lstring (187, "pixels"), new BMessage ('h_px')));
 	hPU->AddItem (new BMenuItem (lstring (188, "in"), new BMessage ('h_in')));
 	hPU->AddItem (new BMenuItem (lstring (189, "cm"), new BMessage ('h_cm')));
 	hPU->ItemAt(0)->SetMarked (true);
-	BMenuField *hMF = new BMenuField (BRect (124, 14, 180, 30), "hUnit", NULL, hPU);
+	BMenuField *hMF = new BMenuField ("hUnit", NULL, hPU);
 	BPopUpMenu *vPU = new BPopUpMenu ("");
 	vPU->AddItem (new BMenuItem (lstring (187, "pixels"), new BMessage ('v_px')));
 	vPU->AddItem (new BMenuItem (lstring (188, "in"), new BMessage ('v_in')));
 	vPU->AddItem (new BMenuItem (lstring (189, "cm"), new BMessage ('v_cm')));
 	vPU->ItemAt(0)->SetMarked (true);
-	BMenuField *vMF = new BMenuField (BRect (124, 38, 180, 54), "vUnit", NULL, vPU);
-	text->AddChild (newWidth);
-	text->AddChild (hMF);
-	text->AddChild (newHeight);
-	text->AddChild (vMF);
-	text->AddChild (rDPI);
-	text->AddChild (dpiV);
-	
+	BMenuField *vMF = new BMenuField ("vUnit", NULL, vPU);
+
+	BView *view = new BView("SW bg", B_WILL_DRAW);
+    view->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+
+	BLayoutBuilder::Grid<>(view, 2.0, 2.0) // FIX
+		.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+			.Add(newWidth->CreateLabelLayoutItem(), 0, 0)
+			.Add(newWidth->CreateTextViewLayoutItem(), 1, 0)
+			.Add(hMF, 2,0)
+			.Add(newHeight->CreateLabelLayoutItem(), 0, 1)
+			.Add(newHeight->CreateTextViewLayoutItem(), 1, 1)
+			.Add(vMF, 2, 1)
+			.Add(rDPI->CreateLabelLayoutItem(), 0, 2)
+			.Add(rDPI->CreateTextViewLayoutItem(), 1, 2)
+			.Add(dpiV, 2, 2);
+	text->AddChild(view);
+
+	BButton *createButton = new BButton ("SW open", lstring (183, "Create"), new BMessage ('Sopn'));
+	BButton *cancelButton = new BButton ("SW cancel", lstring (131, "Cancel"), new BMessage ('Scnc'));
+	createButton->MakeDefault (true);
+
 	BPopUpMenu *cPU = new BPopUpMenu ("");
 	cPU->AddItem (new BMenuItem (lstring (407, "Current Foreground"), new BMessage ('cFG ')));
 	cPU->AddItem (new BMenuItem (lstring (408, "Current Background"), new BMessage ('cBG ')));
 	cPU->AddItem (new BMenuItem (lstring (409, "Transparent"), new BMessage ('cTR ')));
 	cPU->ItemAt(fColor)->SetMarked (true);
-	BMenuField *cMF = new BMenuField (BRect (4, 106, 196, 128), "color", lstring (406, "Color: "), cPU);
-	cMF->SetDivider (50);
-	bg->AddChild (cMF);
+	BMenuField *cMF = new BMenuField ("color", lstring (406, "Color: "), cPU);
 	
-	cancelFrame.Set (82, 136, 134, 160);
-	openFrame.Set (140, 136, 192, 160);
-	BButton *cancel = new BButton (cancelFrame, "SW cancel", lstring (131, "Cancel"), new BMessage ('Scnc'));
-	BButton *open = new BButton (openFrame, "SW open", lstring (183, "Create"), new BMessage ('Sopn')); 
-	open->MakeDefault (true);
-	bg->AddChild (cancel);
-	bg->AddChild (open);
 	
+	BLayoutBuilder::Group<>(this, B_VERTICAL, B_USE_DEFAULT_SPACING)
+		.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+		.Add(text)
+		.Add(cMF)
+		.AddGroup(B_HORIZONTAL)
+			.AddGlue()
+			.Add(cancelButton)
+			.Add(createButton);
+
 	fStatus = 0;
 }
 
