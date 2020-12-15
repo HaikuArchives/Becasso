@@ -955,7 +955,8 @@ void Becasso::MessageReceived (BMessage *message)
 		}
 		case 'aURL':
 		{
-			char *argv[1] = { "http://www.sumware.demon.nl" };
+			//char *argv[1] = { "http://www.sumware.demon.nl" }; not available anymore
+			char *argv[1] = { "https://github.com/HaikuArchives/Becasso" };
 			be_roster->Launch ("text/html", 1, argv);
 //			system ("NetPositive http://www.sumware.demon.nl &");
 			break;
