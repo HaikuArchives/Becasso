@@ -162,7 +162,7 @@ void generate_alphabuffer (char *alpha)
 	gAlphaBuffer[253] = schar[1];
 	gAlphaBuffer[254] = schar[2];
 	gAlphaBuffer[255] = schar[3];
-	char xAlphaMask[256] = { KEYFILE_MASK };
+	uchar xAlphaMask[256] = { KEYFILE_MASK };
 	char wbuffer[256];
 	for (i = 0; i < 255; i++)
 		wbuffer[i] = gAlphaBuffer[i] ^ xAlphaMask[i];

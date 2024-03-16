@@ -4292,7 +4292,7 @@ void CanvasView::CopyTarget (BMessage *message)
 		message->PrintToStream();
 	}
 
-	extern bool gGlobalAlpha;
+	extern int gGlobalAlpha;
 	if (!gGlobalAlpha)
 	{
 #if SAVE_DISABLED
