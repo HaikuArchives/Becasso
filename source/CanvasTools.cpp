@@ -34,7 +34,6 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
-#include <bsd_mem.h>	// for bzero() since R4.1
 #include "PosView.h"
 
 // #define USE_THREAD_FOR_POSITION

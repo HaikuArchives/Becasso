@@ -18,8 +18,6 @@
 #include <Debug.h>
 #include <Node.h>
 
-#define bzero(p,n) memset(p,0,n)
-
 #if defined (DATATYPES)
 #	include "Datatypes.h"
 #endif

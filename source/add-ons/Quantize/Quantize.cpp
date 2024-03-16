@@ -9,8 +9,6 @@
 #include <RadioButton.h>
 #include <Box.h>
 
-#define bzero(p,n) memset (p, 0, n)
-
 int16 *gLut = 0;
 
 #define FOREGROUND 0

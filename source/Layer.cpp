@@ -4,8 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define bzero(p,n) memset(p,0,n)
-
 Layer::Layer (BRect bounds, const char *name)
 : BBitmap (bounds, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
 {
