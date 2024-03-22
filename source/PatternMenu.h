@@ -13,33 +13,35 @@
 
 class PatternMenuButton;
 
-class PatternMenu : public BMenu
-{
-friend class PatternMenuButton;
-public:
-					 PatternMenu (BView *_view, int h, int v, float s);
-virtual				~PatternMenu ();
-virtual void		 AddItem (PatternItem *item, BRect frame);
-virtual void		 MouseMoved (BPoint point, uint32 transit, const BMessage *msg);
-PatternItem			*FindMarked ();
-PatternItem			*ItemAt (int i);
-virtual void		 Mark (int _index);
-void				 setParent (PatternMenuButton *pmb);
-PatternMenuButton	*getParent () { return parent; };
-void				 TearDone (BRect place, bool newwin);
-void				 InvalidateWindow ();
+class PatternMenu : public BMenu {
+	friend class PatternMenuButton;
 
-protected:
-virtual BPoint ScreenLocation ();
+  public:
+	PatternMenu(BView* _view, int h, int v, float s);
+	virtual ~PatternMenu();
+	virtual void AddItem(PatternItem* item, BRect frame);
+	virtual void MouseMoved(BPoint point, uint32 transit, const BMessage* msg);
+	PatternItem* FindMarked();
+	PatternItem* ItemAt(int i);
+	virtual void Mark(int _index);
+	void setParent(PatternMenuButton* pmb);
 
-private:
-typedef BMenu inherited;
-DragWindow			*fWindow;
-PatternMenuButton	*parent;
-PatternItem			*items[MAX_PATTERNS];
-int 				 index;
-BView				*view;
-float				 hs, vs;
+	PatternMenuButton* getParent() { return parent; };
+
+	void TearDone(BRect place, bool newwin);
+	void InvalidateWindow();
+
+  protected:
+	virtual BPoint ScreenLocation();
+
+  private:
+	typedef BMenu inherited;
+	DragWindow* fWindow;
+	PatternMenuButton* parent;
+	PatternItem* items[MAX_PATTERNS];
+	int index;
+	BView* view;
+	float hs, vs;
 };
 
 #endif

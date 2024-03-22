@@ -24,14 +24,12 @@
 class BBitmap;
 class BInvoker;
 
-
 // All functions are virtual for weak linkage to work
 
-class _IMPEXP_IMAGEMANIP BBitmapAccessor : public BitmapAccessor
-{
-public:
+class _IMPEXP_IMAGEMANIP BBitmapAccessor : public BitmapAccessor {
+  public:
 	// Constructor
-	BBitmapAccessor(BBitmap *bitmap = NULL, const BRect *section = NULL);
+	BBitmapAccessor(BBitmap* bitmap = NULL, const BRect* section = NULL);
 
 	// Overriden BitmapAccessor functions
 	virtual ~BBitmapAccessor();
@@ -39,11 +37,11 @@ public:
 	virtual bool CreateBitmap(BRect bounds, color_space space);
 	virtual BRect Bounds();
 	virtual color_space ColorSpace();
-	virtual void *AccessBits(BRect area, int32 *rowBytes);
+	virtual void* AccessBits(BRect area, int32* rowBytes);
 	virtual void BitsNotChanged();
 
 	// Get pointer to the BBitmap
-	virtual BBitmap *Bitmap() const;
+	virtual BBitmap* Bitmap() const;
 
 	// Get/set if the BBitmap should be deleted at destruction time
 	virtual bool Dispose() const;
@@ -51,31 +49,28 @@ public:
 
 	// Set invokers for automatically sending messages when a bitmap
 	// is created and/or when it is updated
-	virtual void SetInvokers(BInvoker *bitmapCreated, BInvoker *bitmapUpdated);
+	virtual void SetInvokers(BInvoker* bitmapCreated, BInvoker* bitmapUpdated);
 
-private:
+  private:
 	virtual void _ReservedBBitmapAccessor1();
 	virtual void _ReservedBBitmapAccessor2();
 	virtual void _ReservedBBitmapAccessor3();
 
-	BBitmap *mBitmap;
+	BBitmap* mBitmap;
 	BRect mBounds;
 	float mPixelSize;
 	bool mDispose;
 	BRect mLastArea;
 	bool mLastAreaChanged;
-	BInvoker *mCreateInvoker;
-	BInvoker *mUpdateInvoker;
+	BInvoker* mCreateInvoker;
+	BInvoker* mUpdateInvoker;
 
 	int32 _reserved[3];
 };
 
-
 // Create a new BBitmapAccessor object; mimics the contructor
-extern "C" _IMPEXP_IMAGEMANIP BBitmapAccessor *
-Image_CreateBBitmapAccessor(
-	BBitmap *bitmap = NULL,
-	const BRect *section = NULL);
+extern "C" _IMPEXP_IMAGEMANIP BBitmapAccessor*
+Image_CreateBBitmapAccessor(BBitmap* bitmap = NULL, const BRect* section = NULL);
 
 
-#endif  // _BBITMAP_ACCESSOR_H_
+#endif // _BBITMAP_ACCESSOR_H_

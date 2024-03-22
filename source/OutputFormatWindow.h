@@ -45,32 +45,31 @@
 class BInvoker;
 class BPositionIO;
 
-
-class OutputFormatWindow : public BWindow
-{
-public:
+class OutputFormatWindow : public BWindow {
+  public:
 	OutputFormatWindow(
 		// Input stream (e.g. a ProgressiveBitmapStream of the bitmap to save)
-		BPositionIO *in_stream,
+		BPositionIO* in_stream,
 		// Invoker for when an output format is selected
-		BInvoker *item_selected,
+		BInvoker* item_selected,
 		// Invoker for when the window is cancelled (optional)
-		BInvoker *window_cancelled = 0,
+		BInvoker* window_cancelled = 0,
 		// Translator roster to use, or 0 for the default
-		BTranslatorRoster *roster = 0);
+		BTranslatorRoster* roster = 0
+	);
 
 	virtual ~OutputFormatWindow();
-	virtual void MessageReceived(BMessage *msg);
+	virtual void MessageReceived(BMessage* msg);
 	virtual bool QuitRequested();
 
-private:
-	BPositionIO *the_stream;
-	BInvoker *selected_invoker;
-	BInvoker *cancelled_invoker;
-	BTranslatorRoster *the_roster;
+  private:
+	BPositionIO* the_stream;
+	BInvoker* selected_invoker;
+	BInvoker* cancelled_invoker;
+	BTranslatorRoster* the_roster;
 	bool message_sent;
 	bool setup_done;
 };
 
 
-#endif  // OUTPUT_FORMAT_WINDOW_H
+#endif // OUTPUT_FORMAT_WINDOW_H

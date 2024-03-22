@@ -15,19 +15,17 @@
 
 class PalletWindow : public BWindow {
 
-public:
-						PalletWindow(BRect Frame,
-									const char *name = "PalletWindow",
-									int Orientation = 0);
-virtual					~PalletWindow();
-		DragView		*dv;
-/*
-virtual	void			Quit();
-virtual void			ScreenChanged(BRect screen_size, color_space depth);
-virtual	void			WindowActivated(bool state);
-virtual	void			Show();
-virtual	void			Hide();
-*/
+  public:
+	PalletWindow(BRect Frame, const char* name = "PalletWindow", int Orientation = 0);
+	virtual ~PalletWindow();
+	DragView* dv;
+	/*
+	virtual	void			Quit();
+	virtual void			ScreenChanged(BRect screen_size, color_space depth);
+	virtual	void			WindowActivated(bool state);
+	virtual	void			Show();
+	virtual	void			Hide();
+	*/
 };
 
 #endif

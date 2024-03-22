@@ -67,8 +67,8 @@
  */
 
 
-#ifndef	PROGRESSIVE_BITMAP_STREAM_H
-#define	PROGRESSIVE_BITMAP_STREAM_H
+#ifndef PROGRESSIVE_BITMAP_STREAM_H
+#define PROGRESSIVE_BITMAP_STREAM_H
 
 
 #include <Point.h>
@@ -80,64 +80,59 @@ class BBitmap;
 class BInvoker;
 class BarWindow;
 
+class ProgressiveBitmapStream : public BPositionIO {
+  public:
+	// Constructor for when used as source
+	ProgressiveBitmapStream(BBitmap* bitmap);
 
-class ProgressiveBitmapStream : public BPositionIO
-{
-public:
-						// Constructor for when used as source
-						ProgressiveBitmapStream(BBitmap *bitmap);
+	// Constructor for when used as destination
+	ProgressiveBitmapStream(
+		BInvoker* bitmap_created = 0, BInvoker* rect_updated = 0, bool dither = false,
+		bool keep_org = false
+	);
 
-						// Constructor for when used as destination
-						ProgressiveBitmapStream(
-							BInvoker *	bitmap_created = 0,
-							BInvoker *	rect_updated = 0,
-							bool 		dither = false,
-							bool 		keep_org = false);
+	virtual ~ProgressiveBitmapStream();
+	ssize_t Write(const void* buffer, size_t size);
+	ssize_t ReadAt(off_t pos, void* buffer, size_t size);
+	ssize_t WriteAt(off_t pos, const void* buffer, size_t size);
+	off_t Seek(off_t position, uint32 seek_mode);
+	off_t Position() const;
+	status_t SetSize(off_t numBytes);
+	void SetDispose(bool dispose);
+	BBitmap* Bitmap() const;
+	BBitmap* OriginalBitmap();
+	void ForceErrors();
+	bool ErrorsForced() const;
+	void DisplayProgressBar(BPoint left_top, const char* window_title);
 
-	virtual				~ProgressiveBitmapStream();
-	ssize_t				Write(const void *buffer, size_t size);
-	ssize_t				ReadAt(off_t pos, void *buffer, size_t size);
-	ssize_t				WriteAt(off_t pos, const void *buffer, size_t size);
-	off_t				Seek(off_t position, uint32 seek_mode);
-	off_t				Position() const;
-	status_t			SetSize(off_t numBytes);
-  	void				SetDispose(bool dispose);
-	BBitmap *			Bitmap() const;
-	BBitmap *			OriginalBitmap();
-	void				ForceErrors();
-	bool				ErrorsForced() const;
-	void				DisplayProgressBar(
-							BPoint left_top,
-							const char *window_title);
-
-private:
-	bool				fWriteOnly;
-	bool				fDispose;
-	bool				fDisposeOrg;
-	TranslatorBitmap	fHeader;
-	BBitmap *			fBitmap;
-	BBitmap *			fOrgBitmap;
-	bool				fBar;
-	BInvoker *			fBitmapInvoker;
-	BInvoker *			fRectInvoker;
-	off_t				fPosition;
-	off_t				fSize;
-	float				fBytesPerPixel;
-	void				SetExtras();
-	bool				fForceErrors;
-	bool				fDither;
-	bool				fKeepOrg;
-	void				Dither(const uchar *src, int32 place, int32 n_bytes);
-	BPoint				fBarLeftTop;
-	char				fBarTitle[81];
-	BarWindow *			fBarWin;
-	bool				fSeeked;
-	float *				fDeltaBuffer;
-	const rgb_color *	palette;
-	const uchar *		index_list;
-	int32				fHeaderWritten;
-	uint32				fDataSize;
+  private:
+	bool fWriteOnly;
+	bool fDispose;
+	bool fDisposeOrg;
+	TranslatorBitmap fHeader;
+	BBitmap* fBitmap;
+	BBitmap* fOrgBitmap;
+	bool fBar;
+	BInvoker* fBitmapInvoker;
+	BInvoker* fRectInvoker;
+	off_t fPosition;
+	off_t fSize;
+	float fBytesPerPixel;
+	void SetExtras();
+	bool fForceErrors;
+	bool fDither;
+	bool fKeepOrg;
+	void Dither(const uchar* src, int32 place, int32 n_bytes);
+	BPoint fBarLeftTop;
+	char fBarTitle[81];
+	BarWindow* fBarWin;
+	bool fSeeked;
+	float* fDeltaBuffer;
+	const rgb_color* palette;
+	const uchar* index_list;
+	int32 fHeaderWritten;
+	uint32 fDataSize;
 };
 
 
-#endif  // PROGRESSIVE_BITMAP_STREAM_H
+#endif // PROGRESSIVE_BITMAP_STREAM_H
