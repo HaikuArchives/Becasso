@@ -1,7 +1,7 @@
 /* Credits
 
 - William Bull (advice on GUI and architecture)
-- BeDevTalk, esp. Jon Wãtte (Datatypes and many tips) and Chris Herborth 
+- BeDevTalk, esp. Jon Wãtte (Datatypes and many tips) and Chris Herborth
   (color tips, beta testing),
 - Raphael Moll (beta testing and many tips)
 - Thomas Fletcher

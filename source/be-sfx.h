@@ -68,136 +68,89 @@
 #include <Locker.h>
 #include <stdlib.h>
 
+enum { kLoopForever = -1, kDontLoop = 0 };
 
-enum {
-	kLoopForever = -1,
-	kDontLoop = 0
+class SoundEffect {
+  public:
+	/* set swap_data to true if data is in different byte order than host */
+	SoundEffect(bool swap_data, short* pointer, int numFrames, int nLoops = kDontLoop);
+	~SoundEffect();
+
+	short* GetBuffer(int& numFrames, int& numLoops);
+
+  protected:
+	short* fPointer;
+	int fFrames;
+	int fLoops;
 };
 
-class SoundEffect
-{
-public:
+class SoundEffect8_11 : public SoundEffect {
+  protected:
+	/*	set toggle to true if sound is in unsigned char format		*/
+	/*	this only does linear expansion - mulaw requires another subclass	*/
+	/*	No swapping necessary for 8-bit samples...	*/
+	static short* Convert8_11(char* buffer, int size, int loop = kDontLoop, bool toggle = false);
 
-			/* set swap_data to true if data is in different byte order than host */
-								SoundEffect(
-									bool			swap_data,
-									short *			pointer,
-									int				numFrames,
-									int				nLoops = kDontLoop);
-								~SoundEffect();
-
-		short *					GetBuffer(
-									int &			numFrames,
-									int &			numLoops);
-
-protected:
-		short *					fPointer;
-		int						fFrames;
-		int						fLoops;
+  public:
+	SoundEffect8_11(char* buffer, int size, int loops = kDontLoop, bool toggle = false);
 };
-
-
-class SoundEffect8_11 :
-	public SoundEffect
-{
-protected:
-
-				/*	set toggle to true if sound is in unsigned char format		*/
-				/*	this only does linear expansion - mulaw requires another subclass	*/
-				/*	No swapping necessary for 8-bit samples...	*/
-static	short *					Convert8_11(
-									char *			buffer,
-									int				size,
-									int				loop = kDontLoop,
-									bool			toggle = false);
-
-public:
-								SoundEffect8_11(
-									char *			buffer,
-									int				size,
-									int				loops = kDontLoop,
-									bool			toggle = false);
-};
-
 
 typedef int effect_id;
 
-enum {		/*	reasons for SoundCompleted		*/
-	kSoundDone,			/*	sound played the last sample		*/
-	kSoundLooping,		/*	sound will loop to first sample	*/
-	kSoundEvicted,		/*	sound was evicted by newer sound	*/
-	kSoundStopped		/*	sound was manually stopped			*/
+enum {				  /*	reasons for SoundCompleted		*/
+	   kSoundDone,	  /*	sound played the last sample		*/
+	   kSoundLooping, /*	sound will loop to first sample	*/
+	   kSoundEvicted, /*	sound was evicted by newer sound	*/
+	   kSoundStopped  /*	sound was manually stopped			*/
 };
 
-class EffectsPlayer :
-	public BSubscriber
-{
-public:
+class EffectsPlayer : public BSubscriber {
+  public:
+	EffectsPlayer(int backgroundVolume = 0, int nChannels = 8);
+	~EffectsPlayer();
 
-								EffectsPlayer(
-									int				backgroundVolume = 0,
-									int				nChannels = 8);
-								~EffectsPlayer();
+	status_t InitCheck() { return fInit; }
 
-		status_t				InitCheck()
-									{
-										return fInit;
-									}
+	effect_id StartEffect(/*	don't delete the effect until the player is gone	*/
+						  SoundEffect* effect, int volume = 127, int pan = 0
+	);
+	bool IsPlaying(effect_id effect);
+	void StopEffect(effect_id effect);
+	virtual void SoundCompleted(effect_id effect, int reason);
 
-		effect_id				StartEffect(	/*	don't delete the effect until the player is gone	*/
-									SoundEffect *	effect,
-									int				volume = 127,
-									int				pan = 0);
-		bool					IsPlaying(
-									effect_id		effect);
-		void					StopEffect(
-									effect_id		effect);
-virtual	void					SoundCompleted(
-									effect_id		effect,
-									int				reason);
+	void SetEffectVolPan(/*	-1 means no change	*/
+						 effect_id effect, int vol = -1, int pan = -1
+	);
 
-		void					SetEffectVolPan(	/*	-1 means no change	*/
-									effect_id		effect,
-									int				vol = -1,
-									int				pan = -1);
+	void SetVolume(int volume); /*	0->15	*/
+	int GetVolume();
+	void SetBackgroundVolume(int bgVolume);
+	int GetBackgroundVolume();
+	void Mix(short* buffer, int numFrames);
 
-		void					SetVolume(
-									int				volume);	/*	0->15	*/
-		int						GetVolume();
-		void					SetBackgroundVolume(
-									int				bgVolume);
-		int						GetBackgroundVolume();
-		void					Mix(
-									short *			buffer,
-									int				numFrames);
+	static bool PlayHook(void* userData, char* buffer, size_t count, void* /* header */);
 
-static	bool					PlayHook(
-									void *			userData,
-									char *			buffer,
-									size_t			count,
-									void *			/* header */);
-protected:
+  protected:
+	status_t fInit;
+	BDACStream* fOutput;
+	int fVolume;
+	int fBGVolume;
+	effect_id fNextEffect;
 
-		status_t				fInit;
-		BDACStream *			fOutput;
-		int						fVolume;
-		int						fBGVolume;
-		effect_id				fNextEffect;
+	struct PlayingEffect {
+		short* data;
+		int frames;
+		int offset;
+		int lvol;
+		int rvol;
+		int loop;
+		effect_id id;
+	};
 
-		struct PlayingEffect {
-			short *						data;
-			int							frames;
-			int							offset;
-			int							lvol;
-			int							rvol;
-			int							loop;
-			effect_id					id;
-		};
-		PlayingEffect *			fPlayList;
-		int						nPlaying;
-		int						fPlaySize;
-		BLocker					fLock;
+	PlayingEffect* fPlayList;
+	int nPlaying;
+	int fPlaySize;
+	BLocker fLock;
 };
 
 #endif /* BE_SFX_H	*/
-

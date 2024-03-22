@@ -1,8 +1,9 @@
 #include <stdarg.h>
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 extern "C"
 #endif
-void verbose (int level, const char *format, ...);
+	void
+	verbose(int level, const char* format, ...);
 
 extern int DebugLevel;

@@ -3,16 +3,15 @@
 
 #include <Window.h>
 
-class NagWindow : public BWindow
-{
-public:
-			 NagWindow (BRect frame);
-virtual		~NagWindow ();
+class NagWindow : public BWindow {
+  public:
+	NagWindow(BRect frame);
+	virtual ~NagWindow();
 
-virtual void Go ();	 
+	virtual void Go();
 
-private:
-typedef BWindow inherited;
+  private:
+	typedef BWindow inherited;
 };
 
 #endif
