@@ -3,7 +3,8 @@
 
 #include <Window.h>
 
-class NagWindow : public BWindow {
+class NagWindow : public BWindow
+{
   public:
 	NagWindow(BRect frame);
 	virtual ~NagWindow();

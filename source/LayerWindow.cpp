@@ -82,13 +82,11 @@ LayerWindow::doChanges(int index)
 		if (myView->currentLayerIndex() == 0) {
 			layerM->FindItem('dell')->SetEnabled(false);
 			layerM->FindItem('mrgl')->SetEnabled(false);
-		}
-		else {
+		} else {
 			layerM->FindItem('dell')->SetEnabled(true);
 			layerM->FindItem('mrgl')->SetEnabled(true);
 		}
-	}
-	else {
+	} else {
 		// printf ("Refresh %i\n", index);
 		layerView->getLayerItem(index)->Refresh(myView->getLayer(index));
 	}
@@ -154,8 +152,7 @@ LayerWindow::MessageReceived(BMessage* msg)
 			// most common operation anyway.
 			layerView->getLayerItem(prev)->select(false);
 			layerView->getLayerItem(current)->select(true);
-		}
-		else // ugh - rebuild the entire menu.  Bad bad bad.
+		} else // ugh - rebuild the entire menu.  Bad bad bad.
 		{
 			BRect viewFrame, menubarFrame;
 			menubarFrame = menubar->Frame();

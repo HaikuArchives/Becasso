@@ -25,7 +25,8 @@
 #define STOP_PRESSED 'STOP'
 
 // BarWindow class
-class BarWindow : public BWindow {
+class BarWindow : public BWindow
+{
   public:
 	BarWindow(BRect frame, char* window_title, float max);
 	virtual void MessageReceived(BMessage* msg);
@@ -291,8 +292,7 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 				fBitmap = new BBitmap(fHeader.bounds, B_COLOR_8_BIT);
 				if (fKeepOrg)
 					fOrgBitmap = new BBitmap(fHeader.bounds, fHeader.colors);
-			}
-			else {
+			} else {
 				fBitmap = new BBitmap(fHeader.bounds, fHeader.colors);
 			}
 
@@ -328,8 +328,7 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 				);
 			}
 			Dither(static_cast<const uchar*>(buffer) + to_header, in_bitmap, to_bitmap);
-		}
-		else {
+		} else {
 			memcpy(
 				static_cast<char*>(fBitmap->Bits()) + in_bitmap,
 				static_cast<const char*>(buffer) + to_header, to_bitmap
@@ -347,8 +346,7 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 			if (bottom == top) {
 				left /= int(fBytesPerPixel);
 				right /= int(fBytesPerPixel);
-			}
-			else {
+			} else {
 				left = 0;
 				right = int(fHeader.bounds.right);
 			}
@@ -555,8 +553,7 @@ ProgressiveBitmapStream::Dither(const uchar* src, int32 place, int32 n_bytes)
 				r = int(src[2] + r_delta);
 				g = (int32)src[1] + (int32)g_delta;
 				b = (int32)src[0] + (int32)b_delta;
-			}
-			else {
+			} else {
 				// Floyd-Steinberg diffusion
 				r =
 					int(src[2] + r_delta * 0.4375 + deltas[0] * 0.0625 + deltas[3] * 0.3125 +

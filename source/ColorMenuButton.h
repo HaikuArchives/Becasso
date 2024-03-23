@@ -16,7 +16,8 @@
 #define C_H_NUM 32
 #define C_SIZE 12
 
-class ColorMenuButton : public BView {
+class ColorMenuButton : public BView
+{
   public:
 	ColorMenuButton(const char* ident, BRect frame, const char* name);
 	virtual ~ColorMenuButton();

@@ -91,8 +91,7 @@ BufferProc(void* theCookie, void* buffer, size_t size, const media_raw_audio_for
 		//				buf[i + j] = 0.0;
 		//		}
 		cookie->pos += channel_count * num_frames;
-	}
-	else {
+	} else {
 		//		printf ("Done.\n");
 		cookie->parent->player()->SetHasData(false);
 		// cookie->parent->player()->Stop();

@@ -5,7 +5,8 @@
 #include <Button.h>
 #include <Bitmap.h>
 
-class SAboutView : public BView {
+class SAboutView : public BView
+{
   public:
 	SAboutView(BRect rect, BBitmap* becasso, BBitmap* sum, bool startup = false);
 	virtual ~SAboutView();

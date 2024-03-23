@@ -35,7 +35,8 @@ random(int max)
 	// A bit convoluted, but this is necessary on GCC because RAND_MAX is MAX_INT.
 }
 
-class DiffuseView : public BView {
+class DiffuseView : public BView
+{
   public:
 	DiffuseView(BRect rect) : BView(rect, "diffuse_view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -181,8 +182,7 @@ process(
 					// printf ("(%d, %d): (%d, %d)\n", x, y, xspread, yspread);
 					bgra_pixel* p = ++sbits + yspread * w + xspread;
 					*(++dbits) = *p;
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

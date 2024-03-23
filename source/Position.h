@@ -5,7 +5,8 @@
 
 #define POSITION_QUEUE 256
 
-typedef struct {
+typedef struct
+{
 	BPoint fPoint;
 	BPoint fTilt;
 	uint32 fButtons;

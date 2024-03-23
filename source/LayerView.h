@@ -9,7 +9,8 @@
 #include "LayerItem.h"
 #include "AttribDraw.h" // For MAX_LAYERS
 
-class LayerView : public BView {
+class LayerView : public BView
+{
   public:
 	LayerView(BRect frame, const char* name, CanvasView* _myView);
 	virtual ~LayerView();

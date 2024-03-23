@@ -74,12 +74,10 @@ pixelblend(bgra_pixel d, bgra_pixel s)
 	if (sa == 255 || !(d & 0xFF)) // Fully opaque
 	{
 		res = s;
-	}
-	else if (sa == 0) // Fully transparent
+	} else if (sa == 0) // Fully transparent
 	{
 		res = d;
-	}
-	else {
+	} else {
 		res =
 			((((d & 0xFF000000) / ta) * da + ((s & 0xFF000000) / ta) * sa) & 0xFF000000) |
 			((((d & 0x00FF0000) / ta) * da + ((s & 0x00FF0000) / ta) * sa) & 0x00FF0000) |
@@ -96,12 +94,10 @@ pixelblend(bgra_pixel d, bgra_pixel s)
 	if (sa == 255 || !(d >> 24)) // Fully opaque
 	{
 		res = s;
-	}
-	else if (sa == 0) // Fully transparent
+	} else if (sa == 0) // Fully transparent
 	{
 		res = d;
-	}
-	else {
+	} else {
 		res = ((((d & 0x00FF0000) * da + (s & 0x00FF0000) * sa) / ta) & 0x00FF0000) |
 			  ((((d & 0x0000FF00) * da + (s & 0x0000FF00) * sa) / ta) & 0x0000FF00) |
 			  ((((d & 0x000000FF) * da + (s & 0x000000FF) * sa) / ta) & 0x000000FF) |
@@ -197,8 +193,7 @@ contrastingcolor(rgb_color a, rgb_color b)
 			return (Black);
 		else
 			return (White);
-	}
-	else
+	} else
 		return (Red);
 }
 

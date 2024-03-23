@@ -41,7 +41,8 @@
 #define IMAGE_CONF_CONV 'cnfc'
 
 // MyFilePanel class
-class MyFilePanel : public BFilePanel {
+class MyFilePanel : public BFilePanel
+{
 	virtual void WasHidden()
 	{
 		be_app->PostMessage(WINDOW_CLOSED);
@@ -50,7 +51,8 @@ class MyFilePanel : public BFilePanel {
 };
 
 // ExampleApp class
-class ExampleApp : public BApplication {
+class ExampleApp : public BApplication
+{
   public:
 	ExampleApp();
 	virtual void ReadyToRun(void);
@@ -64,7 +66,8 @@ class ExampleApp : public BApplication {
 };
 
 // BitmapView class
-class BitmapView : public BView {
+class BitmapView : public BView
+{
   public:
 	BitmapView(BBitmap* bitmap);
 	~BitmapView();
@@ -82,7 +85,8 @@ class BitmapView : public BView {
 };
 
 // ImageWindow class
-class ImageWindow : public BWindow {
+class ImageWindow : public BWindow
+{
   public:
 	ImageWindow(const char* title, BBitmap* bitmap);
 	virtual bool QuitRequested(void);
@@ -104,7 +108,8 @@ class ImageWindow : public BWindow {
 };
 
 // ConfigWindow class
-class ConfigWindow : public BWindow {
+class ConfigWindow : public BWindow
+{
 	BMessenger* mWindow;
 	int mAddonId;
 	int32 mWhat;
@@ -272,8 +277,7 @@ ExampleApp::RefsReceived(BMessage* msg)
 		if (mBitmap) {
 			// Open new window with bitmap
 			new ImageWindow(file_name, mBitmap);
-		}
-		else {
+		} else {
 			char alert_string[256];
 			sprintf(alert_string, "Couldn't get bitmap for '%s'.", file_name);
 			(new BAlert("Error", alert_string, "OK"))->Go();

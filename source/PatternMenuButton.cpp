@@ -116,8 +116,7 @@ PatternMenuButton::MouseDown(BPoint point)
 			//			msg->AddInt32 ("color", c.blue);
 			//			editor->PostMessage (msg);
 			//			delete msg;
-		}
-		else {
+		} else {
 			ShowEditor();
 		}
 	}
@@ -141,8 +140,7 @@ PatternMenuButton::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		hlp->AddString("View", _name);
 		Window()->PostMessage(hlp);
 		delete hlp;
-	}
-	else if (transit == B_EXITED_VIEW) {
+	} else if (transit == B_EXITED_VIEW) {
 		BMessage* hlp = new BMessage('chlp');
 		hlp->AddString("View", "");
 		Window()->PostMessage(hlp);

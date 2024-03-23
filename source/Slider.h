@@ -11,7 +11,8 @@
 #include <TextControl.h>
 #include "Build.h"
 
-class IMPEXP Slider : public BView {
+class IMPEXP Slider : public BView
+{
   public:
 	Slider(
 		BRect frame, float sep, const char* name, float _min, float _max, float step,

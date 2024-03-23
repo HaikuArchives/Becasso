@@ -67,7 +67,8 @@ ColorMenu::FindMarked()
 	return (items[index]);
 }
 
-class colorTearInfo {
+class colorTearInfo
+{
   public:
 	colorTearInfo(BRect r, ColorMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
@@ -189,8 +190,7 @@ ColorMenu::TearDone(BRect place, bool newwin)
 		ColorMenuView* mv = new ColorMenuView(mvRect, "MenuView", parent);
 		fWindow->AddChild(mv);
 		fWindow->Show();
-	}
-	else {
+	} else {
 		fWindow->MoveTo(place.LeftTop());
 		fWindow->Activate();
 	}

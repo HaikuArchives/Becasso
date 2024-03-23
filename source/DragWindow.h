@@ -6,7 +6,8 @@
 #include <string.h>
 #include "Settings.h"
 
-class DragWindow : public BWindow {
+class DragWindow : public BWindow
+{
   public:
 	DragWindow(const char* kind, BRect frame, const char* title)
 		: BWindow(

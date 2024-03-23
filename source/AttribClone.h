@@ -14,7 +14,8 @@
 #define PROP_Y 5
 #define PROP_HARDNESS 6
 
-class AttribClone : public AttribView {
+class AttribClone : public AttribView
+{
   public:
 	AttribClone();
 	virtual ~AttribClone();

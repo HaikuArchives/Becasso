@@ -16,7 +16,8 @@
 
 // hey app set Active of Window X to true
 
-class CaptureWindow : public BWindow {
+class CaptureWindow : public BWindow
+{
   public:
 	CaptureWindow(BRect rect)
 		: BWindow(
@@ -46,7 +47,8 @@ recurse_views(BMessenger view, BMessenger mgr, BMessenger* result);
 const char*
 nstr(char* d, const char* s, const int n);
 
-class GrabView : public BView {
+class GrabView : public BView
+{
   public:
 	GrabView(BRect rect, const char* name)
 		: BView(rect, name, B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW)
@@ -231,8 +233,7 @@ recurse_views(BMessenger view, BMessenger mgr, BMessenger* result)
 			found = true;
 			depth--;
 			return B_OK;
-		}
-		else {
+		} else {
 			if (recurse_views(view, mgr, result) == B_OK) {
 				//				printf ("Found in a kid\n");
 				depth--;
@@ -296,8 +297,7 @@ window_for_messenger(BMessenger mgr, BMessenger* window, BLooper* us)
 		if (looper // The camera was dropped on one of our own windows, so tread with caution...
 			&& be_app->WindowAt(i)->Looper() == us) {
 			// skip this one
-		}
-		else {
+		} else {
 			BMessenger thewin;
 			msg = new BMessage(B_GET_PROPERTY);
 			msg->AddSpecifier("Window", i);
@@ -318,7 +318,7 @@ window_for_messenger(BMessenger mgr, BMessenger* window, BLooper* us)
 			delete msg;
 
 			//			printf ("Window %i (%s) has %i view(s)\n", i, reply.FindString ("result"),
-			//num_views);
+			// num_views);
 			for (int j = 0; j < num_views; j++) {
 				BMessenger theview;
 				msg = new BMessage(B_GET_PROPERTY);
@@ -368,8 +368,7 @@ GrabView::MessageReceived(BMessage* msg)
 				msg->AddInt32("index", window->fIndex);
 				be_app->PostMessage(msg);
 				delete msg;
-			}
-			else
+			} else
 				printf("Couldn't find the window.\n");
 		}
 		break;
@@ -573,7 +572,6 @@ bitmap(char* title)
 		}
 
 		return (b);
-	}
-	else
+	} else
 		return (NULL);
 }

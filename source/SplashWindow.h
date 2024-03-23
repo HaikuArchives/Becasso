@@ -5,7 +5,8 @@
 
 class SAboutView;
 
-class SplashWindow : public BWindow {
+class SplashWindow : public BWindow
+{
   public:
 	SplashWindow(BRect rect, BBitmap* becasso, BBitmap* sum);
 	virtual ~SplashWindow();

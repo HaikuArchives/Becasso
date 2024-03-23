@@ -10,7 +10,8 @@
 #define DIAL_90 90
 #define DIAL_360 360
 
-class IMPEXP Dial : public BView {
+class IMPEXP Dial : public BView
+{
   public:
 	Dial(BRect frame, const char* name, int type, BMessage* msg);
 	~Dial();

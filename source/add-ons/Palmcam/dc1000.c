@@ -471,8 +471,7 @@ main(int argc, char* argv[])
 	if (dsc_close(dsc) == -1) {
 		fprintf(stderr, "%s: %s\n", logname, dsc_strerror(&dsc->lasterror));
 		error = -1;
-	}
-	else if (flag_V)
+	} else if (flag_V)
 		printf("Connection successfully closed.\n\n");
 
 	return (error == -1 ? 1 : 0);
@@ -654,8 +653,7 @@ int delete(dsc_t* dsc, int* index, int flag_V)
 			for (i = n; i < DSCMAXIMAGE; i++)
 				index[i] = index[i + 1];
 			index[DSCMAXIMAGE] = 0;
-		}
-		else
+		} else
 			n++;
 
 	return (sigint ? -1 : 0);
@@ -709,8 +707,7 @@ parse(int* index, const char* arg)
 				break;
 
 			lp = ++p;
-		}
-		else {
+		} else {
 			fprintf(stderr, "%s: bad character `%c' in index\n", logname, a[p]);
 			break;
 		}
@@ -780,8 +777,7 @@ getimage(dsc_t* dsc, int index, const char* name, int flag_V, int flag_q, int fl
 				returnerrno();
 
 			flag_c = 0;
-		}
-		else {
+		} else {
 			if (flag_V)
 				printf("Found file \"%s\" %lu bytes.\n", name, (unsigned long)statbuf.st_size);
 
@@ -833,8 +829,7 @@ getimage(dsc_t* dsc, int index, const char* name, int flag_V, int flag_q, int fl
 				printf("Remaining size is %u bytes. Reading", (unsigned int)(imagesize - csize));
 				if (flag_q)
 					printf("...\n");
-			}
-			else if (!flag_q) {
+			} else if (!flag_q) {
 				printf("%s (%u bytes) reading", name, (unsigned int)imagesize);
 				for (i = 0; i < cblk; i++)
 					putchar(',');
@@ -864,8 +859,7 @@ getimage(dsc_t* dsc, int index, const char* name, int flag_V, int flag_q, int fl
 			printf("Image size is %u bytes.\nReading", (unsigned int)imagesize);
 			if (flag_q)
 				printf("...\n");
-		}
-		else if (!flag_q)
+		} else if (!flag_q)
 			printf("%s (%u bytes) reading", name, (unsigned int)imagesize);
 	}
 
@@ -875,8 +869,7 @@ getimage(dsc_t* dsc, int index, const char* name, int flag_V, int flag_q, int fl
 	if (flag_c) {
 		i = cblk;
 		s = csize;
-	}
-	else {
+	} else {
 		i = 0;
 		s = 0;
 	}
@@ -890,8 +883,7 @@ getimage(dsc_t* dsc, int index, const char* name, int flag_V, int flag_q, int fl
 				returnerrno();
 			if (dsc_requestimage(dsc, index) == -1)
 				returnerror();
-		}
-		else {
+		} else {
 			if (write(file, buf, b) != b)
 				returnerrno();
 			if (!flag_q) {

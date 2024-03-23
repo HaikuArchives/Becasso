@@ -322,14 +322,12 @@ AttribRoundRect::MessageReceived(BMessage* msg)
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = RRECT_OUTFILL;
-				}
-				else if (!strcasecmp(name, "Filled")) {
+				} else if (!strcasecmp(name, "Filled")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_ON);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = RRECT_FILL;
-				}
-				else if (!strcasecmp(name, "Outline")) {
+				} else if (!strcasecmp(name, "Outline")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_ON);
@@ -342,8 +340,7 @@ AttribRoundRect::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}
@@ -357,8 +354,7 @@ AttribRoundRect::MessageReceived(BMessage* msg)
 				if (!strcasecmp(name, "Relative")) {
 					rel->SetValue(B_CONTROL_ON);
 					value = RRECT_RELATIVE;
-				}
-				else if (!strcasecmp(name, "Absolute")) {
+				} else if (!strcasecmp(name, "Absolute")) {
 					abs->SetValue(B_CONTROL_ON);
 					value = RRECT_ABSOLUTE;
 				}
@@ -369,8 +365,7 @@ AttribRoundRect::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

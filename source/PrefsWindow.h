@@ -11,7 +11,8 @@ class BTextControl;
 class BPopUpMenu;
 class Slider;
 
-class PrefsWindow : public BWindow {
+class PrefsWindow : public BWindow
+{
   public:
 	PrefsWindow();
 	virtual ~PrefsWindow();

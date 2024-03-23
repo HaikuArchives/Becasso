@@ -17,7 +17,8 @@
 #define COLOR_BG 1
 #define COLOR_TR 2
 
-class SizeWindow : public BWindow {
+class SizeWindow : public BWindow
+{
   public:
 	SizeWindow(int32 h, int32 w, int32 c);
 	virtual ~SizeWindow();

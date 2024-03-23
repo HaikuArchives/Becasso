@@ -103,7 +103,8 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	sFrame.Set(16, 290, 160, 308);
 	vFrame.Set(16, 312, 160, 330);
 	hTC = new BTextControl(hFrame, "hTC", lstring(199, "Hue (0–360)"), hS, new BMessage('TrbH'));
-	sTC = new BTextControl(sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
+	sTC =
+		new BTextControl(sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
 	vTC = new BTextControl(vFrame, "vTC", lstring(201, "Value (0–1)"), vS, new BMessage('TrbV'));
 	hTC->SetDivider(90);
 	sTC->SetDivider(90);
@@ -235,7 +236,7 @@ ColorWindow::MessageReceived(BMessage* msg)
 		}
 		//		char *htmlString;
 		//		if (msg->FindData ("text/plain", B_MIME_TYPE, (void **) &htmlString, &dummy) ==
-		//B_OK)
+		// B_OK)
 		//		{
 		//			printf ("HTML: <%s>\n", htmlString);
 		//		}
@@ -327,7 +328,7 @@ ColorWindow::MessageReceived(BMessage* msg)
 		gTC->SetText(s.String());
 		fNumberFormat.Format(s, c.blue);
 		bTC->SetText(s.String());
-SetColor(c);
+		SetColor(c);
 		break;
 	}
 	case 'CSQh': {
@@ -344,7 +345,7 @@ SetColor(c);
 		fNumberFormat.SetPrecision(3);
 		fNumberFormat.Format(s, h.value);
 		vTC->SetText(s.String());
-c = hsv2rgb(h);
+		c = hsv2rgb(h);
 		SetColor(c);
 		break;
 	}

@@ -70,8 +70,7 @@ scale_p(picture* src, picture* dest)
 						d++;
 						r = beta * *(srcline++);
 						s++;
-					}
-					else {
+					} else {
 						r += *(srcline++) * mdx / msx;
 						*(destline++) = r;
 						stillinblock = FALSE;
@@ -79,8 +78,7 @@ scale_p(picture* src, picture* dest)
 				}
 			}
 		}
-	}
-	else if (xscale > 1) // Stretch horizontally
+	} else if (xscale > 1) // Stretch horizontally
 	{
 		float* srcdata = src->data;
 		float* destdata = mtmp;
@@ -106,16 +104,14 @@ scale_p(picture* src, picture* dest)
 						srcline++;
 						s++;
 						d++;
-					}
-					else {
+					} else {
 						*(destline++) = *(srcline++);
 						stillinblock = FALSE;
 					}
 				}
 			}
 		}
-	}
-	else // No scaling in x-dimension -> copy to temp bitmap.
+	} else // No scaling in x-dimension -> copy to temp bitmap.
 	{
 		printf("No scaling in x-dimension -> copy to temp bitmap.\n");
 		memcpy(mtmp, src->data, src->x * src->y * sizeof(float));
@@ -153,8 +149,7 @@ scale_p(picture* src, picture* dest)
 						r = beta * *srccol;
 						srccol += line;
 						s++;
-					}
-					else {
+					} else {
 						r += *srccol * mdy / msy;
 						srccol += line;
 						*destcol = r;
@@ -164,8 +159,7 @@ scale_p(picture* src, picture* dest)
 				}
 			}
 		}
-	}
-	else if (yscale > 1) // Stretch vertically
+	} else if (yscale > 1) // Stretch vertically
 	{
 		float* srcdata = mtmp;
 		float* destdata = dest->data;
@@ -194,8 +188,7 @@ scale_p(picture* src, picture* dest)
 						d++;
 						srccol += line;
 						s++;
-					}
-					else {
+					} else {
 						*destcol = *srccol;
 						destcol += line;
 						srccol += line;
@@ -204,8 +197,7 @@ scale_p(picture* src, picture* dest)
 				}
 			}
 		}
-	}
-	else // No scaling in y-dimension -> Just copy the bitmap to dest.
+	} else // No scaling in y-dimension -> Just copy the bitmap to dest.
 	{
 		printf("No scaling in y-dimension -> Just copy the bitmap to dest.\n");
 		memcpy(dest->data, mtmp, dest->x * dest->y * sizeof(float));

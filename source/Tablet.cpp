@@ -65,11 +65,9 @@ Tablet::Init()
 			fRect = BRect(0, 0, fMaxX, fMaxY);
 			fPos.x = fPos.y = 0;
 			fValid = true;
-		}
-		else
+		} else
 			syslog(LOG_DEBUG, "No tablet at this port, or tablet switched off...\n");
-	}
-	else
+	} else
 		syslog(LOG_DEBUG, "No tablet at this port\n");
 	return (fValid);
 }
@@ -78,7 +76,7 @@ BPoint
 Tablet::Point()
 {
 	//	syslog (LOG_DEBUG, "Returning (%f, %f)", fScaleX*(fPos.x - fRect.left)/(fRect.Width() + 1),
-	//fScaleY*(fPos.y - fRect.top)/(fRect.Height() + 1));
+	// fScaleY*(fPos.y - fRect.top)/(fRect.Height() + 1));
 	return (BPoint(
 		fScaleX * (fPos.x - fRect.left) / (fRect.Width() + 1),
 		fScaleY * (fPos.y - fRect.top) / (fRect.Height() + 1)
@@ -145,8 +143,7 @@ convertpositiontostruct(const char* data, tablet_position& info, uint32 tablet_t
 	if (tablet_type == ET_TABLET) {
 		info.pressuredata = (info.pressuredata << 1) & ((data[0] * kAp1BitMask) >> kAp1Bit);
 		mid = 256;
-	}
-	else
+	} else
 		mid = 128;
 	if (info.pressuresign)
 		info.pressure = info.pressuredata;
@@ -185,13 +182,11 @@ GetLine(BSerialPort* port, char* buff, const long buffLen)
 				*ptr = '\0';
 				done = true;
 				break;
-			}
-			else
+			} else
 				*ptr = aChar;
 			ptr++;
 			totalread++;
-		}
-		else // Nothing within timeout
+		} else // Nothing within timeout
 		{
 			*ptr = 0;
 			syslog(LOG_DEBUG, "<null>\n");

@@ -102,11 +102,9 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 				b, selection, int(point.x - cx), int(point.y - cy),
 				buttons & B_SECONDARY_MOUSE_BUTTON ? -strength : strength
 			);
-		}
-		else if (dm == B_OP_COPY || dm == B_OP_OVER) {
+		} else if (dm == B_OP_COPY || dm == B_OP_OVER) {
 			FastAddWithAlpha(point.x - cx, point.y - cy, strength);
-		}
-		else {
+		} else {
 			DrawBitmapAsync(brushbm, BPoint(point.x - cx, point.y - cy));
 			drawView->DrawBitmap(brushbm, BPoint(point.x - cx, point.y - cy));
 		}
@@ -140,8 +138,7 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 						b, selection, int(nextPos.x - cx), int(nextPos.y - cy),
 						int(pstrength + i * facs)
 					);
-				}
-				else // if (dm == B_OP_COPY || dm == B_OP_OVER)
+				} else // if (dm == B_OP_COPY || dm == B_OP_OVER)
 				{
 					FastAddWithAlpha(
 						int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
@@ -150,9 +147,9 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 				//				else
 				//				{
 				//					DrawBitmapAsync (brushbm, BPoint (nextPos.x - cx, nextPos.y -
-				//cy)); 					drawView->DrawBitmap (brushbm, BPoint (nextPos.x - cx, nextPos.y - cy));
-				//					drawView->Sync();
-				//					selectionView->Sync();
+				// cy)); 					drawView->DrawBitmap (brushbm, BPoint (nextPos.x - cx,
+				// nextPos.y - cy)); 					drawView->Sync();
+				// selectionView->Sync();
 				//				}
 			}
 			pos = nextPos;
@@ -186,7 +183,7 @@ void
 CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoint /*tilt*/)
 {
 	//	printf ("Top of tBrushM: (%.0f, %.0f), %i (%.3f, %.3f)\n", point.x, point.y, strength,
-	//tilt.x, tilt.y);
+	// tilt.x, tilt.y);
 	BPoint pos = fBC.pos;
 	BPoint nextPos;
 	float cx = fBC.cx;
@@ -221,8 +218,7 @@ CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 					buttons & B_SECONDARY_MOUSE_BUTTON ? -int(pstrength + i * facs)
 													   : int(pstrength + i * facs)
 				);
-			}
-			else // if (dm == B_OP_COPY || dm == B_OP_OVER)
+			} else // if (dm == B_OP_COPY || dm == B_OP_OVER)
 			{
 				FastAddWithAlpha(
 					int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
@@ -320,8 +316,7 @@ CanvasView::tClone(int32 mode, BPoint point, uint32 buttons)
 			thi = h - 1;
 
 			if (mode == M_SELECT) {
-			}
-			else {
+			} else {
 				// first, extract the cloned area into "copy" with alpha replaced by the brush
 				// values
 				uint32* cbits = (uint32*)copy->Bits();
@@ -337,7 +332,7 @@ CanvasView::tClone(int32 mode, BPoint point, uint32 buttons)
 								   bd[y * w + x] << ALPHA_BPOS)
 								: 0;
 						//								(0xFF00FF00 & COLOR_MASK | bd[y*w + x] <<
-						//ALPHA_BPOS) : 0;
+						// ALPHA_BPOS) : 0;
 					}
 				}
 
@@ -370,7 +365,7 @@ void
 CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoint /*tilt*/)
 {
 	//	printf ("Top of tCloneM: (%.0f, %.0f), %i (%.3f, %.3f)\n", point.x, point.y, strength,
-	//tilt.x, tilt.y);
+	// tilt.x, tilt.y);
 	BPoint pos = fCC.pos;
 	BPoint nextPos;
 	float cx = fCC.cx;
@@ -423,8 +418,7 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 			for (float i = 1; i < num; i++) {
 				nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 				if (mode == M_SELECT) {
-				}
-				else {
+				} else {
 					// first, extract the cloned area into "copy" with alpha replaced by the brush
 					// values
 					uint32* cbits = (uint32*)copy->Bits();
@@ -568,11 +562,9 @@ CanvasView::tTablet(int32 mode)
 	if (abs(strength) > 255 * wacom->Threshold()) {
 		if (mode == M_SELECT) {
 			AddToSelection(b, selection, int(point.x - cx), int(point.y - cy), int(strength));
-		}
-		else if (dm == B_OP_COPY || dm == B_OP_OVER) {
+		} else if (dm == B_OP_COPY || dm == B_OP_OVER) {
 			FastAddWithAlpha(point.x - cx, point.y - cy, strength);
-		}
-		else {
+		} else {
 			DrawBitmapAsync(brushbm, BPoint(point.x - cx, point.y - cy));
 			drawView->DrawBitmap(brushbm, BPoint(point.x - cx, point.y - cy));
 		}
@@ -604,13 +596,11 @@ CanvasView::tTablet(int32 mode)
 						AddToSelection(
 							b, selection, int(nextPos.x - cx), int(nextPos.y - cy), int(strength)
 						);
-					}
-					else if (dm == B_OP_COPY || dm == B_OP_OVER) {
+					} else if (dm == B_OP_COPY || dm == B_OP_OVER) {
 						FastAddWithAlpha(
 							int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
 						);
-					}
-					else {
+					} else {
 						DrawBitmapAsync(brushbm, BPoint(nextPos.x - cx, nextPos.y - cy));
 						drawView->DrawBitmap(brushbm, BPoint(nextPos.x - cx, nextPos.y - cy));
 						drawView->Sync();
@@ -692,8 +682,7 @@ CanvasView::tEraser(int32 mode, BPoint point, uint32 buttons)
 			if (mode == M_DRAW) {
 				drawView->FillRect(eraser, B_SOLID_LOW);
 				//				FillRect (eraser, B_SOLID_LOW);
-			}
-			else
+			} else
 				selectionView->FillRect(eraser, B_SOLID_LOW);
 			/*S*/ StrokeRect(eraser);
 			break;
@@ -701,8 +690,7 @@ CanvasView::tEraser(int32 mode, BPoint point, uint32 buttons)
 			if (mode == M_DRAW) {
 				drawView->FillEllipse(eraser, B_SOLID_LOW);
 				//				FillEllipse (eraser, B_SOLID_LOW);
-			}
-			else
+			} else
 				selectionView->FillEllipse(eraser, B_SOLID_LOW);
 			/*S*/ StrokeEllipse(eraser);
 			break;
@@ -779,8 +767,7 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 			SetHighColor(locolor->color());
 			SetLowColor(hicolor->color());
 		}
-	}
-	else {
+	} else {
 		SetHighColor(Black);
 		SetLowColor(White);
 	}
@@ -797,8 +784,7 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 	if (mode == M_DRAW) {
 		//		text->TextView()->SetHighColor (HighColor());
 		//		text->TextView()->SetLowColor (LowColor());
-	}
-	else {
+	} else {
 		text->TextView()->SetHighColor(Black);
 		text->TextView()->SetLowColor(White);
 	}
@@ -855,8 +841,7 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 			}
 			i++;
 		}
-	}
-	else {
+	} else {
 		// Yuk this is silly - but I'm afraid it's necessary.  Sigh.
 		// The reason is that selection maps are 8 bit, but you can't
 		// set the HighColor by index directly.
@@ -916,8 +901,7 @@ CanvasView::tTextM(int32 mode, BPoint point)
 	if (mode == M_DRAW) {
 		SetHighColor(hicolor->color());
 		SetLowColor(locolor->color());
-	}
-	else {
+	} else {
 		SetHighColor(Black);
 		SetLowColor(White);
 	}
@@ -1034,12 +1018,10 @@ CanvasView::tTextD()
 			tempsel->RemoveChild(tempselView);
 			delete tempselView;
 			delete tempsel;
-		}
-		else {
+		} else {
 			drawView->DrawString(text->Text(), place);
 		}
-	}
-	else {
+	} else {
 		BBitmap* tempsel = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		bzero(tempsel->Bits(), tempsel->BitsLength());
 		BView* tempselView =
@@ -1182,16 +1164,14 @@ CanvasView::tSpraycan(int32 mode, BPoint point, uint32 buttons)
 					selectionView->StrokeLine(p);
 					//					MovePenTo (p);
 					//					StrokeLine (p);
-				}
-				else if (frand() > color_ratio) {
+				} else if (frand() > color_ratio) {
 					if (lighten)
 						fplot_alpha(p, hit);
 					else
 						fplot(p, hit);
 					//					MovePenTo (p);
 					//					StrokeLine (p);
-				}
-				else {
+				} else {
 					if (lighten)
 						fplot_alpha(p, lot);
 					else
@@ -1274,16 +1254,14 @@ CanvasView::tSpraycanM(int32 mode, BPoint point, uint32 buttons, int pressure, B
 				selectionView->StrokeLine(p);
 				//					MovePenTo (p);
 				//					StrokeLine (p);
-			}
-			else if (frand() > color_ratio) {
+			} else if (frand() > color_ratio) {
 				if (lighten)
 					fplot_alpha(p, hit);
 				else
 					fplot(p, hit);
 				//					MovePenTo (p);
 				//					StrokeLine (p);
-			}
-			else {
+			} else {
 				if (lighten)
 					fplot_alpha(p, lot);
 				else
@@ -1351,8 +1329,7 @@ CanvasView::tFreehand(int32 mode, BPoint point, uint32 buttons)
 			else
 #endif
 				drawView->StrokeLine(point, curpat);
-		}
-		else {
+		} else {
 			p = selectionView->PenLocation();
 #if defined(FIX_STROKELINE_BUG)
 			if (halfpensize > 0.5 && point == prev)
@@ -1421,8 +1398,7 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 	if (fillcorners) {
 		drawView->SetLineMode(B_ROUND_CAP, B_ROUND_JOIN);
 		selectionView->SetLineMode(B_ROUND_CAP, B_ROUND_JOIN);
-	}
-	else {
+	} else {
 		drawView->SetLineMode(B_BUTT_CAP, B_MITER_JOIN);
 		selectionView->SetLineMode(B_BUTT_CAP, B_MITER_JOIN);
 	}
@@ -1457,20 +1433,21 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 					//					if (fillcorners)
 					//					{
 					//						drawView->FillEllipse (pos, halfpensize, halfpensize,
-					//curpat); 						drawView->FillEllipse (point, halfpensize, halfpensize, curpat);
+					// curpat); 						drawView->FillEllipse (point, halfpensize,
+					// halfpensize, curpat);
 					//					}
 					drawView->StrokeLine(pos, point, curpat);
-				}
-				else {
+				} else {
 					//					selectionView->SetDrawingMode (B_OP_COPY);
 					//					selectionView->DrawSBitmap (undo[indexUndo].sbitmap, tframe,
-					//tframe); 					drawView->SetDrawingMode (dm); 					selectionView->Sync();
+					// tframe); 					drawView->SetDrawingMode (dm);
+					// selectionView->Sync();
 					SBitmapToSelection(undo[indexUndo].sbitmap, selection, tframe);
 					//					if (fillcorners)
 					//					{
 					//						selectionView->FillEllipse (pos, halfpensize,
-					//halfpensize, curpat); 						selectionView->FillEllipse (point, halfpensize,
-					//halfpensize, curpat);
+					// halfpensize, curpat); 						selectionView->FillEllipse
+					// (point, halfpensize, halfpensize, curpat);
 					//					}
 					selectionView->StrokeLine(pos, point, curpat);
 				}
@@ -1495,8 +1472,7 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 			MovePenTo(pos);
 			Sync();
 			entry++;
-		}
-		else {
+		} else {
 			if (mode == M_DRAW) {
 				memcpy(
 					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
@@ -1508,19 +1484,18 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 				//					drawView->FillEllipse (point, halfpensize, halfpensize, curpat);
 				//				}
 				drawView->StrokeLine(pos, point, curpat);
-			}
-			else {
+			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				//				if (fillcorners)
 				//				{
 				//					selectionView->FillEllipse (pos, halfpensize, halfpensize,
-				//curpat); 					selectionView->FillEllipse (point, halfpensize, halfpensize, curpat);
+				// curpat); 					selectionView->FillEllipse (point, halfpensize,
+				// halfpensize, curpat);
 				//				}
 				selectionView->StrokeLine(pos, point, curpat);
 			}
 		}
-	}
-	else if (!(buttons & B_TERTIARY_MOUSE_BUTTON)) {
+	} else if (!(buttons & B_TERTIARY_MOUSE_BUTTON)) {
 		if (mode == M_DRAW) {
 			memcpy(
 				currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(), currentLayer()->BitsLength()
@@ -1531,13 +1506,13 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 			//				drawView->FillEllipse (point, halfpensize, halfpensize, curpat);
 			//			}
 			drawView->StrokeLine(PenLocation(), point, curpat);
-		}
-		else {
+		} else {
 			memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 			//			if (fillcorners)
 			//			{
 			//				selectionView->FillEllipse (PenLocation(), halfpensize, halfpensize,
-			//curpat); 				selectionView->FillEllipse (point, halfpensize, halfpensize, curpat);
+			// curpat); 				selectionView->FillEllipse (point, halfpensize, halfpensize,
+			// curpat);
 			//			}
 			selectionView->StrokeLine(PenLocation(), point, curpat);
 		}
@@ -1546,8 +1521,7 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 		drawView->Sync();
 		selectionView->Sync();
 		SetupUndo(mode);
-	}
-	else {
+	} else {
 		entry = 0;
 		myWindow->posview->SetPoint(-1, -1);
 	}
@@ -1584,8 +1558,7 @@ CanvasView::tLinesM(int32 mode, BPoint point)
 				drawView->SetLineMode(B_BUTT_CAP, B_MITER_JOIN);
 			//				drawView->FillEllipse (pos, halfpensize, halfpensize, curpat);
 			drawView->StrokeLine(pos, point, curpat);
-		}
-		else {
+		} else {
 			if (tAttribLines->fillCorners() && entry == 1)
 				selectionView->SetLineMode(B_ROUND_CAP, B_ROUND_JOIN);
 			else
@@ -1670,8 +1643,7 @@ CanvasView::tPolyblob(int32 mode, BPoint point, uint32 buttons)
 		if (mode == M_DRAW) {
 			drawView->FillPolygon(polygon, curpat);
 			drawView->StrokePolygon(polygon);
-		}
-		else {
+		} else {
 			selectionView->FillPolygon(polygon, curpat);
 			selectionView->StrokePolygon(polygon);
 		}
@@ -1723,8 +1695,7 @@ CanvasView::tPolygon(int32 mode, BPoint point, uint32 buttons)
 		polypoint = point; // This is a hack.  Apparently, a 2-point BPolygon can't be
 						   // drawn, so this is for tPolygonM().
 		entry = 1;
-	}
-	else {
+	} else {
 		if ((leftfirst && (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)) ||
 			(!leftfirst && (buttons & B_PRIMARY_MOUSE_BUTTON)) ||
 			(buttons & B_TERTIARY_MOUSE_BUTTON)) // Polygon closed
@@ -1747,8 +1718,7 @@ CanvasView::tPolygon(int32 mode, BPoint point, uint32 buttons)
 				if (mode == M_DRAW) {
 					drawView->FillPolygon(polygon, curpat);
 					drawView->StrokePolygon(polygon);
-				}
-				else {
+				} else {
 					selectionView->FillPolygon(polygon, curpat);
 					selectionView->StrokePolygon(polygon);
 				}
@@ -1762,8 +1732,7 @@ CanvasView::tPolygon(int32 mode, BPoint point, uint32 buttons)
 			Invalidate();
 			entry = 0;
 			myWindow->posview->SetPoint(-1, -1);
-		}
-		else {
+		} else {
 			polygon->AddPoints(&point, 1);
 			Sync();
 			myWindow->Lock();
@@ -1806,8 +1775,7 @@ CanvasView::tPolygonM(int32 mode, BPoint point)
 		{
 			StrokeLine(polypoint, pos);
 			StrokeLine(point);
-		}
-		else {
+		} else {
 			StrokePolygon(polygon, false);
 			StrokeLine(BPoint(pos.x / fScale, pos.y / fScale), point);
 		}
@@ -1871,8 +1839,7 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 					default:
 						fprintf(stderr, "Unknown Rect type...\n");
 					}
-				}
-				else {
+				} else {
 					// selectionView->SetDrawingMode (B_OP_COPY);
 					// selectionView->DrawSBitmap (undo[indexUndo].sbitmap, tframe, tframe);
 					// selectionView->SetDrawingMode (dm);
@@ -1911,8 +1878,7 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 			MovePenTo(pos);
 			Sync();
 			entry = 1;
-		}
-		else {
+		} else {
 			if (mode == M_DRAW) {
 				memcpy(
 					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
@@ -1933,8 +1899,7 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 					fprintf(stderr, "Unknown Rect type...\n");
 				}
 				drawView->Sync();
-			}
-			else {
+			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				switch (tAttribRect->getType()) {
 				case RECT_OUTLINE:
@@ -1955,8 +1920,7 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 			entry = 0;
 			myWindow->posview->SetPoint(-1, -1);
 		}
-	}
-	else {
+	} else {
 		if (mode == M_DRAW) {
 			switch (tAttribRect->getType()) {
 			case RECT_OUTLINE:
@@ -1973,8 +1937,7 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 				fprintf(stderr, "Unknown Rect type...\n");
 			}
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribRect->getType()) {
 			case RECT_OUTLINE:
 				selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
@@ -2040,8 +2003,7 @@ CanvasView::tRectM(int32 mode, BPoint point)
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribRect->getType()) {
 			case RECT_OUTLINE:
 				selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
@@ -2145,8 +2107,7 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 						fprintf(stderr, "Unknown RoundRect type...\n");
 					}
 					drawView->Sync();
-				}
-				else {
+				} else {
 					// selectionView->SetDrawingMode (B_OP_COPY);
 					// selectionView->DrawSBitmap (undo[indexUndo].sbitmap, tframe, tframe);
 					// selectionView->SetDrawingMode (dm);
@@ -2184,8 +2145,7 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 			MovePenTo(pos);
 			Sync();
 			entry = 1;
-		}
-		else {
+		} else {
 			switch (tAttribRoundRect->getRadType()) {
 			case RRECT_RELATIVE:
 				xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
@@ -2220,8 +2180,7 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 					fprintf(stderr, "Unknown RoundRect type...\n");
 				}
 				drawView->Sync();
-			}
-			else {
+			} else {
 				memcpy(undo[indexUndo].sbitmap->Bits(), selection->Bits(), selection->BitsLength());
 				switch (tAttribRoundRect->getType()) {
 				case RRECT_OUTLINE:
@@ -2242,8 +2201,7 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 			entry = 0;
 			myWindow->posview->SetPoint(-1, -1);
 		}
-	}
-	else {
+	} else {
 		BPoint pos = PenLocation();
 		float xRad;
 		float yRad;
@@ -2277,8 +2235,7 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 				fprintf(stderr, "Unknown RoundRect type...\n");
 			}
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribRoundRect->getType()) {
 			case RRECT_OUTLINE:
 				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
@@ -2359,8 +2316,7 @@ CanvasView::tRoundRectM(int32 mode, BPoint point)
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribRoundRect->getType()) {
 			case RRECT_OUTLINE:
 				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
@@ -2436,8 +2392,7 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 						center.x - pradius, center.y - pradius, center.x + pradius,
 						center.y + pradius
 					);
-				}
-				else {
+				} else {
 					frame.Set(
 						point.x - radius, point.y - radius, point.x + radius, point.y + radius
 					);
@@ -2477,8 +2432,7 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 						fprintf(stderr, "Unknown Circle type...\n");
 					}
 					drawView->Sync();
-				}
-				else {
+				} else {
 					// selectionView->SetDrawingMode (B_OP_COPY);
 					// selectionView->DrawSBitmap (undo[indexUndo].sbitmap, tframe, tframe);
 					// selectionView->SetDrawingMode (dm);
@@ -2525,8 +2479,7 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 			MovePenTo(center);
 			Sync();
 			entry = 1;
-		}
-		else {
+		} else {
 			if (mode == M_DRAW) {
 				memcpy(
 					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
@@ -2559,8 +2512,7 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 					fprintf(stderr, "Unknown Circle type...\n");
 				}
 				drawView->Sync();
-			}
-			else {
+			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				radius = sqrt(
 					(center.x - point.x) * (center.x - point.x) +
@@ -2593,11 +2545,10 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 			entry = 0;
 			myWindow->posview->SetPoint(-1, -1);
 		}
-	}
-	else {
+	} else {
 		BPoint center = PenLocation();
 		//		float radius = sqrt ((center.x - point.x)*(center.x - point.x) + (center.y -
-		//point.y)*(center.y - point.y));
+		// point.y)*(center.y - point.y));
 		if (mode == M_DRAW) {
 			memcpy(
 				currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(), currentLayer()->BitsLength()
@@ -2627,8 +2578,7 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 				fprintf(stderr, "Unknown Circle type...\n");
 			}
 			drawView->Sync();
-		}
-		else {
+		} else {
 			memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 			float radius = sqrt(
 				(center.x - point.x) * (center.x - point.x) +
@@ -2697,8 +2647,7 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 			pframe = PRect(
 				center.x - pradius, center.y - pradius, center.x + pradius, center.y + pradius
 			);
-		}
-		else {
+		} else {
 			frame = PRect(point.x - radius, point.y - radius, point.x + radius, point.y + radius);
 			pframe = PRect(prev.x - pradius, prev.y - pradius, prev.x + pradius, prev.y + pradius);
 		}
@@ -2727,8 +2676,7 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribCircle->getType()) {
 			case CIRCLE_OUTLINE:
 				selectionView->StrokeEllipse(
@@ -2825,8 +2773,7 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 						fprintf(stderr, "Unknown Ellipse type...\n");
 					}
 					drawView->Sync();
-				}
-				else {
+				} else {
 					// selectionView->SetDrawingMode (B_OP_COPY);
 					// selectionView->DrawSBitmap (undo[indexUndo].sbitmap, tframe, tframe);
 					// selectionView->SetDrawingMode (dm);
@@ -2864,8 +2811,7 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 			MovePenTo(pos);
 			Sync();
 			entry = 1;
-		}
-		else {
+		} else {
 			if (mode == M_DRAW) {
 				memcpy(
 					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
@@ -2886,8 +2832,7 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 					fprintf(stderr, "Unknown Ellipse type...\n");
 				}
 				drawView->Sync();
-			}
-			else {
+			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				switch (tAttribEllipse->getType()) {
 				case ELLIPSE_OUTLINE:
@@ -2908,8 +2853,7 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 			entry = 0;
 			myWindow->posview->SetPoint(-1, -1);
 		}
-	}
-	else {
+	} else {
 		if (mode == M_DRAW) {
 			switch (tAttribEllipse->getType()) {
 			case ELLIPSE_OUTLINE:
@@ -2926,8 +2870,7 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 				fprintf(stderr, "Unknown Ellipse type...\n");
 			}
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribEllipse->getType()) {
 			case ELLIPSE_OUTLINE:
 				selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
@@ -2990,8 +2933,7 @@ CanvasView::tEllipseM(int32 mode, BPoint point)
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
-		}
-		else {
+		} else {
 			switch (tAttribEllipse->getType()) {
 			case ELLIPSE_OUTLINE:
 				selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
@@ -3058,8 +3000,7 @@ CanvasView::isfillcolorrgb(LPoint point, uchar* t)
 		else
 			*t = c.alpha;
 		return true;
-	}
-	else {
+	} else {
 		*t = 0;
 		return false;
 	}
@@ -3075,8 +3016,7 @@ CanvasView::isfillcolort(LPoint point, uchar* t)
 		if (!fillcolor.alpha) {
 			*t = 255;
 			return (true);
-		}
-		else {
+		} else {
 			*t = 0;
 			return (false);
 		}
@@ -3084,8 +3024,7 @@ CanvasView::isfillcolort(LPoint point, uchar* t)
 	if (c.alpha == 255) {
 		d = uchar(diff(c, fillcolor));
 		*t = uchar(255 - d * 254 / tolerance);
-	}
-	else {
+	} else {
 		d = c.alpha;
 		*t = c.alpha;
 	}
@@ -3177,8 +3116,7 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 			//			snooze (0);
 			//			tempView->Sync ();
 		}
-	}
-	else if (tAttribFill->getTolMode() == FILLTOL_TOL) {
+	} else if (tAttribFill->getTolMode() == FILLTOL_TOL) {
 		while (!(ps.isempty())) {
 			uchar t;
 			LPoint p = ps.pop();
@@ -3214,8 +3152,7 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 			//			snooze (0);
 			//			tempView->Sync ();
 		}
-	}
-	else {
+	} else {
 		while (!(ps.isempty())) {
 			uchar t;
 			LPoint p = ps.pop();
@@ -3271,8 +3208,7 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 	if (c) {
 		temp2View->SetHighColor(*c);
 		temp2View->FillRect(temp2->Bounds());
-	}
-	else {
+	} else {
 		temp2View->FillRect(temp2->Bounds(), curpat);
 	}
 	temp2View->Sync();
@@ -3297,8 +3233,7 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 			BlendWithAlpha(temp2, currentLayer(), 0, 0);
 		else
 			AddWithAlpha(temp2, currentLayer(), 0, 0);
-	}
-	else {
+	} else {
 		uchar* sbits = (uchar*)selection->Bits();
 		long sbprdif = selection->BytesPerRow() - long(tw) - 1;
 		t2bits = (uint32*)temp2->Bits();
@@ -3340,8 +3275,8 @@ CanvasView::tSetColors(uint32 buttons)
 		SetHighColor(hi);
 		SetLowColor(lo);
 		//		selectionView->SetLowColor (screen.ColorMap()->color_list[(lo.red + lo.green +
-		//lo.blue)/3]); 		selectionView->SetHighColor (screen.ColorMap()->color_list[(hi.red +
-		//hi.green + hi.blue)/3]);
+		// lo.blue)/3]); 		selectionView->SetHighColor (screen.ColorMap()->color_list[(hi.red +
+		// hi.green + hi.blue)/3]);
 		selectionView->SetLowColor(SELECT_NONE);
 		selectionView->SetHighColor(SELECT_FULL);
 	}

@@ -4,7 +4,8 @@
 #include "AttribView.h"
 #include <Message.h>
 
-class AttribSelect : public AttribView {
+class AttribSelect : public AttribView
+{
   public:
 	AttribSelect();
 	virtual ~AttribSelect();

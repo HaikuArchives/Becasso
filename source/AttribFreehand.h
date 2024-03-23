@@ -7,7 +7,8 @@
 
 #define PROP_PENSIZE 1
 
-class AttribFreehand : public AttribView {
+class AttribFreehand : public AttribView
+{
   public:
 	AttribFreehand();
 	virtual ~AttribFreehand();

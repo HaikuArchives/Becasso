@@ -51,8 +51,7 @@ PicMenuView::Draw(BRect updateRect)
 			}
 			Sync();
 		}
-	}
-	else {
+	} else {
 	}
 }
 
@@ -69,8 +68,7 @@ PicMenuView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		hlp->AddString("View", "");
 		fPMB->Window()->PostMessage(hlp);
 		delete hlp;
-	}
-	else {
+	} else {
 		index = int(point.y / bw) * hnum + int(point.x / bw);
 		char helpstring[2 * MAX_HLPNAME];
 		strcpy(helpstring, menu->ItemAt(index)->helptext());
@@ -139,8 +137,7 @@ PicMenuView::MouseDown(BPoint point)
 		aWindow->Lock();
 		if (aWindow->IsHidden()) {
 			aWindow->Show();
-		}
-		else {
+		} else {
 			aWindow->Activate();
 		}
 		aWindow->Unlock();

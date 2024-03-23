@@ -291,13 +291,11 @@ EffectsPlayer::Mix(short* buffer, int numFrames)
 					fPlayList[iz].loop--;
 					fPlayList[iz].offset = 0;
 					list[nNotify++] = fPlayList[iz].id;
-				}
-				else if (fPlayList[iz].loop < 0) {
+				} else if (fPlayList[iz].loop < 0) {
 					/*	loop forever (until manually stopped)	*/
 					fPlayList[iz].offset = 0;
 					list[nNotify++] = fPlayList[iz].id;
-				}
-				else {
+				} else {
 					/*	kick it out	*/
 					list[nNotify++] = -fPlayList[iz].id; /*	to know what kind of notify		*/
 					memcpy(
@@ -307,8 +305,7 @@ EffectsPlayer::Mix(short* buffer, int numFrames)
 					nPlaying--;
 					iz--; /*	will get incremented in for() clause	*/
 				}
-			}
-			else
+			} else
 				fPlayList[iz].offset = offset;
 		}
 		int left;
@@ -325,8 +322,7 @@ EffectsPlayer::Mix(short* buffer, int numFrames)
 			}
 			left += curl;
 			right += curr;
-		}
-		else {
+		} else {
 			left = curl;
 			right = curr;
 		}

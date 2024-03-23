@@ -26,7 +26,8 @@ class BInvoker;
 
 // All functions are virtual for weak linkage to work
 
-class _IMPEXP_IMAGEMANIP BBitmapAccessor : public BitmapAccessor {
+class _IMPEXP_IMAGEMANIP BBitmapAccessor : public BitmapAccessor
+{
   public:
 	// Constructor
 	BBitmapAccessor(BBitmap* bitmap = NULL, const BRect* section = NULL);

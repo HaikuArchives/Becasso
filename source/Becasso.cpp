@@ -278,8 +278,7 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 	BFile file(&info.ref, O_RDONLY);
 	if (file.InitCheck()) {
 		fprintf(stderr, "InitCheck() failed\n");
-	}
-	else {
+	} else {
 		BResources res(&file);
 		colordata = res.FindResource('rgbx', 131, &bsize);
 		teardata = res.FindResource('sfx1', 130, &fxsize);
@@ -317,16 +316,14 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 					(int)RGBColors[i][2], &RGBColors[i][3]
 				);
 		}
-	}
-	else
+	} else
 		fprintf(stderr, "Warning: Couldn't find RGB color resource\n");
 
 #if defined(EASTER_EGG_SFX)
 	if (teardata) {
 		extern SoundEffect8_11* fxTear;
 		fxTear = new SoundEffect8_11(teardata, fxsize);
-	}
-	else
+	} else
 		fprintf(stderr, "Warning: Couldn't find easter egg resource\n");
 #endif
 
@@ -409,8 +406,7 @@ Becasso::LoadAddOns()
 			AddOn* newaddon;
 			try {
 				newaddon = new AddOn(addon);
-			}
-			catch (...) {
+			} catch (...) {
 				BPath path;
 				addon.GetPath(&path);
 				if (VerbAddOns)
@@ -430,13 +426,11 @@ Becasso::LoadAddOns()
 					splash->Unlock();
 					delete spl;
 					AddOns->AddItem(newaddon);
-				}
-				else
+				} else
 					fprintf(stderr, "Warning: Add-On returned error from init\n");
 			}
 		}
-	}
-	else {
+	} else {
 		fprintf(stderr, "Hmmm - I couldn't find the add-ons/ directory...\n");
 	}
 }
@@ -536,7 +530,7 @@ Becasso::AboutRequested()
 {
 	//	char line[81];
 	//	sprintf (line, "Becasso v%s\n© 1997 ∑ Sum Software\nDemo version, expires 1 dec
-	//1997\nhttp://www.sumware.demon.nl", Version); 	BAlert *about = new BAlert ("", line, "OK");
+	// 1997\nhttp://www.sumware.demon.nl", Version); 	BAlert *about = new BAlert ("", line, "OK");
 	//	about->Go();
 	if (about && about->Lock()) {
 		about->Activate();
@@ -653,8 +647,7 @@ Becasso::ArgvReceived(int32 argc, char** argv)
 	for (int i = 1; i < argc; i++) {
 		if (argv[i][0] == '-') {
 			// Command line option - these are handled in main().
-		}
-		else {
+		} else {
 			// printf ("%s\n", argv[i]);
 			entry_ref ref;
 			get_ref_for_path(argv[i], &ref);
@@ -700,8 +693,7 @@ Becasso::ResolveSpecifier(
 			extern AttribWindow* tAttribWindow;
 			tAttribWindow->PostMessage(message);
 			return NULL;
-		}
-		else {
+		} else {
 			fCurrentProperty = PROP_TOOL;
 			return this;
 		}
@@ -715,8 +707,7 @@ Becasso::ResolveSpecifier(
 			extern AttribWindow* mAttribWindow;
 			mAttribWindow->PostMessage(message);
 			return NULL;
-		}
-		else {
+		} else {
 			fCurrentProperty = PROP_MODE;
 			return this;
 		}
@@ -765,8 +756,7 @@ Becasso::ResolveSpecifier(
 						current->its_looper->PostMessage(message);
 						return NULL;
 					}
-				}
-				else {
+				} else {
 					BString indexData, errorString;
 					fNumberFormat.Format(indexData, index);
 					errorString.SetToFormat("Index out of range: %s", indexData.String());
@@ -775,8 +765,7 @@ Becasso::ResolveSpecifier(
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errorString);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errorString);
 				}
 			}
@@ -803,8 +792,7 @@ Becasso::ResolveSpecifier(
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
 			}
@@ -876,8 +864,7 @@ Becasso::MessageReceived(BMessage* message)
 			}
 			if (i == m)
 				fprintf(stderr, "Unknown Canvas %p (?!)\n", its_looper);
-		}
-		else
+		} else
 			fprintf(stderr, "BIG error!!\n");
 		break;
 	}
@@ -934,8 +921,7 @@ Becasso::MessageReceived(BMessage* message)
 				error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 				error.AddString("message", errstring);
 				message->SendReply(&error);
-			}
-			else
+			} else
 				fprintf(stderr, "%s\n", errstring);
 			break;
 		}
@@ -972,8 +958,7 @@ Becasso::MessageReceived(BMessage* message)
 				error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 				error.AddString("message", errstring);
 				message->SendReply(&error);
-			}
-			else
+			} else
 				fprintf(stderr, "%s\n", errstring);
 			break;
 		}
@@ -1065,8 +1050,7 @@ Becasso::MessageReceived(BMessage* message)
 						canvasWindowFrame.right = atof(strtok(NULL, " ,"));
 						canvasWindowFrame.bottom = atof(strtok(NULL, " ,"));
 					}
-				}
-				else if (!strcasecmp(property, "Name")) {
+				} else if (!strcasecmp(property, "Name")) {
 					const char* namestring;
 					if (specifier.FindString("name", &namestring) == B_OK) {
 						title.SetTo(namestring);
@@ -1130,23 +1114,19 @@ Becasso::MessageReceived(BMessage* message)
 					canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
 					canvasWindow->ResizeTo(canvasWindowFrame.Width(), canvasWindowFrame.Height());
 					canvasWindow->Show();
-				}
-				catch (...) {
+				} catch (...) {
 					printf("Caught in the act!\n");
 				}
-			}
-			else {
+			} else {
 				char name[B_FILE_NAME_LENGTH];
 				if (entry.GetName(name) == B_OK) {
 					printf("Couldn't find %s\n", name);
-				}
-				else {
+				} else {
 					printf("Not a file?\n");
 				}
 				// Not a file?
 			}
-		}
-		else {
+		} else {
 			printf("No ref?\n");
 			// No refs?
 		}
@@ -1193,24 +1173,20 @@ Becasso::MessageReceived(BMessage* message)
 					extern int SilentOperation;
 					canvasWindow->Minimize(SilentOperation >= 1);
 					canvasWindow->Show();
-				}
-				catch (...) {
+				} catch (...) {
 					printf("Caught in the act!\n");
 					break;
 				}
-			}
-			else {
+			} else {
 				char name[B_FILE_NAME_LENGTH];
 				if (entry.GetName(name) == B_OK) {
 					printf("Couldn't find %s\n", name);
-				}
-				else {
+				} else {
 					printf("Not a file?\n");
 				}
 				// Not a file?
 			}
-		}
-		else {
+		} else {
 			printf("No refs?\n");
 			// No refs?
 		}
@@ -1268,8 +1244,7 @@ Becasso::MessageReceived(BMessage* message)
 				m = new BMessage('rstf');
 				canvasWindow->PostMessage(m);
 				delete m;
-			}
-			else {
+			} else {
 				fprintf(stderr, "Invalid BBitmap\n");
 				// Error
 			}
@@ -1296,8 +1271,7 @@ Becasso::MessageReceived(BMessage* message)
 				m = new BMessage('rstf');
 				canvasWindow->PostMessage(m);
 				delete m;
-			}
-			else {
+			} else {
 				fprintf(stderr, "Invalid BBitmap\n");
 				// Error
 			}
@@ -1308,8 +1282,7 @@ Becasso::MessageReceived(BMessage* message)
 	{
 		if (launching) {
 			launchMessage = new BMessage(*message);
-		}
-		else {
+		} else {
 			BRect bounds;
 			color_space colorspace;
 			ssize_t bits_length;
@@ -1358,8 +1331,7 @@ Becasso::MessageReceived(BMessage* message)
 		{
 			if (firstWin) {
 				activeWin = firstWin; // Just take the first Canvas Window you found.
-			}
-			else // no canvas windows at all!
+			} else					  // no canvas windows at all!
 			{
 				fprintf(stderr, "No canvas windows open...\n");
 				if (message->IsSourceWaiting()) // Disappoint our friend.
@@ -1411,8 +1383,7 @@ Becasso::MessageReceived(BMessage* message)
 					ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
 					if (realmessage.IsSourceWaiting()) {
 						realmessage.SendReply(ok);
-					}
-					else {
+					} else {
 						ie.SendMessage(ok);
 					}
 					delete ok;
@@ -1423,19 +1394,16 @@ Becasso::MessageReceived(BMessage* message)
 						canvasWindow->PostMessage(m);
 						delete m;
 					}
-				}
-				else {
+				} else {
 					fprintf(stderr, "Invalid BBitmap\n");
 					// Error
 				}
-			}
-			else {
+			} else {
 				fprintf(stderr, "Message didn't contain a valid BBitmap\n");
 				// Error
 			}
 			break;
-		}
-		else {
+		} else {
 			// Fall through to BBP_OPEN_BBITMAP.
 			// Explanation:  Becasso received a BBP_REPLACE_BBITMAP message itself,
 			// which doesn't make sense (which bitmap should be replaced?).
@@ -1447,8 +1415,7 @@ Becasso::MessageReceived(BMessage* message)
 		// printf ("BBP_OPEN_BBITMAP\n");
 		if (launching) {
 			launchMessage = new BMessage(*message);
-		}
-		else {
+		} else {
 			const char* name;
 			if (message->FindString("name", &name) == B_OK) {
 				title.SetTo(name);
@@ -1481,8 +1448,7 @@ Becasso::MessageReceived(BMessage* message)
 					ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
 					if (message->IsSourceWaiting()) {
 						message->SendReply(ok);
-					}
-					else {
+					} else {
 						ie.SendMessage(ok);
 					}
 					delete ok;
@@ -1493,13 +1459,11 @@ Becasso::MessageReceived(BMessage* message)
 						canvasWindow->PostMessage(m);
 						delete m;
 					}
-				}
-				else {
+				} else {
 					fprintf(stderr, "Invalid BBitmap\n");
 					// Error
 				}
-			}
-			else if (message->FindRef("ref", &ref) == B_OK) {
+			} else if (message->FindRef("ref", &ref) == B_OK) {
 				BEntry entry;
 				if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
 					bool AskForAlpha = true;
@@ -1545,8 +1509,7 @@ Becasso::MessageReceived(BMessage* message)
 						ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
 						if (message->IsSourceWaiting()) {
 							message->SendReply(ok);
-						}
-						else {
+						} else {
 							ie.SendMessage(ok);
 						}
 						delete ok;
@@ -1557,24 +1520,20 @@ Becasso::MessageReceived(BMessage* message)
 							canvasWindow->PostMessage(m);
 							delete m;
 						}
-					}
-					catch (...) {
+					} catch (...) {
 						printf("Caught in the act!\n");
 						break;
 					}
-				}
-				else {
+				} else {
 					char name[B_FILE_NAME_LENGTH];
 					if (entry.GetName(name) == B_OK) {
 						printf("Couldn't find %s\n", name);
-					}
-					else {
+					} else {
 						printf("Not a file?\n");
 					}
 					// Not a file?
 				}
-			}
-			else {
+			} else {
 				fprintf(stderr, "Message didn't contain a valid BBitmap or ref\n");
 				// Error
 			}
@@ -1629,12 +1588,10 @@ Becasso::MessageReceived(BMessage* message)
 					fprintf(stderr, "Capture Error: Invalid BBitmap\n");
 					// Error
 				}
-			}
-			else // map == NULL  => Canceled
+			} else // map == NULL  => Canceled
 			{
 			}
-		}
-		else {
+		} else {
 			fprintf(
 				stderr, "Error: Your capture add-on asked for a grab, but didn't identify itself.\n"
 			);
@@ -1707,8 +1664,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddInt32("result", NumTools);
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(stderr, "Number of Tools: %ld\n", NumTools);
 			break;
 		}
@@ -1718,8 +1674,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddInt32("result", NumModes);
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(stderr, "Number of Modes: %ld\n", NumModes);
 			break;
 		}
@@ -1741,8 +1696,7 @@ Becasso::MessageReceived(BMessage* message)
 					reply.AddString("suites", str);
 				}
 				message->SendReply(&reply);
-			}
-			else {
+			} else {
 				fprintf(stderr, "Available Tools:\n");
 				for (int i = 0; i < NumTools; i++)
 					fprintf(stderr, "%s\n", ToolSpecifiers[i]);
@@ -1759,8 +1713,7 @@ Becasso::MessageReceived(BMessage* message)
 					reply.AddString("suites", str);
 				}
 				message->SendReply(&reply);
-			}
-			else {
+			} else {
 				fprintf(stderr, "Available Modes:\n");
 				for (int i = 0; i < NumModes; i++)
 					fprintf(stderr, "%s\n", ModeSpecifiers[i]);
@@ -1806,13 +1759,11 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
 				break;
-			}
-			else if (message->FindInt32("data", &numberspecifier) == B_OK) {
+			} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
 				if (0 <= numberspecifier && numberspecifier < NumTools) {
 					extern PicMenuButton* tool;
 					tool->set(numberspecifier);
@@ -1822,23 +1773,23 @@ Becasso::MessageReceived(BMessage* message)
 						message->SendReply(&error);
 					}
 					break;
-				}
-				else {
+				} else {
 					BString numberToolsData, numberSpecifierData, errorString;
 					fNumberFormat.Format(numberToolsData, NumTools - 1);
 					fNumberFormat.Format(numberSpecifierData, numberspecifier);
-					errorString.SetToFormat("Tool index out of range [0..%s]: %s", numberToolsData.String(), numberSpecifierData.String());
+					errorString.SetToFormat(
+						"Tool index out of range [0..%s]: %s", numberToolsData.String(),
+						numberSpecifierData.String()
+					);
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errorString.String());
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errorString.String());
 				}
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Tool Type (either string or int32 please)");
 				if (message->IsSourceWaiting()) {
@@ -1846,8 +1797,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -1883,13 +1833,11 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
 				break;
-			}
-			else if (message->FindInt32("data", &numberspecifier) == B_OK) {
+			} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
 				if (0 <= numberspecifier && numberspecifier < NumModes) {
 					extern PicMenuButton* mode;
 					mode->set(numberspecifier);
@@ -1899,8 +1847,7 @@ Becasso::MessageReceived(BMessage* message)
 						message->SendReply(&error);
 					}
 					break;
-				}
-				else {
+				} else {
 					char errstring[256];
 					sprintf(
 						errstring, "Mode Index Out of Range [0..%ld]: %ld", NumTools - 1,
@@ -1911,12 +1858,10 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Mode Type (either string or int32 please)");
 				if (message->IsSourceWaiting()) {
@@ -1924,8 +1869,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -1960,12 +1904,10 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 					break;
-				}
-				else {
+				} else {
 					extern ColorMenuButton* hicolor;
 					hicolor->set(rgb);
 					if (message->IsSourceWaiting()) {
@@ -1975,8 +1917,7 @@ Becasso::MessageReceived(BMessage* message)
 					}
 				}
 				break;
-			}
-			else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
+			} else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
 				extern ColorMenuButton* hicolor;
 				hicolor->set(*rgbspecifier);
 				if (message->IsSourceWaiting()) {
@@ -1985,8 +1926,7 @@ Becasso::MessageReceived(BMessage* message)
 					message->SendReply(&error);
 				}
 				break;
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Color Type (either string or rgb_color please)");
 				if (message->IsSourceWaiting()) {
@@ -1994,8 +1934,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -2030,12 +1969,10 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 					break;
-				}
-				else {
+				} else {
 					extern ColorMenuButton* locolor;
 					locolor->set(rgb);
 					if (message->IsSourceWaiting()) {
@@ -2045,8 +1982,7 @@ Becasso::MessageReceived(BMessage* message)
 					}
 				}
 				break;
-			}
-			else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
+			} else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
 				extern ColorMenuButton* locolor;
 				locolor->set(*rgbspecifier);
 				if (message->IsSourceWaiting()) {
@@ -2055,8 +1991,7 @@ Becasso::MessageReceived(BMessage* message)
 					message->SendReply(&error);
 				}
 				break;
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Color Type (either string or rgb_color please)");
 				if (message->IsSourceWaiting()) {
@@ -2064,8 +1999,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -2079,8 +2013,7 @@ Becasso::MessageReceived(BMessage* message)
 				// char *s = (char *) &def_out_type;
 				// fprintf (stderr, "Current Default Export Type: '%c%c%c%c'\n", s[0], s[1], s[2],
 				// s[3]);
-			}
-			else if (message->FindString("data", &namedspecifier) == B_OK) {
+			} else if (message->FindString("data", &namedspecifier) == B_OK) {
 				const char* s = namedspecifier;
 				uint32 type;
 
@@ -2110,8 +2043,7 @@ Becasso::MessageReceived(BMessage* message)
 						{
 							out_type = fmts[j].type;
 							def_out_translator = translators[i];
-						}
-						else if (fmts[j].type == type)
+						} else if (fmts[j].type == type)
 						// Type was specified as type code
 						{
 							out_type = type;
@@ -2128,12 +2060,10 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 					break;
-				}
-				else {
+				} else {
 					def_out_type = out_type;
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_REPLY);
@@ -2142,8 +2072,7 @@ Becasso::MessageReceived(BMessage* message)
 					}
 					break;
 				}
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Export Format Type (either string or int32 please)");
 				if (message->IsSourceWaiting()) {
@@ -2151,8 +2080,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 				break;
 			}
@@ -2186,13 +2114,11 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
 				break;
-			}
-			else if (message->FindInt32("data", &indexspecifier) == B_OK) {
+			} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
 				if ((indexspecifier >= 0) && (indexspecifier < CountWindows())) {
 					delete fCurrentScriptee;
 					fCurrentScriptee = new BMessenger(WindowAt(indexspecifier));
@@ -2202,8 +2128,7 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_NO_ERROR);
 						message->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					char errstring[256];
 					sprintf(
 						errstring, "Invalid Scriptee: Index %ld out of range [0..%ld]",
@@ -2214,13 +2139,11 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
 				break;
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(
 					errstring,
@@ -2231,8 +2154,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -2248,8 +2170,7 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_NO_ERROR);
 						message->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					char errstring[256];
 					sprintf(errstring, "No tablet initialized (at the moment)");
 					if (message->IsSourceWaiting()) {
@@ -2257,12 +2178,10 @@ Becasso::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid TabletArea type (BRect please)");
 				if (message->IsSourceWaiting()) {
@@ -2270,8 +2189,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -2291,8 +2209,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddSpecifier("result", ToolSpecifiers[tool->selected()]);
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(
 					stderr,
 					"Current Tool: "
@@ -2309,8 +2226,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddSpecifier("result", ModeSpecifiers[mode->selected()]);
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(
 					stderr,
 					"Current Mode: "
@@ -2328,8 +2244,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(
 					stderr,
 					"Current Foreground Color: [Red: %3d Green: %3d Blue: %3d Alpha: %3d]\n",
@@ -2345,8 +2260,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(
 					stderr,
 					"Current Background Color: [Red: %3d Green: %3d Blue: %3d Alpha: %3d]\n",
@@ -2363,16 +2277,14 @@ Becasso::MessageReceived(BMessage* message)
 					reply.AddInt32("error", B_NO_ERROR);
 					reply.AddRect("result", rect);
 					message->SendReply(&reply);
-				}
-				else
+				} else
 					fprintf(
 						stderr,
 						"Current Tablet Area: [left: %5.0f top: %5.0f right: %5.0f bottom: "
 						"%5.0f]\n",
 						rect.left, rect.top, rect.right, rect.bottom
 					);
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "No tablet initialized (at the moment)");
 				if (message->IsSourceWaiting()) {
@@ -2380,8 +2292,7 @@ Becasso::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 		}
@@ -2391,8 +2302,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddData("result", B_INT32_TYPE, &def_out_type, sizeof(int32));
 				message->SendReply(&reply);
-			}
-			else {
+			} else {
 				char* s = (char*)&def_out_type;
 #if defined(__POWERPC__)
 				fprintf(
@@ -2412,8 +2322,7 @@ Becasso::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddData("result", B_MESSENGER_TYPE, &fCurrentScriptee, sizeof(BMessenger));
 				message->SendReply(&reply);
-			}
-			else {
+			} else {
 				fprintf(
 					stderr, "Scriptee %s.  I'd return a BMessenger * as reply.\n",
 					fCurrentScriptee ? "set" : "not set"
@@ -2469,11 +2378,9 @@ Becasso::setGrab(bool b, bool down)
 		SetCursor(down ? grab : hand);
 		fCurrentCursorSave = fCurrentCursor;
 		fCurrentCursor = CURSOR_OPEN_HAND;
-	}
-	else if (b && fCurrentCursor == CURSOR_OPEN_HAND) {
+	} else if (b && fCurrentCursor == CURSOR_OPEN_HAND) {
 		SetCursor(down ? grab : hand);
-	}
-	else if (!b && fCurrentCursor == CURSOR_OPEN_HAND) {
+	} else if (!b && fCurrentCursor == CURSOR_OPEN_HAND) {
 		switch (fCurrentCursorSave) {
 		case CURSOR_HAND:
 			setHand();
@@ -2510,8 +2417,7 @@ Becasso::setCross()
 	if (mode->selected() == M_SELECT) {
 		SetCursor(scross);
 		fCurrentCursor = CURSOR_SELECT;
-	}
-	else {
+	} else {
 		SetCursor(cross[0]);
 		fCurrentCursor = CURSOR_CROSS;
 	}
@@ -2539,8 +2445,7 @@ Becasso::setReady()
 	if (mode->selected() == M_SELECT) {
 		SetCursor(scross);
 		fCurrentCursor = CURSOR_SELECT;
-	}
-	else {
+	} else {
 		SetCursor(cross[0]);
 		fCurrentCursor = CURSOR_CROSS;
 	}
@@ -2563,8 +2468,7 @@ Becasso::setPicker(bool b)
 		SetCursor(picker);
 		fCurrentCursorSave = fCurrentCursor;
 		fCurrentCursor = CURSOR_PICKER;
-	}
-	else if (!b && fCurrentCursor == CURSOR_PICKER) {
+	} else if (!b && fCurrentCursor == CURSOR_PICKER) {
 		switch (fCurrentCursorSave) {
 		case CURSOR_HAND:
 			setHand();

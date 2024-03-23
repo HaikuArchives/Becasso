@@ -188,14 +188,12 @@ AttribPolyblob::MessageReceived(BMessage* msg)
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = POLYBLOB_OUTFILL;
-				}
-				else if (!strcasecmp(name, "Filled")) {
+				} else if (!strcasecmp(name, "Filled")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_ON);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = POLYBLOB_FILL;
-				}
-				else if (!strcasecmp(name, "Outline")) {
+				} else if (!strcasecmp(name, "Outline")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_ON);
@@ -208,8 +206,7 @@ AttribPolyblob::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

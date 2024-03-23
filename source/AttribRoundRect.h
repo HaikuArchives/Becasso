@@ -22,7 +22,8 @@
 #define PROP_ABSY 6
 #define PROP_CORNERS 7
 
-class AttribRoundRect : public AttribView {
+class AttribRoundRect : public AttribView
+{
   public:
 	AttribRoundRect();
 	virtual ~AttribRoundRect();

@@ -14,7 +14,8 @@
 #define NUM_BUTTONS 5
 #define BUT_ARRAY 16
 
-class MainWindow : public BWindow {
+class MainWindow : public BWindow
+{
   public:
 	MainWindow(const BRect frame, const char* name);
 	virtual ~MainWindow();

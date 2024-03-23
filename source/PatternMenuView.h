@@ -4,7 +4,8 @@
 #include "View.h"
 #include "PatternMenuButton.h"
 
-class PatternMenuView : public BView {
+class PatternMenuView : public BView
+{
   public:
 	PatternMenuView(BRect rect, const char* name, PatternMenuButton* pmb);
 	virtual ~PatternMenuView();

@@ -58,8 +58,7 @@ SAboutView::Draw(BRect updateRect)
 			SetHighColor(Red);
 			SetFontSize(13);
 			DrawString(lstring(4, "Unregistered Version"), BPoint(85, 155));
-		}
-		else {
+		} else {
 			SetHighColor(Grey8);
 #if defined(__HAIKU__)
 			DrawString("Released under the MIT license", BPoint(85, 152));

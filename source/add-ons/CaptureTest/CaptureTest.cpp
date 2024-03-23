@@ -7,7 +7,8 @@
 #include <Application.h>
 #include <string.h>
 
-class CaptureWindow : public BWindow {
+class CaptureWindow : public BWindow
+{
   public:
 	CaptureWindow(BRect rect)
 		: BWindow(

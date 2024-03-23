@@ -13,7 +13,8 @@ typedef uint32 bgra_pixel;
 typedef uint32 cmyk_pixel;
 typedef uint8 grey_pixel;
 
-typedef struct {
+typedef struct
+{
 	float hue;		  // [0,360>
 	float saturation; // [0,1]
 	float value;	  // [0,1]

@@ -77,8 +77,7 @@ TOTDWindow::TOTDWindow(const BRect frame, const int num)
 		g_settings_lock.Unlock();
 		fTotd = 1;
 		fTextView->SetText(lstring(503, ""));
-	}
-	else
+	} else
 		fTextView->SetText(totdText);
 }
 
@@ -122,8 +121,7 @@ TOTDWindow::MessageReceived(BMessage* msg)
 		if (!strcmp(totdText, "@@@")) {
 			fTotd = 1;
 			fTextView->SetText(lstring(503, ""));
-		}
-		else
+		} else
 			fTextView->SetText(totdText);
 		break;
 	}

@@ -12,7 +12,8 @@
 #define KNOBMARGIN 4
 #define KNOBVAL 16
 
-class EnterFilter : public BMessageFilter {
+class EnterFilter : public BMessageFilter
+{
   public:
 	EnterFilter(BHandler* handler);
 	virtual filter_result Filter(BMessage* message, BHandler** target);
@@ -202,8 +203,7 @@ Slider::MouseDown(BPoint point)
 				if (!(knob.Contains(p)) && !dragging) {
 					if (x > knob.left) {
 						value += step * (x - knob.right) / 10;
-					}
-					else {
+					} else {
 						value += step * (x - knob.left) / 10;
 					}
 					if (value < min)
@@ -218,8 +218,7 @@ Slider::MouseDown(BPoint point)
 					Invalidate(BRect(sep + 1, 0, offslid->Bounds().Width() + sep, height));
 					offslid->Unlock();
 					NotifyTarget();
-				}
-				else if (px != p.x && step <= 1) // Hacks galore!
+				} else if (px != p.x && step <= 1) // Hacks galore!
 				{
 					dragging = true;
 					value = (x - knobsize / 2) / (width - knobsize) * (max - min) + min;
@@ -327,8 +326,7 @@ Slider::KeyDown(const char* bytes, int32 numBytes)
 				BMessage* key = new BMessage('tcVC');
 				MessageReceived(key);
 				delete key;
-			}
-			else {
+			} else {
 				knobpos = BPoint(float(value - min) / (max - min) * (width - knobsize), 1);
 				BRect kbr = BRect(
 					knobpos.x + sep, knobpos.y, knobpos.x + knobsize - 2 + sep,
@@ -372,8 +370,7 @@ Slider::KeyDown(const char* bytes, int32 numBytes)
 				BMessage* key = new BMessage('tcVC');
 				MessageReceived(key);
 				delete key;
-			}
-			else {
+			} else {
 				// MakeFocus (false);
 				inherited::KeyDown(bytes, numBytes);
 				Invalidate();
@@ -382,8 +379,7 @@ Slider::KeyDown(const char* bytes, int32 numBytes)
 		default:
 			inherited::KeyDown(bytes, numBytes);
 		}
-	}
-	else
+	} else
 		inherited::KeyDown(bytes, numBytes);
 }
 

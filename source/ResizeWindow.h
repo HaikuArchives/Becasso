@@ -11,7 +11,8 @@
 #define UNIT_INCH 1
 #define UNIT_CM 2
 
-class ResizeWindow : public BWindow {
+class ResizeWindow : public BWindow
+{
   public:
 	ResizeWindow(CanvasWindow* target, const char* title, int32 h, int32 w);
 	virtual ~ResizeWindow();

@@ -34,13 +34,15 @@
 #define INVOKE_LIST 'invk'
 
 // Struct for keeping output format info together
-struct OutputFormat {
+struct OutputFormat
+{
 	uint32 type;
 	translator_id translator;
 };
 
 // CaptionView class for displaying a caption with a separator line
-class CaptionView : public BView {
+class CaptionView : public BView
+{
   public:
 	CaptionView(BRect frame, const char* caption);
 	virtual ~CaptionView();
@@ -52,7 +54,8 @@ class CaptionView : public BView {
 };
 
 // View for displaying the three info lines
-class InfoLinesView : public BView {
+class InfoLinesView : public BView
+{
   public:
 	InfoLinesView(BRect frame, int32 nLines);
 	virtual ~InfoLinesView();
@@ -66,7 +69,8 @@ class InfoLinesView : public BView {
 };
 
 // The main view
-class OutputFormatView : public BView {
+class OutputFormatView : public BView
+{
   public:
 	OutputFormatView(
 		BRect frame, BPositionIO* stream, BInvoker* item_selected, BTranslatorRoster* roster
@@ -375,8 +379,7 @@ OutputFormatView::MessageReceived(BMessage* msg)
 			info_lines[2] = version_line;
 			info_view->SetInfoLines(info_lines);
 			AddConfigView();
-		}
-		else {
+		} else {
 			// Reselect the original item
 			if (index >= 0)
 				list_view->Select(index);
@@ -479,8 +482,7 @@ OutputFormatView::AddConfigView()
 
 		// Make the config_view and its children follow the bottom of the window
 		RecursiveSetMode(config_view);
-	}
-	else {
+	} else {
 		// This translator doesn't have a config view
 		if (config_caption) {
 			RemoveChild(config_caption);

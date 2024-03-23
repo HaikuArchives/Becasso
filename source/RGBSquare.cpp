@@ -75,8 +75,7 @@ RGBSquare::ScreenChanged(BRect /* frame */, color_space mode)
 		first = true;
 		AttachedToWindow();
 		Invalidate();
-	}
-	else if (colorsquare->ColorSpace() != B_COLOR_8_BIT && mode == B_COLOR_8_BIT) {
+	} else if (colorsquare->ColorSpace() != B_COLOR_8_BIT && mode == B_COLOR_8_BIT) {
 		delete colorsquare;
 		delete colorcol;
 		colorsquare = new BBitmap(BRect(0, 0, 255, 255), B_COLOR_8_BIT);
@@ -122,8 +121,7 @@ RGBSquare::MouseDown(BPoint point)
 			Window()->PostMessage(&set);
 		}
 		inherited::MouseDown(point);
-	}
-	else {
+	} else {
 		thread_id id = spawn_thread(RGB_track_mouse, "RGB tracker", B_DISPLAY_PRIORITY, this);
 		resume_thread(id);
 	}
@@ -157,8 +155,7 @@ RGBSquare::mouseDown(BPoint point, int ob)
 		Window()->PostMessage(msg);
 		delete msg;
 		prevy = point.y;
-	}
-	else if (ob == 2) {
+	} else if (ob == 2) {
 		DrawLines();
 		switch (notcolor) {
 		case 0: // Red in the column
@@ -201,8 +198,7 @@ RGB_track_mouse(void* data)
 		msg = new BMessage('RGBc');
 		obj->Window()->PostMessage(msg);
 		delete msg;
-	}
-	else if (squareRect.Contains(point)) {
+	} else if (squareRect.Contains(point)) {
 		msg = new BMessage('RGBs');
 		obj->Window()->PostMessage(msg);
 		delete msg;
@@ -251,8 +247,7 @@ RGBSquare::SetColor(rgb_color c)
 					col[g][x][2] = 0;
 				}
 			}
-		}
-		else if (notcolor == 1) // Green in the column
+		} else if (notcolor == 1) // Green in the column
 		{
 			uchar g = c.green;
 			for (int r = 0; r < 256; r++) {
@@ -267,8 +262,7 @@ RGBSquare::SetColor(rgb_color c)
 					col[r][x][2] = 0;
 				}
 			}
-		}
-		else // Blue in the column
+		} else // Blue in the column
 		{
 			uchar b = c.blue;
 			for (int r = 0; r < 256; r++) {

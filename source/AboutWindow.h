@@ -3,7 +3,8 @@
 
 #include <Window.h>
 
-class AboutWindow : public BWindow {
+class AboutWindow : public BWindow
+{
   public:
 	AboutWindow(BRect rect);
 	virtual ~AboutWindow();

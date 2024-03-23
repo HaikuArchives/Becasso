@@ -12,7 +12,8 @@
 
 #include <string.h>
 
-class CaptureWindow : public BWindow {
+class CaptureWindow : public BWindow
+{
   public:
 	CaptureWindow(BRect rect)
 		: BWindow(
@@ -138,7 +139,7 @@ CaptureWindow::SetUpNodes()
 	format.type = B_MEDIA_RAW_VIDEO;
 	media_raw_video_format vid_format = media_raw_video_format::wildcard;
 	//	{ 0, 2, 0, VIDEO_SIZE_Y - 1, B_VIDEO_TOP_LEFT_RIGHT, 1, 1, {B_RGB32, VIDEO_SIZE_X,
-	//VIDEO_SIZE_Y, VIDEO_SIZE_X*4, 0, 0}};
+	// VIDEO_SIZE_Y, VIDEO_SIZE_X*4, 0, 0}};
 	format.u.raw_video = vid_format;
 
 	/* connect producer to consumer */

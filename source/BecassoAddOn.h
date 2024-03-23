@@ -127,7 +127,8 @@ class BView;
 const BRect EmptyRect = BRect(0, 0, 0, 0);
 
 // The becasso_addon_info struct
-typedef struct {
+typedef struct
+{
 	char name[80];		   // The name as it appears in the menu
 	uint32 index;		   // A unique index assigned at init time
 	int type;			   // Filter, Transformer, Generator, or Capture

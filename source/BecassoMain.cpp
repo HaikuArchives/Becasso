@@ -121,8 +121,7 @@ generate_alphabuffer(char* alpha)
 
 	if (reg == REG_HAIKU) {
 		strcat(gAlphaMask, "Haiku");
-	}
-	else {
+	} else {
 		RegWindow* rw =
 			new RegWindow(BRect(100, 100, 440, 240), lstring(420, "Register Becasso 2.0"), reg);
 		int val = rw->Go();
@@ -203,8 +202,7 @@ setup_alphabuffer()
 		fclose(kf);
 		// Hmm, there is no keyfile... Perhaps a SV db file then?
 		generate_alphabuffer(path);
-	}
-	else {
+	} else {
 		if (fread(buffer, 255, 1, kf) != 1) {
 			(new BAlert(
 				 "", lstring(8, "Your Keyfile is damaged"), lstring(136, "OK"), NULL, NULL,
@@ -237,7 +235,7 @@ setup_alphabuffer()
 		{
 			fprintf(stderr, "keyfile checksum failure\n"); //: %x, %x %x %x %x\n", sum,
 			//				gAlphaBuffer[252], gAlphaBuffer[253], gAlphaBuffer[254],
-			//gAlphaBuffer[255]);
+			// gAlphaBuffer[255]);
 			return; // checksum failure
 		}
 

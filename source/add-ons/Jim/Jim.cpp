@@ -4,7 +4,8 @@
 
 // #include "ScannerBe.h"
 
-class CaptureWindow : public BWindow {
+class CaptureWindow : public BWindow
+{
   public:
 	CaptureWindow(BRect rect)
 		: BWindow(
@@ -22,7 +23,8 @@ class CaptureWindow : public BWindow {
 
 CaptureWindow* window;
 
-class ClickWatcher : public BLooper {
+class ClickWatcher : public BLooper
+{
   public:
 	virtual void MessageReceived(BMessage* msg);
 };

@@ -10,7 +10,8 @@
 
 // NB: This is a very straightforward implementation, and NOT very efficient!
 
-class cn_list {
+class cn_list
+{
   public:
 	cn_list(int _max) : fMax(_max), fIndex(0), fMf(0)
 	{
@@ -72,7 +73,8 @@ cn_list::most_frequent()
 
 int gSize;
 
-class OilView : public BView {
+class OilView : public BView
+{
   public:
 	OilView(BRect rect) : BView(rect, "oil_view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -188,7 +190,7 @@ process(
 
 		//		printf ("size = %i, hsize = %i\n", size, hsize);
 		//		printf ("slpr = %i, dlpr = %i, h = %i, w = %i\n", slpr, (*outLayer)->BytesPerRow(),
-		//h, w);
+		// h, w);
 		for (int32 y = 0; y < h; y++) {
 			bgra_pixel* dbits = (bgra_pixel*)(*outLayer)->Bits() + y * dlpr - 1;
 			if (final) {
@@ -227,8 +229,7 @@ process(
 					}
 					// printf ("(%ld, %ld) -> %p\n", x, y, colors.most_frequent());
 					*(++dbits) = colors.most_frequent();
-				}
-				else
+				} else
 					*(++dbits) = *(sbits + y * slpr + x);
 			}
 			if (inSelection)

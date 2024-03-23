@@ -7,7 +7,8 @@
 #include "ColorWindow.h"
 #include "hsv.h"
 
-class HSVSquare : public BView {
+class HSVSquare : public BView
+{
   public:
 	HSVSquare(BRect frame, ColorWindow* ed);
 	virtual ~HSVSquare();

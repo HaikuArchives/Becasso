@@ -125,8 +125,7 @@ Image_Init(const char* loadPath)
 					return errno;
 				}
 				strcat(str, temp + 2); /*	include slash we know is there	*/
-			}
-			else {
+			} else {
 				str = (char*)malloc(strlen(temp) + 40);
 				if (!str) {
 					free(env);

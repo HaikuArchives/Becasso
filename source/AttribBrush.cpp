@@ -140,8 +140,7 @@ AttribBrush::mkDiagonalBrush(Brush* b, int dir)
 		b->Set(d, 0, 64);
 		b->Set(d, 1, 128);
 		b->Set(d - 1, 0, 128);
-	}
-	else // backward slash
+	} else // backward slash
 	{
 		for (int i = 1; i < d; i++) {
 			b->Set(i, i, 255);

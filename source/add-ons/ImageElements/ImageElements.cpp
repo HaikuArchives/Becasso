@@ -8,7 +8,8 @@
 
 #define MAXAMOUNT 100
 
-class IEWindow : public AddOnWindow {
+class IEWindow : public AddOnWindow
+{
   public:
 	IEWindow(BRect rect, becasso_addon_info* info) : AddOnWindow(rect, info){};
 	virtual ~IEWindow(){};

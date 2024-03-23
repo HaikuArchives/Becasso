@@ -3,7 +3,8 @@
 
 #include <MenuItem.h>
 
-class PatternItem : public BMenuItem {
+class PatternItem : public BMenuItem
+{
   public:
 	PatternItem(const pattern _p);
 	virtual ~PatternItem();

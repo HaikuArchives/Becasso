@@ -33,7 +33,8 @@ set_window_origin(uint32 index, BPoint origin)
 	g_settings_lock.Unlock();
 }
 
-typedef struct {
+typedef struct
+{
 	entry_ref ref;
 	time_t mtime;
 } refandtime;
@@ -88,8 +89,7 @@ make_recent_menu(BMenu* menu)
 
 		if (!num_entries) {
 			menu->AddItem(new BMenuItem("<no entries>", NULL));
-		}
-		else // we have a list of entry_refs now.
+		} else // we have a list of entry_refs now.
 		{
 			// printf ("%ld entries found\n", num_entries);
 			// Since the #items in the list will be small, do a stupid sort
@@ -123,7 +123,7 @@ make_recent_menu(BMenu* menu)
 				BMessage* msg = new BMessage('opnR');
 				msg->AddRef("ref", &ref);
 				//				printf ("%ld %s %s\n", entryList[i].mtime,
-				//ctime(&entryList[i].mtime), name);
+				// ctime(&entryList[i].mtime), name);
 				BMenuItem* item = new BMenuItem(name, msg);
 				item->SetTarget(be_app);
 				menu->AddItem(item);
@@ -207,8 +207,7 @@ PrefsLoader::PrefsLoader()
 					continue;
 				if (sscanf(ptr, "%31[a-zA-Z_0-9] =", name) != 1) {
 					fprintf(stderr, "Strange Becasso settings line: %s\n", name);
-				}
-				else {
+				} else {
 					if (!strcmp(name, "window_origin")) {
 						int32 index;
 						while (*ptr != '=')
@@ -225,11 +224,9 @@ PrefsLoader::PrefsLoader()
 								fprintf(
 									stderr, "Illegal window origin in Becasso settings: %s\n", ptr
 								);
-						}
-						else
+						} else
 							fprintf(stderr, "Illegal window index in Becasso settings: %s\n", ptr);
-					}
-					else if (!strcmp(name, "language")) {
+					} else if (!strcmp(name, "language")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
@@ -237,8 +234,7 @@ PrefsLoader::PrefsLoader()
 						while (*ptr != '\n')
 							g_settings.language[i++] = *ptr++;
 						g_settings.language[i] = 0;
-					}
-					else if (!strcmp(name, "recent_entries")) {
+					} else if (!strcmp(name, "recent_entries")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
@@ -246,29 +242,25 @@ PrefsLoader::PrefsLoader()
 							fprintf(
 								stderr, "Illegal # of Recent items in Becasso settings: %s\n", ptr
 							);
-					}
-					else if (!strcmp(name, "max_undo")) {
+					} else if (!strcmp(name, "max_undo")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
 						if (sscanf(ptr, "%ld", &g_settings.max_undo) != 1)
 							fprintf(stderr, "Illegal max_undo # in Becasso settings: %s\n", ptr);
-					}
-					else if (!strcmp(name, "preview_size")) {
+					} else if (!strcmp(name, "preview_size")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
 						if (sscanf(ptr, "%ld", &g_settings.preview_size) != 1)
 							fprintf(stderr, "Illegal preview_size in Becasso settings: %s\n", ptr);
-					}
-					else if (!strcmp(name, "totd")) {
+					} else if (!strcmp(name, "totd")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
 						if (sscanf(ptr, "%ld", &g_settings.totd) != 1)
 							fprintf(stderr, "Illegal totd number in Becasso settings: %s\n", ptr);
-					}
-					else if (!strcmp(name, "selection_render")) {
+					} else if (!strcmp(name, "selection_render")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
@@ -276,8 +268,7 @@ PrefsLoader::PrefsLoader()
 							fprintf(
 								stderr, "Illegal selection_render in Becasso settings: %s\n", ptr
 							);
-					}
-					else {
+					} else {
 						fprintf(stderr, "Unknown Becasso setting: %s\n", name);
 					}
 				}
@@ -330,8 +321,7 @@ PrefsLoader::Save()
 					fprintf(fp, "window_origin = %d:%g,%g\n", index, origin.x, origin.y);
 			}
 			fclose(fp);
-		}
-		else
+		} else
 			fprintf(stderr, "Couldn't save Settings\n");
 	}
 	g_settings.settings_touched = false;
@@ -355,8 +345,7 @@ init_strings(const char* file)
 			fgets(buffer, 4095, fp); // comment line
 			// printf ("%s", buffer);
 			continue;
-		}
-		else
+		} else
 			ungetc(c, fp);
 
 		if (fscanf(fp, "%d:", &index) > 0) {
@@ -394,8 +383,7 @@ lstring(const int32 index, const char* default_string)
 	if (lStrings[index]) {
 		// printf ("%ld -> %s\n", index, lStrings[index]);
 		return lStrings[index];
-	}
-	else {
+	} else {
 		// printf ("Warning about %ld\n", index);
 		return default_string;
 	}

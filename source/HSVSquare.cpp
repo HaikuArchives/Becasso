@@ -26,8 +26,7 @@ HSVSquare::HSVSquare(BRect frame, ColorWindow* ed)
 					hue += 360;
 				hs[y + 127][x + 127][0] = hue;
 				hs[y + 127][x + 127][1] = sqrt(x * x + y * y) / 127;
-			}
-			else if (!x && !y)
+			} else if (!x && !y)
 				hs[y + 127][x + 127][0] = -1;
 			else
 				hs[y + 127][x + 127][0] = -2;
@@ -71,8 +70,7 @@ HSVSquare::ScreenChanged(BRect /* frame */, color_space cs)
 		colorcol = new BBitmap(BRect(0, 0, 31, 255), B_RGB32);
 		AttachedToWindow();
 		Invalidate();
-	}
-	else if (colorsquare->ColorSpace() != B_COLOR_8_BIT && cs == B_COLOR_8_BIT) {
+	} else if (colorsquare->ColorSpace() != B_COLOR_8_BIT && cs == B_COLOR_8_BIT) {
 		delete colorsquare;
 		delete colorcol;
 		colorsquare = new BBitmap(BRect(0, 0, 255, 255), B_COLOR_8_BIT);
@@ -130,8 +128,7 @@ HSVSquare::MouseDown(BPoint point)
 			BMessage set('CXSc');
 			Window()->PostMessage(&set);
 		}
-	}
-	else {
+	} else {
 		thread_id id = spawn_thread(HSV_track_mouse, "HSV tracker", B_DISPLAY_PRIORITY, this);
 		resume_thread(id);
 	}
@@ -160,8 +157,7 @@ HSVSquare::mouseDown(BPoint point, int ob)
 			DrawLines();
 		}
 		prevy = point.y;
-	}
-	else if (ob == 2) {
+	} else if (ob == 2) {
 		if (x == 0 && y == 0) {
 			DrawLines();
 			currentHSV.hue = HUE_UNDEF;
@@ -173,8 +169,7 @@ HSVSquare::mouseDown(BPoint point, int ob)
 			msg->AddFloat("color", currentHSV.value);
 			Window()->PostMessage(msg);
 			delete msg;
-		}
-		else {
+		} else {
 			DrawLines();
 			currentHSV.hue = clipdegr(atan2(x, y) / M_PI * 180 - 90);
 			currentHSV.saturation = clipone(sqrt(x * x + y * y) / 127);
@@ -205,8 +200,7 @@ HSV_track_mouse(void* data)
 		msg = new BMessage('HSVc');
 		obj->Window()->PostMessage(msg);
 		delete msg;
-	}
-	else if (squareRect.Contains(point)) {
+	} else if (squareRect.Contains(point)) {
 		float x = point.x - 127 - 40;
 		float y = point.y - 127;
 		if (x * x + y * y < 16129) {
@@ -260,8 +254,7 @@ HSVSquare::SetColor(hsv_color h)
 					square[y + 127][x + 127][0] = d.red;
 					square[y + 127][x + 127][1] = d.green;
 					square[y + 127][x + 127][2] = d.blue;
-				}
-				else {
+				} else {
 					square[y + 127][x + 127][0] = LightGrey.red;
 					square[y + 127][x + 127][1] = LightGrey.green;
 					square[y + 127][x + 127][2] = LightGrey.blue;

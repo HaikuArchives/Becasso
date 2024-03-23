@@ -45,15 +45,13 @@ hsv2rgb(hsv_color c)
 			r = v;
 			g = v;
 			b = v;
-		}
-		else {
+		} else {
 			//			fprintf (stderr, "Invalid HSV color\n");
 			r = v;
 			g = v;
 			b = v;
 		}
-	}
-	else {
+	} else {
 		float f, p, q, t;
 		int i;
 
@@ -130,8 +128,7 @@ diff(rgb_color a, rgb_color b)
 		int dg = (int)a.green - b.green;
 		int db = (int)a.blue - b.blue;
 		return (sqrt(irlut[dr] + iglut[dg] + iblut[db]) / 32); // 32 ~ sqrt(1000); 1% error.
-	}
-	else {
+	} else {
 		for (int i = 0; i < 512; i++) {
 			long j = (i - 256) * (i - 256);
 #if defined(USE_OLD_WEIGHTS)

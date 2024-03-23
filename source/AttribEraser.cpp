@@ -196,8 +196,7 @@ AttribEraser::MessageReceived(BMessage* msg)
 					eT1->SetValue(B_CONTROL_OFF);
 					eT2->SetValue(B_CONTROL_ON);
 					value = ERASER_ELLIPSE;
-				}
-				else if (!strcasecmp(name, "Rectangle")) {
+				} else if (!strcasecmp(name, "Rectangle")) {
 					eT1->SetValue(B_CONTROL_ON);
 					eT2->SetValue(B_CONTROL_OFF);
 					value = ERASER_RECT;
@@ -209,8 +208,7 @@ AttribEraser::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

@@ -10,7 +10,8 @@
 #define UD_TABLET 1
 #define ET_TABLET 2 // Graphire
 
-class Tablet {
+class Tablet
+{
   public:
 	Tablet(const char* portname);
 	virtual ~Tablet();

@@ -19,7 +19,8 @@
 #define CURSOR_OPEN_HAND 7
 #define CURSOR_GRAB 8
 
-class Becasso : public BApplication {
+class Becasso : public BApplication
+{
   public:
 	Becasso();
 	virtual ~Becasso();
@@ -67,7 +68,8 @@ class Becasso : public BApplication {
 	int32 canvas_index;
 };
 
-class canvas {
+class canvas
+{
   public:
 	int32 index;
 	char name[MAX_CANVAS_NAME];

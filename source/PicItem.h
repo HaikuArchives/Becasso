@@ -8,7 +8,8 @@
 #include "AttribWindow.h"
 #include "AttribView.h"
 
-class PicItem : public BMenuItem {
+class PicItem : public BMenuItem
+{
   public:
 	PicItem(
 		const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help

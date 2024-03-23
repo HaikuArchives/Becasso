@@ -6,7 +6,8 @@
 #include <Rect.h>
 #include "ColorWindow.h"
 
-class RGBSquare : public BView {
+class RGBSquare : public BView
+{
   public:
 	RGBSquare(BRect frame, int nc, ColorWindow* ed);
 	virtual ~RGBSquare();

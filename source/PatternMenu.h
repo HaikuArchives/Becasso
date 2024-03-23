@@ -13,7 +13,8 @@
 
 class PatternMenuButton;
 
-class PatternMenu : public BMenu {
+class PatternMenu : public BMenu
+{
 	friend class PatternMenuButton;
 
   public:

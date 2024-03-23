@@ -101,8 +101,7 @@ process(
 						minC = cval;
 					if (cval > maxC)
 						maxC = cval;
-				}
-				else
+				} else
 					++sbits;
 			}
 			mapbits += mdiff;
@@ -134,14 +133,12 @@ process(
 							clipchar(factor * (BLUE(pixel) - minC)), ALPHA(pixel)
 						);
 						*(++dbits) = weighted_average(newpix, mapx, pixel, 255 - mapx);
-					}
-					else
+					} else
 						*(++dbits) = *(++sbits);
 				}
 				mapbits += mdiff;
 			}
-		}
-		else {
+		} else {
 			sbits = (bgra_pixel*)inLayer->Bits();
 			bgra_pixel* dbits = (bgra_pixel*)(*outLayer)->Bits();
 			memcpy(dbits, sbits, w * h * 4);
@@ -196,8 +193,7 @@ process(
 					sbits += mdiff;
 					dbits += mdiff;
 				}
-			}
-			else {
+			} else {
 				sbits = mapbits;
 				grey_pixel* dbits = (grey_pixel*)(*outSelection)->Bits();
 				memcpy(dbits, sbits, w * h);

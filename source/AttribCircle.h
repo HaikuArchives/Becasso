@@ -17,7 +17,8 @@
 #define PROP_TYPE 2
 #define PROP_FIXPOINT 3
 
-class AttribCircle : public AttribView {
+class AttribCircle : public AttribView
+{
   public:
 	AttribCircle();
 	virtual ~AttribCircle();

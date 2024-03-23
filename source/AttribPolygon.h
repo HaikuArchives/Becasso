@@ -13,7 +13,8 @@
 #define PROP_PENSIZE 1
 #define PROP_TYPE 2
 
-class AttribPolygon : public AttribView {
+class AttribPolygon : public AttribView
+{
   public:
 	AttribPolygon();
 	virtual ~AttribPolygon();

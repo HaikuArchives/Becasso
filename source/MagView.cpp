@@ -76,8 +76,7 @@ MagView::MouseDown(BPoint point)
 		if (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)
 			locolor->set(myView->getColor(p.x, p.y));
 		fPicking = true;
-	}
-	else if (!fPicking) {
+	} else if (!fPicking) {
 		if (buttons & B_PRIMARY_MOUSE_BUTTON)
 			hi = hicolor->color();
 		if (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)
@@ -117,8 +116,7 @@ MagView::MouseDown(BPoint point)
 					ScrollBy(0, zoom * (point.y - bounds.bottom));
 				if (point.y < bounds.top && bounds.top > 0)
 					ScrollBy(0, zoom * (point.y - bounds.top));
-			}
-			else
+			} else
 				GetMouse(&point, &buttons);
 
 			p = BPoint(int(point.x / zoom), int(point.y / zoom));
@@ -137,8 +135,7 @@ MagView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		mainapp->setHand();
 		mouse_on_canvas = false;
 		// Invalidate();
-	}
-	else if (transit == B_ENTERED_VIEW && Window()->IsActive() && !msg) {
+	} else if (transit == B_ENTERED_VIEW && Window()->IsActive() && !msg) {
 		mouse_on_canvas = true;
 	}
 
@@ -168,8 +165,7 @@ MagView::Pulse()
 	{
 		mainapp->setPicker(true);
 		fPicking = true;
-	}
-	else if (fPicking) {
+	} else if (fPicking) {
 		mainapp->setPicker(false);
 		if (mouse_on_canvas && !buttons)
 			mainapp->FixCursor(
@@ -259,8 +255,7 @@ MagView::SetupUndo(BPoint p, uint32 c)
 		undo[undoIndex].y = uint16(p.y);
 		undo[undoIndex].c = c;
 		//		printf ("Setup undo in %ld\n", undoIndex);
-	}
-	else {
+	} else {
 		for (uint32 i = 0; i < MAX_MAG_UNDO - 1; i++)
 			undo[i] = undo[i + 1];
 		undo[MAX_MAG_UNDO - 1].x = uint16(p.x);
@@ -302,8 +297,7 @@ MagView::Undo()
 			}
 		}
 		return B_OK;
-	}
-	else
+	} else
 		return B_ERROR; // Nothing to undo...
 }
 
@@ -340,7 +334,6 @@ MagView::Redo()
 		}
 
 		return B_OK;
-	}
-	else
+	} else
 		return B_ERROR;
 }

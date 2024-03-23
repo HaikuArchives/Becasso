@@ -7,7 +7,8 @@
 
 #define MAXAMOUNT 100
 
-class TranslateWindow : public AddOnWindow {
+class TranslateWindow : public AddOnWindow
+{
   public:
 	TranslateWindow(BRect rect, becasso_addon_info* info) : AddOnWindow(rect, info)
 	{

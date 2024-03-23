@@ -21,7 +21,8 @@ float gPhase;
 int gDirection;
 int gColor;
 
-class WaveView : public BView {
+class WaveView : public BView
+{
   public:
 	WaveView(BRect rect) : BView(rect, "wave view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -244,8 +245,7 @@ process(
 						if (orig) {
 							for (col = firstCol; col < firstCol + offset; col++)
 								*dl++ = *sl++;
-						}
-						else {
+						} else {
 							for (col = firstCol; col < firstCol + offset; col++)
 								*dl++ = bg;
 						}
@@ -253,8 +253,7 @@ process(
 						if (orig) {
 							a = *sl;
 							sl -= offset;
-						}
-						else
+						} else
 							a = bg;
 						b = *sl;
 						for (col = firstCol + offset; col <= lastCol; col++) {
@@ -265,8 +264,7 @@ process(
 						sl += offset;
 						for (col = lastCol + 1; col < w; col++)
 							*dl++ = *sl++;
-					}
-					else // if (0)	// Shift left
+					} else // if (0)	// Shift left
 					{
 						for (col = 0; col < firstCol; col++)
 							*dl++ = *sl++;
@@ -286,8 +284,7 @@ process(
 							for (col = lastCol + offset; col < lastCol; col++)
 								*dl++ = *sl++;
 							//							sl += offset;
-						}
-						else {
+						} else {
 							*dl++ = weighted_average(bg, ofac, a, 255 - ofac);
 							for (col = lastCol + offset; col < lastCol; col++) {
 								*dl++ = bg;
@@ -301,8 +298,7 @@ process(
 					//						for (col = 0; col < w; col++)
 					//							*(++dl) = *(++sl);
 					//					}
-				}
-				else // !final
+				} else // !final
 				{
 					int32 offset = int32(iamp * sin((row - firstRow) * pfac + phase));
 					bgra_pixel* sl = s + row * pprs;
@@ -316,8 +312,7 @@ process(
 								*(++dl) = *(++sl);
 							}
 							sl -= offset;
-						}
-						else {
+						} else {
 							for (col = firstCol; col < firstCol + offset; col++) {
 								*(++dl) = bg;
 							}
@@ -331,8 +326,7 @@ process(
 						for (col = lastCol; col < w; col++) {
 							*(++dl) = *(++sl);
 						}
-					}
-					else // Shift left
+					} else // Shift left
 					{
 						for (col = 0; col < firstCol; col++)
 							*(++dl) = *(++sl);
@@ -348,8 +342,7 @@ process(
 								*(++dl) = *(++sl);
 							}
 							// sl += offset;
-						}
-						else {
+						} else {
 							for (col = lastCol + offset; col < lastCol; col++) {
 								*(++dl) = bg;
 							}
@@ -362,8 +355,7 @@ process(
 			}
 			for (row = lastRow + 1; row < h; row++)
 				memcpy(d + 1 + row * pprd, s + 1 + row * pprs, pprs * 4);
-		}
-		else /* Vertical */
+		} else /* Vertical */
 		{
 			float delta = 100.0 / (lastCol - firstCol); // For the Status Bar.
 			float iamp = amplitude * (lastRow - firstRow);
@@ -405,8 +397,7 @@ process(
 								sl += pprs;
 							}
 							sl -= offset * pprs;
-						}
-						else {
+						} else {
 							for (row = firstRow; row < firstRow + offset; row++) {
 								*dl = bg;
 								dl += pprd;
@@ -416,8 +407,7 @@ process(
 						if (orig) {
 							a = *sl;
 							// sl -= pprs;
-						}
-						else
+						} else
 							a = bg;
 						b = *sl;
 						for (row = firstRow + offset; row <= lastRow; row++) {
@@ -433,8 +423,7 @@ process(
 							dl += pprd;
 							sl += pprs;
 						}
-					}
-					else // if (foffset < 0)	// Shift up
+					} else // if (foffset < 0)	// Shift up
 					{
 						for (row = 0; row < firstRow; row++) {
 							*dl = *sl;
@@ -462,8 +451,7 @@ process(
 								dl += pprd;
 								sl += pprs;
 							}
-						}
-						else {
+						} else {
 							*dl = weighted_average(a, ofac, bg, 255 - ofac);
 							dl += pprd;
 							for (row = lastRow + offset + 1; row <= lastRow; row++) {
@@ -477,8 +465,7 @@ process(
 							sl += pprs;
 						}
 					}
-				}
-				else // !final
+				} else // !final
 				{
 					int32 offset = int32(-iamp * sin((col - firstCol) * pfac + phase));
 					bgra_pixel* sl = s + col + 1;
@@ -497,8 +484,7 @@ process(
 								sl += pprs;
 							}
 							sl -= offset * pprs;
-						}
-						else {
+						} else {
 							for (row = firstRow; row < firstRow + offset; row++) {
 								*dl = bg;
 								dl += pprd;
@@ -515,8 +501,7 @@ process(
 							dl += pprd;
 							sl += pprs;
 						}
-					}
-					else // Shift up
+					} else // Shift up
 					{
 						for (row = 0; row < firstRow; row++) {
 							*dl = *sl;
@@ -536,8 +521,7 @@ process(
 								dl += pprd;
 								sl += pprs;
 							}
-						}
-						else {
+						} else {
 							for (row = lastRow + offset + 1; row <= lastRow; row++) {
 								*dl = bg;
 								dl += pprd;
@@ -600,8 +584,7 @@ process(
 							*(++dl) = *(++sl);
 						}
 						sl -= offset;
-					}
-					else {
+					} else {
 						for (col = firstCol; col < firstCol + offset; col++) {
 							*(++dl) = bg;
 						}
@@ -615,8 +598,7 @@ process(
 					for (col = lastCol; col < w; col++) {
 						*(++dl) = *(++sl);
 					}
-				}
-				else // Shift left
+				} else // Shift left
 				{
 					for (col = 0; col < firstCol; col++)
 						*(++dl) = *(++sl);
@@ -632,8 +614,7 @@ process(
 							*(++dl) = *(++sl);
 						}
 						// sl += offset;
-					}
-					else {
+					} else {
 						for (col = lastCol + offset; col < lastCol; col++) {
 							*(++dl) = bg;
 						}
@@ -645,8 +626,7 @@ process(
 			}
 			for (row = lastRow + 1; row < h; row++)
 				memcpy(d + 1 + row * pprd, s + 1 + row * pprs, pprs * 4);
-		}
-		else /* Vertical */
+		} else /* Vertical */
 		{
 			float delta = 100.0 / (lastCol - firstCol); // For the Status Bar.
 			float iamp = amplitude * (lastRow - firstRow);
@@ -687,8 +667,7 @@ process(
 							sl += pprs;
 						}
 						sl -= offset * pprs;
-					}
-					else {
+					} else {
 						for (row = firstRow; row < firstRow + offset; row++) {
 							*dl = bg;
 							dl += pprd;
@@ -705,8 +684,7 @@ process(
 						dl += pprd;
 						sl += pprs;
 					}
-				}
-				else // Shift up
+				} else // Shift up
 				{
 					for (row = 0; row < firstRow; row++) {
 						*dl = *sl;
@@ -726,8 +704,7 @@ process(
 							dl += pprd;
 							sl += pprs;
 						}
-					}
-					else {
+					} else {
 						for (row = lastRow + offset + 1; row <= lastRow; row++) {
 							*dl = bg;
 							dl += pprd;

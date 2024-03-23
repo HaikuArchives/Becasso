@@ -51,8 +51,7 @@ BitmapView::Draw(BRect /*update*/)
 				(Bounds().Height() - fBitmap->Bounds().Height()) / 2
 			);
 			DrawBitmap(fBitmap, place);
-		}
-		else
+		} else
 			DrawBitmap(fBitmap, fPosition);
 	}
 }

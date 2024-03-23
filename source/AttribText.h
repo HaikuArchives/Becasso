@@ -19,7 +19,8 @@
 #define PROP_ANTIALIAS 5
 #define PROP_TEXT 6
 
-class AttribText : public AttribView {
+class AttribText : public AttribView
+{
   public:
 	AttribText();
 	virtual ~AttribText();

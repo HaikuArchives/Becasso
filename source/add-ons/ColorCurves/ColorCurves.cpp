@@ -37,12 +37,14 @@ gamma_x86(uint32* s, uint32* d, uint32* table, uint32 numPix);
 
 #define MAX_POINTS 64
 
-typedef struct {
+typedef struct
+{
 	unsigned char x;
 	unsigned char y;
 } point;
 
-class CurveView : public BView {
+class CurveView : public BView
+{
   public:
 	CurveView(BRect rect, const char* name) : BView(rect, name, 0, B_WILL_DRAW)
 	{
@@ -77,8 +79,7 @@ class CurveView : public BView {
 			fGamma[0] = gamma;
 			fGamma[1] = gamma;
 			fGamma[2] = gamma;
-		}
-		else
+		} else
 			fGamma[fCurrent] = gamma;
 	}
 
@@ -120,7 +121,8 @@ class CurveView : public BView {
 
 CurveView* gCurve = 0;
 
-class ColorCurvesView : public BView {
+class ColorCurvesView : public BView
+{
   public:
 	ColorCurvesView(BRect rect) : BView(rect, "color_curves", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -309,16 +311,16 @@ CurveView::do_FillTable(int channel)
 				wct[channel][j] =
 					(unsigned char)(float(points[channel][1].y - points[channel][0].y) * j / 255 +
 									points[channel][0].y);
-		}
-		else {
+		} else {
 			float a, b, c, d;
 			float yprime, ynprime;
 
 			// First section: quadratic function
 			//			ynprime = (float (points[1].y - points[0].y)/(points[1].x -
-			//points[0].x)*(points[2].x - points[1].x)
+			// points[0].x)*(points[2].x - points[1].x)
 			//					+ float (points[2].y - points[1].y)/(points[2].x -
-			//points[1].x)*(points[1].x - points[0].x)) 					/ (points[2].x - points[0].x);
+			// points[1].x)*(points[1].x - points[0].x)) 					/ (points[2].x -
+			// points[0].x);
 			ynprime = float(points[channel][2].y - points[channel][0].y) /
 					  (points[channel][2].x - points[channel][0].x);
 			a = ynprime / points[channel][1].x -
@@ -339,7 +341,7 @@ CurveView::do_FillTable(int channel)
 				float xt = xr - xl;
 				yprime = ynprime;
 				//				ynprime = (float (yr - yl)/(xr - xl)*(points[i + 2].x - points[i +
-				//1].x)
+				// 1].x)
 				//						 + float (points[i + 2].y - yr)/(points[i + 2].x - points[i
 				//+ 1].x)*xt) 						 / (xr - points[i - 1].x);
 				ynprime = float(points[channel][i + 2].y - points[channel][i].y) /
@@ -395,8 +397,7 @@ CurveView::FillTable(int channel)
 		do_FillTable(0);
 		do_FillTable(1);
 		do_FillTable(2);
-	}
-	else
+	} else
 		do_FillTable(channel);
 }
 
@@ -412,8 +413,7 @@ CurveView::do_AddPoint(int channel)
 		points[channel][2] = points[channel][1];
 		points[channel][1].x = (points[channel][2].x - points[channel][0].x) / 2;
 		points[channel][1].y = (points[channel][2].y - points[channel][0].y) / 2;
-	}
-	else {
+	} else {
 		// Find largest section and add the new point there
 		int maxdist = 0;
 		int ind = 0;
@@ -442,8 +442,7 @@ CurveView::AddPoint()
 		do_AddPoint(0);
 		do_AddPoint(1);
 		do_AddPoint(2);
-	}
-	else
+	} else
 		do_AddPoint(fCurrent);
 	FillTable(fCurrent);
 	addon_preview();
@@ -469,8 +468,7 @@ CurveView::RemovePoint()
 		do_RemovePoint(0);
 		do_RemovePoint(1);
 		do_RemovePoint(2);
-	}
-	else
+	} else
 		do_RemovePoint(fCurrent);
 	FillTable(fCurrent);
 	addon_preview();
@@ -502,8 +500,7 @@ CurveView::MouseDown(BPoint point)
 							points[0][i].x = 0;
 							points[1][i].x = 0;
 							points[2][i].x = 0;
-						}
-						else {
+						} else {
 							if (points[0][i].x <= points[0][i - 1].x)
 								points[0][i].x = points[0][i - 1].x + 1;
 							if (points[1][i].x <= points[1][i - 1].x)
@@ -516,8 +513,7 @@ CurveView::MouseDown(BPoint point)
 							points[0][i].x = 255;
 							points[1][i].x = 255;
 							points[2][i].x = 255;
-						}
-						else {
+						} else {
 							if (points[0][i].x >= points[0][i + 1].x)
 								points[0][i].x = points[0][i + 1].x - 1;
 							if (points[1][i].x >= points[1][i + 1].x)
@@ -536,8 +532,7 @@ CurveView::MouseDown(BPoint point)
 				}
 			}
 		}
-	}
-	else {
+	} else {
 		for (int i = 0; i < npoints[fCurrent]; i++) {
 			BRect handle(
 				points[fCurrent][i].x - 3, 252 - points[fCurrent][i].y, points[fCurrent][i].x + 3,
@@ -865,8 +860,7 @@ process(
 				// printf ("("); fflush (stdout);
 				gamma_x86(sbits, dbits, table, w * h);
 				// printf (")"); fflush (stdout);
-			}
-			else {
+			} else {
 #endif
 				for (uint32 x = 0; x < w; x++) {
 					if (!inSelection || *(++mapbits)) {
@@ -877,8 +871,7 @@ process(
 								wct[0][RED(pixel)], wct[1][GREEN(pixel)], wct[2][BLUE(pixel)],
 								wct[3][ALPHA(pixel)]
 							);
-						}
-						else if (cspace == 1) // CMYK
+						} else if (cspace == 1) // CMYK
 						{
 							uint32 p = *(++sbits);
 							cmyk_pixel pixel = bgra2cmyk(p);
@@ -887,8 +880,7 @@ process(
 								wct[7][BLACK(pixel)]
 							));
 							*(++dbits) = (bgra & COLOR_MASK) | (p & ALPHA_MASK);
-						}
-						else // HSV
+						} else // HSV
 						{
 							uint32 p = *(++sbits);
 							hsv_color c = bgra2hsv(p);
@@ -897,8 +889,7 @@ process(
 							c.value = float(wct[10][int(c.value * 255)]) / 255.0;
 							*(++dbits) = (hsv2bgra(c) & COLOR_MASK) | (p & ALPHA_MASK);
 						}
-					}
-					else
+					} else
 						*(++dbits) = *(++sbits);
 				}
 				mapbits += mdiff;

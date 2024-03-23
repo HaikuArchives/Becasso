@@ -26,7 +26,8 @@
 		B_DIRECT_SPECIFIER, 0                                                                      \
 	}
 
-class AttribView : public BView {
+class AttribView : public BView
+{
   public:
 	AttribView(BRect frame, const char* title);
 	virtual ~AttribView();

@@ -12,7 +12,8 @@
 #define FOREGROUND 1
 #define BACKGROUND 2
 
-typedef struct {
+typedef struct
+{
 	float x;
 	float y;
 	float z;
@@ -83,7 +84,8 @@ float gReflection;
 float gTranslucent;
 int gColorType;
 
-class BumpView : public BView {
+class BumpView : public BView
+{
   public:
 	BumpView(BRect rect);
 

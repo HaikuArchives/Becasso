@@ -4,7 +4,8 @@
 #include "Layer.h"
 #include "SBitmap.h"
 
-typedef struct {
+typedef struct
+{
 	int32 type;
 	int32 layer;
 	int32 next;

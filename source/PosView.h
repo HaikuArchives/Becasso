@@ -11,7 +11,8 @@
 
 #define POSWIDTH 130
 
-class PosView : public BView {
+class PosView : public BView
+{
   public:
 	PosView(const BRect frame, const char* name, CanvasView* _canvas);
 	virtual void Draw(BRect updaterect);

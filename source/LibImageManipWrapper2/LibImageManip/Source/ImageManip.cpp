@@ -44,7 +44,8 @@ static const char* noCategory = "";
 static const char* settingsPath = "/boot/home/config/settings/ImageManip Settings";
 
 // Struct for keeping add-on info together
-struct AddonInfo {
+struct AddonInfo
+{
 	AddonInfo* next; // linked list
 
 	char name[NAME_MAX];
@@ -72,7 +73,8 @@ struct AddonInfo {
 	status_t (*GetConfigMessage)(BMessage* ioExtension, BMessage* ioCapability);
 };
 
-class StAcquire {
+class StAcquire
+{
   private:
 	sem_id fSem;
 
@@ -209,8 +211,7 @@ LoadAddon(const char* path, time_t mtime)
 		info->addonVersion = addon_settings.FindInt32("addonVersion");
 		info->canManipulate = addon_settings.FindBool("canManipulate");
 		info->canConvert = addon_settings.FindBool("canConvert");
-	}
-	else {
+	} else {
 		// Add-on is new or modified; load now
 		if (!LoadAddonImage((image_addon_id)info)) {
 			delete info;
@@ -301,8 +302,7 @@ Image_Init(const char* path) /* NULL for the default */
 			loadErr = B_BAD_VALUE;
 			if (debug)
 				printf("too long path!\n");
-		}
-		else {
+		} else {
 			// Copy this segment of the path into a path, and load it
 			memcpy(pathbuf, ptr, end - ptr);
 			pathbuf[end - ptr] = 0;
@@ -316,13 +316,11 @@ Image_Init(const char* path) /* NULL for the default */
 						loadErr = err;
 					else
 						++nLoaded;
-				}
-				else {
+				} else {
 					// Directories are scanned
 					LoadDir(pathbuf, loadErr, nLoaded);
 				}
-			}
-			else if (debug)
+			} else if (debug)
 				printf("cannot stat()!\n");
 		}
 		ptr = end + 1;

@@ -15,7 +15,8 @@ int gX, gY;
 void
 fillmatrix(int x, int y);
 
-class BlurView : public BView {
+class BlurView : public BView
+{
   public:
 	BlurView(BRect rect);
 
@@ -215,8 +216,7 @@ process(
 					rows[GBLURRAD + sy / 2][w + sx / 2 - j - 1] =
 						rows[GBLURRAD + sy / 2][w + sx / 2 + j - 1];
 				}
-			}
-			else if (y < h) {
+			} else if (y < h) {
 				memcpy(rows[GBLURRAD + sy / 2] + sx / 2, ibits + (y + sy / 2) * ilpr, ilpr * 4);
 				for (int j = -sx / 2; j < 0; j++) {
 					rows[GBLURRAD + sy / 2][sx / 2 + j] = rows[GBLURRAD + sy / 2][sx / 2 - j];
@@ -243,8 +243,7 @@ process(
 						}
 					}
 					*(++dbits) = PIXEL(wr, wg, wb, wa);
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;
@@ -296,8 +295,7 @@ process(
 					rows[GBLURRAD + sy / 2][w + sx / 2 - j - 1] =
 						rows[GBLURRAD + sy / 2][w + sx / 2 + j - 1];
 				}
-			}
-			else if (y < h) {
+			} else if (y < h) {
 				memcpy(rows[GBLURRAD + sy / 2] + sx / 2, ibits + (y + sy / 2) * ibpr, ibpr);
 				for (int j = -sx / 2; j < 0; j++) {
 					rows[GBLURRAD + sy / 2][sx / 2 + j] = rows[GBLURRAD + sy / 2][sx / 2 - j];

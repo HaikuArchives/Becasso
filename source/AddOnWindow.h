@@ -10,7 +10,8 @@
 #include "BecassoAddOn.h"
 #include "Build.h"
 
-class AddOnWindow : public BWindow {
+class AddOnWindow : public BWindow
+{
   public:
 	AddOnWindow(BRect frame);
 	virtual ~AddOnWindow();

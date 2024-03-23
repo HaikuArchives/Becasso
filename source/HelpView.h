@@ -9,7 +9,8 @@
 
 #define MAX_HLPNAME 64
 
-class HelpView : public BView {
+class HelpView : public BView
+{
   public:
 	HelpView(const BRect frame, const char* name);
 	virtual void Draw(BRect updaterect);

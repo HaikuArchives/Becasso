@@ -76,7 +76,7 @@ PrefsWindow::PrefsWindow()
 
 
 	//	fUndoSlider = new	BSlider("slider", NULL, new BMessage ('prMU'), 1, MAX_UNDO-1,
-	//B_HORIZONTAL);
+	// B_HORIZONTAL);
 	/*			thumb_style thumbType = B_BLOCK_THUMB,
 				uint32 resizingMode = B_FOLLOW_LEFT_TOP,
 				uint32 flags = B_NAVIGABLE | B_WILL_DRAW
@@ -120,7 +120,7 @@ PrefsWindow::PrefsWindow()
 
 	BLayoutBuilder::Group<>(bg, B_VERTICAL, B_USE_DEFAULT_SPACING)
 		//.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
-		//B_USE_DEFAULT_SPACING)
+		// B_USE_DEFAULT_SPACING)
 		.Add(fNumEntriesTC)
 		.Add(fUndoSlider)
 		.Add(fSelectionCB)

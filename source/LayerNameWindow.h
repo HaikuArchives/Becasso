@@ -4,7 +4,8 @@
 #include <Window.h>
 #include <TextControl.h>
 
-class LayerNameWindow : public BWindow {
+class LayerNameWindow : public BWindow
+{
   public:
 	LayerNameWindow(const char* name);
 	virtual ~LayerNameWindow();

@@ -10,7 +10,8 @@
 #define G_CIRCULAR 2
 #define G_COSINE 3
 
-class GradientWindow : public AddOnWindow {
+class GradientWindow : public AddOnWindow
+{
   public:
 	GradientWindow(BRect rect, becasso_addon_info* info) : AddOnWindow(rect, info)
 	{
@@ -247,8 +248,7 @@ process(
 				bgra_pixel pixel = weighted_average_rgb(lo, val, hi, 255 - val) & COLOR_MASK;
 				if (inSelection) {
 					*(++dbits) = pixelblend(*(++sbits), (pixel | (*(++mapbits) << ALPHA_BPOS)));
-				}
-				else {
+				} else {
 					*(++dbits) = pixel | ALPHA_MASK;
 					sbits++;
 				}

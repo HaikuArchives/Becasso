@@ -49,7 +49,8 @@ static WrapperWindow* window = NULL;
 static int32 mAddonId = -1;
 static bool mApplyToSelection = false;
 
-class WrapperWindow : public AddOnWindow {
+class WrapperWindow : public AddOnWindow
+{
 	void SetupFilters(BMenu* sub_menu);
 	BView* mView;
 	BMenuField* mMenuField;
@@ -169,8 +170,7 @@ WrapperWindow::SetupConfigView(int32 addon, const char* name)
 		int width = max_c(mWidth, mView->Bounds().Width()) + 10;
 		mView->MoveTo((width - mView->Bounds().Width()) / 2, mHeight);
 		ResizeTo(width, mHeight + mView->Bounds().Height());
-	}
-	else {
+	} else {
 		ResizeTo(mWidth, mHeight);
 		width = mWidth;
 	}
@@ -332,8 +332,7 @@ process(
 		if (inSelection) {
 			if (*outSelection == NULL)
 				*outSelection = new Selection(*inSelection);
-		}
-		else // No Selection to filter!
+		} else // No Selection to filter!
 			return (0);
 	}
 	if (*outLayer)
@@ -353,8 +352,7 @@ process(
 		window->Lock();
 		window->Start();
 		window->Unlock();
-	}
-	else {
+	} else {
 		//		return error;
 	}
 
@@ -368,8 +366,7 @@ process(
 		if (inSelection) {
 			layer = new Layer(*inLayer);
 			memcpy(layer->Bits(), inLayer->Bits(), inLayer->BitsLength());
-		}
-		else {
+		} else {
 			layer = *outLayer;
 		}
 		BBitmapAccessor* src_accessor = Image_CreateBBitmapAccessor(layer);
@@ -483,8 +480,7 @@ process(
 			}
 			delete dest_accessor;
 			delete src_accessor;
-		}
-		else {
+		} else {
 			fprintf(stderr, "Wrapper: outLayer must be null\n");
 		}
 		break;
