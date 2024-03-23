@@ -21,12 +21,8 @@ const char addonInfo[] = "Make an image brighter. By Edmund Vermeulen <edmundv@x
 const char addonCategory[] = "Color";
 int32 addonVersion = 110;
 
-
 status_t
-Manipulate(
-	BitmapAccessor *sourceBitmap,
-	BMessage *ioExtension,
-	bool checkOnly)
+Manipulate(BitmapAccessor* sourceBitmap, BMessage* ioExtension, bool checkOnly)
 {
 	// We only support 32-bit bitmaps
 	color_space cs = sourceBitmap->ColorSpace();
@@ -37,7 +33,7 @@ Manipulate(
 		return B_OK;
 
 	// Get pixel size; we only use the first three bytes, and skip the rest
-	int pixel_size = (int) sourceBitmap->BytesPerPixel();
+	int pixel_size = (int)sourceBitmap->BytesPerPixel();
 	if (pixel_size < 3)
 		return B_ERROR;
 
@@ -55,20 +51,19 @@ Manipulate(
 	for (int i = 1; i < 256; i++)
 		gamma_table[i] = uchar(beta * log(float(i) / alpha + 1.0));
 
-	for (float y = sel_rect.top; y <= sel_rect.bottom; ++y)
-	{
+	for (float y = sel_rect.top; y <= sel_rect.bottom; ++y) {
 		int32 rowBytes;
-		uchar *pixel = static_cast<uchar *>(sourceBitmap->AccessBits(
-			BRect(sel_rect.left, y, sel_rect.right, y), &rowBytes));
+		uchar* pixel = static_cast<uchar*>(
+			sourceBitmap->AccessBits(BRect(sel_rect.left, y, sel_rect.right, y), &rowBytes)
+		);
 
-		for (float x = sel_rect.left; x <= sel_rect.right; ++x)
-		{
+		for (float x = sel_rect.left; x <= sel_rect.right; ++x) {
 			// Gamma correct
 			pixel[0] = gamma_table[pixel[0]];
 			pixel[1] = gamma_table[pixel[1]];
 			pixel[2] = gamma_table[pixel[2]];
-	
-			// Go to the next pixel	
+
+			// Go to the next pixel
 			pixel += pixel_size;
 		}
 	}
@@ -76,11 +71,8 @@ Manipulate(
 	return B_OK;
 }
 
-
 status_t
-GetConfigMessage(
-	BMessage * /*ioExtension*/,
-	BMessage *ioCapability)
+GetConfigMessage(BMessage* /*ioExtension*/, BMessage* ioCapability)
 {
 	// Let them know that we support the selection rect extension
 	ioCapability->AddInt32("selection_rect", B_RECT_TYPE);

@@ -11,15 +11,15 @@
 
 class HelpView : public BView
 {
-public:
-			 HelpView (const BRect frame, const char *name);
-virtual void Draw (BRect updaterect);
+  public:
+	HelpView(const BRect frame, const char* name);
+	virtual void Draw(BRect updaterect);
 
-void		 setText (const char *t);
+	void setText(const char* t);
 
-private:
-typedef BView inherited;
-char		 text[MAX_HLPNAME];
+  private:
+	typedef BView inherited;
+	char text[MAX_HLPNAME];
 };
 
-#endif 
+#endif

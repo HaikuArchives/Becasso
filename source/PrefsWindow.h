@@ -2,6 +2,7 @@
 #define PREFSWINDOW_H
 
 #include <Window.h>
+#include <NumberFormat.h>
 #include <stdlib.h>
 #include "Settings.h"
 
@@ -12,25 +13,25 @@ class Slider;
 
 class PrefsWindow : public BWindow
 {
-public:
-			 PrefsWindow ();
-virtual		~PrefsWindow ();
+  public:
+	PrefsWindow();
+	virtual ~PrefsWindow();
 
-virtual void MessageReceived (BMessage *message);
+	virtual void MessageReceived(BMessage* message);
 
-void		 refresh();
+	void refresh();
 
-private:
+  private:
+	typedef BWindow inherited;
+	becasso_settings fLocalSettings;
+	becasso_settings fBackup;
 
-typedef BWindow inherited;
-becasso_settings fLocalSettings;
-becasso_settings fBackup;
-
-BTextControl	*fNumEntriesTC;
-BPopUpMenu		*fLangPU;
-BPopUpMenu		*fPrevSizePU;
-Slider			*fUndoSlider;
-BCheckBox		*fSelectionCB;
+	BTextControl* fNumEntriesTC;
+	BNumberFormat fNumberFormat;
+	BPopUpMenu* fLangPU;
+	BPopUpMenu* fPrevSizePU;
+	Slider* fUndoSlider;
+	BCheckBox* fSelectionCB;
 };
 
-#endif 
+#endif

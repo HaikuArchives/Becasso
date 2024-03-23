@@ -7,15 +7,15 @@ class BTextView;
 
 class TOTDWindow : public BWindow
 {
-public:
-				 TOTDWindow (const BRect frame, const int num);
-virtual			~TOTDWindow ();
-virtual void	 MessageReceived (BMessage *msg);
-virtual bool	 QuitRequested ();
+  public:
+	TOTDWindow(const BRect frame, const int num);
+	virtual ~TOTDWindow();
+	virtual void MessageReceived(BMessage* msg);
+	virtual bool QuitRequested();
 
-private:
-int32			 fTotd;
-BTextView		*fTextView;
+  private:
+	int32 fTotd;
+	BTextView* fTextView;
 };
 
 #endif

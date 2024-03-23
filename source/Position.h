@@ -7,13 +7,14 @@
 
 typedef struct
 {
-	BPoint	fPoint;
-	BPoint	fTilt;
-	uint32	fButtons;
-	uint8	fPressure;
-	bool	fProximity;
+	BPoint fPoint;
+	BPoint fTilt;
+	uint32 fButtons;
+	uint8 fPressure;
+	bool fProximity;
 } Position;
 
-int32 position_tracker (void *data);
+int32
+position_tracker(void* data);
 
-#endif 
+#endif

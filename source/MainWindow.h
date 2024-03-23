@@ -16,19 +16,21 @@
 
 class MainWindow : public BWindow
 {
-public:
-			 MainWindow (const BRect frame, const char *name);
-virtual		~MainWindow ();
-virtual bool QuitRequested ();
-virtual void RefsReceived (BMessage *message);
-virtual void MenusBeginning ();
-virtual BHandler *ResolveSpecifier (BMessage *message, int32 index, BMessage *specifier, int32 command, const char *property);
-virtual void MessageReceived (BMessage *message);
+  public:
+	MainWindow(const BRect frame, const char* name);
+	virtual ~MainWindow();
+	virtual bool QuitRequested();
+	virtual void RefsReceived(BMessage* message);
+	virtual void MenusBeginning();
+	virtual BHandler* ResolveSpecifier(
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
+	);
+	virtual void MessageReceived(BMessage* message);
 
-private:
-typedef BWindow inherited;
-BMenuBar	*menubar;
-BPicture	*buttons[BUT_ARRAY];
+  private:
+	typedef BWindow inherited;
+	BMenuBar* menubar;
+	BPicture* buttons[BUT_ARRAY];
 };
 
-#endif 
+#endif

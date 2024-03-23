@@ -5,14 +5,14 @@
 
 class NagWindow : public BWindow
 {
-public:
-			 NagWindow (BRect frame);
-virtual		~NagWindow ();
+  public:
+	NagWindow(BRect frame);
+	virtual ~NagWindow();
 
-virtual void Go ();	 
+	virtual void Go();
 
-private:
-typedef BWindow inherited;
+  private:
+	typedef BWindow inherited;
 };
 
 #endif

@@ -2,40 +2,42 @@
 #include "MainWindow.h" // Hack alert!
 #include "Colors.h"
 
-PicItem::PicItem (const BPicture *_picture, AttribView *_attrib, AttribWindow *_myWindow, const char *_help)
-: BMenuItem ("", NULL)
+PicItem::PicItem(
+	const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help
+)
+	: BMenuItem("", NULL)
 {
-	picture = new BPicture (*_picture);
+	picture = new BPicture(*_picture);
 	attrib = _attrib;
 	myWindow = _myWindow;
-	help = new char [strlen (_help) + 1];
-	strcpy (help, _help);
+	help = new char[strlen(_help) + 1];
+	strcpy(help, _help);
 }
 
-PicItem::~PicItem ()
+PicItem::~PicItem()
 {
-	delete [] help;
+	delete[] help;
 	delete picture;
 }
 
-void PicItem::Draw ()
-{	
+void
+PicItem::Draw()
+{
 	rgb_color oldHi = Menu()->HighColor();
-	if (IsSelected())
-	{
-		Menu()->SetHighColor (Grey19);
-		Menu()->FillRect (Frame());
+	if (IsSelected()) {
+		Menu()->SetHighColor(Grey19);
+		Menu()->FillRect(Frame());
 	}
-	if (IsMarked())
-	{
-		Menu()->SetHighColor (Black);
-		Menu()->StrokeRect (Frame());
+	if (IsMarked()) {
+		Menu()->SetHighColor(Black);
+		Menu()->StrokeRect(Frame());
 	}
-	Menu()->SetHighColor (oldHi);
-	Menu()->DrawPicture (picture, Frame().LeftTop());
+	Menu()->SetHighColor(oldHi);
+	Menu()->DrawPicture(picture, Frame().LeftTop());
 }
 
-void PicItem::GetContentSize (float *width, float *height)
+void
+PicItem::GetContentSize(float* width, float* height)
 {
 	// *** Hack!
 	*width = 0;

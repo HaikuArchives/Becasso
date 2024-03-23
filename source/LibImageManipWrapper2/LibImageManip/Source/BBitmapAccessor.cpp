@@ -18,33 +18,23 @@
 #include "BitmapAccessor.h"
 #include "BBitmapAccessor.h"
 
+BBitmapAccessor::BBitmapAccessor(BBitmap* bitmap, const BRect* section)
 
-BBitmapAccessor::BBitmapAccessor(
-	BBitmap *bitmap,
-	const BRect *section)
-
-	: BitmapAccessor()
-	, mBitmap(bitmap)
-	, mDispose(true)
-	, mLastAreaChanged(false)
-	, mCreateInvoker(NULL)
-	, mUpdateInvoker(NULL)
+	: BitmapAccessor(), mBitmap(bitmap), mDispose(true), mLastAreaChanged(false),
+	  mCreateInvoker(NULL), mUpdateInvoker(NULL)
 {
-	if (bitmap)
-	{
+	if (bitmap) {
 		mBounds = bitmap->Bounds();
-	 	if (section)
+		if (section)
 			mBounds = mBounds & (*section);
 
 		mPixelSize = BytesPerPixel();
 	}
 }
 
-
 BBitmapAccessor::~BBitmapAccessor()
 {
-	if (mUpdateInvoker && mLastAreaChanged)
-	{
+	if (mUpdateInvoker && mLastAreaChanged) {
 		BMessage msg(*mUpdateInvoker->Message());
 		msg.AddRect("rect", mLastArea);
 		mUpdateInvoker->Invoke(&msg);
@@ -56,18 +46,14 @@ BBitmapAccessor::~BBitmapAccessor()
 		delete mBitmap;
 }
 
-
 bool
 BBitmapAccessor::IsValid()
 {
 	return mBitmap && mBitmap->IsValid() && mBounds.IsValid();
 }
 
-
 bool
-BBitmapAccessor::CreateBitmap(
-	BRect bounds,
-	color_space space)
+BBitmapAccessor::CreateBitmap(BRect bounds, color_space space)
 {
 	if (mDispose)
 		delete mBitmap;
@@ -76,8 +62,7 @@ BBitmapAccessor::CreateBitmap(
 	mBounds = mBitmap->Bounds();
 	mPixelSize = BytesPerPixel();
 
-	if (mCreateInvoker)
-	{
+	if (mCreateInvoker) {
 		BMessage msg(*mCreateInvoker->Message());
 		msg.AddPointer("bitmap", mBitmap);
 		mCreateInvoker->Invoke(&msg);
@@ -86,13 +71,11 @@ BBitmapAccessor::CreateBitmap(
 	return IsValid();
 }
 
-
 BRect
 BBitmapAccessor::Bounds()
 {
 	return mBounds;
 }
-
 
 color_space
 BBitmapAccessor::ColorSpace()
@@ -100,14 +83,10 @@ BBitmapAccessor::ColorSpace()
 	return mBitmap->ColorSpace();
 }
 
-
-void *
-BBitmapAccessor::AccessBits(
-	BRect area,
-	int32 *rowBytes)
+void*
+BBitmapAccessor::AccessBits(BRect area, int32* rowBytes)
 {
-	if (mUpdateInvoker && mLastAreaChanged && mLastArea.IsValid())
-	{
+	if (mUpdateInvoker && mLastAreaChanged && mLastArea.IsValid()) {
 		BMessage msg(*mUpdateInvoker->Message());
 		msg.AddRect("rect", mLastArea);
 		mUpdateInvoker->Invoke(&msg);
@@ -118,11 +97,9 @@ BBitmapAccessor::AccessBits(
 	if (rowBytes)
 		*rowBytes = mBitmap->BytesPerRow();
 
-	return static_cast<char *>(mBitmap->Bits()) +
-		int(area.top) * *rowBytes +
-		int(floor(area.left) * mPixelSize);
+	return static_cast<char*>(mBitmap->Bits()) + int(area.top) * *rowBytes +
+		   int(floor(area.left) * mPixelSize);
 }
-
 
 void
 BBitmapAccessor::BitsNotChanged()
@@ -130,13 +107,11 @@ BBitmapAccessor::BitsNotChanged()
 	mLastAreaChanged = false;
 }
 
-
-BBitmap *
+BBitmap*
 BBitmapAccessor::Bitmap() const
 {
 	return mBitmap;
 }
-
 
 bool
 BBitmapAccessor::Dispose() const
@@ -144,19 +119,14 @@ BBitmapAccessor::Dispose() const
 	return mDispose;
 }
 
-
 void
-BBitmapAccessor::SetDispose(
-	bool flag)
+BBitmapAccessor::SetDispose(bool flag)
 {
 	mDispose = flag;
 }
 
-
 void
-BBitmapAccessor::SetInvokers(
-	BInvoker *bitmapCreated,
-	BInvoker *bitmapUpdated)
+BBitmapAccessor::SetInvokers(BInvoker* bitmapCreated, BInvoker* bitmapUpdated)
 {
 	delete mCreateInvoker;
 	mCreateInvoker = bitmapCreated;
@@ -165,18 +135,25 @@ BBitmapAccessor::SetInvokers(
 	mUpdateInvoker = bitmapUpdated;
 }
 
-
 // For possible future expansion
-void BBitmapAccessor::_ReservedBBitmapAccessor1() {}
-void BBitmapAccessor::_ReservedBBitmapAccessor2() {}
-void BBitmapAccessor::_ReservedBBitmapAccessor3() {}
+void
+BBitmapAccessor::_ReservedBBitmapAccessor1()
+{
+}
 
+void
+BBitmapAccessor::_ReservedBBitmapAccessor2()
+{
+}
+
+void
+BBitmapAccessor::_ReservedBBitmapAccessor3()
+{
+}
 
 // Create a new BBitmapAccessor object; mimics the contructor
-BBitmapAccessor *
-Image_CreateBBitmapAccessor(
-	BBitmap *bitmap,
-	const BRect *section)
+BBitmapAccessor*
+Image_CreateBBitmapAccessor(BBitmap* bitmap, const BRect* section)
 {
 	return new BBitmapAccessor(bitmap, section);
 }

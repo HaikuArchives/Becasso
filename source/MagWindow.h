@@ -11,24 +11,25 @@
 
 class MagWindow : public BWindow
 {
-friend class CanvasView;
-public:
-			 MagWindow (BRect frame, const char *name, CanvasView *_MyView);
-virtual		~MagWindow ();
-virtual void MessageReceived (BMessage *msg);
-virtual bool QuitRequested ();
-virtual void MenusBeginning ();
+	friend class CanvasView;
 
-float		 menubarHeight ();
+  public:
+	MagWindow(BRect frame, const char* name, CanvasView* _MyView);
+	virtual ~MagWindow();
+	virtual void MessageReceived(BMessage* msg);
+	virtual bool QuitRequested();
+	virtual void MenusBeginning();
 
-private:
-typedef BWindow inherited;
-MagView		*magView;
-BScrollBar	*h, *v;
-BMenuBar	*menubar;
-BMenu		*editMenu;
-BWindow		*myWindow;
-float		 menubarheight;
+	float menubarHeight();
+
+  private:
+	typedef BWindow inherited;
+	MagView* magView;
+	BScrollBar *h, *v;
+	BMenuBar* menubar;
+	BMenu* editMenu;
+	BWindow* myWindow;
+	float menubarheight;
 };
 
 #endif

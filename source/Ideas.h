@@ -149,7 +149,8 @@ BUGS IN 1.3:
 
 * Revisited all the translators
 * Fixed problem with Gobe translators
-* Some new strings (6, 7, 8, 4, 108, 305, 306, 400, 401, 403, 404, 116), as well as fixing some forgotten ones
+* Some new strings (6, 7, 8, 4, 108, 305, 306, 400, 401, 403, 404, 116), as well as fixing some
+forgotten ones
 * Moved Translate/Rotate to Layers menu
 * Added Flip Horizontal/Vertical
 * Added Resize To…
@@ -256,7 +257,7 @@ TODO/IDEAS
 * Drops to ShowImage?
 * Scripting documentation (command strings)
 * Document Gobe Productive external editing
-* IMPORTANT NOTE: When burning a CD-ROM, make sure its volume name is BECASSO and 
+* IMPORTANT NOTE: When burning a CD-ROM, make sure its volume name is BECASSO and
   it contains a file README (the registration checks for that).
 * Color Editor window too large for small screen
 * Crash when using tools in Generator mode
@@ -265,7 +266,7 @@ TODO/IDEAS
 *          ADDON_RESIZE
 * -mpentium compilation flag default?
 * NOTE: File loading routines in three places: CanvasView, BitmapStuff and Translator.
-* Pre-render and cache all layers below and above (separately) the current layer for 
+* Pre-render and cache all layers below and above (separately) the current layer for
   quicker updates during editing
 * Dragging a selection can crash?  <---
 * Ability to track lines or polygons with the brush tool (Christian Wulff)

@@ -10,19 +10,23 @@
 
 class IMPEXP Selection : public BBitmap
 {
-public:
-			 Selection (BRect bounds);
-			 Selection (const Selection& selection);
-			~Selection ();
-int			 getMode () { return fMode; };
-void		 setMode (int mode) { fMode = mode; };
-BRect		 Bounds () { return fRect; };
-void		 ClearTo (grey_pixel p);
+  public:
+	Selection(BRect bounds);
+	Selection(const Selection& selection);
+	~Selection();
 
-private:
-typedef BBitmap inherited;
-BRect		 fRect;
-int			 fMode;
+	int getMode() { return fMode; };
+
+	void setMode(int mode) { fMode = mode; };
+
+	BRect Bounds() { return fRect; };
+
+	void ClearTo(grey_pixel p);
+
+  private:
+	typedef BBitmap inherited;
+	BRect fRect;
+	int fMode;
 };
 
-#endif 
+#endif
