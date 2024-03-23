@@ -767,16 +767,17 @@ Becasso::ResolveSpecifier(
 					}
 				}
 				else {
-					char errstring[256];
-					sprintf(errstring, "Index Out of Range: %ld", index);
+					BString indexData, errorString;
+					fNumberFormat.Format(indexData, index);
+					errorString.SetToFormat("Index out of range: %s", indexData.String());
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
+						error.AddString("message", errorString);
 						message->SendReply(&error);
 					}
 					else
-						fprintf(stderr, "%s\n", errstring);
+						fprintf(stderr, "%s\n", errorString);
 				}
 			}
 			break;
@@ -839,6 +840,8 @@ Becasso::MessageReceived(BMessage* message)
 {
 	//	printf ("Becasso::MessageReceived\n");
 	//	message->PrintToStream();
+	BString title, windowNumber;
+
 	switch (message->what) {
 	case 'creg': {
 		// printf ("Registering canvas...\n");
@@ -996,8 +999,8 @@ Becasso::MessageReceived(BMessage* message)
 		static int32 newColor = COLOR_BG;
 		SizeWindow* sizeWindow = new SizeWindow(newHeight, newWidth, newColor);
 		if (sizeWindow->Go()) {
-			char title[MAXTITLE];
-			sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+			fNumberFormat.Format(windowNumber, newnum++);
+			title.SetToFormat("%s %s", "Untitled", windowNumber.String());
 			newWidth = sizeWindow->w();
 			newHeight = sizeWindow->h();
 			newColor = sizeWindow->color();
@@ -1036,8 +1039,8 @@ Becasso::MessageReceived(BMessage* message)
 	case 'cnew': // Deprecated!!!
 	{
 		// message->PrintToStream();
-		char title[MAXTITLE];
-		sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+		fNumberFormat.Format(windowNumber, newnum++);
+		title.SetToFormat("Untitled %s", windowNumber.String());
 		BRect canvasWindowFrame;
 		canvasWindowFrame.Set(
 			128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + 255, 128 + newnum * 16 + 255
@@ -1066,7 +1069,7 @@ Becasso::MessageReceived(BMessage* message)
 				else if (!strcasecmp(property, "Name")) {
 					const char* namestring;
 					if (specifier.FindString("name", &namestring) == B_OK) {
-						strcpy(title, namestring);
+						title.SetTo(namestring);
 					}
 				}
 			}
@@ -1246,8 +1249,8 @@ Becasso::MessageReceived(BMessage* message)
 		if (message->FindMessage("icon/large", &msg) == B_OK) {
 			BBitmap* map = new BBitmap(&msg);
 			if (map->IsValid()) {
-				char title[MAXTITLE];
-				sprintf(title, "%s (Icon) %i", lstring(149, "Untitled"), newnum++);
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("Untitled (Icon) %s", windowNumber.String());
 				float newWidth = map->Bounds().Width();
 				float newHeight = map->Bounds().Height();
 				BRect canvasWindowFrame;
@@ -1274,8 +1277,8 @@ Becasso::MessageReceived(BMessage* message)
 		if (message->FindMessage("icon/mini", &msg) == B_OK) {
 			BBitmap* map = new BBitmap(&msg);
 			if (map->IsValid()) {
-				char title[MAXTITLE];
-				sprintf(title, "%s (MIcon) %i", lstring(149, "Untitled"), newnum++);
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("Untitled (MIcon) %s", windowNumber.String());
 				float newWidth = map->Bounds().Width();
 				float newHeight = map->Bounds().Height();
 				BRect canvasWindowFrame;
@@ -1313,8 +1316,8 @@ Becasso::MessageReceived(BMessage* message)
 			message->FindRect("bounds", &bounds);
 			message->FindInt32("bits_length", (int32*)&bits_length);
 			message->FindInt32("color_space", (int32*)&colorspace);
-			char title[MAXTITLE];
-			sprintf(title, "%s (RRaster) %i", lstring(149, "Untitled"), newnum++);
+			fNumberFormat.Format(windowNumber, newnum++);
+			title.SetToFormat("Untitled (RRaster) %s", windowNumber.String());
 			BBitmap* map = new BBitmap(bounds, colorspace);
 			char* bits;
 			ssize_t numbytes;
@@ -1377,12 +1380,13 @@ Becasso::MessageReceived(BMessage* message)
 		// printf ("Got to the main app...\n");
 		BMessage realmessage;
 		if (message->FindMessage("message", &realmessage) == B_OK) {
-			char title[MAXTITLE];
 			const char* name;
-			if (message->FindString("name", &name) == B_OK)
-				strcpy(title, name);
-			else
-				sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+			if (message->FindString("name", &name) == B_OK) {
+				title.SetTo(name);
+			} else {
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("Untitled %s", windowNumber.String());
+			}
 			BMessage archive;
 			if (realmessage.FindMessage("BBitmap", &archive) == B_OK) {
 				BBitmap* map = new BBitmap(&archive);
@@ -1445,12 +1449,13 @@ Becasso::MessageReceived(BMessage* message)
 			launchMessage = new BMessage(*message);
 		}
 		else {
-			char title[MAXTITLE];
 			const char* name;
-			if (message->FindString("name", &name) == B_OK)
-				strcpy(title, name);
-			else
-				sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+			if (message->FindString("name", &name) == B_OK) {
+				title.SetTo(name);
+			} else {
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("Untitled %s", windowNumber.String());
+			}
 			BMessage archive;
 			entry_ref ref;
 			if (message->FindMessage("BBitmap", &archive) == B_OK) {
@@ -1592,15 +1597,22 @@ Becasso::MessageReceived(BMessage* message)
 		int32 index;
 		if (message->FindInt32("index", &index) == B_OK) {
 			addon = (AddOn*)AddOns->ItemAt(index);
-			char title[MAXTITLE];
-			title[0] = '0';
+			title = '0';
 			// printf ("Calling Bitmap...\n");
-			BBitmap* map = addon->Bitmap(title);
+			BString titleCopy = title;
+			char* mutableTitle = titleCopy.LockBuffer(titleCopy.Length() + 1);
+			strncpy(mutableTitle, titleCopy.String(), titleCopy.Length() + 1);
+			titleCopy.UnlockBuffer();
+			BBitmap* map = addon->Bitmap(mutableTitle);
+
 			// printf ("Got it!\n");
+			BString windowNumber;
 			if (map) {
 				if (map->IsValid()) {
-					if (!title[0])
-						sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+					if (!title[0]) {
+						fNumberFormat.Format(windowNumber, newnum++);
+						title.SetToFormat("Untitled %s", windowNumber.String());
+					}
 					BRect canvasWindowFrame;
 					canvasWindowFrame.Set(
 						128 + newnum * 16, 128 + newnum * 16,
@@ -1613,8 +1625,7 @@ Becasso::MessageReceived(BMessage* message)
 					extern int SilentOperation;
 					canvasWindow->Minimize(SilentOperation >= 1);
 					canvasWindow->Show();
-				}
-				else {
+				} else {
 					fprintf(stderr, "Capture Error: Invalid BBitmap\n");
 					// Error
 				}
@@ -1648,8 +1659,8 @@ Becasso::MessageReceived(BMessage* message)
 		switch (fCurrentProperty) {
 		case PROP_CANVAS: {
 			// message->PrintToStream();
-			char title[MAXTITLE];
-			sprintf(title, "%s %i", lstring(149, "Untitled"), newnum++);
+			fNumberFormat.Format(windowNumber, newnum++);
+			title.SetToFormat("Untitled %s", windowNumber.String());
 			BRect canvasWindowFrame;
 			canvasWindowFrame.Set(
 				128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + 255,
@@ -1659,7 +1670,7 @@ Becasso::MessageReceived(BMessage* message)
 			const char* namestring;
 			if (message->FindString("Name", &namestring) == B_OK ||
 				message->FindString("name", &namestring) == B_OK) {
-				strcpy(title, namestring);
+				title.SetTo(namestring);
 			}
 
 			BRect rect;
@@ -1813,19 +1824,18 @@ Becasso::MessageReceived(BMessage* message)
 					break;
 				}
 				else {
-					char errstring[256];
-					sprintf(
-						errstring, "Tool Index Out of Range [0..%ld]: %ld", NumTools - 1,
-						numberspecifier
-					);
+					BString numberToolsData, numberSpecifierData, errorString;
+					fNumberFormat.Format(numberToolsData, NumTools - 1);
+					fNumberFormat.Format(numberSpecifierData, numberspecifier);
+					errorString.SetToFormat("Tool index out of range [0..%s]: %s", numberToolsData.String(), numberSpecifierData.String());
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
+						error.AddString("message", errorString.String());
 						message->SendReply(&error);
 					}
 					else
-						fprintf(stderr, "%s\n", errstring);
+						fprintf(stderr, "%s\n", errorString.String());
 				}
 			}
 			else {

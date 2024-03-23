@@ -131,11 +131,11 @@ ThumbnailFilePanel::SelectionChanged()
 	else
 		infoView1->SetText("?");
 
-	char sizestr[80];
-	sprintf(
-		sizestr, "%ld x %ld", map->Bounds().IntegerWidth() + 1, map->Bounds().IntegerHeight() + 1
-	);
-	infoView2->SetText(sizestr);
+	BString heightData, sizeString, widthData;
+	fNumberFormat.Format(heightData, map->Bounds().IntegerHeight() + 1);
+	fNumberFormat.Format(widthData, map->Bounds().IntegerWidth() + 1);
+	sizeString.SetToFormat("%s × %s", widthData.String(), heightData.String());
+	infoView2->SetText(sizeString);
 
 	fView->update(map);
 	delete map;

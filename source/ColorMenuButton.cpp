@@ -774,10 +774,14 @@ ColorMenuButton::Save(BEntry entry)
 	fputs("# Becasso Palette file\n", fp);
 	fputs("# R G B triplets, separated by whitespace, ranging from 0 - 255.\n", fp);
 	fputs("# Lines starting with # are comments.\n", fp);
+	BString redS, greenS, blueS, lineS;
 	for (int i = 0; i < C_V_NUM * C_H_NUM; i++) {
 		rgb_color c = menu->ItemAt(i)->getColor();
-		sprintf(line, "%i %i %i\n", int(c.red), int(c.green), int(c.blue));
-		fputs(line, fp);
+		fNumberFormat.Format(redS, int(c.red));
+		fNumberFormat.Format(greenS, int(c.green));
+		fNumberFormat.Format(blueS, int(c.blue));
+		lineS.SetToFormat("%s %s %s\n", redS.String(), greenS.String(), blueS.String());
+		fputs(lineS.String(), fp);
 	}
 	fclose(fp);
 }

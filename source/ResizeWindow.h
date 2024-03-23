@@ -3,6 +3,7 @@
 
 #include <Window.h>
 #include <TextControl.h>
+#include <NumberFormat.h>
 #include <stdlib.h>
 #include "CanvasWindow.h"
 
@@ -29,6 +30,7 @@ class ResizeWindow : public BWindow {
 	BTextControl* newWidth;
 	BTextControl* newHeight;
 	BTextControl* rDPI;
+	BNumberFormat fNumberFormat;
 	CanvasWindow* fTarget;
 	int32 fRez;
 	int32 fStatus;

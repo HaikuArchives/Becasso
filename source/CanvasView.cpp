@@ -874,6 +874,8 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 	origin = point;
 	float angle = 0;
 	float dangle;
+	BString angleData;
+	BString angleString;
 	if (mode == M_DRAW) {
 		while (buttons) {
 			if (prev != point) {
@@ -889,9 +891,11 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 				StrokeLine(BPoint(Bounds().right, origin.y), origin);
 				StrokeLine(point);
 				StrokeArc(origin, 10, 10, 0, dangle);
-				char angletxt[16];
-				sprintf(angletxt, "%.1f°", dangle);
-				DrawString(angletxt, BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
+				fNumberFormat.SetPrecision(1);
+				fNumberFormat.Format(angleData, dangle);
+				angleString.SetToFormat("%s°", angleData.String());
+				DrawString(angleString.String(),
+					BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
 				prev = point;
 			}
 			snooze(20000);
@@ -915,9 +919,11 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 				StrokeLine(BPoint(Bounds().right, origin.y), origin);
 				StrokeLine(point);
 				StrokeArc(origin, 10, 10, 0, dangle);
-				char angletxt[16];
-				sprintf(angletxt, "%.1f°", dangle);
-				DrawString(angletxt, BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
+				fNumberFormat.SetPrecision(1);
+				fNumberFormat.Format(angleData, dangle);
+				angleString.SetToFormat("%s°", angleData.String());
+				DrawString(angleString.String(),
+					BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
 				prev = point;
 			}
 			snooze(20000);
@@ -3553,13 +3559,19 @@ CanvasView::Save(BEntry entry)
 	if (deflateInit(zstream, Z_DEFAULT_COMPRESSION) != Z_OK) {
 		fprintf(stderr, "zlib error!\n");
 	}
+	BString lineString, leftBound, topBound, rightBound, bottomBound, mode, layerHidden, globalAlpha, alphaMap, name;
 	for (int i = 0; i < fNumLayers; i++) {
-		sprintf(
-			line, "%.0f %.0f %.0f %.0f %i %i %i %i %s\n", layer[i]->Bounds().left,
-			layer[i]->Bounds().top, layer[i]->Bounds().right, layer[i]->Bounds().bottom,
-			layer[i]->getMode(), layer[i]->IsHidden() ? 1 : 0, layer[i]->getGlobalAlpha(),
-			layer[i]->getAlphaMap() ? 1 : 0, layer[i]->getName()
-		);
+		fNumberFormat.SetPrecision(0);
+		fNumberFormat.Format(leftBound, layer[i]->Bounds().left);
+		fNumberFormat.Format(topBound, layer[i]->Bounds().top);
+		fNumberFormat.Format(rightBound, layer[i]->Bounds().right);
+		fNumberFormat.Format(bottomBound, layer[i]->Bounds().bottom);
+		fNumberFormat.Format(mode, layer[i]->getMode());
+		fNumberFormat.Format(layerHidden, layer[i]->IsHidden() ? 1 : 0);
+		fNumberFormat.Format(globalAlpha, layer[i]->getGlobalAlpha());
+		fNumberFormat.Format(alphaMap, layer[i]->getAlphaMap() ? 1 : 0);
+		lineString.SetToFormat("%s %s %s %s %s %s %s %s %s\n", leftBound.String(), topBound.String(), rightBound.String(), bottomBound.String(), mode.String(), layerHidden.String(), globalAlpha.String(), alphaMap.String(), layer[i]->getName());
+		strcpy(line, lineString.String());
 		fputs(line, fp);
 	}
 	if (!gGlobalAlpha)

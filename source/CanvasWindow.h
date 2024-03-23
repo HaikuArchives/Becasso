@@ -13,6 +13,7 @@
 #include <Path.h>
 #include <File.h>
 #include <FilePanel.h>
+#include <NumberFormat.h>
 #if defined(DATATYPES)
 #include <Datatypes.h>
 #else
@@ -107,6 +108,9 @@ class CanvasWindow : public BWindow {
 	BMenu* layerNamesMenu;
 	BScrollBar* h;
 	BScrollBar* v;
+	BString fPercentData;
+	BString fTitleString;
+	BNumberFormat fNumberFormat;
 	BGView* bg;
 	CanvasView* canvas;
 	PosView* posview;

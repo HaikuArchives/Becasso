@@ -3,6 +3,7 @@
 
 #include <Application.h>
 #include <Message.h>
+#include <NumberFormat.h>
 #include <Entry.h>
 #include "AboutWindow.h"
 
@@ -53,6 +54,7 @@ class Becasso : public BApplication {
 	AboutWindow* about;
 	BMessage* launchMessage;
 	BMessenger* fCurrentScriptee;
+	BNumberFormat fNumberFormat;
 	entry_ref fRef;
 	int fBusy;
 	int fBusySave;

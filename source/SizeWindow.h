@@ -2,6 +2,7 @@
 #define SIZEWINDOW_H
 
 #include <Window.h>
+#include <NumberFormat.h>
 #include <TextControl.h>
 #include <stdlib.h>
 
@@ -35,16 +36,18 @@ class SizeWindow : public BWindow {
 	void readvalues();
 
 	typedef BWindow inherited;
+	BNumberFormat fNumberFormat;
 	BTextControl* newWidth;
 	BTextControl* newHeight;
 	BTextControl* rDPI;
-	int32 fRez;
+
 	int32 fStatus;
 	int32 fHUnit;
 	int32 fVUnit;
 	int32 fH;
 	int32 fV;
 	int32 fColor;
+	int32 fRez;
 };
 
 #endif

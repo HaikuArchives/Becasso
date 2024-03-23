@@ -77,12 +77,10 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	rgbV->AddChild(rRB);
 	rgbV->AddChild(gRB);
 	rgbV->AddChild(bRB);
-	char rS[16];
-	char gS[16];
-	char bS[16];
-	sprintf(rS, "%i", c.red);
-	sprintf(gS, "%i", c.green);
-	sprintf(bS, "%i", c.blue);
+	BString rS, gS, bS;
+	fNumberFormat.Format(rS, c.red);
+	fNumberFormat.Format(gS, c.green);
+	fNumberFormat.Format(bS, c.blue);
 	rFrame.Set(72, 268, 150, 286);
 	gFrame.Set(72, 290, 150, 308);
 	bFrame.Set(72, 312, 150, 330);
@@ -96,18 +94,16 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	hsvSquare = new HSVSquare(squareFrame, this);
 	hsvV->AddChild(hsvSquare);
 	hsv_color h = rgb2hsv(c);
-	char hS[16];
-	char sS[16];
-	char vS[16];
-	sprintf(hS, "%.0f", h.hue);
-	sprintf(sS, "%1.3f", h.saturation);
-	sprintf(vS, "%1.3f", h.value);
+	BString hS, sS, vS;
+	fNumberFormat.Format(hS, h.hue);
+	fNumberFormat.SetPrecision(3);
+	fNumberFormat.Format(sS, h.saturation);
+	fNumberFormat.Format(vS, h.value);
 	hFrame.Set(16, 268, 160, 286);
 	sFrame.Set(16, 290, 160, 308);
 	vFrame.Set(16, 312, 160, 330);
 	hTC = new BTextControl(hFrame, "hTC", lstring(199, "Hue (0–360)"), hS, new BMessage('TrbH'));
-	sTC =
-		new BTextControl(sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
+	sTC = new BTextControl(sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
 	vTC = new BTextControl(vFrame, "vTC", lstring(201, "Value (0–1)"), vS, new BMessage('TrbV'));
 	hTC->SetDivider(90);
 	sTC->SetDivider(90);
@@ -207,14 +203,17 @@ ColorWindow::ScreenChanged(BRect frame, color_space cs)
 void
 ColorWindow::SetColor(rgb_color _c)
 {
-	char s[128];
+	BString data;
+	BString string;
 	c = _c;
 	cur->SetColor(c);
 	rgb_color d = button->getClosest(c);
 	float distance = diff(c, d);
 	match->SetColor(d);
-	sprintf(s, lstring(211, "(RGB distance: %3.1f)"), distance);
-	dist->SetText(s);
+	fNumberFormat.SetPrecision(1);
+	fNumberFormat.Format(data, distance);
+	string.SetToFormat("RGB distance: %s", data.String());
+	dist->SetText(string.String());
 }
 
 void
@@ -245,7 +244,7 @@ ColorWindow::MessageReceived(BMessage* msg)
 		//		break;
 	}
 	case 'SetC': {
-		char s[16];
+		BString s;
 		c.red = msg->FindInt32("color", (int32)0);
 		c.green = msg->FindInt32("color", (int32)1);
 		c.blue = msg->FindInt32("color", (int32)2);
@@ -257,18 +256,20 @@ ColorWindow::MessageReceived(BMessage* msg)
 		hsv_color h = rgb2hsv(c);
 		rgbSquare->SetColor(c);
 		hsvSquare->SetColor(h);
-		sprintf(s, "%i", c.red);
-		rTC->SetText(s);
-		sprintf(s, "%i", c.green);
-		gTC->SetText(s);
-		sprintf(s, "%i", c.blue);
-		bTC->SetText(s);
-		sprintf(s, "%3.0f", h.hue);
-		hTC->SetText(s);
-		sprintf(s, "%1.3f", h.saturation);
-		sTC->SetText(s);
-		sprintf(s, "%1.3f", h.value);
-		vTC->SetText(s);
+		fNumberFormat.Format(s, c.red);
+		rTC->SetText(s.String());
+		fNumberFormat.Format(s, c.green);
+		gTC->SetText(s.String());
+		fNumberFormat.Format(s, c.blue);
+		bTC->SetText(s.String());
+		fNumberFormat.Format(s, h.hue);
+		hTC->SetText(s.String());
+		fNumberFormat.SetPrecision(3);
+		fNumberFormat.Format(s, h.saturation);
+		sTC->SetText(s.String());
+		fNumberFormat.SetPrecision(3);
+		fNumberFormat.Format(s, h.value);
+		vTC->SetText(s.String());
 		aSlid->SetValue(c.alpha);
 		button->setAlpha(c.alpha);
 		break;
@@ -283,65 +284,67 @@ ColorWindow::MessageReceived(BMessage* msg)
 		rgbSquare->SetNotColor(2);
 		break;
 	case 'TrbR': {
-		char s[16];
+		BString s;
 		int r = atoi(rTC->Text());
 		r = clipchar(r);
-		sprintf(s, "%i", r);
-		rTC->SetText(s);
+		fNumberFormat.Format(s, r);
+		rTC->SetText(s.String());
 		c.red = r;
 		rgbSquare->SetColor(c);
 		SetColor(c);
 		break;
 	}
 	case 'TrbG': {
-		char s[16];
+		BString s;
 		int g = atoi(gTC->Text());
 		g = clipchar(g);
-		sprintf(s, "%i", g);
-		gTC->SetText(s);
+		fNumberFormat.Format(s, g);
+		gTC->SetText(s.String());
 		c.green = g;
 		rgbSquare->SetColor(c);
 		SetColor(c);
 		break;
 	}
 	case 'TrbB': {
-		char s[16];
+		BString s;
 		int b = atoi(bTC->Text());
 		b = clipchar(b);
-		sprintf(s, "%i", b);
-		bTC->SetText(s);
+		fNumberFormat.Format(s, b);
+		bTC->SetText(s.String());
 		c.blue = b;
 		rgbSquare->SetColor(c);
 		SetColor(c);
 		break;
 	}
 	case 'CSQc': {
-		char s[16];
+		BString s;
 		c.red = msg->FindInt32("color", (int32)0);
 		c.green = msg->FindInt32("color", (int32)1);
 		c.blue = msg->FindInt32("color", (int32)2);
-		sprintf(s, "%i", c.red);
-		rTC->SetText(s);
-		sprintf(s, "%i", c.green);
-		gTC->SetText(s);
-		sprintf(s, "%i", c.blue);
-		bTC->SetText(s);
-		SetColor(c);
+		fNumberFormat.Format(s, c.red);
+		rTC->SetText(s.String());
+		fNumberFormat.Format(s, c.green);
+		gTC->SetText(s.String());
+		fNumberFormat.Format(s, c.blue);
+		bTC->SetText(s.String());
+SetColor(c);
 		break;
 	}
 	case 'CSQh': {
-		char s[16];
+		BString s;
 		hsv_color h;
 		h.hue = msg->FindFloat("color", (int32)0);
 		h.saturation = msg->FindFloat("color", (int32)1);
 		h.value = msg->FindFloat("color", (int32)2);
-		sprintf(s, "%3.0f", h.hue);
-		hTC->SetText(s);
-		sprintf(s, "%1.3f", h.saturation);
-		sTC->SetText(s);
-		sprintf(s, "%1.3f", h.value);
-		vTC->SetText(s);
-		c = hsv2rgb(h);
+		fNumberFormat.Format(s, h.hue);
+		hTC->SetText(s.String());
+		fNumberFormat.SetPrecision(3);
+		fNumberFormat.Format(s, h.saturation);
+		sTC->SetText(s.String());
+		fNumberFormat.SetPrecision(3);
+		fNumberFormat.Format(s, h.value);
+		vTC->SetText(s.String());
+c = hsv2rgb(h);
 		SetColor(c);
 		break;
 	}
