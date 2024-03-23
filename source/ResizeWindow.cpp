@@ -18,7 +18,6 @@ ResizeWindow::ResizeWindow(CanvasWindow* target, const char* title, int32 _h, in
 		  B_NOT_RESIZABLE | B_AUTO_UPDATE_SIZE_LIMITS
 	  )
 {
-	char hS[16], wS[16], rD[16];
 	fTarget = target;
 	fRez = 72;
 	fH = _w;
@@ -36,9 +35,11 @@ ResizeWindow::ResizeWindow(CanvasWindow* target, const char* title, int32 _h, in
 	bg->AddChild (rez);
 #endif
 
-	sprintf(hS, "%li", _h);
-	sprintf(wS, "%li", _w);
-	sprintf(rD, "%li", fRez);
+	BString hS, wS, rD;
+
+	fNumberFormat.Format(hS, _h);
+	fNumberFormat.Format(wS, _w);
+	fNumberFormat.Format(rD, fRez);
 
 	newWidth = new BTextControl("NewWidth", lstring(181, "Width"), wS, new BMessage('Swdt'));
 	newHeight = new BTextControl("NewHeight", lstring(182, "Height"), hS, new BMessage('Shgt'));
@@ -106,18 +107,20 @@ ResizeWindow::~ResizeWindow() {}
 void
 ResizeWindow::recalc()
 {
-	char h[16], v[16];
+	BString h, v;
 	switch (fHUnit) {
 	case UNIT_PIXELS:
-		sprintf(h, "%li", fH);
+		fNumberFormat.Format(h, fH);
 		newWidth->SetText(h);
 		break;
 	case UNIT_INCH:
-		sprintf(h, "%.2f", (float)fH / fRez + .005);
+		fNumberFormat.SetPrecision(2);
+		fNumberFormat.Format(h, (double)(fH / fRez + .005));
 		newWidth->SetText(h);
 		break;
 	case UNIT_CM:
-		sprintf(h, "%.2f", (float)fH / fRez * 2.54 + .005);
+		fNumberFormat.SetPrecision(2);
+		fNumberFormat.Format(h, (double)(fH / fRez * 2.54 + .005));
 		newWidth->SetText(h);
 		break;
 	default:
@@ -125,15 +128,17 @@ ResizeWindow::recalc()
 	}
 	switch (fVUnit) {
 	case UNIT_PIXELS:
-		sprintf(v, "%li", fV);
+		fNumberFormat.Format(v, fV);
 		newHeight->SetText(v);
 		break;
 	case UNIT_INCH:
-		sprintf(v, "%.2f", (float)fV / fRez + .005);
+		fNumberFormat.SetPrecision(2);
+		fNumberFormat.Format(v, (double)(fV / fRez + .005));
 		newHeight->SetText(v);
 		break;
 	case UNIT_CM:
-		sprintf(v, "%.2f", (float)fV / fRez * 2.54 + .005);
+		fNumberFormat.SetPrecision(2);
+		fNumberFormat.Format(v, (double)(fV / fRez * 2.54 + .005));
 		newHeight->SetText(v);
 		break;
 	default:

@@ -2,6 +2,7 @@
 #define PREFSWINDOW_H
 
 #include <Window.h>
+#include <NumberFormat.h>
 #include <stdlib.h>
 #include "Settings.h"
 
@@ -25,6 +26,7 @@ class PrefsWindow : public BWindow {
 	becasso_settings fBackup;
 
 	BTextControl* fNumEntriesTC;
+	BNumberFormat fNumberFormat;
 	BPopUpMenu* fLangPU;
 	BPopUpMenu* fPrevSizePU;
 	Slider* fUndoSlider;

@@ -7,6 +7,7 @@
 #include <TextControl.h>
 #include <StringView.h>
 #include <FilePanel.h>
+#include <NumberFormat.h>
 #include "ColorMenuButton.h"
 #include "Slider.h"
 #include "RGBSquare.h"
@@ -34,6 +35,7 @@ class ColorWindow : public BWindow {
 	void SetColor(rgb_color _c);
 	ColorMenuButton* button;
 	BMenuBar* menubar;
+	BNumberFormat fNumberFormat;
 	class RGBSquare* rgbSquare;
 	class HSVSquare* hsvSquare;
 	BTextControl *rTC, *gTC, *bTC, *hTC, *sTC, *vTC;

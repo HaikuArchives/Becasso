@@ -4,6 +4,7 @@
 #include <View.h>
 #include <Rect.h>
 #include <Point.h>
+#include <NumberFormat.h>
 #include <Message.h>
 #include "CanvasView.h"
 #include "Colors.h"
@@ -32,6 +33,7 @@ class PosView : public BView {
 	float radius;
 	bool do_radius;
 	bool is_textlayer;
+	BNumberFormat fNumberFormat;
 	BPoint prev;
 };
 

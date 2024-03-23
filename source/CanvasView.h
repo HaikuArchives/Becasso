@@ -22,6 +22,7 @@
 #include "Position.h"
 #include "Settings.h"
 #include "Colors.h"
+#include <NumberFormat.h>
 
 #define STRETCH_TO_FIT 0
 
@@ -326,6 +327,7 @@ class CanvasView : public SView {
 	spraycan_cache fSC;
 	clone_cache fCC;
 	BPoint fLastCenter;
+	BNumberFormat fNumberFormat;
 };
 
 #endif

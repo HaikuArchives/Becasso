@@ -6,6 +6,7 @@
 #include <Rect.h>
 #include <View.h>
 #include <Message.h>
+#include <NumberFormat.h>
 #include "ColorMenu.h"
 #include "Layer.h"
 // #include "ColorWindow.h"
@@ -70,6 +71,7 @@ class ColorMenuButton : public BView {
 	bool editorshowing;
 	int click;
 	bigtime_t dcspeed;
+	BNumberFormat fNumberFormat;
 };
 
 #endif

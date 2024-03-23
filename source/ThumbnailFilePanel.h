@@ -7,6 +7,7 @@
 #include <View.h>
 #include <Bitmap.h>
 #include <StringView.h>
+#include <NumberFormat.h>
 
 class ThumbnailView : public BView {
   public:
@@ -36,6 +37,7 @@ class ThumbnailFilePanel : public BFilePanel {
 	ThumbnailView* fView;
 	BStringView* infoView1;
 	BStringView* infoView2;
+	BNumberFormat fNumberFormat;
 };
 
 #endif

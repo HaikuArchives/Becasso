@@ -7,6 +7,7 @@
 #include <Rect.h>
 #include <Bitmap.h>
 #include <Message.h>
+#include <NumberFormat.h>
 #include <TextControl.h>
 #include "Build.h"
 
@@ -53,6 +54,7 @@ class IMPEXP Slider : public BView {
 	int click;
 	BTextControl* tc;
 	BHandler* target;
+	BNumberFormat fNumberFormat;
 };
 
 #endif

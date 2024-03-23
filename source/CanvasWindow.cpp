@@ -68,6 +68,11 @@ static value_info value_list[] = {
 	0
 };
 
+float zoomLevels[] = { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0 };
+char aspectLevels[][7] = {
+	"(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)"
+};
+
 CanvasWindow::CanvasWindow(
 	BRect frame, const char* name, BBitmap* map, BMessenger* target, bool AskForAlpha,
 	rgb_color color
@@ -80,8 +85,9 @@ CanvasWindow::CanvasWindow(
 	char fname[MAX_FNAME];
 	strcpy(fName, name);
 	strcpy(fname, name);
-	strcat(fname, " (100%)");
-	SetTitle(fname);
+	fNumberFormat.FormatPercent(fPercentData, 1.0);
+	fTitleString.SetToFormat("%s (%s)", fname, fPercentData.String());
+	SetTitle(fTitleString.String());
 	if (target) {
 		// printf ("Target found\n");
 		myTarget = new BMessenger(*target);
@@ -110,8 +116,9 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 	BFile file = BFile(&ref, B_READ_ONLY);
 	entry.GetName(fname);
 	strcpy(fName, fname);
-	strcat(fname, " (100%)");
-	SetTitle(fname);
+	fNumberFormat.FormatPercent(fPercentData, 1.0);
+	fTitleString.SetToFormat("%s (%s)", fname, fPercentData.String());
+	SetTitle(fTitleString.String());
 	char type[80];
 	BNode node = BNode(&entry);
 	ssize_t s;
@@ -210,7 +217,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 		char str[B_FILE_NAME_LENGTH];
 		translator_info info;
 
-		if (file.ReadAttr("BOES:TYPE", B_STRING_TYPE, 0, str, B_FILE_NAME_LENGTH) == B_OK)
+		if (file.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, str, B_FILE_NAME_LENGTH) == B_OK)
 			mimeStr = str;
 
 		if (mimeStr)
@@ -455,18 +462,29 @@ CanvasWindow::restOfCtor(
 	windowMenu = new BMenu(lstring(110, "Window"));
 	windowMenu->AddItem(new BMenuItem(lstring(111, "Layers"), new BMessage('layr'), 'L'));
 	windowMenu->AddItem(new BMenuItem(lstring(116, "Magnify"), new BMessage('mwin')));
+
 	BMenu* magnifyMenu = new BMenu(lstring(112, "Scale"));
 	magnifyMenu->AddItem(new BMenuItem(lstring(113, "Zoom In"), new BMessage('Min'), '+'));
 	magnifyMenu->AddItem(new BMenuItem(lstring(114, "Zoom Out"), new BMessage('Mout'), '-'));
-	magnifyMenu->AddItem(new BMenuItem("12.5% (1:8)", new BMessage('M-8')));
-	magnifyMenu->AddItem(new BMenuItem("25%   (1:4)", new BMessage('M-4')));
-	magnifyMenu->AddItem(new BMenuItem("50%   (1:2)", new BMessage('M-2')));
-	magnifyMenu->AddItem(new BMenuItem("100%  (1:1)", new BMessage('M1'), '='));
-	magnifyMenu->AddItem(new BMenuItem("200%  (2:1)", new BMessage('M2')));
-	magnifyMenu->AddItem(new BMenuItem("400%  (4:1)", new BMessage('M4')));
-	magnifyMenu->AddItem(new BMenuItem("800%  (8:1)", new BMessage('M8')));
-	magnifyMenu->AddItem(new BMenuItem("1600% (16:1)", new BMessage('M16')));
+
+	for (int i = 0; i < B_COUNT_OF(zoomLevels) && i < B_COUNT_OF(aspectLevels); ++i) {
+			fNumberFormat.FormatPercent(fPercentData, zoomLevels[i]);
+			BMessage* message = new BMessage('M_S');
+			message->AddFloat("scale", zoomLevels[i]);
+			message->AddInt32("index", 1);
+
+			if (zoomLevels[i] >= 10.0) {
+				BString separator(fNumberFormat.GetSeparator(B_GROUPING_SEPARATOR));
+				fPercentData.RemoveFirst(separator);
+			}
+
+			BString label;
+			label.SetToFormat("%s %s", fPercentData.String(), aspectLevels[i]);
+			magnifyMenu->AddItem(new BMenuItem(label.String(), message));
+	}
+
 	windowMenu->AddItem(magnifyMenu);
+
 	windowMenu->AddItem(new BMenuItem(lstring(115, "Resize to Fit"), new BMessage('rstf'), 'Y'));
 	menubar->AddItem(windowMenu);
 	layerMenu = new BMenu(lstring(120, "Layer"));
@@ -682,9 +700,9 @@ void
 CanvasWindow::CanvasScaled(float s)
 {
 	fScale = s;
-	char title[MAX_FNAME];
-	sprintf(title, "%s (%.0f%%)", fName, 100 * s);
-	SetTitle(title);
+	fNumberFormat.FormatPercent(fPercentData, (double)s);
+	fTitleString.SetToFormat("%s (%s)", fName, fPercentData.String());
+	SetTitle(fTitleString.String());
 	FrameResized(Bounds().Width(), Bounds().Height());
 }
 
@@ -692,9 +710,9 @@ void
 CanvasWindow::setName(char* s)
 {
 	strcpy(fName, s);
-	char title[MAX_FNAME];
-	sprintf(title, "%s (%.0f%%)", fName, 100 * fScale);
-	SetTitle(title);
+	fNumberFormat.FormatPercent(fPercentData, (double)fScale);
+	fTitleString.SetToFormat("%s (%s)", fName, fPercentData.String());
+	SetTitle(fTitleString.String());
 }
 
 void
@@ -1076,19 +1094,18 @@ CanvasWindow::MessageReceived(BMessage* message)
 					}
 				}
 				else {
-					char errstring[256];
-					sprintf(
-						errstring, "Layer Index Out of Range [0..%d]: %ld", canvas->numLayers() - 1,
-						indexspecifier
-					);
+					BString indexSpecifierData, numberOfLayersData, errorString;
+					fNumberFormat.Format(numberOfLayersData, canvas->numLayers() - 1);
+					fNumberFormat.Format(indexSpecifierData, indexspecifier);
+					errorString.SetToFormat("Layer index out of range [0..%s]: %s", numberOfLayersData.String(), indexSpecifierData.String());
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
+						error.AddString("message", errorString.String());
 						message->SendReply(&error);
 					}
 					else
-						fprintf(stderr, "%s\n", errstring);
+						fprintf(stderr, "%s\n", errorString.String());
 				}
 			}
 			else {
@@ -1563,15 +1580,18 @@ CanvasWindow::MessageReceived(BMessage* message)
 		savePanel->GetPanelDirectory(&gSaveRef);
 
 		entry_ref lref;
-		char fname[B_FILE_NAME_LENGTH];
 		message->FindRef("directory", &lref);
 		BEntry entry = BEntry(&lref);
+		BString fName;
+		BString percentData;
+		BString title;
 		BDirectory dir = BDirectory(&lref);
 		if (message->FindString("name")) { // The Save Panel sends the name separately
-			strcpy(fName, message->FindString("name"));
+			fName.SetTo(message->FindString("name"));
 			if (!out_type) {
-				sprintf(fname, "%s (%.0f%%)", fName, 100 * fScale);
-				SetTitle(fname);
+				fNumberFormat.FormatPercent(percentData, (double)fScale);
+				title.SetToFormat("%s (%s)", fName, percentData.String());
+				SetTitle(title.String());
 			}
 		}
 		entry.SetTo(&dir, fName, false);
@@ -1675,29 +1695,13 @@ CanvasWindow::MessageReceived(BMessage* message)
 	case 'tTed':
 		canvas->tTextD();
 		break;
-	case 'M-8':
-		canvas->setScale(0.125);
-		break;
-	case 'M-4':
-		canvas->setScale(0.25);
-		break;
-	case 'M-2':
-		canvas->setScale(0.5);
-		break;
-	case 'M1':
-		canvas->setScale(1);
-		break;
-	case 'M2':
-		canvas->setScale(2);
-		break;
-	case 'M4':
-		canvas->setScale(4);
-		break;
-	case 'M8':
-		canvas->setScale(8);
-		break;
-	case 'M16':
-		canvas->setScale(16);
+	case 'M_S':
+		float scale;
+		int32 index;
+		if (message->FindFloat("scale", &scale) == B_OK
+			&& message->FindInt32("index", &index) == B_OK) {
+			canvas->setScale(scale);
+		}
 		break;
 	case 'Mnnn': {
 		float s;

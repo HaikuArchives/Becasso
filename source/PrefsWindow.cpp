@@ -42,8 +42,8 @@ PrefsWindow::PrefsWindow()
 	fBackup = g_settings;
 	g_settings_lock.Unlock();
 
-	char cur[16];
-	sprintf(cur, "%ld", fLocalSettings.recents);
+	BString cur;
+	fNumberFormat.Format(cur, fLocalSettings.recents);
 	fNumEntriesTC = new BTextControl(
 		"recent", lstring(383, "Number of entries in Recent menu:"), cur, new BMessage('prNR')
 	);
@@ -145,9 +145,9 @@ PrefsWindow::~PrefsWindow() {}
 void
 PrefsWindow::refresh()
 {
-	char cur[16];
-	sprintf(cur, "%li", fLocalSettings.recents);
-	fNumEntriesTC->SetText(cur);
+	BString cur;
+	fNumberFormat.Format(cur, fLocalSettings.recents);
+	fNumEntriesTC->SetText(cur.String());
 	// fLangPU->FindItem(fLocalSettings.language)->SetMarked (true);
 	fUndoSlider->SetValue(fLocalSettings.max_undo);
 	fSelectionCB->SetValue(fLocalSettings.selection_type == SELECTION_STATIC);

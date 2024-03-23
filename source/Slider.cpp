@@ -82,12 +82,12 @@ Slider::~Slider()
 void
 Slider::AttachedToWindow()
 {
-	char valmin[KNOBVAL];
-	char valmax[KNOBVAL];
-	sprintf(valmin, fmt, min);
-	sprintf(valmax, fmt, max);
+	BString valMin, valMax;
+	fNumberFormat.Format(valMin, (double)min);
+	fNumberFormat.Format(valMax, (double)max);
+
 	if (!f)
-		knobsize = max_c(StringWidth(valmin), StringWidth(valmax)) + 2 * KNOBMARGIN;
+		knobsize = max_c(StringWidth(valMin), StringWidth(valMax)) + 2 * KNOBMARGIN;
 	else
 		knobsize = f;
 	target = Parent();
@@ -130,10 +130,10 @@ Slider::Draw(BRect rect)
 	offview->SetHighColor(Black);
 	offview->SetLowColor(Grey27);
 	offview->SetFont(be_plain_font);
-	char val[KNOBVAL];
-	sprintf(val, fmt, value);
+	BString val = fmt;
+	fNumberFormat.Format(val, value);
 	offview->DrawString(
-		val, BPoint(knobpos.x + (knobsize - StringWidth(val)) / 2 + 1, knobpos.y + 12)
+		val.String(), BPoint(knobpos.x + (knobsize - StringWidth(val)) / 2 + 1, knobpos.y + 12)
 	);
 	offview->SetHighColor(Grey30);
 	offview->StrokeLine(
@@ -266,8 +266,8 @@ Slider::MouseDown(BPoint point)
 		tc->SetDivider(0);
 		EnterFilter* filter = new EnterFilter(this);
 		tc->TextView()->AddFilter(filter);
-		char vs[64];
-		sprintf(vs, fmt, value);
+		BString vs = fmt;
+		fNumberFormat.Format(vs, value);
 		tc->SetText(vs);
 		AddChild(tc);
 		tc->MakeFocus(true);
@@ -340,9 +340,9 @@ Slider::KeyDown(const char* bytes, int32 numBytes)
 				tc->SetDivider(0);
 				EnterFilter* filter = new EnterFilter(this);
 				tc->TextView()->AddFilter(filter);
-				char vs[64];
-				sprintf(vs, fmt, value);
-				tc->SetText(vs);
+				BString vs = fmt;
+				fNumberFormat.Format(vs, value);
+				tc->SetText(vs.String());
 				AddChild(tc);
 				tc->MakeFocus(true);
 				inherited::KeyDown(bytes, numBytes);
