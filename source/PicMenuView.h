@@ -4,7 +4,8 @@
 #include "View.h"
 #include "PicMenuButton.h"
 
-class PicMenuView : public BView {
+class PicMenuView : public BView
+{
   public:
 	PicMenuView(BRect rect, int _hnum, const char* name, PicMenuButton* pmb);
 	virtual ~PicMenuView();

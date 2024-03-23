@@ -8,7 +8,8 @@
 
 float gThreshold;
 
-class SolarizeView : public BView {
+class SolarizeView : public BView
+{
   public:
 	SolarizeView(BRect rect) : BView(rect, "solarize view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -141,8 +142,7 @@ process(
 						*(++dbits) = PIXEL(255 - red, 255 - green, 255 - blue, alpha);
 					else
 						*(++dbits) = p;
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

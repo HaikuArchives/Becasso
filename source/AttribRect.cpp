@@ -179,14 +179,12 @@ AttribRect::MessageReceived(BMessage* msg)
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = RECT_OUTFILL;
-				}
-				else if (!strcasecmp(name, "Filled")) {
+				} else if (!strcasecmp(name, "Filled")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_ON);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = RECT_FILL;
-				}
-				else if (!strcasecmp(name, "Outline")) {
+				} else if (!strcasecmp(name, "Outline")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_ON);
@@ -199,8 +197,7 @@ AttribRect::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

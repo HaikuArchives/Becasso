@@ -241,14 +241,12 @@ AttribCircle::MessageReceived(BMessage* msg)
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = CIRCLE_OUTFILL;
-				}
-				else if (!strcasecmp(name, "Filled")) {
+				} else if (!strcasecmp(name, "Filled")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_ON);
 					pT3->SetValue(B_CONTROL_OFF);
 					value = CIRCLE_FILL;
-				}
-				else if (!strcasecmp(name, "Outline")) {
+				} else if (!strcasecmp(name, "Outline")) {
 					pT1->SetValue(B_CONTROL_OFF);
 					pT2->SetValue(B_CONTROL_OFF);
 					pT3->SetValue(B_CONTROL_ON);
@@ -261,8 +259,7 @@ AttribCircle::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}
@@ -277,8 +274,7 @@ AttribCircle::MessageReceived(BMessage* msg)
 					pF1->SetValue(B_CONTROL_ON);
 					pF2->SetValue(B_CONTROL_OFF);
 					value = FIXES_CENTER;
-				}
-				else if (!strcasecmp(name, "Perimeter")) {
+				} else if (!strcasecmp(name, "Perimeter")) {
 					pF1->SetValue(B_CONTROL_OFF);
 					pF2->SetValue(B_CONTROL_ON);
 					value = FIXES_PERIMETER;
@@ -290,8 +286,7 @@ AttribCircle::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

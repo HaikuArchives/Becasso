@@ -119,7 +119,8 @@ cfmakeraw(struct termios* termios_p)
  *
  */
 
-struct reader_s {
+struct reader_s
+{
 	thread_id target;
 	long timeout;
 	int fd;
@@ -186,8 +187,7 @@ dsc_read(dsc_t* dsc, void* buf, size_t count)
 		wait_for_thread(ctrl.target, &tmp);
 		kill_thread(timer_id);
 		n = ctrl.r;
-	}
-	else
+	} else
 		n = 0;
 
 #else
@@ -224,8 +224,7 @@ dsc_read(dsc_t* dsc, void* buf, size_t count)
 			if ((tv.tv_sec = READTIMEOUT + t - time(NULL)) < 0)
 				tv.tv_sec = 0;
 #endif
-		}
-		else if (s == -1) {
+		} else if (s == -1) {
 			DPRINTERR(__LINE__ + 1, errno, dsc_read);
 			return -1;
 		}

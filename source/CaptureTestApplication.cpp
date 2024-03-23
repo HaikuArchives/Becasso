@@ -1,7 +1,8 @@
 #include "Datatypes.h"
 #include <DataFormats.h>
 
-class MyWindow : public BWindow {
+class MyWindow : public BWindow
+{
   public:
 	MyWindow();
 	~MyWindow();
@@ -15,7 +16,8 @@ class MyWindow : public BWindow {
 	BView* fCapture;
 };
 
-class TestApplication : public BApplication {
+class TestApplication : public BApplication
+{
   public:
 	TestApplication();
 	void preRun(void);
@@ -37,7 +39,8 @@ const char* SIGNATURE = "application/x-redrackam-testCaptureHandler";
 
 TestApplication::TestApplication() : BApplication(SIGNATURE) {}
 
-class BitmapView : public BView {
+class BitmapView : public BView
+{
   public:
 	BitmapView(BRect a);
 	void Draw(BRect area);
@@ -68,8 +71,7 @@ BitmapView ::Draw(BRect area)
 
 		// dessine l'image
 		DrawBitmap(bitmap, rect);
-	}
-	else {
+	} else {
 		DrawBitmap(bitmap, BPoint(0, 0));
 	}
 }
@@ -228,8 +230,7 @@ MyWindow::MyWindow()
 		PostMessage(B_QUIT_REQUESTED);
 		delete[] list;
 		return;
-	}
-	else {
+	} else {
 		char *name, *info;
 		int32 version;
 		fHandler = list[ix];

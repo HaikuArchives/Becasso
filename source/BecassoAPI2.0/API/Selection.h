@@ -8,7 +8,8 @@
 #include "Build.h"
 #include "AddOnSupport.h"
 
-class IMPEXP Selection : public BBitmap {
+class IMPEXP Selection : public BBitmap
+{
   public:
 	Selection(BRect bounds);
 	Selection(const Selection& selection);

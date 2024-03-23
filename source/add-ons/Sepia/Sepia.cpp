@@ -15,7 +15,8 @@ int gMode;
 #define DUO_SEPIA 1
 #define DUO_FB 2
 
-class SepiaView : public BView {
+class SepiaView : public BView
+{
   public:
 	SepiaView(BRect rect);
 	virtual ~SepiaView(){};
@@ -201,8 +202,7 @@ process(
 						*(++dbits) = gp;
 					else
 						*(++dbits) = weighted_average(gp, mp, p, 255 - mp);
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

@@ -3,7 +3,8 @@
 
 #include <MenuItem.h>
 
-class ColorItem : public BMenuItem {
+class ColorItem : public BMenuItem
+{
   public:
 	ColorItem(const rgb_color _color);
 	virtual ~ColorItem();

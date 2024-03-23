@@ -14,7 +14,8 @@
 #include <TimedEventQueue.h>
 #include <MediaEventLooper.h>
 
-class VideoConsumer : public BMediaEventLooper, public BBufferConsumer {
+class VideoConsumer : public BMediaEventLooper, public BBufferConsumer
+{
   public:
 	VideoConsumer(const char* name, BView* view, BMediaAddOn* addon, const int32 internal_id);
 	~VideoConsumer();

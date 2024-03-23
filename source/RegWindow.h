@@ -16,7 +16,8 @@
 
 class BTextControl;
 
-class RegWindow : public BWindow {
+class RegWindow : public BWindow
+{
   public:
 	RegWindow(const BRect frame, const char* title, char type);
 	virtual ~RegWindow();

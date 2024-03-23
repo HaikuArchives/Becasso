@@ -31,7 +31,8 @@ class Layer;
 class Selection;
 class BGView;
 
-typedef struct {
+typedef struct
+{
 	float cx, cy;
 	float Spacing;
 	int pstrength;
@@ -40,7 +41,8 @@ typedef struct {
 	BPoint pos;
 } brush_cache;
 
-typedef struct {
+typedef struct
+{
 	float cx, cy;
 	float Spacing;
 	int pstrength;
@@ -50,7 +52,8 @@ typedef struct {
 	BPoint prevctr;
 } clone_cache;
 
-typedef struct {
+typedef struct
+{
 	const color_map* cmap;
 	rgb_color hi, lo, hit, lot;
 	bool lighten;
@@ -62,7 +65,8 @@ typedef struct {
 	Position position;
 } spraycan_cache;
 
-class CanvasView : public SView {
+class CanvasView : public SView
+{
   public:
 	CanvasView(const BRect frame, const char* name, BBitmap* map = NULL, rgb_color color = White);
 	CanvasView(const BRect frame, const char* name, FILE* fp);

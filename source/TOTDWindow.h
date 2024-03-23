@@ -5,7 +5,8 @@
 
 class BTextView;
 
-class TOTDWindow : public BWindow {
+class TOTDWindow : public BWindow
+{
   public:
 	TOTDWindow(const BRect frame, const int num);
 	virtual ~TOTDWindow();

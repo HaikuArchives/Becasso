@@ -129,8 +129,7 @@ process(
 				*(dbits + x) = average6(
 					*(sbitsx - 1), *sbitsx, *(sbitsx + 1), *(sbitsxl - 1), *sbitsxl, *(sbitsxl + 1)
 				);
-			}
-			else
+			} else
 				*(dbits + x) = *(sbits + x);
 
 			if (!inSelection || *(mapbits + (h - 1) * mbpr + x)) {
@@ -139,8 +138,7 @@ process(
 				*(dbits + (h - 1) * w + x) = average6(
 					*(sbitsx - 1), *sbitsx, *(sbitsx + 1), *(sbitsxu - 1), *sbitsxu, *(sbitsxu + 1)
 				);
-			}
-			else
+			} else
 				*(dbits + (h - 1) * w + x) = *(sbits + (h - 1) * w + x);
 		}
 
@@ -152,8 +150,7 @@ process(
 				*(dbits + y * w) = average6(
 					*(sbitsy - w), *sbitsy, *(sbitsy + w), *(sbitsyr - w), *sbitsyr, *(sbitsyr + w)
 				);
-			}
-			else
+			} else
 				*(dbits + y * w) = *(sbits + y * w);
 
 			if (!inSelection || *(mapbits + y * mbpr + w - 1)) {
@@ -162,8 +159,7 @@ process(
 				*(dbits + (y + 1) * w - 1) = average6(
 					*(sbitsy - w), *sbitsy, *(sbitsy + w), *(sbitsyl - w), *sbitsyl, *(sbitsyl + w)
 				);
-			}
-			else
+			} else
 				*(dbits + (y + 1) * w - 1) = *(sbits + (y + 1) * w - 1);
 		}
 
@@ -187,8 +183,7 @@ process(
 						*(sbitsu - 1), *sbitsu, *(sbitsu + 1), *(sbits - 1), *sbits, *(sbits + 1),
 						*(sbitsl - 1), *sbitsl, *(sbitsl + 1)
 					);
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			dbits += 2;

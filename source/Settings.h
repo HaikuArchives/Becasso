@@ -17,7 +17,8 @@ static const BPoint InvalidPoint = BPoint(0, 0);
 #define SELECTION_IN_OUT 0
 #define SELECTION_STATIC 1
 
-enum {
+enum
+{
 	numMainWindow = 0,
 	numAttribWindow = 1,
 	numModeWindow = 2,
@@ -51,7 +52,8 @@ init_strings(const char* file);
 const char*
 lstring(const int32 index, const char* default_string);
 
-struct becasso_settings {
+struct becasso_settings
+{
 	BPoint origin[NUM_WINDOWS];
 	char language[64];
 	int32 recents;
@@ -62,7 +64,8 @@ struct becasso_settings {
 	bool settings_touched;
 };
 
-class PrefsLoader {
+class PrefsLoader
+{
   public:
 	PrefsLoader();
 	~PrefsLoader();

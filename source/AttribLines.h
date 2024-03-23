@@ -9,7 +9,8 @@
 #define PROP_PENSIZE 1
 #define PROP_FILLCORNERS 2
 
-class AttribLines : public AttribView {
+class AttribLines : public AttribView
+{
   public:
 	AttribLines();
 	virtual ~AttribLines();

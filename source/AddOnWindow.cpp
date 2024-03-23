@@ -197,8 +197,7 @@ AddOnWindow::MessageReceived(BMessage* msg)
 				bounds.right = 188;
 			bounds.bottom += 64;
 			ResizeTo(bounds.Width(), bounds.Height());
-		}
-		else
+		} else
 			fprintf(stderr, "AddOnWindow: ADDON_RESIZED but couldn't find config view\n");
 		break;
 	}

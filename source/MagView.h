@@ -9,13 +9,15 @@
 
 #define MAX_MAG_UNDO 512
 
-struct MagUndoEntry {
+struct MagUndoEntry
+{
 	uint16 x;
 	uint16 y;
 	uint32 c;
 };
 
-class MagView : public BView {
+class MagView : public BView
+{
   public:
 	MagView(BRect frame, const char* name, CanvasView* _myView);
 	virtual ~MagView();

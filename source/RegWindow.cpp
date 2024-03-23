@@ -69,16 +69,14 @@ RegWindow::RegWindow(const BRect frame, const char* title, char type)
 		bg->AddChild(new BStringView(
 			BRect(4, 20, bgFrame.Width() - 4, 36), "rg2", lstring(437, "This is a free version.")
 		));
-	}
-	else if (type == REG_HAS_14) {
+	} else if (type == REG_HAS_14) {
 		bg->AddChild(new BStringView(
 			BRect(4, 4, bgFrame.Width() - 4, 20), "rg1", lstring(421, "Becasso 1.4 detected")
 		));
 		bg->AddChild(new BStringView(
 			BRect(4, 20, bgFrame.Width() - 4, 36), "rg2", lstring(422, "This is a free upgrade.")
 		));
-	}
-	else if (type == REG_PREINST) {
+	} else if (type == REG_PREINST) {
 		bg->AddChild(new BStringView(
 			BRect(4, 4, bgFrame.Width() - 4, 20), "rg1",
 			lstring(430, "Becasso 2.0 was pre-installed,")
@@ -87,8 +85,7 @@ RegWindow::RegWindow(const BRect frame, const char* title, char type)
 			BRect(4, 20, bgFrame.Width() - 4, 36), "rg2",
 			lstring(431, "but hasn't been registered yet.")
 		));
-	}
-	else // must have the CD
+	} else // must have the CD
 	{
 		bg->AddChild(new BStringView(
 			BRect(4, 4, bgFrame.Width() - 4, 20), "rg3",

@@ -47,8 +47,7 @@ ColorMenuView::Draw(BRect /*updateRect*/)
 			}
 			Sync();
 		}
-	}
-	else {
+	} else {
 	}
 }
 
@@ -97,8 +96,7 @@ ColorMenuView::MouseDown(BPoint point)
 			msg->AddInt32("color", c.blue);
 			fCMB->Editor()->PostMessage(msg);
 			delete msg;
-		}
-		else {
+		} else {
 			fCMB->ShowEditor();
 			Invalidate();
 		}
@@ -120,8 +118,7 @@ ColorMenuView::MouseMoved(BPoint point, uint32 transit, const BMessage* /* msg *
 	int previndex = index;
 	if (transit == B_EXITED_VIEW) {
 		index = -1;
-	}
-	else {
+	} else {
 		index = int(point.y / C_SIZE) * C_H_NUM + int(point.x / C_SIZE);
 	}
 	if (previndex != index) {

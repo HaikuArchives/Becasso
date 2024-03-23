@@ -105,8 +105,7 @@ process(
 						*(++dbits) = gp;
 					else
 						*(++dbits) = weighted_average(gp, mp, p, 255 - mp);
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

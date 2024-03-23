@@ -46,8 +46,7 @@ BitmapStream::ReadAt(off_t pos, void* buffer, size_t size)
 	if (fPosition < sizeof(DATABitmap)) {
 		toRead = sizeof(DATABitmap) - pos;
 		source = ((char*)&fHeader) + pos;
-	}
-	else {
+	} else {
 		toRead = fSize - pos;
 		source = ((char*)fMap->Bits()) + fPosition - sizeof(DATABitmap);
 	}
@@ -70,8 +69,7 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 		if (pos < sizeof(DATABitmap)) {
 			toWrite = sizeof(DATABitmap) - pos;
 			dest = ((char*)&fHeader) + pos;
-		}
-		else {
+		} else {
 			toWrite = fHeader.dataSize - pos + sizeof(DATABitmap);
 			dest = ((char*)fMap->Bits()) + pos - sizeof(DATABitmap);
 		}
@@ -97,7 +95,7 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 			}
 			if (!fMap) {
 				//				fHeader.bounds.PrintToStream();  // ### Sander SToks, 23/07/97
-				//commented out.
+				// commented out.
 				if ((fHeader.bounds.left > 0.0) || (fHeader.bounds.top > 0.0))
 					DEBUGGER("non-origin bounds!");
 				fMap = new BBitmap(fHeader.bounds, fHeader.colors);

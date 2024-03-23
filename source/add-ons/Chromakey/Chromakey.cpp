@@ -17,7 +17,8 @@ int gMode;
 #define CK_FG 1
 #define CK_BG 2
 
-class CKView : public BView {
+class CKView : public BView
+{
   public:
 	CKView(BRect rect);
 
@@ -198,11 +199,9 @@ process(
 					else if (d < threshold + sigma) {
 						int alpha = 255 * (d - threshold) / sigma;
 						*(++dbits) = (p & COLOR_MASK) | (pix.alpha * alpha << (ALPHA_BPOS - 8));
-					}
-					else
+					} else
 						*(++dbits) = p;
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

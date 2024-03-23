@@ -12,7 +12,8 @@
 #define MAX_TAB 32
 #define TAB_HEIGHT 16
 
-class IMPEXP TabView : public BView {
+class IMPEXP TabView : public BView
+{
   public:
 	TabView(BRect frame, const char* name, uint32 resizingMode = B_FOLLOW_LEFT | B_FOLLOW_TOP);
 	virtual ~TabView();

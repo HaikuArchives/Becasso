@@ -58,8 +58,7 @@ Dial::Draw(BRect update)
 	FillRect(Bounds(), B_SOLID_LOW);
 	if (fType == DIAL_360) {
 		StrokeEllipse(bounds)
-	}
-	else {
+	} else {
 	}
 }
 

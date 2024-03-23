@@ -103,13 +103,15 @@ process(
 		entry = true;
 		//		float dlt = ((frame->left - firstpoint.x)*(frame->left - firstpoint.x) + (frame->top
 		//- firstpoint.y)*(frame->top - firstpoint.y)); 		float drt = ((frame->right -
-		//firstpoint.x)*(frame->right - firstpoint.x) + (frame->top - firstpoint.y)*(frame->top -
-		//firstpoint.y)); 		float dlb = ((frame->left - firstpoint.x)*(frame->left - firstpoint.x) +
-		//(frame->bottom - firstpoint.y)*(frame->bottom - firstpoint.y)); 		float drb = ((frame->right
+		// firstpoint.x)*(frame->right - firstpoint.x) + (frame->top - firstpoint.y)*(frame->top -
+		// firstpoint.y)); 		float dlb = ((frame->left - firstpoint.x)*(frame->left -
+		// firstpoint.x) + (frame->bottom - firstpoint.y)*(frame->bottom - firstpoint.y));
+		// float drb = ((frame->right
 		//- firstpoint.x)*(frame->right - firstpoint.x) + (frame->bottom -
-		//firstpoint.y)*(frame->bottom - firstpoint.y)); 		varcorner = 0; // LeftTop 		if (drt < dlt)
-		//varcorner = 1;	// RightTop 		if (dlb < drt && dlb < dlt) varcorner = 2;	// LeftBottom 		if
-		//(drb < dlb && drb < drt && drb < dlt) varcorner = 3;	// RightBottom
+		// firstpoint.y)*(frame->bottom - firstpoint.y)); 		varcorner = 0; // LeftTop 		if
+		// (drt < dlt) varcorner = 1;	// RightTop 		if (dlb < drt && dlb < dlt) varcorner =
+		// 2;	// LeftBottom 		if (drb < dlb && drb < drt && drb < dlt) varcorner = 3;	//
+		// RightBottom
 		printf("Scale: final - setup done\n");
 	}
 
@@ -222,8 +224,7 @@ process(
 			delete view;
 			AddWithAlpha(sLayer, (*outLayer), int(newrect.left), int(newrect.top));
 			delete sLayer;
-		}
-		else if (entry) // The user has released the mouse.  Clean up.
+		} else if (entry) // The user has released the mouse.  Clean up.
 		// N.B. We also get here when "Apply" is clicked.
 		{
 			printf("Clean up\n");
@@ -275,8 +276,7 @@ process(
 			view->Sync();
 			(*outSelection)->RemoveChild(view);
 			delete view;
-		}
-		else if (entry) // The user has released the mouse.  Clean up.
+		} else if (entry) // The user has released the mouse.  Clean up.
 		// N.B. We also get here when "Apply" is clicked.
 		{
 			firstpoint = BPoint(-1, -1);

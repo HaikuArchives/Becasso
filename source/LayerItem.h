@@ -15,7 +15,8 @@
 #define THUMBLAYERMAXHEIGHT 56
 #define THUMBLAYERMAXWIDTH 90
 
-class LayerItem : public BView {
+class LayerItem : public BView
+{
   public:
 	LayerItem(BRect frame, const char* name, int layerIndex, CanvasView* _myView);
 	virtual ~LayerItem();

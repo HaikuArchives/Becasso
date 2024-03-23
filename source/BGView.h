@@ -4,7 +4,8 @@
 #include <View.h>
 #include <ScrollBar.h>
 
-class BGView : public BView {
+class BGView : public BView
+{
   public:
 	BGView(BRect frame, const char* name, uint32 resizeMask, uint32 flags);
 	virtual ~BGView();

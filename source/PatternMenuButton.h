@@ -13,7 +13,8 @@
 #define P_H_NUM 10
 #define P_SIZE 24
 
-class PatternMenuButton : public BView {
+class PatternMenuButton : public BView
+{
   public:
 	PatternMenuButton(BRect frame, const char* name);
 	virtual ~PatternMenuButton();

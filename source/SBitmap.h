@@ -5,7 +5,8 @@
 
 #include <Bitmap.h>
 
-class SBitmap {
+class SBitmap
+{
   public:
 	SBitmap(BBitmap* src);
 	SBitmap(const BRect bounds, const color_space cs);

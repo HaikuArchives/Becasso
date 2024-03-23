@@ -9,7 +9,8 @@
 #include "MagView.h"
 #include "CanvasView.h"
 
-class MagWindow : public BWindow {
+class MagWindow : public BWindow
+{
 	friend class CanvasView;
 
   public:

@@ -8,7 +8,8 @@
 #include "LayerView.h"
 #include "CanvasView.h"
 
-class LayerWindow : public BWindow {
+class LayerWindow : public BWindow
+{
 	friend class CanvasView;
 
   public:

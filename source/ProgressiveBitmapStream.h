@@ -80,7 +80,8 @@ class BBitmap;
 class BInvoker;
 class BarWindow;
 
-class ProgressiveBitmapStream : public BPositionIO {
+class ProgressiveBitmapStream : public BPositionIO
+{
   public:
 	// Constructor for when used as source
 	ProgressiveBitmapStream(BBitmap* bitmap);

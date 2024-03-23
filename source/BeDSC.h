@@ -11,7 +11,8 @@
 #include <unistd.h>
 #include <device/SerialPort.h>
 
-class BeDSC {
+class BeDSC
+{
 
   private:
 	dsc_t* dsc;

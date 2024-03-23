@@ -13,7 +13,8 @@
 
 class ColorMenuButton;
 
-class ColorMenu : public BMenu {
+class ColorMenu : public BMenu
+{
 	friend class ColorMenuButton;
 
   public:

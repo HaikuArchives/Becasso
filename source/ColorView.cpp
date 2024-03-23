@@ -32,8 +32,7 @@ ColorView::ScreenChanged(BRect /* frame */, color_space cs)
 		delete bitmap;
 		bitmap = new BBitmap(bitFrame, B_RGB32);
 		SetColor(color);
-	}
-	else if (bitmap->ColorSpace() != B_COLOR_8_BIT && cs == B_COLOR_8_BIT) {
+	} else if (bitmap->ColorSpace() != B_COLOR_8_BIT && cs == B_COLOR_8_BIT) {
 		BRect bitFrame = bitmap->Bounds();
 		delete bitmap;
 		bitmap = new BBitmap(bitFrame, B_COLOR_8_BIT);

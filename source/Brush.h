@@ -3,7 +3,8 @@
 
 #include <Bitmap.h>
 
-class Brush {
+class Brush
+{
   public:
 	Brush(int h, int w, float s);
 	~Brush();

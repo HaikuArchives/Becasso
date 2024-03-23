@@ -8,7 +8,8 @@
 #include "Modes.h"
 #include <Bitmap.h>
 
-class AddOn {
+class AddOn
+{
   public:
 	AddOn(BEntry entry);
 	~AddOn();

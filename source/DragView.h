@@ -16,7 +16,8 @@
 const int DV_HORZ = 0;
 const int DV_VERT = 1;
 
-class DragView : public BView {
+class DragView : public BView
+{
   public:
 	DragView(BRect frame, const char* name, int Orientation);
 	virtual ~DragView();

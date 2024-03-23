@@ -56,8 +56,7 @@ PatternMenuView::Draw(BRect /* updateRect */)
 			}
 		}
 		Sync();
-	}
-	else {
+	} else {
 	}
 }
 
@@ -104,8 +103,7 @@ PatternMenuView::MouseDown(BPoint point)
 			//			msg->AddInt32 ("color", c.blue);
 			//			fPMB->Editor()->PostMessage (msg);
 			//			delete msg;
-		}
-		else {
+		} else {
 			fPMB->ShowEditor();
 			Invalidate();
 		}
@@ -127,8 +125,7 @@ PatternMenuView::MouseMoved(BPoint point, uint32 transit, const BMessage* /* msg
 	int previndex = index;
 	if (transit == B_EXITED_VIEW) {
 		index = -1;
-	}
-	else {
+	} else {
 		index = int(point.y / P_SIZE) * P_H_NUM + int(point.x / P_SIZE);
 	}
 	if (previndex != index) {

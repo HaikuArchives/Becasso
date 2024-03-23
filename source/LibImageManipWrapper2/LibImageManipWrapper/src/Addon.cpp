@@ -62,7 +62,8 @@ static WrapperView* mView = NULL;
 
 #define STATUS_TEXT_HEIGHT 20
 
-class WrapperView : public BView {
+class WrapperView : public BView
+{
 	void SetupFilters(BMenu* sub_menu);
 	BView* mView;
 	BMenuField* mMenuField;
@@ -185,8 +186,7 @@ WrapperView::SetupConfigView(int32 addon, const char* name)
 		int width = max_c(mWidth, mView->Bounds().Width()) + 10;
 		mView->MoveTo((width - mView->Bounds().Width()) / 2, mTop);
 		ResizeTo(width, mTop + STATUS_TEXT_HEIGHT + mView->Bounds().Height());
-	}
-	else {
+	} else {
 		ResizeTo(mWidth, mTop + STATUS_TEXT_HEIGHT);
 		width = mWidth;
 	}
@@ -365,8 +365,7 @@ process(
 		if (inSelection) {
 			if (*outSelection == NULL)
 				*outSelection = new Selection(*inSelection);
-		}
-		else // No Selection to filter!
+		} else // No Selection to filter!
 			return (0);
 	}
 	if (*outLayer)
@@ -384,8 +383,7 @@ process(
 
 	if (final) {
 		//		addon_start();
-	}
-	else {
+	} else {
 		//		return error;
 	}
 
@@ -395,8 +393,7 @@ process(
 	//	m.PrintToStream();
 	if (frame->IntegerWidth() == 0 || frame->IntegerHeight() == 0) {
 		ioExt.AddRect("selection_rect", bounds);
-	}
-	else {
+	} else {
 		// frame->PrintToStream();
 		ioExt.AddRect("selection_rect", *frame);
 	}
@@ -409,8 +406,7 @@ process(
 		if (inSelection) {
 			layer = new Layer(*inLayer);
 			memcpy(layer->Bits(), inLayer->Bits(), inLayer->BitsLength());
-		}
-		else {
+		} else {
 			layer = *outLayer;
 		}
 		BBitmapAccessor* src_accessor = Image_CreateBBitmapAccessor(layer);
@@ -481,8 +477,7 @@ process(
 		if (inSelection) {
 			layer = new Layer(*inLayer);
 			memcpy((*outLayer)->Bits(), inLayer->Bits(), inLayer->BitsLength());
-		}
-		else {
+		} else {
 			layer = *outLayer;
 		}
 
@@ -552,8 +547,7 @@ process(
 			SetStatus("Error: Could not convert selection!");
 			error = ADDON_ABORT;
 			;
-		}
-		else {
+		} else {
 			int dx = -(bounds.IntegerWidth() - dst_accessor->Bounds().IntegerWidth()) / 2;
 			int dy = -(bounds.IntegerHeight() - dst_accessor->Bounds().IntegerHeight()) / 2;
 			CopySelection(dst_accessor->Bitmap(), *outSelection, dx, dy);

@@ -9,7 +9,8 @@
 #include <StringView.h>
 #include <NumberFormat.h>
 
-class ThumbnailView : public BView {
+class ThumbnailView : public BView
+{
   public:
 	ThumbnailView(BRect frame, const char* name, uint32 resizingMode, uint32 flags);
 	virtual ~ThumbnailView();
@@ -22,7 +23,8 @@ class ThumbnailView : public BView {
 	BBitmap* fBitmap;
 };
 
-class ThumbnailFilePanel : public BFilePanel {
+class ThumbnailFilePanel : public BFilePanel
+{
   public:
 	ThumbnailFilePanel(
 		file_panel_mode mode = B_OPEN_PANEL, BMessenger* target = NULL,

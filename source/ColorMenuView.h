@@ -4,7 +4,8 @@
 #include "View.h"
 #include "ColorMenuButton.h"
 
-class ColorMenuView : public BView {
+class ColorMenuView : public BView
+{
   public:
 	ColorMenuView(BRect rect, const char* name, ColorMenuButton* pmb);
 	virtual ~ColorMenuView();

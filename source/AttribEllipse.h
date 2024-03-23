@@ -13,7 +13,8 @@
 #define PROP_PENSIZE 1
 #define PROP_TYPE 2
 
-class AttribEllipse : public AttribView {
+class AttribEllipse : public AttribView
+{
   public:
 	AttribEllipse();
 	virtual ~AttribEllipse();

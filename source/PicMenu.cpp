@@ -89,7 +89,8 @@ PicMenu::ScreenLocation()
 
 #if defined(WINVERSION)
 
-class picTearInfo {
+class picTearInfo
+{
   public:
 	picTearInfo(BRect r, PicMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
@@ -165,8 +166,7 @@ PicMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 			if (hnum < 2) {
 				point.x = 1;
 				point.y = i * (Bounds().Width() + 1) + 1;
-			}
-			else {
+			} else {
 				// only works for 2 wide...
 				point.x = i & 1 ? Bounds().Width() / hnum + 1 : 1;
 				point.y = (i / 2) * (Bounds().Width() / hnum) + 1;
@@ -217,8 +217,7 @@ PicMenu::TearDone(BRect place, bool newwin)
 		PicMenuView* mv = new PicMenuView(mvRect, hnum, "MenuView", parent);
 		fWindow->AddChild(mv);
 		fWindow->Show();
-	}
-	else {
+	} else {
 		fWindow->MoveTo(place.LeftTop());
 		fWindow->Activate();
 	}

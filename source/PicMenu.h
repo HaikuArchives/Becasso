@@ -14,7 +14,8 @@
 
 class PicMenuButton;
 
-class PicMenu : public BMenu {
+class PicMenu : public BMenu
+{
 	friend class PicMenuButton;
 
   public:

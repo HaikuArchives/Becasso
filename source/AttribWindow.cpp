@@ -124,29 +124,24 @@ AttribWindow::ResolveSpecifier(
 					extern const char* ToolSpecifiers[];
 					if (index >= 0 && index <= NumTools) {
 						name = ToolSpecifiers[index];
-					}
-					else
+					} else
 						return inherited::ResolveSpecifier(
 							message, index, specifier, command, property
 						);
-				}
-				else if (!strcasecmp(property, "Mode")) {
+				} else if (!strcasecmp(property, "Mode")) {
 					//				extern const int32 NumModes;
 					extern const char* ModeSpecifiers[];
 					if (index >= 0 && index <= NumModes) {
 						name = ModeSpecifiers[index];
-					}
-					else
+					} else
 						return inherited::ResolveSpecifier(
 							message, index, specifier, command, property
 						);
 				}
-			}
-			else // Name nor index?!
+			} else // Name nor index?!
 				return inherited::ResolveSpecifier(message, index, specifier, command, property);
 		}
-	}
-	else // This must be a "normal" Be scripting call
+	} else // This must be a "normal" Be scripting call
 		return inherited::ResolveSpecifier(message, index, specifier, command, property);
 
 	message->PopSpecifier();

@@ -25,7 +25,8 @@ float gYscale;
 int gRippleType;
 bool gInvDecay;
 
-class RippleView : public BView {
+class RippleView : public BView
+{
   public:
 	RippleView(BRect rect) : BView(rect, "ripple view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -316,8 +317,7 @@ process(
 					if (type == RADIAL) {
 						nx = (delta + dx) / scale_x + cx;
 						ny = (delta + dy) / scale_y + cy;
-					}
-					else // ANGULAR
+					} else // ANGULAR
 					{
 						float nr = r + delta;
 						float ang = atan2(dx, dy);
@@ -340,15 +340,13 @@ process(
 						p3 = (s + (iny + (iny < h ? 1 : 0)) * pprs)[inx];
 
 						*(++dl) = interpolate(mx, my, p0, p1, p2, p3);
-					}
-					else {
+					} else {
 						p0 = (s + iny * pprs)[inx];
 						*(++dl) = p0;
 					}
 
 					++sl;
-				}
-				else
+				} else
 					*(++dl) = *(++sl);
 			}
 			sl = s + row * pprs + lastCol;

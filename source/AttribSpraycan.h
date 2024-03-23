@@ -13,7 +13,8 @@
 #define PROP_RATE 2
 #define PROP_FADE 3
 
-class AttribSpraycan : public AttribView {
+class AttribSpraycan : public AttribView
+{
   public:
 	AttribSpraycan();
 	virtual ~AttribSpraycan();

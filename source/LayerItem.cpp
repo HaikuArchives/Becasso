@@ -82,14 +82,12 @@ LayerItem::MouseMoved(BPoint point, uint32 transit, const BMessage* message)
 			SetHighColor(Black);
 			StrokeLine(Bounds().LeftTop(), Bounds().RightTop());
 			StrokeLine(Bounds().LeftBottom(), Bounds().RightBottom());
-		}
-		else if (to == 0) {
+		} else if (to == 0) {
 			SetHighColor(Blue);
 			StrokeLine(Bounds().LeftTop(), Bounds().RightTop());
 			SetHighColor(Black);
 			StrokeLine(Bounds().LeftBottom(), Bounds().RightBottom());
-		}
-		else {
+		} else {
 			SetHighColor(Black);
 			StrokeLine(Bounds().LeftTop(), Bounds().RightTop());
 			SetHighColor(Blue);
@@ -155,8 +153,7 @@ LayerItem::MouseDown(BPoint point)
 		}
 		if (!bt && click != 2) {
 			click = 1;
-		}
-		else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON && !(modifiers() & B_CONTROL_KEY)) {
+		} else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON && !(modifiers() & B_CONTROL_KEY)) {
 			BMessage* dragmessage = new BMessage('ldrg');
 			dragmessage->AddInt32("startingindex", index);
 			BBitmap* dragbitmap = new BBitmap(Bounds(), B_RGBA32, true);
@@ -305,8 +302,7 @@ LayerItem::MessageReceived(BMessage* message)
 			msg->AddInt32("index", index);
 			fMyView->Window()->PostMessage(msg);
 			delete msg;
-		}
-		else {
+		} else {
 			BMessage* msg = new BMessage('movL');
 			int16 to = int16(floor(point.y / LAYERITEMHEIGHT - 0.5) + (sindex > index ? 0 : 1));
 			msg->AddInt32("from", sindex);
@@ -314,7 +310,6 @@ LayerItem::MessageReceived(BMessage* message)
 			fMyView->Window()->PostMessage(msg);
 			delete msg;
 		}
-	}
-	else
+	} else
 		inherited::MessageReceived(message);
 }

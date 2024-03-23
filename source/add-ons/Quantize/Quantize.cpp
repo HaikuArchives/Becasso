@@ -63,7 +63,8 @@ int16* gLut = 0;
 #define BOX_G_SHIFT (G_SHIFT + BOX_G_LOG)
 #define BOX_B_SHIFT (B_SHIFT + BOX_B_LOG)
 
-class QView : public BView {
+class QView : public BView
+{
   public:
 	QView(BRect rect) : BView(rect, "Quantize_view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -224,21 +225,18 @@ find_nearby_colors(
 			min_dist = tdist * tdist;
 			tdist = (x - maxr) * R_WEIGHT;
 			max_dist = tdist * tdist;
-		}
-		else if (x > maxr) {
+		} else if (x > maxr) {
 			tdist = (x - maxr) * R_WEIGHT;
 			min_dist = tdist * tdist;
 			tdist = (x - minr) * R_WEIGHT;
 			max_dist = tdist * tdist;
-		}
-		else // within cell range so no contribution to min_dist
+		} else // within cell range so no contribution to min_dist
 		{
 			min_dist = 0;
 			if (x <= cr) {
 				tdist = (x - maxr) * R_WEIGHT;
 				max_dist = tdist * tdist;
-			}
-			else {
+			} else {
 				tdist = (x - minr) * R_WEIGHT;
 				max_dist = tdist * tdist;
 			}
@@ -250,19 +248,16 @@ find_nearby_colors(
 			min_dist += tdist * tdist;
 			tdist = (x - maxg) * G_WEIGHT;
 			max_dist += tdist * tdist;
-		}
-		else if (x > maxg) {
+		} else if (x > maxg) {
 			tdist = (x - maxg) * G_WEIGHT;
 			min_dist += tdist * tdist;
 			tdist = (x - ming) * G_WEIGHT;
 			max_dist += tdist * tdist;
-		}
-		else {
+		} else {
 			if (x <= cg) {
 				tdist = (x - maxg) * G_WEIGHT;
 				max_dist += tdist * tdist;
-			}
-			else {
+			} else {
 				tdist = (x - ming) * G_WEIGHT;
 				max_dist += tdist * tdist;
 			}
@@ -274,19 +269,16 @@ find_nearby_colors(
 			min_dist += tdist * tdist;
 			tdist = (x - maxb) * B_WEIGHT;
 			max_dist += tdist * tdist;
-		}
-		else if (x > maxb) {
+		} else if (x > maxb) {
 			tdist = (x - maxb) * B_WEIGHT;
 			min_dist += tdist * tdist;
 			tdist = (x - minb) * B_WEIGHT;
 			max_dist += tdist * tdist;
-		}
-		else {
+		} else {
 			if (x <= cb) {
 				tdist = (x - maxb) * B_WEIGHT;
 				max_dist += tdist * tdist;
-			}
-			else {
+			} else {
 				tdist = (x - minb) * B_WEIGHT;
 				max_dist += tdist * tdist;
 			}
@@ -514,7 +506,7 @@ process(
 						uint8 g = GREEN(pixel);
 						uint8 b = BLUE(pixel);
 						//						uint16 appr = ((r << 8) & 0xF700)|((g << 3) &
-						//0x07E0)|((b >> 3) & 0x001F);
+						// 0x07E0)|((b >> 3) & 0x001F);
 						int rs = r >> R_SHIFT;
 						int gs = g >> G_SHIFT;
 						int bs = b >> B_SHIFT;
@@ -525,14 +517,12 @@ process(
 							);
 						}
 						*(++dbits) = rgb2bgra(palette[ELEM(gLut, rs, gs, bs)]);
-					}
-					else
+					} else
 						*(++dbits) = *(++sbits);
 				}
 				mapbits += mdiff;
 			}
-		}
-		else // FS Dither
+		} else // FS Dither
 		{
 
 			// Foley & Van Dam, pp 572.
@@ -547,7 +537,7 @@ process(
 			int32 sdif = slpr - width;
 			uint32 dbpr = (*outLayer)->BytesPerRow() / 4;
 			bgra_pixel* dest = dbits; //(bgra_pixel *) (*outLayer)->Bits() + int (bounds.top)*dbpr +
-									  //int (bounds.left) - 1;
+									  // int (bounds.left) - 1;
 			int32 ddif = dbpr - width;
 
 			int* nera = new int[width];

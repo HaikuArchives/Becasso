@@ -14,7 +14,8 @@
 #define PROP_Y 5
 #define PROP_HARDNESS 6
 
-class AttribBrush : public AttribView {
+class AttribBrush : public AttribView
+{
   public:
 	AttribBrush();
 	virtual ~AttribBrush();

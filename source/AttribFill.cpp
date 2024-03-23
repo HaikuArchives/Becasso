@@ -201,8 +201,7 @@ AttribFill::MessageReceived(BMessage* msg)
 				if (!strcasecmp(name, "Visual")) {
 					tol->SetValue(B_CONTROL_ON);
 					value = FILLTOL_TOL;
-				}
-				else if (!strcasecmp(name, "RGB") || !strcasecmp(name, "Absolute")) {
+				} else if (!strcasecmp(name, "RGB") || !strcasecmp(name, "Absolute")) {
 					rgb->SetValue(B_CONTROL_ON);
 					value = FILLTOL_RGB;
 				}
@@ -213,8 +212,7 @@ AttribFill::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					// Error report...
 				}
 			}

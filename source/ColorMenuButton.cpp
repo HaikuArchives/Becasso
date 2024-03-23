@@ -134,8 +134,7 @@ ColorMenuButton::MouseDown(BPoint point)
 			msg->AddInt32("color", c.blue);
 			editor->PostMessage(msg);
 			delete msg;
-		}
-		else {
+		} else {
 			ShowEditor();
 		}
 	}
@@ -161,8 +160,7 @@ ColorMenuButton::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		hlp->AddString("View", _name);
 		Window()->PostMessage(hlp);
 		delete hlp;
-	}
-	else if (transit == B_EXITED_VIEW) {
+	} else if (transit == B_EXITED_VIEW) {
 		BMessage* hlp = new BMessage('chlp');
 		hlp->AddString("View", "");
 		Window()->PostMessage(hlp);
@@ -257,7 +255,8 @@ ColorMenuButton::palette()
 #define BLUE_WEIGHT 1
 #endif
 
-typedef struct {
+typedef struct
+{
 	uint16 rmin, rmax;
 	uint16 gmin, gmax;
 	uint16 bmin, bmax;
@@ -498,24 +497,21 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 						printf("Split on red\n");
 					n->rmin = n->rmax - rd / 2;
 					biggest->rmax = n->rmin - 1;
-				}
-				else // blue wins
+				} else // blue wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on blue\n");
 					n->bmin = n->bmax - bd / 2;
 					biggest->bmax = n->bmin - 1;
 				}
-			}
-			else {
+			} else {
 				if (sg > sb) // green wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on green\n");
 					n->gmin = n->gmax - gd / 2;
 					biggest->gmax = n->gmin - 1;
-				}
-				else // blue wins
+				} else // blue wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on blue\n");
@@ -806,11 +802,9 @@ ColorMenuButton::Load(BEntry entry)
 				c.blue = clipchar(int(strtol(endp, &endp, 0)));
 				c.alpha = 255;
 				menu->ItemAt(i)->setColor(c);
-			}
-			else
+			} else
 				i--;
-		}
-		else {
+		} else {
 			c.red = 0;
 			c.green = 0;
 			c.blue = 0;
@@ -834,8 +828,7 @@ ColorMenuButton::Generate(ulong w)
 	if (w == 'PGdf') {
 		for (int i = 0; i < 256; i++)
 			menu->ItemAt(i)->setColor(system_colors()->color_list[i]);
-	}
-	else if (w == 'PGht') {
+	} else if (w == 'PGht') {
 		rgb_color c;
 		for (int i = 0; i <= 43; i++) {
 			c.red = 0;
@@ -866,8 +859,7 @@ ColorMenuButton::Generate(ulong w)
 			c.blue = 255 * i / 43;
 			menu->ItemAt(i + 212)->setColor(c);
 		}
-	}
-	else if (w == 'PGsp') {
+	} else if (w == 'PGsp') {
 		for (int i = 0; i < 256; i++) {
 			hsv_color h;
 			h.hue = 315 * (255 - i) / 255;
@@ -875,8 +867,7 @@ ColorMenuButton::Generate(ulong w)
 			h.value = 1.0;
 			menu->ItemAt(i)->setColor(hsv2rgb(h));
 		}
-	}
-	else {
+	} else {
 		for (int i = 0; i < 256; i++) {
 			rgb_color c;
 			c.red = (w == 'PGG' || w == 'PGr' || w == 'PGrg' || w == 'PGrb') ? i : 0;
@@ -904,8 +895,7 @@ ColorMenuButton::MessageReceived(BMessage* msg)
 			long dummy;
 			msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy);
 			set(*dropped, false);
-		}
-		else
+		} else
 			fprintf(stderr, "ColorMenuButton just received a non-dropped B_PASTE?!\n");
 		break;
 	}

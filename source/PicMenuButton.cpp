@@ -118,8 +118,7 @@ PicMenuButton::MouseDown(BPoint point)
 		aWindow->Lock();
 		if (aWindow->IsHidden()) {
 			aWindow->Show();
-		}
-		else {
+		} else {
 			aWindow->Activate();
 		}
 		aWindow->Unlock();
@@ -150,8 +149,7 @@ PicMenuButton::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		hlp->AddString("View", helpstring);
 		Window()->PostMessage(hlp);
 		delete hlp;
-	}
-	else if (transit == B_EXITED_VIEW) {
+	} else if (transit == B_EXITED_VIEW) {
 		BMessage* hlp = new BMessage('chlp');
 		hlp->AddString("View", "");
 		Window()->PostMessage(hlp);

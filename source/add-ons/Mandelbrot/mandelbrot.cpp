@@ -563,14 +563,12 @@ drawMandel(
 			view->displayZoom();
 		}
 		view->mLastZoom = point;
-	}
-	else if (mods & B_CONTROL_KEY) {
+	} else if (mods & B_CONTROL_KEY) {
 		// change rotation
 		if (view->mLastModifier != B_CONTROL_KEY) {
 			view->mLastModifier = B_CONTROL_KEY;
 			view->mLastRotate = point;
-		}
-		else {
+		} else {
 			double a, x, y;
 			// x = (point.x - window->mLastRotate.x);
 			// y = (point.y - window->mLastRotate.y);
@@ -586,8 +584,7 @@ drawMandel(
 			view->mAngle = angle;
 			view->displayAngle();
 		}
-	}
-	else {
+	} else {
 		// move center
 		if (view->mLastModifier != B_COMMAND_KEY)
 			view->mLastModifier = B_COMMAND_KEY;
@@ -595,8 +592,7 @@ drawMandel(
 			if (julia) {
 				xcenter = ((point.x - (width / 2)) / (width / 2)) * 2.0;
 				ycenter = ((point.y - (height / 2)) / (height / 2)) * 2.0;
-			}
-			else {
+			} else {
 				xcenter = view->mXCenter + (view->mLastSlide.x - point.x) / (width / 2 * xzoom);
 				ycenter = view->mYCenter + (view->mLastSlide.y - point.y) / (height / 2 * yzoom);
 			}
@@ -689,8 +685,7 @@ drawMandel(
 					x2 = x * x;
 					y2 = y * y;
 				}
-			}
-			else {
+			} else {
 				// mandelbrot
 				ar = xcenter - xzoom * i;
 				a = cr * ar - sr * br;
@@ -733,8 +728,7 @@ drawMandel(
 					pixel = pixelblend(*(sbits + 1), (pixel | (*(selbits + 1)) << ALPHA_BPOS));
 					sbits += step;
 					selbits += step;
-				}
-				else
+				} else
 					pixel |= ALPHA_MASK;
 				dbits += step;
 
@@ -775,8 +769,7 @@ drawMandel(
 					}
 					dbits2 += offset;
 				}
-			}
-			else {
+			} else {
 				// step is 1
 				if (selection)
 					*(++dbits) = pixelblend(*(++sbits), (pixel | (*(++selbits)) << ALPHA_BPOS));
@@ -857,14 +850,12 @@ selectMandel(
 			view->displayZoom();
 		}
 		view->mLastZoom = point;
-	}
-	else if (mods & B_CONTROL_KEY) {
+	} else if (mods & B_CONTROL_KEY) {
 		// change rotation
 		if (view->mLastModifier != B_CONTROL_KEY) {
 			view->mLastModifier = B_CONTROL_KEY;
 			view->mLastRotate = point;
-		}
-		else {
+		} else {
 			double a, x, y;
 			// x = (point.x - view->mLastRotate.x);
 			// y = (point.y - view->mLastRotate.y);
@@ -880,8 +871,7 @@ selectMandel(
 			view->mAngle = angle;
 			view->displayAngle();
 		}
-	}
-	else {
+	} else {
 		// move center
 		if (view->mLastModifier != B_COMMAND_KEY)
 			view->mLastModifier = B_COMMAND_KEY;
@@ -889,8 +879,7 @@ selectMandel(
 			if (julia) {
 				xcenter = ((point.x - (width / 2)) / (width / 2)) * 2.0;
 				ycenter = ((point.y - (height / 2)) / (height / 2)) * 2.0;
-			}
-			else {
+			} else {
 				xcenter = view->mXCenter + (view->mLastSlide.x - point.x) / (width / 2 * xzoom);
 				ycenter = view->mYCenter + (view->mLastSlide.y - point.y) / (height / 2 * yzoom);
 			}
@@ -981,8 +970,7 @@ selectMandel(
 					x2 = x * x;
 					y2 = y * y;
 				}
-			}
-			else {
+			} else {
 				// mandelbrot
 				ar = xcenter - xzoom * i;
 				a = cr * ar - sr * br;
@@ -1074,8 +1062,7 @@ selectMandel(
 					}
 					dbits2 += offset;
 				}
-			}
-			else {
+			} else {
 				// step is 1
 				// if (selection) *(++dbits) = pixelblend (*(++sbits), (pixel | *(++selbits)));
 				// else *(++dbits) = pixel | 0x0FF;

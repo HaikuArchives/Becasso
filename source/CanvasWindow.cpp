@@ -68,10 +68,8 @@ static value_info value_list[] = {
 	0
 };
 
-float zoomLevels[] = { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0 };
-char aspectLevels[][7] = {
-	"(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)"
-};
+float zoomLevels[] = {0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0};
+char aspectLevels[][7] = {"(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)"};
 
 CanvasWindow::CanvasWindow(
 	BRect frame, const char* name, BBitmap* map, BMessenger* target, bool AskForAlpha,
@@ -91,8 +89,7 @@ CanvasWindow::CanvasWindow(
 	if (target) {
 		// printf ("Target found\n");
 		myTarget = new BMessenger(*target);
-	}
-	else
+	} else
 		myTarget = NULL;
 	restOfCtor(frame, map, NULL, AskForAlpha, color);
 }
@@ -106,8 +103,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 	if (target) {
 		// printf ("Target found\n");
 		myTarget = new BMessenger(*target);
-	}
-	else
+	} else
 		myTarget = NULL;
 	BBitmap* map = NULL;
 	char fname[MAX_FNAME];
@@ -203,8 +199,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 				new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 			alert->Go();
 			throw(0);
-		}
-		else {
+		} else {
 			map = bms->/*Get*/ Bitmap();
 			bms->SetDispose(false);
 		}
@@ -261,8 +256,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 						),
 						fName, filetype
 					);
-				}
-				else {
+				} else {
 					sprintf(
 						errstring,
 						lstring(
@@ -278,8 +272,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 			throw(0);
 		}
 #endif
-	}
-	else {
+	} else {
 		printf("No DataTypes (?!)\n");
 		// No DataTypes...
 		throw(0);
@@ -468,19 +461,19 @@ CanvasWindow::restOfCtor(
 	magnifyMenu->AddItem(new BMenuItem(lstring(114, "Zoom Out"), new BMessage('Mout'), '-'));
 
 	for (int i = 0; i < B_COUNT_OF(zoomLevels) && i < B_COUNT_OF(aspectLevels); ++i) {
-			fNumberFormat.FormatPercent(fPercentData, zoomLevels[i]);
-			BMessage* message = new BMessage('M_S');
-			message->AddFloat("scale", zoomLevels[i]);
-			message->AddInt32("index", 1);
+		fNumberFormat.FormatPercent(fPercentData, zoomLevels[i]);
+		BMessage* message = new BMessage('M_S');
+		message->AddFloat("scale", zoomLevels[i]);
+		message->AddInt32("index", 1);
 
-			if (zoomLevels[i] >= 10.0) {
-				BString separator(fNumberFormat.GetSeparator(B_GROUPING_SEPARATOR));
-				fPercentData.RemoveFirst(separator);
-			}
+		if (zoomLevels[i] >= 10.0) {
+			BString separator(fNumberFormat.GetSeparator(B_GROUPING_SEPARATOR));
+			fPercentData.RemoveFirst(separator);
+		}
 
-			BString label;
-			label.SetToFormat("%s %s", fPercentData.String(), aspectLevels[i]);
-			magnifyMenu->AddItem(new BMenuItem(label.String(), message));
+		BString label;
+		label.SetToFormat("%s %s", fPercentData.String(), aspectLevels[i]);
+		magnifyMenu->AddItem(new BMenuItem(label.String(), message));
 	}
 
 	windowMenu->AddItem(magnifyMenu);
@@ -565,8 +558,7 @@ CanvasWindow::restOfCtor(
 					"alphalert", alert, lstring(144, "Keep As-Is"), lstring(145, "Invert")
 				);
 				/* int32 button_index = */ alphalert->Go(new BInvoker(new BMessage('aliv'), this));
-			}
-			else // Changed in 1.5: Don't invert without asking.
+			} else // Changed in 1.5: Don't invert without asking.
 			{
 				//				verbose (1, "Inverting alpha channel\n");
 				//				BMessage invert ('aliv');
@@ -684,8 +676,7 @@ CanvasWindow::setLayerMenu()
 		layerMenu->FindItem('delL')->SetEnabled(false);
 		layerMenu->FindItem('mrgL')->SetEnabled(false);
 		layerMenu->FindItem('Lodn')->SetEnabled(false);
-	}
-	else {
+	} else {
 		layerMenu->FindItem('delL')->SetEnabled(true);
 		layerMenu->FindItem('mrgL')->SetEnabled(true);
 		layerMenu->FindItem('Lodn')->SetEnabled(true);
@@ -724,8 +715,7 @@ CanvasWindow::setMenuItem(uint32 command, bool v)
 		//		printf ("Item '%c%c%c%c' %sabled\n", cmd[3], cmd[2], cmd[1], cmd[0], v ? "en" :
 		//"dis");
 		item->SetEnabled(v);
-	}
-	else
+	} else
 		printf("Item not found\n");
 }
 
@@ -752,8 +742,7 @@ CanvasWindow::FrameResized(float width, float height)
 		setMenuItem('pwlb', false);
 		setMenuItem('pwrb', false);
 		setMenuItem('pwct', false);
-	}
-	else {
+	} else {
 		setMenuItem('cwin', false);
 		setMenuItem('pwlt', true);
 		setMenuItem('pwrt', true);
@@ -843,8 +832,7 @@ CanvasWindow::sendbitmapreply()
 	if (b->Archive(&ieb, false) == B_OK) {
 		ie->AddMessage("BBitmap", &ieb);
 		canvas->changed = false;
-	}
-	else {
+	} else {
 		// Error
 		fprintf(stderr, "Error archiving BBitmap for sending\n");
 	}
@@ -880,8 +868,7 @@ CanvasWindow::QuitRequested()
 		if (myTarget && !fromRef) {
 			myTarget->SendMessage(sendbitmapreply());
 			return (true);
-		}
-		else {
+		} else {
 			savePanel->Show();
 			while (savePanel->IsShowing())
 				snooze(500000); // YUCK!!!
@@ -967,8 +954,7 @@ CanvasWindow::ResolveSpecifier(
 		if (message->what == B_CREATE_PROPERTY) {
 			fCurrentProperty = PROP_LAYER;
 			return this;
-		}
-		else // We get here if "Layer" was a specifier.
+		} else // We get here if "Layer" was a specifier.
 		{
 			// Don't PopSpecifier()... The canvas still needs to find out which layer...
 			return canvas;
@@ -1025,8 +1011,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				BMessage reply(B_REPLY);
 				reply.AddString("result", fCanvasName);
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(stderr, "Canvas Name: \"%s\"\n", fCanvasName);
 			break;
 		case PROP_ACTIVELAYER:
@@ -1035,8 +1020,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				reply.AddInt32("error", B_NO_ERROR);
 				reply.AddSpecifier("Layer", canvas->currentLayer()->getName());
 				message->SendReply(&reply);
-			}
-			else
+			} else
 				fprintf(
 					stderr, "Current Layer: %d: \"%s\"\n", canvas->currentLayerIndex(),
 					canvas->currentLayer()->getName()
@@ -1078,12 +1062,10 @@ CanvasWindow::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errstring);
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errstring);
 				}
-			}
-			else if (message->FindInt32("data", &indexspecifier) == B_OK) {
+			} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
 				if (indexspecifier >= 0 && indexspecifier < canvas->numLayers()) {
 					canvas->makeCurrentLayer(indexspecifier);
 					setLayerMenu();
@@ -1092,23 +1074,23 @@ CanvasWindow::MessageReceived(BMessage* message)
 						error.AddInt32("error", B_NO_ERROR);
 						message->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					BString indexSpecifierData, numberOfLayersData, errorString;
 					fNumberFormat.Format(numberOfLayersData, canvas->numLayers() - 1);
 					fNumberFormat.Format(indexSpecifierData, indexspecifier);
-					errorString.SetToFormat("Layer index out of range [0..%s]: %s", numberOfLayersData.String(), indexSpecifierData.String());
+					errorString.SetToFormat(
+						"Layer index out of range [0..%s]: %s", numberOfLayersData.String(),
+						indexSpecifierData.String()
+					);
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 						error.AddString("message", errorString.String());
 						message->SendReply(&error);
-					}
-					else
+					} else
 						fprintf(stderr, "%s\n", errorString.String());
 				}
-			}
-			else {
+			} else {
 				char errstring[256];
 				sprintf(errstring, "Invalid Layer Type (either string or int32 please)");
 				if (message->IsSourceWaiting()) {
@@ -1116,8 +1098,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					message->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			break;
@@ -1148,14 +1129,12 @@ CanvasWindow::MessageReceived(BMessage* message)
 			{
 				// printf ("Source is waiting\n");
 				message->SendReply(sendbitmapreply());
-			}
-			else // Async
+			} else // Async
 			{
 				// printf ("Async\n");
 				myTarget->SendMessage(sendbitmapreply());
 			}
-		}
-		else
+		} else
 			beep();
 		break;
 	case BBP_REPLACE_BBITMAP: {
@@ -1178,14 +1157,13 @@ CanvasWindow::MessageReceived(BMessage* message)
 				//					BRect canvasWindowFrame;
 				//					canvasWindowFrame.Set (128 + newnum*16, 128 + newnum*16,
 				//						128 + newnum*16 + newWidth - 1, 128 + newnum*16 + newHeight
-				//- 1); 					CanvasWindow *canvasWindow = new CanvasWindow (canvasWindowFrame, title,
-				//map, &ie); 					canvasWindow->Show();
+				//- 1); 					CanvasWindow *canvasWindow = new CanvasWindow
+				//(canvasWindowFrame, title, map, &ie); 					canvasWindow->Show();
 				BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
 				ok->AddMessenger("target", BMessenger(this, NULL));
 				if (message->IsSourceWaiting()) {
 					message->SendReply(ok);
-				}
-				else {
+				} else {
 					ie.SendMessage(ok);
 				}
 				delete ok;
@@ -1196,13 +1174,11 @@ CanvasWindow::MessageReceived(BMessage* message)
 					PostMessage(m);
 					delete m;
 				}
-			}
-			else {
+			} else {
 				fprintf(stderr, "Invalid BBitmap\n");
 				// Error
 			}
-		}
-		else {
+		} else {
 			fprintf(stderr, "Message didn't contain a valid BBitmap\n");
 			// Error
 		}
@@ -1244,8 +1220,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				ie->AddMessenger("target", this);
 				ie->AddRef("ref", &myRef);
 				myTarget->SendMessage(ie);
-			}
-			else {
+			} else {
 				BEntry entry(&myRef);
 
 				if (entry.Exists()) //// *** NOT TRANSLATED - COPIED FROM OS!!
@@ -1341,8 +1316,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 							{
 								// extensions.PrintToStream();
 								// strcat (suggestion, ext);
-							}
-							else if (PatronizeMIME) {
+							} else if (PatronizeMIME) {
 								// extensions.PrintToStream();
 								char alertstring[1024];
 								sprintf(
@@ -1370,8 +1344,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 								uint32 button = alert->Go();
 								if (button == 1) {
 									PatronizeMIME = false;
-								}
-								else // Update the MIME database
+								} else // Update the MIME database
 								{
 									sprintf(
 										alertstring,
@@ -1428,14 +1401,12 @@ CanvasWindow::MessageReceived(BMessage* message)
 													// printf ("Easy: %s\n", ext);
 													mtext.AddString("extensions", ext);
 													foundsomething = true;
-												}
-												else if ((ext[0] == 'x') && (ext[1] == '-') && (strlen(ext + 2) == 3)) // x-foo?
+												} else if ((ext[0] == 'x') && (ext[1] == '-') && (strlen(ext + 2) == 3)) // x-foo?
 												{
 													// printf ("Easy: x-%s\n", ext + 2);
 													mtext.AddString("extensions", ext + 2);
 													foundsomething = true;
-												}
-												else {
+												} else {
 													char sd[B_MIME_TYPE_LENGTH];
 													if (mt.GetShortDescription(sd) == B_OK) {
 														// Maybe we can find a hint in the short
@@ -1464,12 +1435,10 @@ CanvasWindow::MessageReceived(BMessage* message)
 														mtext.AddString("extensions", "jpg");
 														mtext.AddString("extensions", "jpeg");
 														foundsomething = true;
-													}
-													else if (!strcmp(ext, "targa") || !strcmp(ext, "x-targa")) {
+													} else if (!strcmp(ext, "targa") || !strcmp(ext, "x-targa")) {
 														mtext.AddString("extensions", "tga");
 														foundsomething = true;
-													}
-													else if (!strcmp(ext, "tiff")) {
+													} else if (!strcmp(ext, "tiff")) {
 														mtext.AddString("extensions", "tif");
 														mtext.AddString("extensions", "tiff");
 														foundsomething = true;
@@ -1484,8 +1453,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 													// desc); mtext.PrintToStream();
 													mt.SetFileExtensions(&mtext);
 												}
-											}
-											else {
+											} else {
 												// else: There already are extensions set.
 												// printf ("Already set\n");
 												// mtext.PrintToStream();
@@ -1507,8 +1475,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 									// printf ("Adding extension %s\n", ext);
 									strcat(suggestion, ext);
 								}
-							}
-							else
+							} else
 								suggestion[il] = 0;
 
 							break; // I.e. don't look for further out_types.
@@ -1517,8 +1484,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				}
 			}
 			tv->SetText(suggestion);
-		}
-		else
+		} else
 			printf("Hmmm, no 'text view'\n");
 
 		savePanel->Window()->Unlock();
@@ -1552,8 +1518,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				get_ref_for_path(dir.Path(), &lref);
 				message->AddRef("directory", &lref);
 				message->AddString("name", path.Leaf());
-			}
-			else
+			} else
 				message->AddString("name", pathname);
 		}
 		if (!message->HasRef("directory"))
@@ -1667,8 +1632,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 			bitmapStream = NULL;
 			outputFormatWindow = NULL;
 			out_type = 0;
-		}
-		else {
+		} else {
 			canvas->Save(entry);
 		}
 		canvas->changed = false;
@@ -1698,8 +1662,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 	case 'M_S':
 		float scale;
 		int32 index;
-		if (message->FindFloat("scale", &scale) == B_OK
-			&& message->FindInt32("index", &index) == B_OK) {
+		if (message->FindFloat("scale", &scale) == B_OK &&
+			message->FindInt32("index", &index) == B_OK) {
 			canvas->setScale(scale);
 		}
 		break;
@@ -1722,8 +1686,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 			frame.OffsetBy(16, 16);
 			magWindow = new MagWindow(frame, FileName(), canvas);
 			magWindow->Show();
-		}
-		else
+		} else
 			magWindow->Activate();
 		break;
 	}
@@ -1742,8 +1705,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 	case 'xpal': {
 		if (extractWindow) {
 			extractWindow->Activate();
-		}
-		else {
+		} else {
 			extractWindow = new XpalWindow(
 				BRect(100, 100, 300, 180), lstring(157, "Extract Palette"), new BMessenger(this)
 			);
@@ -1788,9 +1750,9 @@ CanvasWindow::MessageReceived(BMessage* message)
 		BRect mf = menubar->Frame();
 		//			printf ("MIN_WIDTH = %f, MAX_HEIGHT = %f\n", MIN_WIDTH, MIN_HEIGHT);
 		//			printf ("canvas->Frame().Width() = %f, Height() = %f\n", cf.Width(),
-		//cf.Height()); 			printf ("menubar->Frame().Height() = %f\n", mf.Height()); 			printf ("w = %f, h
-		//= %f\n", max_c (MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH), max_c (MIN_HEIGHT,
-		//cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height()));
+		// cf.Height()); 			printf ("menubar->Frame().Height() = %f\n", mf.Height());
+		// printf ("w = %f, h = %f\n", max_c (MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH), max_c
+		//(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height()));
 		ResizeTo(
 			max_c(MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH),
 			max_c(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height() + 1)
@@ -1837,8 +1799,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 			layerWindow->Activate();
 			//				windowMenu->FindItem('layr')->SetMarked (false);
 			//				layerOpen = false;
-		}
-		else {
+		} else {
 			char title[B_FILE_NAME_LENGTH + 10];
 			sprintf(title, lstring(160, "Layers in %s"), fName);
 			BRect layerFrame = BRect(100, 100, 310, 294);
@@ -1862,8 +1823,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 			canvas->addLayer(lstring(161, "Untitled Layer"));
 			Unlock();
 			//				setLayerMenu();
-		}
-		else
+		} else
 			printf("Hey, couldn't lock!!\n");
 		break;
 	case 'insL':
@@ -1969,8 +1929,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 			if (message->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) ==
 				B_OK)
 				canvas->Fill(M_DRAW, droppoint, dropped);
-		}
-		else
+		} else
 			canvas->Paste(false);
 		break;
 	case 'psNL': // copy to new layer
@@ -2034,8 +1993,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 		if (c.alpha == 0) {
 			canvas->ChannelToSelection('ctsA', true);
 			canvas->InvertSelection(true);
-		}
-		else
+		} else
 			canvas->SelectByColor(c, true);
 		break;
 	}
@@ -2097,8 +2055,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 		status_t err = B_NO_ERROR;
 		if (message->FindRect("data", &cropRect) == B_OK) {
 			err = canvas->Crop(cropRect);
-		}
-		else
+		} else
 			err = -4;
 		if (message->IsSourceWaiting()) {
 			BMessage error(B_REPLY);

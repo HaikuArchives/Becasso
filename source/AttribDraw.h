@@ -7,7 +7,8 @@
 
 #define MAX_LAYERS 32
 
-class AttribDraw : public AttribView {
+class AttribDraw : public AttribView
+{
   public:
 	AttribDraw();
 	virtual ~AttribDraw();

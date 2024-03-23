@@ -68,11 +68,9 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 				if (da == 0) // Fully opaque pixel
 				{
 					*dest = srcpixel;
-				}
-				else if (da == 255) // Fully transparent pixel
+				} else if (da == 255) // Fully transparent pixel
 				{
-				}
-				else {
+				} else {
 #if !defined(BLEND_USES_SHIFTS)
 					*dest =
 						((((destpixel & 0xFF000000) / 255 * da + (srcpixel & 0xFF000000) / 255 * sa)
@@ -102,11 +100,9 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 				if (da == 0) // Fully opaque pixel
 				{
 					*dest = srcpixel;
-				}
-				else if (da == 255) // Fully transparent pixel
+				} else if (da == 255) // Fully transparent pixel
 				{
-				}
-				else {
+				} else {
 #if !defined(BLEND_USES_SHIFTS)
 					*dest =
 						((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) / 255) &
@@ -144,8 +140,7 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 				register int tda = 65025 - da * 255;
 				if (sa == 0) // Fully transparent pixel
 				{
-				}
-				else if (sa == 255) // Fully opaque pixel
+				} else if (sa == 255) // Fully opaque pixel
 				{
 					*dest =
 						(((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025) << 24) &
@@ -159,8 +154,7 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 						  << 8) &
 						 0x0000FF00) |
 						(clipchar(sa + int(destpixel & 0xFF)));
-				}
-				else {
+				} else {
 					*dest = (((tsa + sa * ((srcpixel >> 24))) * (tda + da * ((destpixel >> 24))) /
 								  16581375
 							  << 24) &
@@ -184,8 +178,7 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 				register int tda = 65025 - da * 255;
 				if (sa == 0) // Fully transparent pixel
 				{
-				}
-				else if (sa == 255) // Fully opaque pixel
+				} else if (sa == 255) // Fully opaque pixel
 				{
 					*dest = (((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
 							   65025)
@@ -198,8 +191,7 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 							(((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF)) / 65025)) &
 							 0x000000FF) |
 							(clipchar(sa + int(destpixel >> 24)) << 24);
-				}
-				else {
+				} else {
 					*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
 								  (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
 							  << 16) &
@@ -376,7 +368,7 @@ entry2bitmap(BEntry entry, bool silent)
 					zstream->next_out = (uchar*)layer[i]->Bits();
 					zstream->avail_out = layer[i]->BitsLength();
 					//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-					//zstream->avail_out);
+					// zstream->avail_out);
 					if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
 						fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
 					}
@@ -439,7 +431,7 @@ entry2bitmap(BEntry entry, bool silent)
 					zstream->next_out = (uchar*)layer[i]->Bits();
 					zstream->avail_out = layer[i]->BitsLength();
 					//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-					//zstream->avail_out);
+					// zstream->avail_out);
 					if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
 						fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
 					}
@@ -497,8 +489,7 @@ entry2bitmap(BEntry entry, bool silent)
 				for (ulong x = rl; x <= rr; x++) {
 					if (((x & 8) || (y & 8)) && !((x & 8) && (y & 8))) {
 						*(++dest) = check1;
-					}
-					else {
+					} else {
 						*(++dest) = check2;
 					}
 				}
@@ -531,14 +522,12 @@ entry2bitmap(BEntry entry, bool silent)
 					new BAlert("", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				alert->Go();
 			}
-		}
-		else {
+		} else {
 			map = bms->GetBitmap();
 			bms->SetDispose(false);
 		}
 		delete bms;
-	}
-	else {
+	} else {
 		printf("No DataTypes (?!)\n");
 		// No DataTypes...
 	}
@@ -562,8 +551,7 @@ entry2bitmap(BEntry entry, bool silent)
 					"me.\nMaybe you haven't installed the corresponding Translator?",
 					path.Path(), filetype
 				);
-			}
-			else {
+			} else {
 				sprintf(
 					errstring,
 					"The file '%s' is of type '%s'.\nI don't think this is an image at all.",
@@ -659,11 +647,9 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 			if (sa == 255)				// Fully Opaque
 			{
 				*dest_data = srcpixel;
-			}
-			else if (sa == 0) // Fully transparent
+			} else if (sa == 0) // Fully transparent
 			{
-			}
-			else {
+			} else {
 				*dest_data =
 					((((((destpixel >> 24)) * da + ((srcpixel >> 24)) * sa) / ta) << 24) &
 					 0xFF000000) |
@@ -684,11 +670,9 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 			if (sa == 255)				// Fully Opaque
 			{
 				*dest_data = srcpixel;
-			}
-			else if (sa == 0) // Fully transparent
+			} else if (sa == 0) // Fully transparent
 			{
-			}
-			else {
+			} else {
 				*dest_data =
 					((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
 					  << 16) &
@@ -754,18 +738,16 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
 					//((srcpixel>>24)       )*sa)/ta)<<24) & 0xFF000000) |
 					//								  ((((((destpixel>>16) & 0xFF)*da +
 					//((srcpixel>>16) & 0xFF)*sa)/ta)<<16) & 0x00FF0000) |
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
-					//8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) | 										clipchar (sa + int (destpixel &
-					//0xFF));
+					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
+					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
 						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
 						 ) &
@@ -787,11 +769,9 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
 							((srcpixel & 0x00FF0000) >> 1) * sa) /
@@ -809,8 +789,7 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	}
-	else if (strength > 0) {
+	} else if (strength > 0) {
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
@@ -822,18 +801,16 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
 					//((srcpixel>>24)       )*sa)/ta)<<24) & 0xFF000000) |
 					//								  ((((((destpixel>>16) & 0xFF)*da +
 					//((srcpixel>>16) & 0xFF)*sa)/ta)<<16) & 0x00FF0000) |
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
-					//8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) | 										clipchar (sa + int (destpixel &
-					//0xFF));
+					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
+					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
 						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
 						 ) &
@@ -855,11 +832,9 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || /* da == 0 */ !(destpixel & 0xFF000000)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
 							((srcpixel & 0x00FF0000) >> 1) * sa) /
@@ -877,8 +852,7 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	}
-	else // Very special case:  Only "erase" transparency.
+	} else // Very special case:  Only "erase" transparency.
 	{
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
@@ -891,11 +865,9 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = destpixel & 0xFFFFFF00;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data = (destpixel & 0xFFFFFF00) | clipchar(da - sa);
 				}
 #else
@@ -907,11 +879,9 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				if (sa == 255 || !(destpixel & 0xFF000000)) // Fully opaque
 				{
 					*dest_data = destpixel & 0x00FFFFFF;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data = (destpixel & 0x00FFFFFF) | (clipchar(da - sa) << 24);
 				}
 #endif
@@ -952,8 +922,7 @@ InvertWithInverseAlpha(BBitmap* src, BBitmap* selection)
 			}
 			sel_data += sel_bprdif;
 		}
-	}
-	else if (src->ColorSpace() == B_COLOR_8_BIT) {
+	} else if (src->ColorSpace() == B_COLOR_8_BIT) {
 		const color_map* map = system_colors();
 		long src_bprdif = src_bpr - w - 1;
 		for (int j = 0; j <= h; j++) {
@@ -1015,8 +984,7 @@ AddToSelection(Brush* src, BBitmap* dest, long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	}
-	else {
+	} else {
 		for (long j = miny; j < maxy; j++) {
 			for (long i = minx; i < maxx; i++) {
 				int sa = *(++src_data) * strength / 255;
@@ -1514,8 +1482,7 @@ FSDither(BBitmap* b32, BBitmap* b8, BRect place)
 			cwrite = delta - 1;
 			cread = fcwrite - 1;
 			switcher = 0;
-		}
-		else {
+		} else {
 			cread = delta - 1;
 			cwrite = fcwrite - 1;
 			switcher = 1;
@@ -1598,8 +1565,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 					stmp->BytesPerRow()
 				);
 #endif
-			}
-			else {
+			} else {
 				// printf ("Layer...\n");
 				bgra_pixel* srcdata = (bgra_pixel*)src->Bits();
 				bgra_pixel* destdata = (bgra_pixel*)stmp->Bits();
@@ -1639,8 +1605,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								b = (pixel >> 24) * beta;
 								a = (pixel & 0x000000FF) * beta;
 								srcline++;
-							}
-							else {
+							} else {
 								bgra_pixel pixel = *(srcline++);
 								r += ((pixel & 0x0000FF00) >> 8) * f;
 								g += ((pixel & 0x00FF0000) >> 16) * f;
@@ -1687,8 +1652,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 							d++;
 							r = beta * *(srcline++);
 							s++;
-						}
-						else {
+						} else {
 							r += *(srcline++) * f;
 							*(destline++) = uint8(r);
 							stillinblock = false;
@@ -1697,8 +1661,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	}
-	else if (xscale > 1) // Stretch horizontally
+	} else if (xscale > 1) // Stretch horizontally
 	{
 		// printf ("Stretch horizontally\n");
 		if (src) // Code for Layer
@@ -1713,8 +1676,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 					stmp->BytesPerRow()
 				);
 #endif
-			}
-			else {
+			} else {
 				// printf ("Layer...\n");
 				bgra_pixel* srcdata = (bgra_pixel*)src->Bits();
 				bgra_pixel* destdata = (bgra_pixel*)stmp->Bits();
@@ -1749,8 +1711,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16) +
 												(uint8(r) << 8) + (uint8(a));
 								d++;
-							}
-							else {
+							} else {
 								*(destline++) = *(srcline++);
 								stillinblock = false;
 							}
@@ -1789,8 +1750,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 							srcline++;
 							s++;
 							d++;
-						}
-						else {
+						} else {
 							*(destline++) = *(srcline++);
 							stillinblock = false;
 						}
@@ -1798,8 +1758,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	}
-	else // No scaling in x-dimension -> copy to temp bitmap.
+	} else // No scaling in x-dimension -> copy to temp bitmap.
 	{
 		// printf ("copying\n");
 		if (src)
@@ -1824,8 +1783,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 					dest->BytesPerRow()
 				);
 #endif
-			}
-			else {
+			} else {
 				// printf ("Layer...\n");
 				bgra_pixel* srcdata = (bgra_pixel*)stmp->Bits();
 				bgra_pixel* destdata = (bgra_pixel*)dest->Bits();
@@ -1867,8 +1825,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								a = (pixel & 0x000000FF) * beta;
 								srccol += slpr;
 								s++;
-							}
-							else {
+							} else {
 								bgra_pixel pixel = *srccol;
 								srccol += slpr;
 								r += ((pixel & 0x0000FF00) >> 8) * f;
@@ -1920,8 +1877,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 							r = beta * *srccol;
 							srccol += sbpr;
 							s++;
-						}
-						else {
+						} else {
 							r += (*srccol) * f;
 							srccol += sbpr;
 							*destcol = uchar(r);
@@ -1932,8 +1888,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	}
-	else if (yscale > 1) // Stretch vertically
+	} else if (yscale > 1) // Stretch vertically
 	{
 		// printf ("Stretch vertically:\n");
 		if (src) // Code for Layer
@@ -1948,8 +1903,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 					dest->BytesPerRow()
 				);
 #endif
-			}
-			else {
+			} else {
 				// printf ("Layer...\n");
 				bgra_pixel* srcdata = (bgra_pixel*)stmp->Bits();
 				bgra_pixel* destdata = (bgra_pixel*)dest->Bits();
@@ -1987,8 +1941,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 										   (uint8(a));
 								destcol += dlpr;
 								d++;
-							}
-							else {
+							} else {
 								*destcol = *srccol;
 								destcol += dlpr;
 								srccol += slpr;
@@ -2031,8 +1984,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 							d++;
 							srccol += sbpr;
 							s++;
-						}
-						else {
+						} else {
 							*destcol = *srccol;
 							destcol += dbpr;
 							srccol += sbpr;
@@ -2042,8 +1994,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	}
-	else // No scaling in y-dimension -> Just copy the bitmap to dest.
+	} else // No scaling in y-dimension -> Just copy the bitmap to dest.
 	{
 		// printf ("Copying...\n");
 		if (src)
@@ -2107,8 +2058,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A1 / 256) * ALPHA(a2);
 					A4 = (-w - A1 / 256) * ALPHA(a3);
 					A5 = ALPHA(a5) - A1 - A2 - A4;
-				}
-				else if (w > 0 && h < 0) // TRC
+				} else if (w > 0 && h < 0) // TRC
 				{
 					if (iix >= 0 && iix <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a2 = *(sp + (iiy - 1) * bpr + iix);
@@ -2120,8 +2070,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A3 / 256) * ALPHA(a2);
 					A6 = (w - A3 / 256) * ALPHA(a6);
 					A5 = ALPHA(a5) - A3 - A2 - A6;
-				}
-				else if (w < 0 && h > 0) // BLC
+				} else if (w < 0 && h > 0) // BLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy >= 0 && iiy <= bh)
 						a4 = *(sp + iiy * bpr + iix - 1);
@@ -2133,8 +2082,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A4 = (-w - A7 / 256) * ALPHA(a4);
 					A8 = (h - A7 / 256) * ALPHA(a8);
 					A5 = ALPHA(a5) - A7 - A4 - A8;
-				}
-				else if (w > 0 && h > 0) // BRC
+				} else if (w > 0 && h > 0) // BRC
 				{
 					if (iix + 1 >= 0 && iix + 1 <= bw && iiy >= 0 && iiy <= bh)
 						a6 = *(sp + iiy * bpr + iix + 1);
@@ -2146,8 +2094,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A6 = (w - A9 / 256) * ALPHA(a6);
 					A8 = (h - A9 / 256) * ALPHA(a8);
 					A5 = ALPHA(a5) - A9 - A6 - A8;
-				}
-				else // do 9-aliasing
+				} else // do 9-aliasing
 				{
 					A5 = ALPHA(a5);
 				}
@@ -2175,8 +2122,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 				iy += sr;
 			}
 		}
-	}
-	else {
+	} else {
 		for (int i = 0; i <= bh; i++) {
 			ix = ox - i * sr;
 			iy = oy + i * cr;
@@ -2246,8 +2192,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A1 / 256) * a2;
 					A4 = (-w - A1 / 256) * a4;
 					A5 = a5 - A1 - A2 - A4;
-				}
-				else if (w > 0 && h < 0) // TRC
+				} else if (w > 0 && h < 0) // TRC
 				{
 					if (iix >= 0 && iix <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a2 = *(sp + (iiy - 1) * bpr + iix);
@@ -2259,8 +2204,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A3 / 256) * a2;
 					A6 = (w - A3 / 256) * a6;
 					A5 = a5 - A3 - A2 - A6;
-				}
-				else if (w < 0 && h > 0) // BLC
+				} else if (w < 0 && h > 0) // BLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy >= 0 && iiy <= bh)
 						a4 = *(sp + iiy * bpr + iix - 1);
@@ -2272,8 +2216,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A4 = (-w - A7 / 256) * a4;
 					A8 = (h - A7 / 256) * a8;
 					A5 = a5 - A7 - A4 - A8;
-				}
-				else if (w > 0 && h > 0) // BRC
+				} else if (w > 0 && h > 0) // BRC
 				{
 					if (iix + 1 >= 0 && iix + 1 <= bw && iiy >= 0 && iiy <= bh)
 						a6 = *(sp + iiy * bpr + iix + 1);
@@ -2285,8 +2228,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A6 = (w - A9 / 256) * a6;
 					A8 = (h - A9 / 256) * a8;
 					A5 = a5 - A9 - A6 - A8;
-				}
-				else // do 9-aliasing
+				} else // do 9-aliasing
 				{
 					A5 = a5;
 				}
@@ -2297,8 +2239,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 				iy += sr;
 			}
 		}
-	}
-	else {
+	} else {
 		for (int i = 0; i <= bh; i++) {
 			ix = ox - i * sr;
 			iy = oy + i * cr;
@@ -2345,8 +2286,7 @@ SBitmapToLayer(SBitmap* s, Layer* d, BPoint& p)
 				uint32* dp = (uint32*)d->Bits() + y * d->BytesPerRow() / 4 + rl;
 				memcpy(dp, sp, bpr);
 			}
-		}
-		else {
+		} else {
 			int32 rt = -int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
 			int32 rl = int32(p.x);
@@ -2359,8 +2299,7 @@ SBitmapToLayer(SBitmap* s, Layer* d, BPoint& p)
 				memcpy(dp, sp, bpr);
 			}
 		}
-	}
-	else {
+	} else {
 		if (p.y >= 0) {
 			int32 rt = int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
@@ -2373,8 +2312,7 @@ SBitmapToLayer(SBitmap* s, Layer* d, BPoint& p)
 				uint32* dp = (uint32*)d->Bits() + y * d->BytesPerRow() / 4;
 				memcpy(dp, sp, bpr);
 			}
-		}
-		else {
+		} else {
 			int32 rt = -int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
 			int32 rl = -int32(p.x);
@@ -2444,8 +2382,7 @@ SBitmapToSelection(SBitmap* s, Selection* d, BPoint& p)
 				uint8* dp = (uint8*)d->Bits() + y * d->BytesPerRow() + rl;
 				memcpy(dp, sp, bpr);
 			}
-		}
-		else {
+		} else {
 			int32 rt = -int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
 			int32 rl = int32(p.x);
@@ -2458,8 +2395,7 @@ SBitmapToSelection(SBitmap* s, Selection* d, BPoint& p)
 				memcpy(dp, sp, bpr);
 			}
 		}
-	}
-	else {
+	} else {
 		if (p.y >= 0) {
 			int32 rt = int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
@@ -2472,8 +2408,7 @@ SBitmapToSelection(SBitmap* s, Selection* d, BPoint& p)
 				uint8* dp = (uint8*)d->Bits() + y * d->BytesPerRow();
 				memcpy(dp, sp, bpr);
 			}
-		}
-		else {
+		} else {
 			int32 rt = -int32(p.y);
 			int32 rb = int32(s->Bounds().bottom);
 			int32 rl = -int32(p.x);

@@ -104,7 +104,8 @@ PatternMenu::FindMarked()
 	return (items[index]);
 }
 
-class patternTearInfo {
+class patternTearInfo
+{
   public:
 	patternTearInfo(BRect r, PatternMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
@@ -229,8 +230,7 @@ PatternMenu::TearDone(BRect place, bool newwin)
 		PatternMenuView* mv = new PatternMenuView(mvRect, "MenuView", parent);
 		fWindow->AddChild(mv);
 		fWindow->Show();
-	}
-	else {
+	} else {
 		fWindow->MoveTo(place.LeftTop());
 		fWindow->Activate();
 	}

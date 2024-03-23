@@ -13,7 +13,8 @@
 #define PROP_XSIZE 1
 #define PROP_YSIZE 3
 
-class AttribEraser : public AttribView {
+class AttribEraser : public AttribView
+{
   public:
 	AttribEraser();
 	virtual ~AttribEraser();

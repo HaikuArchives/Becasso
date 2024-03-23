@@ -66,8 +66,7 @@ CanvasView::CanvasView(const BRect frame, const char* name, BBitmap* map, rgb_co
 	BRect bitmapRect;
 	if (map) {
 		bitmapRect = map->Bounds();
-	}
-	else {
+	} else {
 		bitmapRect.Set(0, 0, frame.Width(), frame.Height());
 	}
 	fCanvasFrame = bitmapRect;
@@ -105,18 +104,16 @@ CanvasView::CanvasView(const BRect frame, const char* name, BBitmap* map, rgb_co
 				}
 				rowptr += deltarow;
 			}
-		}
-		else {
+		} else {
 			drawView->DrawBitmapAsync(map, B_ORIGIN);
 			drawView->Sync();
 			//			uint8 *srcptr = (uint8 *) map->Bits();
 			//			uint8 *lptr   = (uint8 *) layer[0]->Bits();
 			//			printf ("b = %i, g = %i, r = %i, a = %i\n", *srcptr++, *srcptr++, *srcptr++,
-			//*srcptr); 			printf ("b = %i, g = %i, r = %i, a = %i\n", *lptr++, *lptr++, *lptr++,
-			//*lptr);
+			//*srcptr); 			printf ("b = %i, g = %i, r = %i, a = %i\n", *lptr++, *lptr++,
+			//*lptr++, *lptr);
 		}
-	}
-	else {
+	} else {
 		drawView->SetLowColor(color);
 		drawView->FillRect(bitmapRect, B_SOLID_LOW);
 		drawView->Sync();
@@ -211,7 +208,7 @@ CanvasView::CanvasView(const BRect frame, const char* name, FILE* fp)
 			zstream->next_out = (uchar*)layer[i]->Bits();
 			zstream->avail_out = layer[i]->BitsLength();
 			//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-			//zstream->avail_out);
+			// zstream->avail_out);
 			if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
 				fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
 			}
@@ -274,7 +271,7 @@ CanvasView::CanvasView(const BRect frame, const char* name, FILE* fp)
 			zstream->next_out = (uchar*)layer[i]->Bits();
 			zstream->avail_out = layer[i]->BitsLength();
 			//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-			//zstream->avail_out);
+			// zstream->avail_out);
 			if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
 				fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
 			}
@@ -417,8 +414,7 @@ CanvasView::AttachedToWindow()
 	if (screen.ColorSpace() == B_COLOR_8_BIT) {
 		screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 		screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-	}
-	else // 32 or 16 bit screens
+	} else // 32 or 16 bit screens
 	{
 		screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		screenbitmap32 = screenbitmap;
@@ -456,8 +452,7 @@ CanvasView::ScreenChanged(BRect /* frame */, color_space mode)
 			screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 			screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		}
-	}
-	else {
+	} else {
 		if (screenbitmap->ColorSpace() == B_COLOR_8_BIT) {
 			delete screenbitmap32;
 			delete screenbitmap;
@@ -574,8 +569,7 @@ CanvasView::get_and_plot(BPoint p, rgb_color c)
 		*addr = PIXEL(c.red, c.green, c.blue, c.alpha);
 		changed = true;
 		return pix;
-	}
-	else
+	} else
 		return 0;
 }
 
@@ -631,7 +625,7 @@ CanvasView::fplot_alpha(BPoint p, rgb_color c)
 	if (Bounds().Contains(p)) {
 		uint32* addr = sbptr + sblpr * long(p.y + 0.5) + long(p.x + 0.5);
 		//		uint32 *addr = (uint32 *) currentLayer()->Bits() +
-		//currentLayer()->BytesPerRow()/4*long (p.y + 0.5) + long (p.x + 0.5);
+		// currentLayer()->BytesPerRow()/4*long (p.y + 0.5) + long (p.x + 0.5);
 		uint32 pixel = *addr;
 		int sa = c.alpha;
 		int da = 255 - sa;
@@ -730,8 +724,7 @@ CanvasView::addLayer(const char* name)
 	if (myWindow->LockWithTimeout(100000) == B_OK) {
 		myWindow->PostMessage(msg);
 		myWindow->Unlock();
-	}
-	else
+	} else
 		printf("1. Couldn't get lock\n");
 	delete msg;
 	if (myWindow->isLayerOpen()) {
@@ -844,8 +837,7 @@ CanvasView::do_translateLayer(int /*index*/, int32 mode)
 			snooze(20000);
 			GetMouse(&point, &buttons);
 		}
-	}
-	else {
+	} else {
 		while (buttons) {
 			if (prev != point) {
 				selection->ClearTo(0);
@@ -894,8 +886,9 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 				fNumberFormat.SetPrecision(1);
 				fNumberFormat.Format(angleData, dangle);
 				angleString.SetToFormat("%s°", angleData.String());
-				DrawString(angleString.String(),
-					BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
+				DrawString(
+					angleString.String(), BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2))
+				);
 				prev = point;
 			}
 			snooze(20000);
@@ -903,8 +896,7 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 		}
 		mainapp->setBusy();
 		Rotate(undo[indexUndo].bitmap, currentLayer(), origin, angle, true);
-	}
-	else {
+	} else {
 		while (buttons) {
 			if (prev != point) {
 				angle = atan2(origin.y - point.y, point.x - origin.x);
@@ -922,8 +914,9 @@ CanvasView::do_rotateLayer(int /*index*/, int32 mode)
 				fNumberFormat.SetPrecision(1);
 				fNumberFormat.Format(angleData, dangle);
 				angleString.SetToFormat("%s°", angleData.String());
-				DrawString(angleString.String(),
-					BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2)));
+				DrawString(
+					angleString.String(), BPoint(origin.x + 15, origin.y + (angle > 0 ? 10 : -2))
+				);
 				prev = point;
 			}
 			snooze(20000);
@@ -964,8 +957,7 @@ CanvasView::flipLayer(int hv, int index)
 					*ilp-- = tmp;
 				}
 			}
-		}
-		else // vertical flip
+		} else // vertical flip
 		{
 			for (int32 x = 0; x <= w; x++) {
 				bgra_pixel* lp = p + x;
@@ -979,8 +971,7 @@ CanvasView::flipLayer(int hv, int index)
 				}
 			}
 		}
-	}
-	else {
+	} else {
 		grey_pixel* p = (grey_pixel*)selection->Bits();
 		uint32 ppr = selection->BytesPerRow();
 		int32 w = fCanvasFrame.IntegerWidth();
@@ -996,8 +987,7 @@ CanvasView::flipLayer(int hv, int index)
 					*ilp-- = tmp;
 				}
 			}
-		}
-		else // vertical flip
+		} else // vertical flip
 		{
 			for (int32 x = 0; x <= w; x++) {
 				grey_pixel* lp = p + x;
@@ -1032,8 +1022,7 @@ CanvasView::moveLayers(int from, int to)
 		for (int i = from; i < to; i++)
 			layer[i] = layer[i + 1];
 		layer[to] = tmp;
-	}
-	else {
+	} else {
 		Layer* tmp = layer[from];
 		for (int i = from; i > to; i--)
 			layer[i] = layer[i - 1];
@@ -1105,8 +1094,7 @@ CanvasView::do_removeLayer(int index)
 		AttachCurrentLayer();
 		//		printf ("Current Layer attached.\n");
 		snooze(20000);
-	}
-	else {
+	} else {
 		//		printf ("Boe\n"); snooze (20000);
 		// fCurrentLayer--;
 		// UndoSelection();
@@ -1148,8 +1136,7 @@ CanvasView::makeCurrentLayer(int index)
 		checkMetaLayer();
 		changed = true;
 		Invalidate();
-	}
-	else
+	} else
 		fprintf(stderr, "Becasso: Layer index %d out of range\n", index);
 }
 
@@ -1213,8 +1200,7 @@ CanvasView::setLayerContentsToBitmap(int index, BBitmap* map, int32 resize)
 	if (map->Bounds() != fCanvasFrame && resize == STRETCH_TO_FIT) {
 		verbose(1, "Stretching bitmap to fit\n");
 		::Scale(map, NULL, currentLayer(), NULL);
-	}
-	else {
+	} else {
 		drawView->DrawBitmap(map, B_ORIGIN);
 	}
 	currentLayer()->Unlock();
@@ -1362,8 +1348,7 @@ CanvasView::Crop(BRect rect)
 	if (screen.ColorSpace() == B_COLOR_8_BIT) {
 		screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 		screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-	}
-	else // 32 or 16 bit screens
+	} else // 32 or 16 bit screens
 	{
 		screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		screenbitmap32 = screenbitmap;
@@ -1463,8 +1448,7 @@ CanvasView::Pad(uint32 what)
 	if (screen.ColorSpace() == B_COLOR_8_BIT) {
 		screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 		screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-	}
-	else // 32 or 16 bit screens
+	} else // 32 or 16 bit screens
 	{
 		screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		screenbitmap32 = screenbitmap;
@@ -1531,8 +1515,7 @@ CanvasView::resizeTo(int32 w, int32 h)
 	if (screen.ColorSpace() == B_COLOR_8_BIT) {
 		screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 		screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-	}
-	else // 32 or 16 bit screens
+	} else // 32 or 16 bit screens
 	{
 		screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		screenbitmap32 = screenbitmap;
@@ -1567,8 +1550,7 @@ CanvasView::ResizeToWindow(uint32 what)
 		float ratio = Bounds().Width() / Bounds().Height();
 		if (rect.Height() * ratio > newrect.Width()) {
 			newrect.bottom = int(rect.right / ratio);
-		}
-		else {
+		} else {
 			newrect.right = int(rect.bottom * ratio);
 		}
 	}
@@ -1731,8 +1713,7 @@ CanvasView::RotateCanvas(uint32 what)
 	if (screen.ColorSpace() == B_COLOR_8_BIT) {
 		screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 		screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-	}
-	else // 32 or 16 bit screens
+	} else // 32 or 16 bit screens
 	{
 		screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		screenbitmap32 = screenbitmap;
@@ -1787,8 +1768,7 @@ CanvasView::ReplaceCurrentLayer(BBitmap* newlayer)
 		if (screen.ColorSpace() == B_COLOR_8_BIT) {
 			screenbitmap = new BBitmap(fCanvasFrame, B_COLOR_8_BIT, true);
 			screenbitmap32 = new BBitmap(fCanvasFrame, B_RGBA32, true);
-		}
-		else // 32 or 16 bit screens
+		} else // 32 or 16 bit screens
 		{
 			screenbitmap = new BBitmap(fCanvasFrame, B_RGBA32, true);
 			screenbitmap32 = screenbitmap;
@@ -1804,8 +1784,7 @@ CanvasView::ReplaceCurrentLayer(BBitmap* newlayer)
 		}
 		myWindow->Unlock();
 		Invalidate();
-	}
-	else {
+	} else {
 		extern PicMenuButton* mode;
 		SetupUndo(mode->selected());
 	}
@@ -1943,8 +1922,7 @@ CanvasView::Filter(AddOn* addon, uint8 preview)
 	// "true" : "false");
 	if (preview) {
 		Invalidate(fPreviewRect);
-	}
-	else // User clicked "Apply", so Do The Real Thing.
+	} else // User clicked "Apply", so Do The Real Thing.
 	{
 		extern Becasso* mainapp;
 		extern PicMenuButton* mode;
@@ -2019,8 +1997,7 @@ CanvasView::Transform(AddOn* addon, uint8 preview)
 		SetupUndo(mode->selected()); // Save now.
 		// But if we're `just' previewing, there's no need to flush the undo
 		// buffer, so we shouldn't save next time we come here.
-	}
-	else {
+	} else {
 		// We're here for a second (...) time, so restore the previous state
 		// of the canvas.
 		// I'm not too happy with this because it causes quite an overhead for
@@ -2091,8 +2068,7 @@ CanvasView::Generate(AddOn* addon, uint8 preview)
 		SetupUndo(mode->selected()); // Save now.
 		// But if we're `just' previewing, there's no need to flush the undo
 		// buffer, so we shouldn't save next time we come here.
-	}
-	else {
+	} else {
 		// We're here for a second (...) time, so restore the previous state
 		// of the canvas.
 		// I'm not too happy with this because it causes quite an overhead for
@@ -2204,8 +2180,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 		// But we're `just' previewing (interactively here), there's no need to
 		// flush the undo buffer, so we shouldn't save next time we come here.
 		transformerSaved = true;
-	}
-	else {
+	} else {
 		Undo(false);
 	}
 
@@ -2304,8 +2279,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 		// But we're `just' previewing (interactively here), there's no need to
 		// flush the undo buffer, so we shouldn't save next time we come here.
 		transformerSaved = true;
-	}
-	else
+	} else
 		Undo(false);
 
 	if (previewmode & PREVIEW_2x2) {
@@ -2397,8 +2371,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 					Layer* tmp = tr2x2Layer;
 					tr2x2Layer = newlayer;
 					newlayer = tmp;
-				}
-				else
+				} else
 					hascreatednewlayer = false;
 
 				if (newselection && newselection != tr2x2Selection) {
@@ -2408,8 +2381,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 					Selection* tmp = tr2x2Selection;
 					tr2x2Selection = newselection;
 					newselection = tmp;
-				}
-				else
+				} else
 					hascreatednewselection = false;
 
 				//				printf ("Rescaling bitmap\n");
@@ -2443,8 +2415,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 		pRect = savePRect;
 		point.x *= 2;
 		point.y *= 2;
-	}
-	else {
+	} else {
 		while (buttons) {
 			if (prev != point) {
 				if (!first) {
@@ -2479,8 +2450,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 					Layer* tmp = currentLayer();
 					layer[fCurrentLayer] = newlayer;
 					newlayer = tmp;
-				}
-				else
+				} else
 					hascreatednewlayer = false;
 
 				if (newselection && newselection != selection) {
@@ -2490,8 +2460,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 					Selection* tmp = selection;
 					selection = newselection;
 					newselection = tmp;
-				}
-				else
+				} else
 					hascreatednewselection = false;
 
 				//				printf ("Invalidating...\n");
@@ -2511,8 +2480,7 @@ CanvasView::eTransform(BPoint point, uint32 buttons)
 	if (!hascreatednewlayeronce && !hascreatednewselectiononce) {
 		//		printf ("Restoring previous result\n");
 		Undo(false);
-	}
-	else {
+	} else {
 		if (hascreatednewlayer) // Cheap way of restoring old result...
 		{
 			//			printf ("Restoring previous result (cheaply)\n");
@@ -2749,8 +2717,7 @@ CanvasView::ConstructCanvas(BBitmap* bitmap, BRect update, bool doselect, bool d
 		for (ulong x = rl; x <= rr; x++) {
 			if (((x & 8) || (y & 8)) && !((x & 8) && (y & 8))) {
 				*(++dest) = check1;
-			}
-			else {
+			} else {
 				*(++dest) = check2;
 			}
 		}
@@ -2802,8 +2769,7 @@ CanvasView::ConstructCanvas(BBitmap* bitmap, BRect update, bool doselect, bool d
 	}
 	if (bitmap->ColorSpace() == B_COLOR_8_BIT) {
 		FSDither(screenbitmap32, bitmap, update);
-	}
-	else if (bitmap != screenbitmap) {
+	} else if (bitmap != screenbitmap) {
 		///////////////////
 		// printf ("Here?!\n");
 		if (bitmap->ColorSpace() == B_RGBA32)
@@ -2890,14 +2856,14 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 					register unsigned int sel = *(++sel_data);
 					if (!sel) {
 //						*dest = ((((destpixel & 0xFF00FF00) >> 8)*da + ((srcpixel & 0xFF00FF00) >>
-//8)*sa) & 0xFF00FF00) |
+// 8)*sa) & 0xFF00FF00) |
 //								((((destpixel & 0x00FF0000) >> 8)*da + ((srcpixel & 0x00FF0000) >>
-//8)*sa) * 0x00FF0000) | 								(sa); 						*dest = (((((destpixel>>24)        *da +  (srcpixel>>24) *sa)<<16)) &
-//0xFF000000) |
+// 8)*sa) * 0x00FF0000) | 								(sa); 						*dest =
+// (((((destpixel>>24)        *da +  (srcpixel>>24) *sa)<<16)) & 0xFF000000) |
 //								(((((destpixel>>16) & 0xFF)*da + ((srcpixel>>16) & 0xFF)*sa)<< 8)  &
-//0x00FF0000) |
+// 0x00FF0000) |
 //								 ((((destpixel>> 8) & 0xFF)*da + ((srcpixel>> 8) & 0xFF)*sa)       &
-//0x0000FF00) | 								(sa & 0xFF);//(max_c (sa, da) & 0xFF);
+// 0x0000FF00) | 								(sa & 0xFF);//(max_c (sa, da) & 0xFF);
 #if !defined(BLEND_USES_SHIFTS)
 						*dest = ((((destpixel & 0xFF000000) / 255 * da +
 								   (srcpixel & 0xFF000000) / 255 * sa)) &
@@ -2920,8 +2886,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							 0x0000FF00) |
 							(clipchar(sa + int(destpixel & 0xFF)));
 #endif
-					}
-					else {
+					} else {
 						//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sa;
 						register uint32 ipixel =
 							pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
@@ -2955,9 +2920,9 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 					register unsigned int sel = *(++sel_data);
 					if (!sel) {
 //						*dest = ((((destpixel & 0x0000FF00)*da + (srcpixel & 0x0000FF00)*sa)/255) &
-//0x0000FF00) |
+// 0x0000FF00) |
 //								((((destpixel & 0x00FF00FF)*da + (srcpixel & 0x00FF00FF)*sa)/255) &
-//0x00FF00FF) | 								(sa);
+// 0x00FF00FF) | 								(sa);
 #if !defined(BLEND_USES_SHIFTS)
 						*dest = ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
 								  255) &
@@ -2985,8 +2950,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 								 0x000000FF) |
 								(clipchar(sa + int(destpixel >> 24)) << 24);
 #endif
-					}
-					else {
+					} else {
 						//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sa
 						//<< 24);
 						register uint32 ipixel = pixelblend(
@@ -3018,8 +2982,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 				dest += ddiff;
 				sel_data += seldiff;
 			}
-		}
-		else // doselect et al.
+		} else // doselect et al.
 		{
 			if (UseMMX && !preserve_alpha)
 				mmx_alpha_blend((uint32*)b->Bits(), (uint32*)a->Bits(), ga, w, rl, rt, rr, rb);
@@ -3034,20 +2997,18 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						if (da == 0) // Fully opaque pixel
 						{
 							*dest = srcpixel;
-						}
-						else if (da == 255) // Fully transparent pixel
+						} else if (da == 255) // Fully transparent pixel
 						{
-						}
-						else {
+						} else {
 //							*dest = ((((destpixel & 0xFF00FF00)/255)*da + ((srcpixel &
-//0xFF00FF00)/255)*sa) & 0xFF00FF00) |
+// 0xFF00FF00)/255)*sa) & 0xFF00FF00) |
 //									((((destpixel & 0x00FF0000)/255)*da + ((srcpixel &
-//0x00FF0000)/255)*sa) & 0x00FF0000) | 									(sa); 							*dest = (((((destpixel>>24)        *da + (srcpixel>>24)
-//*sa)<<16)) & 0xFF000000) |
+// 0x00FF0000)/255)*sa) & 0x00FF0000) | 									(sa);
+// *dest = (((((destpixel>>24)        *da + (srcpixel>>24) *sa)<<16)) & 0xFF000000) |
 //									(((((destpixel>>16) & 0xFF)*da + ((srcpixel>>16) & 0xFF)*sa)<<
-//8)  & 0x00FF0000) |
+// 8)  & 0x00FF0000) |
 //									 ((((destpixel>> 8) & 0xFF)*da + ((srcpixel>> 8) & 0xFF)*sa) &
-//0x0000FF00) | 									(sa & 0xFF);//(max_c (sa, da) & 0xFF);
+// 0x0000FF00) | 									(sa & 0xFF);//(max_c (sa, da) & 0xFF);
 #if !defined(BLEND_USES_SHIFTS)
 							*dest =
 								((((destpixel & 0xFF000000) / 255 * da +
@@ -3082,18 +3043,17 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						if (da == 0) // Fully opaque pixel
 						{
 							*dest = srcpixel;
-						}
-						else if (da == 255) // Fully transparent pixel
+						} else if (da == 255) // Fully transparent pixel
 						{
-						}
-						else {
+						} else {
 //							*dest = ((((destpixel & 0x0000FF00)*da + (srcpixel & 0x0000FF00)*sa) >>
-//8) & 0x0000FF00) |
+// 8) & 0x0000FF00) |
 //									((((destpixel & 0x00FF00FF)*da + (srcpixel & 0x00FF00FF)*sa) &
-//0xFF00FF00) >> 8) | 									(clipchar (sa + int (destpixel >> 24)) << 24); 							*dest = ((((((destpixel>>16) &
-//0xFF)*da + ((srcpixel>>16) & 0xFF)*sa) << 16)/255) & 0x00FF0000) |
+// 0xFF00FF00) >> 8) | 									(clipchar (sa + int (destpixel >> 24)) <<
+// 24); 							*dest = ((((((destpixel>>16) & 0xFF)*da + ((srcpixel>>16) &
+// 0xFF)*sa) << 16)/255) & 0x00FF0000) |
 //									((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>> 8) & 0xFF)*sa) <<
-//8)/255) & 0x0000FF00) |
+// 8)/255) & 0x0000FF00) |
 //									((((((destpixel    ) & 0xFF)*da + ((srcpixel    ) & 0xFF)*sa)
 //)/255) & 0x000000FF) |
 #if !defined(BLEND_USES_SHIFTS)
@@ -3159,13 +3119,12 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 								  << 8) &
 								 0x0000FF00) |
 								(max_c(sa, da) & 0xFF);
-					}
-					else {
+					} else {
 						//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sa;
 						register uint32 ipixel =
 							pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
 						//						register uint32 ipixel = 0xFFFFFF00 - (srcpixel &
-						//0xFFFFFF00);
+						// 0xFFFFFF00);
 						*dest =
 							((((destpixel & 0xFF000000) / 255 * da +
 							   (ipixel & 0xFF000000) / 255 * sa)) &
@@ -3198,10 +3157,10 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 								 0x000000FF) |
 								(clipchar(sa + int(destpixel >> 24)) << 24);
 						//((max_c (sa, da) & 0xFF) << 24);
-					}
-					else {
+					} else {
 						//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sa
-						//<< 24); 						register uint32 ipixel = 0x00FFFFFF - (srcpixel & 0x00FFFFFF);
+						//<< 24); 						register uint32 ipixel = 0x00FFFFFF -
+						//(srcpixel & 0x00FFFFFF);
 						register uint32 ipixel = pixelblend(
 							srcpixel, (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sel << 24)
 						);
@@ -3220,8 +3179,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 				dest += ddiff;
 				sel_data += seldiff;
 			}
-		}
-		else {
+		} else {
 			for (ulong y = rt; y <= rb; y++) {
 				for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
@@ -3233,8 +3191,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 					register int tda = 65025 - da * 255;
 					if (sa == 0) // Fully transparent pixel
 					{
-					}
-					else if (sa == 255) // Fully opaque pixel
+					} else if (sa == 255) // Fully opaque pixel
 					{
 						*dest = (((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025)
 								  << 24) &
@@ -3249,8 +3206,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 								 0x0000FF00) |
 								(clipchar(sa + int(destpixel & 0xFF)));
 						//(max_c (sa, da) & 0xFF);
-					}
-					else {
+					} else {
 						*dest = (((tsa + sa * ((srcpixel >> 24))) *
 									  (tda + da * ((destpixel >> 24))) / 16581375
 								  << 24) &
@@ -3275,8 +3231,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 					register int tda = 65025 - da * 255;
 					if (sa == 0) // Fully transparent pixel
 					{
-					}
-					else if (sa == 255) // Fully opaque pixel
+					} else if (sa == 255) // Fully opaque pixel
 					{
 						*dest =
 							(((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
@@ -3291,8 +3246,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							 0x000000FF) |
 							(clipchar(sa + int(destpixel >> 24)) << 24);
 						//((max_c (sa, da) & 0xFF) << 24);
-					}
-					else {
+					} else {
 						*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
 									  (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
 								  << 16) &
@@ -3451,8 +3405,7 @@ CanvasView::Draw(BRect updateRect)
 		Sync();
 		verbose(2, "DrawBitmap(), Sync()\n");
 		delete b;
-	}
-	else {
+	} else {
 		updateRect.left = int(updateRect.left / fScale);
 		updateRect.top = int(updateRect.top / fScale);
 		updateRect.right = int(updateRect.right / fScale) + 1;
@@ -3559,7 +3512,8 @@ CanvasView::Save(BEntry entry)
 	if (deflateInit(zstream, Z_DEFAULT_COMPRESSION) != Z_OK) {
 		fprintf(stderr, "zlib error!\n");
 	}
-	BString lineString, leftBound, topBound, rightBound, bottomBound, mode, layerHidden, globalAlpha, alphaMap, name;
+	BString lineString, leftBound, topBound, rightBound, bottomBound, mode, layerHidden,
+		globalAlpha, alphaMap, name;
 	for (int i = 0; i < fNumLayers; i++) {
 		fNumberFormat.SetPrecision(0);
 		fNumberFormat.Format(leftBound, layer[i]->Bounds().left);
@@ -3570,7 +3524,11 @@ CanvasView::Save(BEntry entry)
 		fNumberFormat.Format(layerHidden, layer[i]->IsHidden() ? 1 : 0);
 		fNumberFormat.Format(globalAlpha, layer[i]->getGlobalAlpha());
 		fNumberFormat.Format(alphaMap, layer[i]->getAlphaMap() ? 1 : 0);
-		lineString.SetToFormat("%s %s %s %s %s %s %s %s %s\n", leftBound.String(), topBound.String(), rightBound.String(), bottomBound.String(), mode.String(), layerHidden.String(), globalAlpha.String(), alphaMap.String(), layer[i]->getName());
+		lineString.SetToFormat(
+			"%s %s %s %s %s %s %s %s %s\n", leftBound.String(), topBound.String(),
+			rightBound.String(), bottomBound.String(), mode.String(), layerHidden.String(),
+			globalAlpha.String(), alphaMap.String(), layer[i]->getName()
+		);
 		strcpy(line, lineString.String());
 		fputs(line, fp);
 	}
@@ -3619,7 +3577,7 @@ CanvasView::Pulse()
 			//			if (find_thread ("Position Tracker") == B_NAME_NOT_FOUND)
 			//			{
 			//				posision_thread = spawn_thread (position_tracker, "Position Tracker",
-			//B_DISPLAY_PRIORITY, this);
+			// B_DISPLAY_PRIORITY, this);
 			//			}
 
 			extern bool BuiltInTablet;
@@ -3658,8 +3616,7 @@ CanvasView::Pulse()
 
 			fDragScroll = true;
 			fPicking = false;
-		}
-		else {
+		} else {
 			if (fDragScroll)
 				mainapp->setGrab(false);
 
@@ -3667,8 +3624,7 @@ CanvasView::Pulse()
 			fPicking = true;
 			fDragScroll = false;
 		}
-	}
-	else if (fPicking || fDragScroll) {
+	} else if (fPicking || fDragScroll) {
 		if (fPicking) {
 			mainapp->setPicker(false);
 			fPicking = false;
@@ -3772,8 +3728,7 @@ CanvasView::ResolveSpecifier(
 					fLayerSpecifier = i;
 				}
 			}
-		}
-		else if (specifier->FindInt32("index", &indexspecifier) == B_OK) {
+		} else if (specifier->FindInt32("index", &indexspecifier) == B_OK) {
 			if (indexspecifier >= 0 && indexspecifier < fNumLayers) {
 				fLayerSpecifier = indexspecifier;
 			}
@@ -3814,8 +3769,7 @@ CanvasView::MessageReceived(BMessage* msg)
 					BMessage error(B_REPLY);
 					error.AddInt32("result", layer[fLayerSpecifier]->getGlobalAlpha());
 					msg->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(
 						stderr, "Alpha of Layer %s = %d\n", layer[fLayerSpecifier]->getName(),
 						layer[fLayerSpecifier]->getGlobalAlpha()
@@ -3830,8 +3784,7 @@ CanvasView::MessageReceived(BMessage* msg)
 					BMessage error(B_REPLY);
 					error.AddString("result", layer[fLayerSpecifier]->getName());
 					msg->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(
 						stderr, "Layer %ld = %s\n", fLayerSpecifier,
 						layer[fLayerSpecifier]->getName()
@@ -3894,16 +3847,14 @@ CanvasView::MessageReceived(BMessage* msg)
 						error.AddInt32("error", B_NO_ERROR);
 						msg->SendReply(&error);
 					}
-				}
-				else {
+				} else {
 					if (msg->IsSourceWaiting()) {
 						BMessage error(B_ERROR);
 						error.AddInt32("error", B_NO_TRANSLATOR);
 						msg->SendReply(&error);
 					}
 				}
-			}
-			else if (msg->FindString("data", &fname) == B_OK) {
+			} else if (msg->FindString("data", &fname) == B_OK) {
 				char errstring[256];
 				sprintf(errstring, "File added by name (%s) not supported - use ref", fname);
 				if (msg->IsSourceWaiting()) {
@@ -3911,8 +3862,7 @@ CanvasView::MessageReceived(BMessage* msg)
 					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
 					error.AddString("message", errstring);
 					msg->SendReply(&error);
-				}
-				else
+				} else
 					fprintf(stderr, "%s\n", errstring);
 			}
 			fLayerSpecifier = -1;
@@ -3986,8 +3936,7 @@ CanvasView::MessageReceived(BMessage* msg)
 			inDrag = true;
 			Paste(inPaste);
 			inDrag = false;
-		}
-		else
+		} else
 			SimpleData(msg);
 
 		break;
@@ -4089,11 +4038,9 @@ CanvasView::SimpleData(BMessage* message)
 			pt.x -= fr.left;
 			pt.y -= fr.top;
 		}
-	}
-	else if (!message->FindPoint("be:destination_point", &target)) {
+	} else if (!message->FindPoint("be:destination_point", &target)) {
 		/* target is OK */
-	}
-	else {
+	} else {
 		target = B_ORIGIN;
 	}
 	target.x -= pt.x;
@@ -4130,8 +4077,7 @@ CanvasView::SimpleData(BMessage* message)
 		drop_map->Unlock();
 		//		printf ("Filled in drop_map from local ptr\n");
 		delete v;
-	}
-	else if (!drop_map) {
+	} else if (!drop_map) {
 		if (message->what == B_ARCHIVED_OBJECT) {
 			verbose(2, "B_ARCHIVED_OBJECT\n");
 			if (!validate_instantiation(message, "BBitmap"))
@@ -4139,8 +4085,7 @@ CanvasView::SimpleData(BMessage* message)
 			drop_map = dynamic_cast<BBitmap*>(instantiate_object(message));
 			if (!drop_map)
 				goto err;
-		}
-		else if (message->HasRef("refs")) {
+		} else if (message->HasRef("refs")) {
 			verbose(2, "HasRef\n");
 			BBitmapStream output;
 			entry_ref ref;
@@ -4167,8 +4112,7 @@ CanvasView::SimpleData(BMessage* message)
 			SetupUndo(M_DRAW);
 			Paste(true);
 			return;
-		}
-		else {
+		} else {
 			// Extended DnD protocol.  The message probably contains "promises" only.
 			verbose(1, "Extended DnD\n");
 			extern int DebugLevel;
@@ -4310,8 +4254,7 @@ CanvasView::CopyTarget(BMessage* message)
 				BNodeInfo ni(&f);
 				ni.SetType(type);
 			}
-		}
-		else if (!message->FindString("be:types", &type)) {
+		} else if (!message->FindString("be:types", &type)) {
 			//	put in message
 			uint32 type_code = TypeCodeForMIME(type);
 			BMessage msg(B_MIME_DATA);
@@ -4319,8 +4262,7 @@ CanvasView::CopyTarget(BMessage* message)
 			BTranslatorRoster::Default()->Translate(&strm, NULL, NULL, &f, type_code);
 			msg.AddData(type, B_MIME_TYPE, f.Buffer(), f.BufferLength());
 			message->SendReply(&msg);
-		}
-		else {
+		} else {
 			BMessage msg(B_MESSAGE_NOT_UNDERSTOOD);
 			message->SendReply(&msg);
 		}
@@ -4367,8 +4309,7 @@ CanvasView::MouseDown(BPoint point)
 		} while (msg);
 		//		printf ("Removed %d MouseMoved messages\n", count);
 		myWindow->Unlock();
-	}
-	else
+	} else
 		printf("Hah!  Couldn't get lock!\n");
 }
 
@@ -4407,8 +4348,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		mainapp->setHand();
 		mouse_on_canvas = false;
 		Invalidate();
-	}
-	else if (transit == B_ENTERED_VIEW && Window()->IsActive() && !msg) {
+	} else if (transit == B_ENTERED_VIEW && Window()->IsActive() && !msg) {
 		// Fix for the fact that we don't get MouseUp()s outside our view
 		//		BPoint point;
 		//		uint32 buttons;
@@ -4439,8 +4379,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		}
 
 		Invalidate();
-	}
-	else {
+	} else {
 		if (buttons && !fMouseDown) // MouseDown missed!  (This happens a LOT!)
 		{
 			return;
@@ -4469,8 +4408,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 					BPoint p = ConvertToScreen(BPoint(point.x * fScale, point.y * fScale));
 					// printf ("new pos = %f, %f\n", fPoint.x - p.x, fPoint.y - p.y);
 					fBGView->ScrollTo(BPoint(fPoint.x - p.x, fPoint.y - p.y));
-				}
-				else // Color Picker
+				} else // Color Picker
 				{
 					extern ColorMenuButton *hicolor, *locolor;
 					if (buttons & B_PRIMARY_MOUSE_BUTTON && !(modifiers() & B_CONTROL_KEY))
@@ -4480,8 +4418,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 					fPicking = true;
 					fDragScroll = false;
 				}
-			}
-			else if (!fPicking) {
+			} else if (!fPicking) {
 				extern PicMenuButton* tool;
 				int32 currentTool = tool->selected();
 				if (currentTool == T_BRUSH) {
@@ -4495,8 +4432,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 						position.fTilt
 					);
 					fMouseDown = position.fButtons; // Sometimes MouseUp() is missed!
-				}
-				else if (currentTool == T_CLONE) {
+				} else if (currentTool == T_CLONE) {
 					extern PicMenuButton* mode;
 					Position position;
 					GetPosition(&position);
@@ -4507,8 +4443,7 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 						position.fTilt
 					);
 					fMouseDown = position.fButtons; // Sometimes MouseUp() is missed!
-				}
-				else if (currentTool == T_SPRAYCAN) {
+				} else if (currentTool == T_SPRAYCAN) {
 					extern PicMenuButton* mode;
 					Position position;
 					GetPosition(&position);
@@ -4547,13 +4482,11 @@ CanvasView::MouseOrTablet(Position* position)
 		do_translateLayer(fTranslating - 1, currentMode);
 		fTranslating = 0;
 		mainapp->setCross();
-	}
-	else if (fRotating) {
+	} else if (fRotating) {
 		do_rotateLayer(fRotating - 1, currentMode);
 		fRotating = 0;
 		mainapp->setCross();
-	}
-	else if (modifiers() & B_OPTION_KEY) // Color Picker	/ DragScroll
+	} else if (modifiers() & B_OPTION_KEY) // Color Picker	/ DragScroll
 	{
 		if (modifiers() & B_SHIFT_KEY) // DragScroll
 		{
@@ -4563,37 +4496,30 @@ CanvasView::MouseOrTablet(Position* position)
 			fPoint = BPoint(p.x - lt.x, p.y - lt.y);
 			//			printf ("New drag: ");
 			//			fPoint.PrintToStream();
-		}
-		else {
+		} else {
 			if (buttons & B_PRIMARY_MOUSE_BUTTON)
 				hicolor->set(getColor(point));
 			if (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)
 				locolor->set(getColor(point));
 		}
-	}
-	else if ((modifiers() & B_SHIFT_KEY) & selchanged) // Cut/Copy/Paste
+	} else if ((modifiers() & B_SHIFT_KEY) & selchanged) // Cut/Copy/Paste
 	{
 		if (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY) {
 			Cut();
 			eDrag(point, buttons);
-		}
-		else if (buttons & B_PRIMARY_MOUSE_BUTTON) {
+		} else if (buttons & B_PRIMARY_MOUSE_BUTTON) {
 			Copy();
 			eDrag(point, buttons);
 		}
-	}
-	else if ((modifiers() & B_COMMAND_KEY) && filterOpen && filterOpen->DoesPreview()) // AddOn
-																					   // Preview
+	} else if ((modifiers() & B_COMMAND_KEY) && filterOpen && filterOpen->DoesPreview()) // AddOn
+																						 // Preview
 	{
 		eFilter(point, buttons);
-	}
-	else if (generatorOpen && (generatorOpen->DoesPreview() & PREVIEW_MOUSE)) {
+	} else if (generatorOpen && (generatorOpen->DoesPreview() & PREVIEW_MOUSE)) {
 		eGenerate(point, buttons);
-	}
-	else if (transformerOpen && (transformerOpen->DoesPreview() & PREVIEW_MOUSE)) {
+	} else if (transformerOpen && (transformerOpen->DoesPreview() & PREVIEW_MOUSE)) {
 		eTransform(point, buttons);
-	}
-	else if (inPaste)
+	} else if (inPaste)
 		ePaste(point, buttons);
 	else if (!transformerOpen && !generatorOpen) {
 		switch (currentTool) {
@@ -4682,8 +4608,7 @@ CanvasView::KeyDown(const char* bytes, int32 numBytes)
 				if (pasteX || pasteY) {
 					pasteX = 0;
 					pasteY = 0;
-				}
-				else {
+				} else {
 					pasteX = fPasteX;
 					pasteY = fPasteY;
 				}
@@ -4707,8 +4632,7 @@ CanvasView::KeyDown(const char* bytes, int32 numBytes)
 				cutbg = NULL;
 				inPaste = false;
 				Invalidate();
-			}
-			else if (entry) {
+			} else if (entry) {
 				entry = 0;
 				Invalidate();
 			}
@@ -4774,8 +4698,7 @@ CanvasView::KeyDown(const char* bytes, int32 numBytes)
 		default:
 			inherited::KeyDown(bytes, numBytes);
 		}
-	}
-	else
+	} else
 		inherited::KeyDown(bytes, numBytes);
 }
 
@@ -4857,7 +4780,7 @@ CanvasView::SetupUndo(int32 mode)
 	}
 	if (indexUndo + 1 == maxUndo - 1) {
 		//		printf ("Deleting undo[0]: %p, %p (indexUndo = %d)\n", undo[0].bitmap,
-		//undo[0].sbitmap, indexUndo);
+		// undo[0].sbitmap, indexUndo);
 		delete undo[0].bitmap;
 		delete undo[0].sbitmap;
 		for (int i = 1; i < maxUndo; i++) {
@@ -4865,8 +4788,7 @@ CanvasView::SetupUndo(int32 mode)
 		}
 		undo[maxUndo - 1].bitmap = 0;
 		undo[maxUndo - 1].sbitmap = 0;
-	}
-	else
+	} else
 		indexUndo++;
 
 	//	printf ("Killing the redo buffer...\n");
@@ -4887,16 +4809,14 @@ CanvasView::SetupUndo(int32 mode)
 		//		printf ("Setup undo: selection -> undo[%i]\n", indexUndo);
 		selection->Unlock();
 		u.layer = -1;
-	}
-	else if (type == UNDO_DRAW) {
+	} else if (type == UNDO_DRAW) {
 		currentLayer()->Lock();
 		u.bitmap = new SBitmap(currentLayer());
 		u.sbitmap = NULL;
 		//		printf ("Setup undo: layer[%i] -> undo[%i]\n", fCurrentLayer, indexUndo);
 		currentLayer()->Unlock();
 		u.layer = fCurrentLayer;
-	}
-	else if (type == UNDO_BOTH) {
+	} else if (type == UNDO_BOTH) {
 		selection->Lock();
 		u.sbitmap = new SBitmap(selection);
 		u.bitmap = new SBitmap(currentLayer());
@@ -4906,19 +4826,17 @@ CanvasView::SetupUndo(int32 mode)
 		//		printf ("Setup undo: layer[%i] -> undo[%i]\n", fCurrentLayer, indexUndo);
 		currentLayer()->Unlock();
 		u.layer = fCurrentLayer;
-	}
-	else if (type == UNDO_SWITCH) {
+	} else if (type == UNDO_SWITCH) {
 		currentLayer()->Lock();
 		u.bitmap = new SBitmap(currentLayer());
 		//		printf ("Setup undo: layer[%i] & selection -> undo[%i]\n", fCurrentLayer,
-		//indexUndo);
+		// indexUndo);
 		currentLayer()->Unlock();
 		u.layer = fCurrentLayer;
 		u.sbitmap = new SBitmap(selection);
 		selection->Lock();
 		selection->Unlock();
-	}
-	else if (type == UNDO_MERGE) {
+	} else if (type == UNDO_MERGE) {
 		layer[fIndex1]->Lock();
 		u.bitmap = new SBitmap(layer[fIndex1]);
 		layer[fIndex1]->Unlock();
@@ -4931,8 +4849,7 @@ CanvasView::SetupUndo(int32 mode)
 		u.fGlobalAlpha = layer[fIndex2]->getGlobalAlpha();
 		u.fHide = layer[fIndex2]->IsHidden();
 		strcpy(u.fName, layer[fIndex2]->getName());
-	}
-	else if (type == UNDO_LDEL) {
+	} else if (type == UNDO_LDEL) {
 		layer[fIndex2]->Lock();
 		u.bitmap = new SBitmap(layer[fIndex2]);
 		layer[fIndex2]->Unlock();
@@ -5017,16 +4934,14 @@ CanvasView::Undo(bool advance, bool menu)
 			u.sbitmap = new SBitmap(selection);
 			u.bitmap = NULL;
 			u.layer = -1;
-		}
-		else if (type == UNDO_DRAW) {
+		} else if (type == UNDO_DRAW) {
 			//			printf ("Current layer[%i] -> undo[%i]\n", fCurrentLayer, indexUndo);
 			u.bitmap = new SBitmap(currentLayer());
 			u.sbitmap = NULL;
 			u.layer = fCurrentLayer;
-		}
-		else if (type == UNDO_SWITCH) {
+		} else if (type == UNDO_SWITCH) {
 			//			printf ("Current layer[%i] & selection -> undo[%i]\n", fCurrentLayer,
-			//indexUndo);
+			// indexUndo);
 			u.bitmap = new SBitmap(currentLayer());
 			u.layer = fCurrentLayer;
 			u.sbitmap = new SBitmap(selection);
@@ -5044,16 +4959,14 @@ CanvasView::Undo(bool advance, bool menu)
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		layer[u.layer]->Unlock();
-	}
-	else if (u.type == UNDO_SELECT) {
+	} else if (u.type == UNDO_SELECT) {
 		//		printf ("undo[%i] -> selection\n", indexUndo);
 		selection->Lock();
 		memcpy(selection->Bits(), u.sbitmap->Bits(), selection->BitsLength());
 		selection->Unlock();
 		selchanged = true;
 		sel = true;
-	}
-	else if (u.type == UNDO_BOTH) {
+	} else if (u.type == UNDO_BOTH) {
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		layer[u.layer]->Unlock();
@@ -5062,8 +4975,7 @@ CanvasView::Undo(bool advance, bool menu)
 		selection->Unlock();
 		selchanged = true;
 		sel = true;
-	}
-	else if (u.type == UNDO_SWITCH) {
+	} else if (u.type == UNDO_SWITCH) {
 		//		printf ("undo[%i] -> layer[%i] & selection\n", indexUndo, u.layer);
 		selection->Lock();
 		memcpy(selection->Bits(), u.sbitmap->Bits(), selection->BitsLength());
@@ -5073,8 +4985,7 @@ CanvasView::Undo(bool advance, bool menu)
 		layer[u.layer]->Unlock();
 		selchanged = true;
 		sel = true;
-	}
-	else if (u.type == UNDO_MERGE) {
+	} else if (u.type == UNDO_MERGE) {
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		layer[u.layer]->Unlock();
@@ -5086,8 +4997,7 @@ CanvasView::Undo(bool advance, bool menu)
 		layer[u.next]->setGlobalAlpha(u.fGlobalAlpha);
 		layer[u.next]->setMode(u.fMode);
 		layer[u.next]->Unlock();
-	}
-	else if (u.type == UNDO_LDEL) {
+	} else if (u.type == UNDO_LDEL) {
 		insertLayer(u.layer, "Restored");
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
@@ -5134,16 +5044,14 @@ CanvasView::Redo(bool menu)
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		//		printf ("undo[%i] -> layer[%i]\n", indexUndo + 1, u.layer);
 		layer[u.layer]->Unlock();
-	}
-	else if (u.type == UNDO_SELECT) {
+	} else if (u.type == UNDO_SELECT) {
 		selection->Lock();
 		memcpy(selection->Bits(), u.sbitmap->Bits(), selection->BitsLength());
 		//		printf ("undo[%i] -> selection\n", indexUndo + 1);
 		selection->Unlock();
 		selchanged = true;
 		sel = true;
-	}
-	else if (u.type == UNDO_BOTH) {
+	} else if (u.type == UNDO_BOTH) {
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		//		printf ("undo[%i] -> layer[%i]\n", indexUndo + 1, u.layer);
@@ -5154,8 +5062,7 @@ CanvasView::Redo(bool menu)
 		selection->Unlock();
 		selchanged = true;
 		sel = true;
-	}
-	else if (u.type == UNDO_SWITCH) {
+	} else if (u.type == UNDO_SWITCH) {
 		layer[u.layer]->Lock();
 		memcpy(layer[u.layer]->Bits(), u.bitmap->Bits(), layer[u.layer]->BitsLength());
 		//		printf ("undo[%i] -> layer[%i] & selection\n", indexUndo + 1, u.layer);
@@ -5163,12 +5070,10 @@ CanvasView::Redo(bool menu)
 		selection->Lock();
 		memcpy(selection->Bits(), u.sbitmap->Bits(), selection->BitsLength());
 		selection->Unlock();
-	}
-	else if (u.type == UNDO_MERGE) {
+	} else if (u.type == UNDO_MERGE) {
 		Merge(layer[u.layer], layer[u.next], fCanvasFrame, false);
 		do_removeLayer(u.next);
-	}
-	else if (u.type == UNDO_LDEL) {
+	} else if (u.type == UNDO_LDEL) {
 		do_removeLayer(u.layer);
 	}
 	myWindow->Lock();
@@ -5299,8 +5204,7 @@ CanvasView::Paste(bool winAct)
 	if (inPaste) {
 		if (winAct) {
 			verbose(1, "Window Activated while in Paste()\n");
-		}
-		else {
+		} else {
 			ePaste(point, buttons); // Note: These are dummies!
 			return;
 		}
@@ -5317,8 +5221,7 @@ CanvasView::Paste(bool winAct)
 					be_clipboard->Unlock();
 					return;
 				}
-			}
-			else {
+			} else {
 				be_clipboard->Unlock();
 				return;
 			}
@@ -5350,8 +5253,7 @@ CanvasView::Paste(bool winAct)
 		AddWithAlpha(clip, currentLayer(), int(point.x + pasteX), int(point.y + pasteY));
 		inPaste = false;
 		// ePaste (point, buttons);
-	}
-	else if (inDrag) {
+	} else if (inDrag) {
 		extern int DebugLevel;
 		if (DebugLevel >= 1)
 			printf("%s... Drag to ext. window\n", Window()->Title());
@@ -5360,11 +5262,9 @@ CanvasView::Paste(bool winAct)
 		AddWithAlpha(clip, currentLayer(), int(point.x + pasteX), int(point.y + pasteY));
 		ePaste(point, buttons);
 		inPaste = false;
-	}
-	else if (winAct) {
+	} else if (winAct) {
 		verbose(2, "WinAct\n");
-	}
-	else {
+	} else {
 		// printf ("Copy/Paste\n");
 		ePasteM(point);
 	}
@@ -5647,8 +5547,7 @@ CanvasView::eDrag(BPoint point, uint32 buttons)
 		&& (fScale == 1)) {
 		// printf ("Top layer active...\n");
 		DragMessage(dragMessage, dragmap, B_OP_ALPHA, BPoint(-fPasteX, -fPasteY));
-	}
-	else {
+	} else {
 		SetupUndo(M_DRAW);
 		extern bool inPaste, inDrag;
 		delete cutbg;
@@ -5699,8 +5598,7 @@ CanvasView::eDrag(BPoint point, uint32 buttons)
 				myWindow->posview->Pulse();
 				myWindow->Unlock();
 				invalidate = true;
-			}
-			else if (invalidate) {
+			} else if (invalidate) {
 				Invalidate();
 				invalidate = false;
 			}
@@ -6142,20 +6040,21 @@ CanvasView::ColorizeSelection(rgb_color c)
 			//			{
 			//				#if defined (__POWERPC__)
 			//					*c_data = (((((d>>24)        *da +  (b>>24)        *sa)<<16)) &
-			//0xFF000000) |
+			// 0xFF000000) |
 			//							  (((((d>>16) & 0xFF)*da + ((b>>16) & 0xFF)*sa)<< 8)  &
-			//0x00FF0000) |
+			// 0x00FF0000) |
 			//							   ((((d>> 8) & 0xFF)*da + ((b>> 8) & 0xFF)*sa)       &
-			//0x0000FF00) |
+			// 0x0000FF00) |
 			//								//(sa & 0xFF);//(max_c (sa, da) & 0xFF);
 			//								clipchar (sa + int (d & 0xFF));
 			//				#else
 			//					*c_data = (((((d>>16) & 0xFF)*da + ((b>>16) & 0xFF)*sa)<<16) &
-			//0x00FF0000) |
+			// 0x00FF0000) |
 			//							  (((((d>> 8) & 0xFF)*da + ((b>> 8) & 0xFF)*sa)<< 8) &
-			//0x0000FF00) |
+			// 0x0000FF00) |
 			//							  (((((d    ) & 0xFF)*da + ((b    ) & 0xFF)*sa)    ) &
-			//0x000000FF) | 							      (clipchar (sa + int (d >> 24)) << 24); 				#endif
+			// 0x000000FF) | 							      (clipchar (sa + int (d >> 24)) << 24);
+			// #endif
 			//			}
 			*c_data = pixelblend(d, b);
 		}
@@ -6245,18 +6144,16 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
 					//((srcpixel>>24)       )*sa)/ta)<<24) & 0xFF000000) |
 					//								  ((((((destpixel>>16) & 0xFF)*da +
 					//((srcpixel>>16) & 0xFF)*sa)/ta)<<16) & 0x00FF0000) |
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
-					//8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) | 										clipchar (sa + int (destpixel &
-					//0xFF));
+					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
+					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
 						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
 						 ) &
@@ -6278,17 +6175,15 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || da == 0 /* !(destpixel & 0xFF000000) */) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 
 					//					*dest_data = ((((destpixel & 0x0000FF00)*da + (srcpixel &
-					//0x0000FF00)*sa)/255) & 0x0000FF00) |
+					// 0x0000FF00)*sa)/255) & 0x0000FF00) |
 					//								 ((((destpixel & 0x00FF00FF)*da + (srcpixel &
-					//0x00FF00FF)*sa)/255) & 0x00FF00FF) | 								    (clipchar (sa + int (destpixel >> 24)) <<
-					//24);
+					// 0x00FF00FF)*sa)/255) & 0x00FF00FF) |
+					// (clipchar (sa + int (destpixel >> 24)) << 24);
 
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
@@ -6309,8 +6204,7 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	}
-	else if (strength > 0) {
+	} else if (strength > 0) {
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
@@ -6322,18 +6216,16 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
 					//((srcpixel>>24)       )*sa)/ta)<<24) & 0xFF000000) |
 					//								  ((((((destpixel>>16) & 0xFF)*da +
 					//((srcpixel>>16) & 0xFF)*sa)/ta)<<16) & 0x00FF0000) |
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
-					//8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) | 										clipchar (sa + int (destpixel &
-					//0xFF));
+					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
+					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
 						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
 						 ) &
@@ -6355,11 +6247,9 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000)) // Fully opaque
 				{
 					*dest_data = srcpixel;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
 							((srcpixel & 0x00FF0000) >> 1) * sa) /
@@ -6379,8 +6269,7 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	}
-	else // Very special case:  Only "erase" transparency.
+	} else // Very special case:  Only "erase" transparency.
 	{
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
@@ -6393,11 +6282,9 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || !(destpixel & 0xFF)) // Fully opaque
 				{
 					*dest_data = destpixel & 0xFFFFFF00;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data = (destpixel & 0xFFFFFF00) | clipchar(da - sa);
 				}
 #else
@@ -6409,11 +6296,9 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				if (sa == 255 || !(destpixel & 0xFF000000)) // Fully opaque
 				{
 					*dest_data = destpixel & 0x00FFFFFF;
-				}
-				else if (sa == 0) // Fully transparent
+				} else if (sa == 0) // Fully transparent
 				{
-				}
-				else {
+				} else {
 					*dest_data = (destpixel & 0x00FFFFFF) | ((clipchar(da - sa)) << 24);
 				}
 #endif
@@ -6482,12 +6367,10 @@ CanvasView::FastBlendWithAlpha(long x, long y, int /* strength */)
 				*(++dest_data) = *(++src_data);
 				*(++dest_data) = *(++src_data);
 				*(++dest_data) = *(++src_data); // new alpha channel
-			}
-			else if (sa == 0) {
+			} else if (sa == 0) {
 				dest_data += 4;
 				src_data += 4;
-			}
-			else {
+			} else {
 				*dest_data = (*(++dest_data) * da + *(++src_data) * sa) / ta;
 				*dest_data = (*(++dest_data) * da + *(++src_data) * sa) / ta;
 				*dest_data = (*(++dest_data) * da + *(++src_data) * sa) / ta;
@@ -6532,10 +6415,10 @@ CanvasView::WindowActivated(bool active)
 			//			cutbg = new BBitmap (clipRect, B_RGBA32, true);
 			//			cutbg->Lock();
 			//			cutView->DrawBitmap (currentLayer(), BPoint (-point.x - pasteX, -point.y -
-			//pasteY)); 			cutbg->Unlock(); 			prevPaste = BRect (point.x + pasteX, point.y + pasteY,
-			//				 point.x + pasteX + clip->Bounds().right, point.y + pasteY +
-			//clip->Bounds().bottom); 			printf ("prevPaste set\n"); 			ePasteM (point); printf ("Calling
-			// Paste from WindowActivated()\n");
+			// pasteY)); 			cutbg->Unlock(); 			prevPaste = BRect (point.x + pasteX,
+			// point.y + pasteY, 				 point.x + pasteX + clip->Bounds().right, point.y +
+			// pasteY + clip->Bounds().bottom); 			printf ("prevPaste set\n");
+			// ePasteM (point); printf ("Calling Paste from WindowActivated()\n");
 			Paste(true);
 		}
 		if (Bounds().Contains(point)) {
@@ -6549,8 +6432,7 @@ CanvasView::WindowActivated(bool active)
 			Invalidate();
 		}
 		newWin = false;
-	}
-	else if (!active && windowLock) {
+	} else if (!active && windowLock) {
 		//		printf ("Inactivating.");
 		if (inPaste) {
 			//			printf ("(inPaste)");

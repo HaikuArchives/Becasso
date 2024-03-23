@@ -13,7 +13,8 @@
 #define PROP_PENSIZE 1
 #define PROP_TYPE 2
 
-class AttribRect : public AttribView {
+class AttribRect : public AttribView
+{
   public:
 	AttribRect();
 	virtual ~AttribRect();

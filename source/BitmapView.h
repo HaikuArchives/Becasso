@@ -5,7 +5,8 @@
 #include <Rect.h>
 #include <Bitmap.h>
 
-class BitmapView : public BView {
+class BitmapView : public BView
+{
   public:
 	BitmapView(BRect bounds, const char* name);
 	BitmapView(

@@ -18,7 +18,8 @@
 #define CE_WIDTH 320
 #define CE_HEIGHT 502
 
-class ColorWindow : public BWindow {
+class ColorWindow : public BWindow
+{
   public:
 	ColorWindow(BRect frame, const char* name, ColorMenuButton* but);
 	virtual ~ColorWindow();

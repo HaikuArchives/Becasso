@@ -10,7 +10,8 @@
 
 #define MAXLAYERNAME 128
 
-class IMPEXP Layer : public BBitmap {
+class IMPEXP Layer : public BBitmap
+{
   public:
 	Layer(BRect bounds, const char* name);
 	Layer(const Layer& layer);

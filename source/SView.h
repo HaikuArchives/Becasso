@@ -6,7 +6,8 @@
 #include "Tablet.h"
 #include "Wacom.h"
 
-class SView : public BView {
+class SView : public BView
+{
   public:
 	SView(BRect frame, const char* name, uint32 resizeMask, uint32 flags);
 	virtual ~SView();

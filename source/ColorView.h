@@ -5,7 +5,8 @@
 #include <Rect.h>
 #include <Bitmap.h>
 
-class ColorView : public BView {
+class ColorView : public BView
+{
   public:
 	ColorView(BRect frame, const char* name, rgb_color c);
 	virtual ~ColorView();

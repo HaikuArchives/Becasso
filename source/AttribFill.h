@@ -15,7 +15,8 @@
 #define PROP_DGREEN 3
 #define PROP_DBLUE 4
 
-class AttribFill : public AttribView {
+class AttribFill : public AttribView
+{
   public:
 	AttribFill();
 	virtual ~AttribFill();

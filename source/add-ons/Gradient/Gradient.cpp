@@ -14,7 +14,8 @@
 int gOrientation;
 int gSlope;
 
-class GradientView : public BView {
+class GradientView : public BView
+{
   public:
 	GradientView(BRect rect) : BView(rect, "gradient_view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -226,8 +227,7 @@ process(
 				bgra_pixel pixel = weighted_average_rgb(lo, val, hi, 255 - val) & COLOR_MASK;
 				if (inSelection) {
 					*(++dbits) = pixelblend(*(++sbits), (pixel | (*(++mapbits) << ALPHA_BPOS)));
-				}
-				else {
+				} else {
 					*(++dbits) = pixel | ALPHA_MASK;
 					sbits++;
 				}

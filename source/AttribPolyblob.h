@@ -13,7 +13,8 @@
 #define PROP_PENSIZE 1
 #define PROP_TYPE 2
 
-class AttribPolyblob : public AttribView {
+class AttribPolyblob : public AttribView
+{
   public:
 	AttribPolyblob();
 	virtual ~AttribPolyblob();

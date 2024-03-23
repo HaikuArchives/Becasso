@@ -10,7 +10,8 @@
 float gBrightness = 0;
 float gContrast = 0;
 
-class BCView : public BView {
+class BCView : public BView
+{
   public:
 	BCView(BRect rect);
 
@@ -153,8 +154,7 @@ process(
 						clipchar(brightness + contrast * BLUE(pixel)), ALPHA(pixel)
 					);
 					*(++dbits) = weighted_average(newpix, map, pixel, 255 - map);
-				}
-				else
+				} else
 					*(++dbits) = *(++sbits);
 			}
 			mapbits += mdiff;

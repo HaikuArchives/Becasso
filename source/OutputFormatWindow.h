@@ -45,7 +45,8 @@
 class BInvoker;
 class BPositionIO;
 
-class OutputFormatWindow : public BWindow {
+class OutputFormatWindow : public BWindow
+{
   public:
 	OutputFormatWindow(
 		// Input stream (e.g. a ProgressiveBitmapStream of the bitmap to save)

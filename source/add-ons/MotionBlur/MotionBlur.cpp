@@ -11,7 +11,8 @@
 float gSize;
 float gAngle;
 
-class MotionBlurView : public BView {
+class MotionBlurView : public BView
+{
   public:
 	MotionBlurView(BRect rect) : BView(rect, "motion_blur_view", B_FOLLOW_ALL, B_WILL_DRAW)
 	{
@@ -175,22 +176,18 @@ process(
 							if (dx < 0) {
 								dx = -dx;
 								s1 = -1;
-							}
-							else
+							} else
 								s1 = 1;
-						}
-						else
+						} else
 							s1 = 0;
 
 						if ((dy = py) != 0) {
 							if (dy < 0) {
 								dy = -dy;
 								s2 = -1;
-							}
-							else
+							} else
 								s2 = 1;
-						}
-						else
+						} else
 							s2 = 0;
 
 						if (dy > dx) {
@@ -198,8 +195,7 @@ process(
 							dx = dy;
 							dy = swapdir;
 							swapdir = 1;
-						}
-						else
+						} else
 							swapdir = 0;
 
 						dy *= 2;
@@ -229,11 +225,9 @@ process(
 							if ((xx < 0) || (xx >= w) || (yy < 0) || (yy >= h))
 								break;
 						}
-					}
-					else
+					} else
 						i = 0;
-				}
-				else
+				} else
 					i = 0;
 
 				if (i == 0)
@@ -280,22 +274,18 @@ process(
 				if (dx < 0) {
 					dx = -dx;
 					s1 = -1;
-				}
-				else
+				} else
 					s1 = 1;
-			}
-			else
+			} else
 				s1 = 0;
 
 			if ((dy = py) != 0) {
 				if (dy < 0) {
 					dy = -dy;
 					s2 = -1;
-				}
-				else
+				} else
 					s2 = 1;
-			}
-			else
+			} else
 				s2 = 0;
 
 			if (dy > dx) {
@@ -303,8 +293,7 @@ process(
 				dx = dy;
 				dy = swapdir;
 				swapdir = 1;
-			}
-			else
+			} else
 				swapdir = 0;
 
 			dy *= 2;
@@ -346,8 +335,7 @@ process(
 							if ((xx < 0) || (xx >= w) || (yy < 0) || (yy >= h))
 								break;
 						}
-					}
-					else
+					} else
 						i = 0;
 
 					if (i == 0)

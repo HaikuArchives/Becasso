@@ -39,7 +39,8 @@ class LayerWindow;
 class PosView;
 class XpalWindow;
 
-class CanvasWindow : public BWindow {
+class CanvasWindow : public BWindow
+{
 	friend class CanvasView;
 
   public:

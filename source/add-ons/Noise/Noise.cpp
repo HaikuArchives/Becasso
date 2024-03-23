@@ -23,7 +23,8 @@ fillvector(int x);
 int
 random(int max);
 
-class NoiseView : public BView {
+class NoiseView : public BView
+{
   public:
 	NoiseView(BRect rect) : BView(rect, "noise_view", B_FOLLOW_NONE, B_WILL_DRAW)
 	{
@@ -189,16 +190,14 @@ process(
 						p.green = clipchar(p.green + amount);
 						p.blue = clipchar(p.blue + amount);
 						*(++dbits) = rgb2bgra(p);
-					}
-					else if (*(++mapbits)) {
+					} else if (*(++mapbits)) {
 						rgb_color p = bgra2rgb(*(++sbits));
 						char amount = xvec[random(MAXRANDSIZE)] * *mapbits / 255;
 						p.red = clipchar(p.red + amount);
 						p.green = clipchar(p.green + amount);
 						p.blue = clipchar(p.blue + amount);
 						*(++dbits) = rgb2bgra(p);
-					}
-					else
+					} else
 						*(++dbits) = *(++sbits);
 				}
 				mapbits += mdiff;
@@ -223,8 +222,7 @@ process(
 						p.green = clipchar(p.green * factor / 255);
 						p.blue = clipchar(p.blue * factor / 255);
 						*(++dbits) = rgb2bgra(p);
-					}
-					else if (*(++mapbits)) {
+					} else if (*(++mapbits)) {
 						rgb_color p = bgra2rgb(*(++sbits));
 						char amount = xvec[random(MAXRANDSIZE)] * *mapbits / 255;
 						int factor = 255 + amount;
@@ -232,8 +230,7 @@ process(
 						p.green = clipchar(p.green * factor / 255);
 						p.blue = clipchar(p.blue * factor / 255);
 						*(++dbits) = rgb2bgra(p);
-					}
-					else
+					} else
 						*(++dbits) = *(++sbits);
 				}
 				mapbits += mdiff;

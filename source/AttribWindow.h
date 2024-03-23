@@ -8,12 +8,14 @@
 
 #define MAX_VIEWS 64
 
-typedef struct {
+typedef struct
+{
 	AttribView* view;
 	BitmapView* icon;
 } view_n_icon;
 
-class AttribWindow : public BWindow {
+class AttribWindow : public BWindow
+{
   public:
 	AttribWindow(BRect frame, const char* title);
 	virtual ~AttribWindow();

@@ -16,7 +16,8 @@
 #include <View.h>
 #include <Roster.h>
 
-class TileView : public BView {
+class TileView : public BView
+{
   public:
 	TileView(BRect frame, BBitmap* bitmap);
 
@@ -56,8 +57,7 @@ TileView::Draw(BRect update)
 		for (int x = 0; x < Bounds().Width() / xs; x++)
 			for (int y = 0; y < Bounds().Height() / ys; y++)
 				DrawBitmapAsync(fBitmap, BPoint(x * xs, y * ys));
-	}
-	else
+	} else
 		FillRect(update, B_SOLID_LOW);
 
 	Sync();
@@ -72,21 +72,19 @@ TileView::KeyDown(const char* bytes, int32 numbytes)
 			LockLooper();
 			Window()->PostMessage(&msg);
 			UnlockLooper();
-		}
-		else if (bytes[0] == B_RIGHT_ARROW) {
+		} else if (bytes[0] == B_RIGHT_ARROW) {
 			BMessage msg('Til+');
 			LockLooper();
 			Window()->PostMessage(&msg);
 			UnlockLooper();
-		}
-		else
+		} else
 			inherited::KeyDown(bytes, numbytes);
-	}
-	else
+	} else
 		inherited::KeyDown(bytes, numbytes);
 }
 
-class TileMainView : public BView {
+class TileMainView : public BView
+{
   public:
 	TileMainView(BRect rect);
 
@@ -137,7 +135,8 @@ TileMainView::TileMainView(BRect rect) : BView(rect, "tile main view", B_FOLLOW_
 	AddChild(text);
 }
 
-class TilesList {
+class TilesList
+{
   public:
 	TilesList() { fIndex = 0; }
 
@@ -147,8 +146,7 @@ class TilesList {
 	{
 		if (fIndex < 4096) {
 			entry.GetRef(&(entries[fIndex++]));
-		}
-		else
+		} else
 			fprintf(stderr, "TilesList: Too many tiles\n");
 	}
 
@@ -168,7 +166,8 @@ class TilesList {
 	int32 fIndex;
 };
 
-class TilesDir {
+class TilesDir
+{
   public:
 	TilesDir() { fTilesList = new TilesList(); };
 
@@ -399,8 +398,7 @@ process(
 				for (int y = 0; y < zeroframe.Height() / ys; y++) {
 					v->DrawBitmapAsync(view->Bitmap(), BPoint(x * xs, y * ys));
 				}
-		}
-		else
+		} else
 			v->FillRect(zeroframe, B_SOLID_LOW);
 		v->Sync();
 		b->RemoveChild(v);
@@ -420,8 +418,7 @@ process(
 			}
 			// memcpy ((*outLayer)->Bits(), inLayer->Bits(), inLayer->BitsLength());
 			*outLayer = inLayer;
-		}
-		else // No selection: tile the entire canvas/
+		} else // No selection: tile the entire canvas/
 		{
 			for (int i = 0; i < b->BitsLength() / 4; i++)
 				*(bd) = *(++bd) | ALPHA_MASK;

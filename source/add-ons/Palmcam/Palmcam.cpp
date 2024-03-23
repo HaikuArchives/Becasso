@@ -27,7 +27,8 @@ int cursel = -1;
 int nsel = 0;
 int my_addon_index = 0;
 
-class CaptureWindow : public BWindow {
+class CaptureWindow : public BWindow
+{
   public:
 	CaptureWindow(BRect rect)
 		: BWindow(rect, "PalmCam", B_TITLED_WINDOW, B_NOT_ZOOMABLE | B_WILL_ACCEPT_FIRST_CLICK)
@@ -362,12 +363,10 @@ addon_open(void)
 	if (!window->portName()[0]) {
 		if (DebugLevel)
 			fprintf(stderr, "No port defined for the camera yet\n");
-	}
-	else if (camera->Open(window->portName(), window->portBPS()) != B_OK) {
+	} else if (camera->Open(window->portName(), window->portBPS()) != B_OK) {
 		if (DebugLevel)
 			fprintf(stderr, "Couldn't open camera at %s\n", window->portName());
-	}
-	else {
+	} else {
 		update_list();
 		window->Lock();
 		window->fList->Invalidate();
@@ -445,8 +444,7 @@ bitmap(char* title)
 				return (NULL);
 			}
 			// else simply retry
-		}
-		else {
+		} else {
 			i++;
 			s += bf;
 		}
@@ -479,8 +477,7 @@ bitmap(char* title)
 		window->Lock();
 		me.SendMessage(msg);
 		window->Unlock();
-	}
-	else {
+	} else {
 		window->Lock();
 		window->fAbort->SetEnabled(false);
 		window->Unlock();

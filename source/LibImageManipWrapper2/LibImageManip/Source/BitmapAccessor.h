@@ -31,7 +31,8 @@
 
 
 // This is the abstract base class that is used for the interface
-class _IMPEXP_IMAGEMANIP BitmapAccessor {
+class _IMPEXP_IMAGEMANIP BitmapAccessor
+{
   public:
 	virtual ~BitmapAccessor();
 	virtual bool IsValid() = 0;

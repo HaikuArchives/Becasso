@@ -226,8 +226,7 @@ VideoConsumer::CreateBuffers(const media_format& with_format)
 				ERROR("VideoConsumer::CreateBuffers - ERROR ADDING BUFFER TO GROUP\n");
 				return status;
 			} // else PROGRESS("VideoConsumer::CreateBuffers - SUCCESSFUL ADD BUFFER TO GROUP\n");
-		}
-		else {
+		} else {
 			ERROR(
 				"VideoConsumer::CreateBuffers - ERROR CREATING VIDEO RING BUFFER: %08lx\n", status
 			);
@@ -244,8 +243,7 @@ VideoConsumer::CreateBuffers(const media_format& with_format)
 			if (buffList[j] != NULL) {
 				mBufferMap[j] = buffList[j];
 				//				PROGRESS(" j = %d buffer = %08lx\n", j, mBufferMap[j]);
-			}
-			else {
+			} else {
 				ERROR("VideoConsumer::CreateBuffers ERROR MAPPING RING BUFFER\n");
 				return B_ERROR;
 			}
@@ -365,8 +363,7 @@ VideoConsumer::GetNextInput(int32* cookie, media_input* out_input)
 		*out_input = mIn;
 		(*cookie)++;
 		return B_OK;
-	}
-	else {
+	} else {
 		//		ERROR("VideoConsumer::GetNextInput - - BAD INDEX\n");
 		return B_MEDIA_BAD_DESTINATION;
 	}
@@ -488,12 +485,10 @@ VideoConsumer::HandleEvent(const media_timed_event* event, bigtime_t lateness, b
 					fLastIndex = index;
 					mWindow->Unlock();
 				}
-			}
-			else
+			} else
 				PROGRESS("VidConsumer::HandleEvent - DROPPED FRAME\n");
 			buffer->Recycle();
-		}
-		else
+		} else
 			buffer->Recycle();
 		break;
 	default:
@@ -528,16 +523,14 @@ VideoConsumer::LocalSave(char* filename, BBitmap* bitmap)
 			err = SetFileType(output, mTranslator, mImageFormat);
 			if (err != B_OK)
 				printf("Error setting type of output file");
-		}
-		else {
+		} else {
 			printf("Error writing output file");
 		}
 		input.DetachBitmap(&bitmap);
 		output->Unset();
 		delete output;
 		return B_OK;
-	}
-	else {
+	} else {
 		printf("Error creating output file");
 		return B_ERROR;
 	}

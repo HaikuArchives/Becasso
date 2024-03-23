@@ -45,10 +45,9 @@ AddOn::AddOn(BEntry entry)
 				fprintf(stderr, "Problems finding addon_open routine in %s\n", path.Path());
 			throw(1);
 		}
-	}
-	else if (get_image_symbol(
-				 fAddOnID, "addon_make_config", B_SYMBOL_TYPE_TEXT, (void**)&addon_make_config
-			 )) {
+	} else if (get_image_symbol(
+				   fAddOnID, "addon_make_config", B_SYMBOL_TYPE_TEXT, (void**)&addon_make_config
+			   )) {
 		if (VerbAddOns)
 			fprintf(stderr, "Problems finding addon_make_config routine in %s\n", path.Path());
 		throw(1);
@@ -186,8 +185,7 @@ AddOn::SetTargetOfControlsRecurse(BView* target, BView* view)
 			if (DebugLevel > 2)
 				printf("setting target of control %s\n", control->Name());
 			control->SetTarget(target);
-		}
-		else if (DebugLevel > 2)
+		} else if (DebugLevel > 2)
 			printf("skipping target for control %s\n", control->Name());
 		return;
 	}

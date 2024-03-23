@@ -8,7 +8,8 @@
 #include "PicMenu.h"
 #include "HelpView.h"
 
-class PicMenuButton : public BPictureButton {
+class PicMenuButton : public BPictureButton
+{
   public:
 	PicMenuButton(BRect frame, const char* name, BPicture* p);
 	virtual ~PicMenuButton();

@@ -68,9 +68,14 @@
 #include <Locker.h>
 #include <stdlib.h>
 
-enum { kLoopForever = -1, kDontLoop = 0 };
+enum
+{
+	kLoopForever = -1,
+	kDontLoop = 0
+};
 
-class SoundEffect {
+class SoundEffect
+{
   public:
 	/* set swap_data to true if data is in different byte order than host */
 	SoundEffect(bool swap_data, short* pointer, int numFrames, int nLoops = kDontLoop);
@@ -84,7 +89,8 @@ class SoundEffect {
 	int fLoops;
 };
 
-class SoundEffect8_11 : public SoundEffect {
+class SoundEffect8_11 : public SoundEffect
+{
   protected:
 	/*	set toggle to true if sound is in unsigned char format		*/
 	/*	this only does linear expansion - mulaw requires another subclass	*/
@@ -97,14 +103,16 @@ class SoundEffect8_11 : public SoundEffect {
 
 typedef int effect_id;
 
-enum {				  /*	reasons for SoundCompleted		*/
-	   kSoundDone,	  /*	sound played the last sample		*/
-	   kSoundLooping, /*	sound will loop to first sample	*/
-	   kSoundEvicted, /*	sound was evicted by newer sound	*/
-	   kSoundStopped  /*	sound was manually stopped			*/
+enum
+{				 /*	reasons for SoundCompleted		*/
+  kSoundDone,	 /*	sound played the last sample		*/
+  kSoundLooping, /*	sound will loop to first sample	*/
+  kSoundEvicted, /*	sound was evicted by newer sound	*/
+  kSoundStopped	 /*	sound was manually stopped			*/
 };
 
-class EffectsPlayer : public BSubscriber {
+class EffectsPlayer : public BSubscriber
+{
   public:
 	EffectsPlayer(int backgroundVolume = 0, int nChannels = 8);
 	~EffectsPlayer();
@@ -137,7 +145,8 @@ class EffectsPlayer : public BSubscriber {
 	int fBGVolume;
 	effect_id fNextEffect;
 
-	struct PlayingEffect {
+	struct PlayingEffect
+	{
 		short* data;
 		int frames;
 		int offset;

@@ -59,8 +59,7 @@ TabView::Draw(BRect update)
 			StrokeLine(
 				BPoint(xpos + 1, TAB_HEIGHT), BPoint(xpos + width + _HTABHEIGHT, TAB_HEIGHT)
 			);
-		}
-		else if (current == i + 1) {
+		} else if (current == i + 1) {
 			SetHighColor(Grey30);
 			StrokeLine(BPoint(xpos - _HTABHEIGHT, TAB_HEIGHT), BPoint(xpos + width, TAB_HEIGHT));
 		}
@@ -113,8 +112,7 @@ TabView::KeyDown(const char* bytes, int32 numBytes)
 		default:
 			inherited::KeyDown(bytes, numBytes);
 		}
-	}
-	else
+	} else
 		inherited::KeyDown(bytes, numBytes);
 }
 
@@ -152,8 +150,7 @@ TabView::AddView(BView* view, const char* tab)
 			RaiseView(0);
 		}
 		index++;
-	}
-	else
+	} else
 		fprintf(stderr, "More than %i Views in a TabView\n", MAX_VIEWS);
 }
 

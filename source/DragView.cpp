@@ -37,8 +37,7 @@ MouseThread(void* data)
 						This->goAwayState = 0;
 						This->Draw(goAwayRect);
 					}
-				}
-				else if (This->goAwayState != 1) {
+				} else if (This->goAwayState != 1) {
 					This->goAwayState = 1;
 					This->Draw(goAwayRect);
 				}

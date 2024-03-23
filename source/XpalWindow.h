@@ -6,7 +6,8 @@
 #include <CheckBox.h>
 #include "Slider.h"
 
-class XpalWindow : public BWindow {
+class XpalWindow : public BWindow
+{
   public:
 	XpalWindow(BRect rect, const char* name, BMessenger* target);
 	virtual ~XpalWindow();

@@ -3,7 +3,8 @@
 
 #include <Point.h>
 
-class LPoint {
+class LPoint
+{
   public:
 	LPoint(){};
 
@@ -28,7 +29,8 @@ class LPoint {
 
 // Note: This is really a FIFO, not a LIFO stack.
 
-class PointStack {
+class PointStack
+{
   public:
 	PointStack();
 	PointStack(LPoint p);

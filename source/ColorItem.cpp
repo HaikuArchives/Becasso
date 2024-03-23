@@ -37,8 +37,7 @@ ColorItem::Draw()
 		Menu()->SetHighColor(oldHi);
 		frame.InsetBy(1, 1);
 		Menu()->FillRect(frame, B_SOLID_LOW);
-	}
-	else
+	} else
 		Menu()->FillRect(frame, B_SOLID_LOW);
 
 	Menu()->SetLowColor(oldLo);

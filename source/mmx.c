@@ -160,8 +160,7 @@ mmx_alpha_blend(bgra_pixel* src, bgra_pixel* dest, int ga, int w, int l, int t, 
 		else
 			mmx_alpha_blend_diff_ga(ga_64, s, d, height, difference, width);
 #endif
-	}
-	else {
+	} else {
 #if defined(__MWCC__)
 		uint64 ff_64 = 0x00FF00FF00FF00FFLL;
 		uint64 z_64 = 0x0000000000000000LL;
