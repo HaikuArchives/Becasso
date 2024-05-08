@@ -1,12 +1,11 @@
 #include "Dial.h"
-#include <string.h>
 #include <MessageFilter.h>
+#include <string.h>
 #include "Colors.h"
 
 public:
 EnterFilter(BHandler* handler);
-virtual filter_result
-Filter(BMessage* message, BHandler** target);
+virtual filter_result Filter(BMessage* message, BHandler** target);
 
 private:
 BHandler* fHandler;
@@ -43,7 +42,10 @@ Dial::Dial(BRect frame, const char* name, int type, BMessage* msg)
 	fType = type;
 }
 
-Dial::~Dial() { delete msg; }
+Dial::~Dial()
+{
+	delete msg;
+}
 
 void
 Dial::MouseDown(BPoint point)

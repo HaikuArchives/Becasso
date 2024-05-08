@@ -1,9 +1,9 @@
 #ifndef ATTRIBCIRCLE_H
 #define ATTRIBCIRCLE_H
 
-#include "AttribView.h"
 #include <Message.h>
 #include <PictureButton.h>
+#include "AttribView.h"
 #include "Slider.h"
 
 #define CIRCLE_OUTLINE 1
@@ -17,15 +17,13 @@
 #define PROP_TYPE 2
 #define PROP_FIXPOINT 3
 
-class AttribCircle : public AttribView
-{
-  public:
+class AttribCircle : public AttribView {
+public:
 	AttribCircle();
 	virtual ~AttribCircle();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 	float getPenSize() { return fPenSize; };
@@ -34,7 +32,7 @@ class AttribCircle : public AttribView
 
 	int getFirst() { return fFirst; };
 
-  private:
+private:
 	typedef AttribView inherited;
 	float fPenSize;
 	int fType;

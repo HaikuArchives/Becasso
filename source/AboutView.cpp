@@ -1,8 +1,8 @@
 #include "AboutView.h"
-#include "Colors.h"
 #include <Application.h>
 #include <stdio.h>
 #include <string.h>
+#include "Colors.h"
 #include "Settings.h"
 
 SAboutView::SAboutView(BRect rect, BBitmap* becasso, BBitmap* sum, bool startup)
@@ -19,8 +19,7 @@ SAboutView::SAboutView(BRect rect, BBitmap* becasso, BBitmap* sum, bool startup)
 		url =
 			new BButton(BRect(126, 178, 196, 196), "url", lstring(1, "URL"), new BMessage('aURL'));
 		doc = new BButton(
-			BRect(204, 178, 274, 196), "doc", lstring(2, "Manual"), new BMessage('aDOC')
-		);
+			BRect(204, 178, 274, 196), "doc", lstring(2, "Manual"), new BMessage('aDOC'));
 		url->SetTarget(be_app);
 		doc->SetTarget(be_app);
 		AddChild(url);

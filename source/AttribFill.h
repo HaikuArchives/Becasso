@@ -1,9 +1,9 @@
 #ifndef ATTRIBFILL_H
 #define ATTRIBFILL_H
 
-#include "AttribView.h"
 #include <Message.h>
 #include <RadioButton.h>
+#include "AttribView.h"
 #include "Slider.h"
 
 #define FILLTOL_TOL 0
@@ -15,15 +15,13 @@
 #define PROP_DGREEN 3
 #define PROP_DBLUE 4
 
-class AttribFill : public AttribView
-{
-  public:
+class AttribFill : public AttribView {
+public:
 	AttribFill();
 	virtual ~AttribFill();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 	int getTolMode() { return fTolMode; };
@@ -32,7 +30,7 @@ class AttribFill : public AttribView
 
 	rgb_color getToleranceRGB() { return fToleranceRGB; };
 
-  private:
+private:
 	typedef AttribView inherited;
 	int fTolMode;
 	float fTolerance;

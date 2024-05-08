@@ -1,19 +1,19 @@
-#include <math.h>
-#include <Screen.h>
 #include "ColorMenuButton.h"
-#include "ColorMenu.h"
-#include "Colors.h"
-#include "PatternMenuButton.h" // I'm not too happy about this.
-#include "ColorWindow.h"
-#include "BitmapStuff.h"
-#include "hsv.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <Application.h>
 #include <File.h>
 #include <Path.h>
+#include <Screen.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <Application.h>
 #include "BecassoAddOn.h"
+#include "BitmapStuff.h"
+#include "ColorMenu.h"
+#include "ColorWindow.h"
+#include "Colors.h"
+#include "PatternMenuButton.h"	// I'm not too happy about this.
+#include "hsv.h"
 
 #define OPEN_RAD 4
 
@@ -42,7 +42,7 @@ ColorMenuButton::ColorMenuButton(const char* ident, BRect frame, const char* nam
 	}
 	fW = frame.IntegerWidth();
 	fH = frame.IntegerWidth();
-	alpha = 255; // Note: alpha = opacity!
+	alpha = 255;  // Note: alpha = opacity!
 	get_click_speed(&dcspeed);
 	click = 1;
 	lock = new BLocker();
@@ -91,8 +91,7 @@ ColorMenuButton::MouseDown(BPoint point)
 		}
 		if (click != 2) {
 			BRect openRect = BRect(
-				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD
-			);
+				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD);
 			menu->Show();
 			if ((mselected = menu->Track(true, &openRect)) != NULL) {
 				index = menu->IndexOf(mselected);
@@ -183,17 +182,19 @@ ColorMenuButton::Draw(BRect update)
 	delete v;
 
 	switch (button->ColorSpace()) {
-	case B_COLOR_8_BIT: {
-		FSDither(b32, button, update);
-		delete b32;
-		break;
-	}
-	default: {
-		button->Lock();
-		delete button;
-		button = b32;
-		break;
-	}
+		case B_COLOR_8_BIT:
+		{
+			FSDither(b32, button, update);
+			delete b32;
+			break;
+		}
+		default:
+		{
+			button->Lock();
+			delete button;
+			button = b32;
+			break;
+		}
 	}
 
 	update.right--;
@@ -211,11 +212,9 @@ bool
 ColorMenuButton::approx(rgb_color a, rgb_color b)
 // Note: Doesn't check for alpha.
 {
-	return (
-		(abs(int(a.red) - b.red) <= rgb_tolerance.red) &&
-		(abs(int(a.green) - b.green) <= rgb_tolerance.green) &&
-		(abs(int(a.blue) - b.blue) <= rgb_tolerance.blue)
-	);
+	return ((abs(int(a.red) - b.red) <= rgb_tolerance.red) &&
+			(abs(int(a.green) - b.green) <= rgb_tolerance.green) &&
+			(abs(int(a.blue) - b.blue) <= rgb_tolerance.blue));
 }
 
 float
@@ -255,8 +254,7 @@ ColorMenuButton::palette()
 #define BLUE_WEIGHT 1
 #endif
 
-typedef struct
-{
+typedef struct {
 	uint16 rmin, rmax;
 	uint16 gmin, gmax;
 	uint16 bmin, bmax;
@@ -264,12 +262,9 @@ typedef struct
 	uint32 num_colors;
 } CMB_box;
 
-void
-trim_box(CMB_box* b, uint32* histogram);
-CMB_box*
-biggest_population(CMB_box* b, int boxindex);
-CMB_box*
-biggest_volume(CMB_box* b, int boxindex);
+void trim_box(CMB_box* b, uint32* histogram);
+CMB_box* biggest_population(CMB_box* b, int boxindex);
+CMB_box* biggest_volume(CMB_box* b, int boxindex);
 
 void
 trim_box(CMB_box* box, uint32* histogram)
@@ -384,7 +379,7 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 
 	// uint32 histogram[CMB_R][CMB_G][CMB_B];
 	uint32* histogram = new uint32[CMB_R * CMB_G * CMB_B];
-	memset(histogram, 0, CMB_R * CMB_G * CMB_B * 4); // otherwise strange errors with MALLOC_DEBUG!
+	memset(histogram, 0, CMB_R * CMB_G * CMB_B * 4);  // otherwise strange errors with MALLOC_DEBUG!
 
 	uint32 dtable[C_V_NUM * C_H_NUM];
 	int cindex = 0;
@@ -396,16 +391,16 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 	for (uint32 p = (l->Bounds().IntegerWidth() + 1) * (l->Bounds().IntegerHeight() + 1); p > 0;
 		 p--) {
 		bgra_pixel pixel = *(++s);
-		if (!needtoquantize) // Maybe we can get away with the existing colors...
+		if (!needtoquantize)  // Maybe we can get away with the existing colors...
 		{
 			int j = 0;
 			while (pixel != dtable[j] && j < cindex)
 				j++;
-			if (j == cindex) // New color
+			if (j == cindex)  // New color
 			{
 				dtable[cindex++] = pixel;
 				if (cindex >= max_col)
-					needtoquantize = true; // Too many colors.
+					needtoquantize = true;	// Too many colors.
 			}
 		}
 
@@ -464,15 +459,13 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 				biggest = biggest_volume(boxes, boxindex);
 
 			if (!biggest)
-				break; // No more splittable boxes left...
-					   // (This shouldn't happen, because we test for #colors <= max_col first)
+				break;	// No more splittable boxes left...
+						// (This shouldn't happen, because we test for #colors <= max_col first)
 
 			if (DebugLevel > 2)
-				printf(
-					"Biggest: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n", biggest->num_colors,
-					biggest->rmin, biggest->rmax, biggest->gmin, biggest->gmax, biggest->bmin,
-					biggest->bmax
-				);
+				printf("Biggest: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+					biggest->num_colors, biggest->rmin, biggest->rmax, biggest->gmin, biggest->gmax,
+					biggest->bmin, biggest->bmax);
 
 			CMB_box* n = &boxes[boxindex++];
 			n->rmin = biggest->rmin;
@@ -491,13 +484,13 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 			float sb = gd * BLUE_WEIGHT;
 
 			if (sr > sg) {
-				if (sr > sb) // red wins
+				if (sr > sb)  // red wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on red\n");
 					n->rmin = n->rmax - rd / 2;
 					biggest->rmax = n->rmin - 1;
-				} else // blue wins
+				} else	// blue wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on blue\n");
@@ -505,13 +498,13 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 					biggest->bmax = n->bmin - 1;
 				}
 			} else {
-				if (sg > sb) // green wins
+				if (sg > sb)  // green wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on green\n");
 					n->gmin = n->gmax - gd / 2;
 					biggest->gmax = n->gmin - 1;
-				} else // blue wins
+				} else	// blue wins
 				{
 					if (DebugLevel > 2)
 						printf("Split on blue\n");
@@ -522,16 +515,12 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 			trim_box(n, histogram);
 			trim_box(biggest, histogram);
 			if (DebugLevel > 2)
-				printf(
-					"  After split: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+				printf("  After split: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
 					biggest->num_colors, biggest->rmin, biggest->rmax, biggest->gmin, biggest->gmax,
-					biggest->bmin, biggest->bmax
-				);
+					biggest->bmin, biggest->bmax);
 			if (DebugLevel > 2)
-				printf(
-					"  And:         %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n", n->num_colors,
-					n->rmin, n->rmax, n->gmin, n->gmax, n->bmin, n->bmax
-				);
+				printf("  And:         %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+					n->num_colors, n->rmin, n->rmax, n->gmin, n->gmax, n->bmin, n->bmax);
 		}
 
 		if (DebugLevel)
@@ -541,11 +530,9 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 		// reasonable averages for the box colors.
 		for (int j = 0; j < max_col; j++) {
 			if (DebugLevel > 2)
-				printf(
-					"Box %i: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n", j, boxes[j].num_colors,
-					boxes[j].rmin, boxes[j].rmax, boxes[j].gmin, boxes[j].gmax, boxes[j].bmin,
-					boxes[j].bmax
-				);
+				printf("Box %i: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n", j,
+					boxes[j].num_colors, boxes[j].rmin, boxes[j].rmax, boxes[j].gmin, boxes[j].gmax,
+					boxes[j].bmin, boxes[j].bmax);
 			uint32 fr, fg, fb;
 			fr = fg = fb = 0;
 			uint32 tot = 0;
@@ -560,7 +547,7 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 						fb += w * (b << 3);
 					}
 			r = g = b = 0;
-			if (tot != 0) // This shouldn't fail, actually.
+			if (tot != 0)  // This shouldn't fail, actually.
 			{
 				r = fr / tot;
 				g = fg / tot;
@@ -597,7 +584,7 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 int
 ColorMenuButton::getIndexOfClosest(rgb_color c)
 {
-	float minc = 255; // Worst case...
+	float minc = 255;  // Worst case...
 	float cd;
 	int i = 0;
 	int ind = 0;
@@ -725,7 +712,7 @@ ColorMenuButton::setTolerance(float _t)
 void
 ColorMenuButton::setAlpha(uchar a)
 {
-	alpha = a; // Note: The Color Editor gives us opacity (of course!)
+	alpha = a;	// Note: The Color Editor gives us opacity (of course!)
 }
 
 float
@@ -794,7 +781,7 @@ ColorMenuButton::Load(BEntry entry)
 	for (int i = 0; i < C_V_NUM * C_H_NUM; i++) {
 		rgb_color c;
 		if (fgets(line, 80, fp)) {
-			if (line[0] != '#') // Comment line
+			if (line[0] != '#')	 // Comment line
 			{
 				char* endp = line;
 				c.red = clipchar(int(strtol(endp, &endp, 0)));
@@ -889,35 +876,37 @@ void
 ColorMenuButton::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case B_PASTE: {
-		if (msg->WasDropped()) {
-			rgb_color* dropped;
-			long dummy;
-			msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy);
-			set(*dropped, false);
-		} else
-			fprintf(stderr, "ColorMenuButton just received a non-dropped B_PASTE?!\n");
-		break;
-	}
-	case B_SIMPLE_DATA: {
-		entry_ref ref;
-		if (msg->FindRef("refs", &ref) == B_NO_ERROR) {
-			BNode node = BNode(&ref);
-			ssize_t s;
-			char buffer[1024];
-			if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
-				buffer[s] = 0;
-				if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
-					BEntry entry = BEntry(&ref);
-					Load(entry);
-					break;
+		case B_PASTE:
+		{
+			if (msg->WasDropped()) {
+				rgb_color* dropped;
+				long dummy;
+				msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy);
+				set(*dropped, false);
+			} else
+				fprintf(stderr, "ColorMenuButton just received a non-dropped B_PASTE?!\n");
+			break;
+		}
+		case B_SIMPLE_DATA:
+		{
+			entry_ref ref;
+			if (msg->FindRef("refs", &ref) == B_NO_ERROR) {
+				BNode node = BNode(&ref);
+				ssize_t s;
+				char buffer[1024];
+				if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
+					buffer[s] = 0;
+					if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
+						BEntry entry = BEntry(&ref);
+						Load(entry);
+						break;
+					}
 				}
 			}
+			// Note: Fall through to default!
 		}
-		// Note: Fall through to default!
-	}
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

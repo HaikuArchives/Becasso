@@ -4,16 +4,14 @@
 #include <MenuItem.h>
 #include <Picture.h>
 #include <Window.h>
-#include "HelpView.h"
-#include "AttribWindow.h"
 #include "AttribView.h"
+#include "AttribWindow.h"
+#include "HelpView.h"
 
-class PicItem : public BMenuItem
-{
-  public:
+class PicItem : public BMenuItem {
+public:
 	PicItem(
-		const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help
-	);
+		const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help);
 	virtual ~PicItem();
 
 	BPicture* getPicture() { return picture; };
@@ -27,10 +25,10 @@ class PicItem : public BMenuItem
 	virtual void Draw();
 
 
-  protected:
+protected:
 	virtual void GetContentSize(float* width, float* height);
 
-  private:
+private:
 	typedef BMenuItem inherited;
 	char* help;
 	BPicture* picture;

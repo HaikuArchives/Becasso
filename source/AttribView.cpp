@@ -18,8 +18,7 @@ AttribView::MessageReceived(BMessage* message)
 
 BHandler*
 AttribView::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	return inherited::ResolveSpecifier(message, index, specifier, command, property);
 }

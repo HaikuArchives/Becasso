@@ -1,20 +1,19 @@
 #ifndef _XPALWINDOW_H
 #define _XPALWINDOW_H
 
-#include <Window.h>
-#include <Messenger.h>
 #include <CheckBox.h>
+#include <Messenger.h>
+#include <Window.h>
 #include "Slider.h"
 
-class XpalWindow : public BWindow
-{
-  public:
+class XpalWindow : public BWindow {
+public:
 	XpalWindow(BRect rect, const char* name, BMessenger* target);
 	virtual ~XpalWindow();
 	virtual void MessageReceived(BMessage* message);
 	// int32		 Go ();
 
-  private:
+private:
 	typedef BWindow inherited;
 	int fNum;
 	BMessenger* fTarget;

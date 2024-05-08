@@ -1,22 +1,20 @@
-#include <TextControl.h>
+#include "ResizeWindow.h"
 #include <Box.h>
-#include <Rect.h>
-#include <View.h>
 #include <Button.h>
-#include <PopUpMenu.h>
 #include <LayoutBuilder.h>
 #include <MenuField.h>
+#include <PopUpMenu.h>
+#include <Rect.h>
 #include <StringView.h>
-#include "ResizeWindow.h"
-#include "Colors.h"
+#include <TextControl.h>
+#include <View.h>
 #include <stdio.h>
+#include "Colors.h"
 #include "Settings.h"
 
 ResizeWindow::ResizeWindow(CanvasWindow* target, const char* title, int32 _h, int32 _w)
-	: BWindow(
-		  BRect(100, 100, 300, 248), title, B_TITLED_WINDOW,
-		  B_NOT_RESIZABLE | B_AUTO_UPDATE_SIZE_LIMITS
-	  )
+	: BWindow(BRect(100, 100, 300, 248), title, B_TITLED_WINDOW,
+		  B_NOT_RESIZABLE | B_AUTO_UPDATE_SIZE_LIMITS)
 {
 	fTarget = target;
 	fRez = 72;
@@ -68,11 +66,9 @@ ResizeWindow::ResizeWindow(CanvasWindow* target, const char* title, int32 _h, in
 	BView* view = new BView("SW bg", B_WILL_DRAW);
 	view->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
-	BLayoutBuilder::Grid<>(view, 2.0, 2.0) // FIX
-		.SetInsets(
-			B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
-			B_USE_DEFAULT_SPACING
-		)
+	BLayoutBuilder::Grid<>(view, 2.0, 2.0)	// FIX
+		.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
+			B_USE_DEFAULT_SPACING)
 		.Add(newWidth->CreateLabelLayoutItem(), 0, 0)
 		.Add(newWidth->CreateTextViewLayoutItem(), 1, 0)
 		.Add(hMF, 2, 0)
@@ -89,10 +85,8 @@ ResizeWindow::ResizeWindow(CanvasWindow* target, const char* title, int32 _h, in
 	open->MakeDefault(true);
 
 	BLayoutBuilder::Group<>(this, B_VERTICAL, B_USE_DEFAULT_SPACING)
-		.SetInsets(
-			B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
-			B_USE_DEFAULT_SPACING
-		)
+		.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
+			B_USE_DEFAULT_SPACING)
 		.Add(text)
 		.AddGroup(B_HORIZONTAL)
 		.AddGlue()
@@ -109,40 +103,40 @@ ResizeWindow::recalc()
 {
 	BString h, v;
 	switch (fHUnit) {
-	case UNIT_PIXELS:
-		fNumberFormat.Format(h, fH);
-		newWidth->SetText(h);
-		break;
-	case UNIT_INCH:
-		fNumberFormat.SetPrecision(2);
-		fNumberFormat.Format(h, (double)(fH / fRez + .005));
-		newWidth->SetText(h);
-		break;
-	case UNIT_CM:
-		fNumberFormat.SetPrecision(2);
-		fNumberFormat.Format(h, (double)(fH / fRez * 2.54 + .005));
-		newWidth->SetText(h);
-		break;
-	default:
-		fprintf(stderr, "SizeWindow: Unknown Unit (H)\n");
+		case UNIT_PIXELS:
+			fNumberFormat.Format(h, fH);
+			newWidth->SetText(h);
+			break;
+		case UNIT_INCH:
+			fNumberFormat.SetPrecision(2);
+			fNumberFormat.Format(h, (double)(fH / fRez + .005));
+			newWidth->SetText(h);
+			break;
+		case UNIT_CM:
+			fNumberFormat.SetPrecision(2);
+			fNumberFormat.Format(h, (double)(fH / fRez * 2.54 + .005));
+			newWidth->SetText(h);
+			break;
+		default:
+			fprintf(stderr, "SizeWindow: Unknown Unit (H)\n");
 	}
 	switch (fVUnit) {
-	case UNIT_PIXELS:
-		fNumberFormat.Format(v, fV);
-		newHeight->SetText(v);
-		break;
-	case UNIT_INCH:
-		fNumberFormat.SetPrecision(2);
-		fNumberFormat.Format(v, (double)(fV / fRez + .005));
-		newHeight->SetText(v);
-		break;
-	case UNIT_CM:
-		fNumberFormat.SetPrecision(2);
-		fNumberFormat.Format(v, (double)(fV / fRez * 2.54 + .005));
-		newHeight->SetText(v);
-		break;
-	default:
-		fprintf(stderr, "SizeWindow: Unknown Unit (V)\n");
+		case UNIT_PIXELS:
+			fNumberFormat.Format(v, fV);
+			newHeight->SetText(v);
+			break;
+		case UNIT_INCH:
+			fNumberFormat.SetPrecision(2);
+			fNumberFormat.Format(v, (double)(fV / fRez + .005));
+			newHeight->SetText(v);
+			break;
+		case UNIT_CM:
+			fNumberFormat.SetPrecision(2);
+			fNumberFormat.Format(v, (double)(fV / fRez * 2.54 + .005));
+			newHeight->SetText(v);
+			break;
+		default:
+			fprintf(stderr, "SizeWindow: Unknown Unit (V)\n");
 	}
 }
 
@@ -150,27 +144,27 @@ void
 ResizeWindow::readvalues()
 {
 	switch (fHUnit) {
-	case UNIT_PIXELS:
-		fH = atoi(newWidth->Text());
-		break;
-	case UNIT_INCH:
-		fH = int32(fRez * atof(newWidth->Text()));
-		break;
-	case UNIT_CM:
-		fH = int32(fRez / 2.54 * atof(newWidth->Text()));
-		break;
+		case UNIT_PIXELS:
+			fH = atoi(newWidth->Text());
+			break;
+		case UNIT_INCH:
+			fH = int32(fRez * atof(newWidth->Text()));
+			break;
+		case UNIT_CM:
+			fH = int32(fRez / 2.54 * atof(newWidth->Text()));
+			break;
 	}
 
 	switch (fVUnit) {
-	case UNIT_PIXELS:
-		fV = atoi(newHeight->Text());
-		break;
-	case UNIT_INCH:
-		fV = int32(fRez * atof(newHeight->Text()));
-		break;
-	case UNIT_CM:
-		fV = int32(fRez / 2.54 * atof(newHeight->Text()));
-		break;
+		case UNIT_PIXELS:
+			fV = atoi(newHeight->Text());
+			break;
+		case UNIT_INCH:
+			fV = int32(fRez * atof(newHeight->Text()));
+			break;
+		case UNIT_CM:
+			fV = int32(fRez / 2.54 * atof(newHeight->Text()));
+			break;
 	}
 }
 
@@ -178,52 +172,53 @@ void
 ResizeWindow::MessageReceived(BMessage* message)
 {
 	switch (message->what) {
-	case 'RScn':
-		Quit();
-		break;
-	case 'RSok': {
-		readvalues();
-		BMessage msg('rszt');
-		msg.AddInt32("width", fH);
-		msg.AddInt32("height", fV);
-		fTarget->PostMessage(&msg);
-		Quit();
-		break;
-	}
-	case 'h_px':
-		fHUnit = UNIT_PIXELS;
-		recalc();
-		break;
-	case 'h_in':
-		fHUnit = UNIT_INCH;
-		recalc();
-		break;
-	case 'h_cm':
-		fHUnit = UNIT_CM;
-		recalc();
-		break;
-	case 'v_px':
-		fVUnit = UNIT_PIXELS;
-		recalc();
-		break;
-	case 'v_in':
-		fVUnit = UNIT_INCH;
-		recalc();
-		break;
-	case 'v_cm':
-		fVUnit = UNIT_CM;
-		recalc();
-		break;
-	case 'Swdt':
-	case 'Shgt':
-		readvalues();
-		break;
-	case 'Srez':
-		fRez = atoi(rDPI->Text());
-		readvalues();
-		break;
-	default:
-		inherited::MessageReceived(message);
-		break;
+		case 'RScn':
+			Quit();
+			break;
+		case 'RSok':
+		{
+			readvalues();
+			BMessage msg('rszt');
+			msg.AddInt32("width", fH);
+			msg.AddInt32("height", fV);
+			fTarget->PostMessage(&msg);
+			Quit();
+			break;
+		}
+		case 'h_px':
+			fHUnit = UNIT_PIXELS;
+			recalc();
+			break;
+		case 'h_in':
+			fHUnit = UNIT_INCH;
+			recalc();
+			break;
+		case 'h_cm':
+			fHUnit = UNIT_CM;
+			recalc();
+			break;
+		case 'v_px':
+			fVUnit = UNIT_PIXELS;
+			recalc();
+			break;
+		case 'v_in':
+			fVUnit = UNIT_INCH;
+			recalc();
+			break;
+		case 'v_cm':
+			fVUnit = UNIT_CM;
+			recalc();
+			break;
+		case 'Swdt':
+		case 'Shgt':
+			readvalues();
+			break;
+		case 'Srez':
+			fRez = atoi(rDPI->Text());
+			readvalues();
+			break;
+		default:
+			inherited::MessageReceived(message);
+			break;
 	}
 }

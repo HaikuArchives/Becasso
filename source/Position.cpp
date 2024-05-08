@@ -1,6 +1,6 @@
-#include "Tablet.h"
 #include "CanvasView.h"
 #include "SView.h"
+#include "Tablet.h"
 
 #if 1
 

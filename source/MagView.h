@@ -1,24 +1,22 @@
 #ifndef _MAGVIEW_H
 #define _MAGVIEW_H
 
-#include <View.h>
-#include <Rect.h>
 #include <Point.h>
+#include <Rect.h>
 #include <ScrollBar.h>
+#include <View.h>
 #include "CanvasView.h"
 
 #define MAX_MAG_UNDO 512
 
-struct MagUndoEntry
-{
+struct MagUndoEntry {
 	uint16 x;
 	uint16 y;
 	uint32 c;
 };
 
-class MagView : public BView
-{
-  public:
+class MagView : public BView {
+public:
 	MagView(BRect frame, const char* name, CanvasView* _myView);
 	virtual ~MagView();
 	virtual void Draw(BRect updateRect);
@@ -39,7 +37,7 @@ class MagView : public BView
 	status_t Undo();
 	status_t Redo();
 
-  private:
+private:
 	void SetupUndo(BPoint p, uint32 c);
 
 	float zoom;

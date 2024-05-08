@@ -1,12 +1,12 @@
 #ifndef ATTRIBTEXT_H
 #define ATTRIBTEXT_H
 
-#include "AttribView.h"
-#include <Message.h>
-#include <Font.h>
-#include <PopUpMenu.h>
 #include <CheckBox.h>
+#include <Font.h>
+#include <Message.h>
+#include <PopUpMenu.h>
 #include <TextView.h>
+#include "AttribView.h"
 #include "Slider.h"
 
 #define DEMO_TEXT "Becasso"
@@ -19,15 +19,13 @@
 #define PROP_ANTIALIAS 5
 #define PROP_TEXT 6
 
-class AttribText : public AttribView
-{
-  public:
+class AttribText : public AttribView {
+public:
 	AttribText();
 	virtual ~AttribText();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 	virtual void AttachedToWindow();
 
@@ -35,7 +33,7 @@ class AttribText : public AttribView
 
 	const char* getText() { return fText->Text(); };
 
-  private:
+private:
 	typedef AttribView inherited;
 	BFont fFont;
 	font_family* families;

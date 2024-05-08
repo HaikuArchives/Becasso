@@ -21,24 +21,24 @@ verbose(int level, const char* fmt, ...)
 				continue;
 			}
 			switch (*++p) {
-			case 'd':
-				ivalue = va_arg(ap, int);
-				fprintf(stderr, "%d", ivalue);
-				break;
+				case 'd':
+					ivalue = va_arg(ap, int);
+					fprintf(stderr, "%d", ivalue);
+					break;
 
-				/*case 'f':
-					dvalue = va_arg (ap, float);
-					fprintf (stderr, "%d", dvalue);
-					break; */
+					/*case 'f':
+						dvalue = va_arg (ap, float);
+						fprintf (stderr, "%d", dvalue);
+						break; */
 
-			case 's':
-				for (svalue = va_arg(ap, char*); *svalue; svalue++)
-					putc(*svalue, stderr);
-				break;
+				case 's':
+					for (svalue = va_arg(ap, char*); *svalue; svalue++)
+						putc(*svalue, stderr);
+					break;
 
-			default:
-				putc(*p, stderr);
-				break;
+				default:
+					putc(*p, stderr);
+					break;
 			}
 			va_end(ap);
 		}

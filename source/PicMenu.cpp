@@ -1,14 +1,14 @@
 #include "PicMenu.h"
-#include "PicItem.h"
-#include "PicMenuView.h"
-#include "BitmapView.h"
-#include "BecassoAddOn.h" // for some defines
-#include <Roster.h>
 #include <Application.h>
-#include <Resources.h>
 #include <Bitmap.h>
+#include <Resources.h>
+#include <Roster.h>
 #include <Screen.h>
 #include <stdio.h>
+#include "BecassoAddOn.h"  // for some defines
+#include "BitmapView.h"
+#include "PicItem.h"
+#include "PicMenuView.h"
 #include "Settings.h"
 
 PicMenu::PicMenu(const char* name, BView* _view, int h, int v, float s) : BMenu(name, h * s, v * s)
@@ -89,17 +89,15 @@ PicMenu::ScreenLocation()
 
 #if defined(WINVERSION)
 
-class picTearInfo
-{
-  public:
+class picTearInfo {
+public:
 	picTearInfo(BRect r, PicMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
 	PicMenu* parent;
 	BView* someView;
 };
 
-int32
-pic_tear_drag(void* data);
+int32 pic_tear_drag(void* data);
 
 int32
 pic_tear_drag(void* data)
@@ -112,7 +110,7 @@ pic_tear_drag(void* data)
 	BView* view = tearInfo->someView;
 	// It might seem a good idea to use `menu' as the view, but
 	// this gave errors: `Method requires owner but doesn't have one'.
-	delete tearInfo; // The caller doesn't do this (race condition otherwise)
+	delete tearInfo;  // The caller doesn't do this (race condition otherwise)
 
 	//	printf ("Entering loop\n");
 	while (buttons) {
@@ -145,7 +143,7 @@ PicMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 	if (!Parent())
 		return;
 	GetMouse(&point, &buttons);
-	if (transit == B_EXITED_VIEW && buttons) // Do the tear off thing!
+	if (transit == B_EXITED_VIEW && buttons)  // Do the tear off thing!
 	{
 #if defined(EASTER_EGG_SFX)
 		extern bool EasterEgg;
@@ -227,19 +225,20 @@ void
 PicMenu::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'tear': {
-		break;
-	}
-	default:
-		// msg->PrintToStream();
-		inherited::MessageReceived(msg);
+		case 'tear':
+		{
+			break;
+		}
+		default:
+			// msg->PrintToStream();
+			inherited::MessageReceived(msg);
 	}
 }
 
 PicItem*
 PicMenu::FindMarked()
 {
-	return items[marked]; // IndexOf (inherited::FindMarked())];
+	return items[marked];  // IndexOf (inherited::FindMarked())];
 }
 
 void

@@ -1,8 +1,8 @@
 #include "Layer.h"
-#include "DModes.h"
-#include "BecassoAddOn.h"
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include "BecassoAddOn.h"
+#include "DModes.h"
 
 Layer::Layer(BRect bounds, const char* name) : BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
 {

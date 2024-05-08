@@ -3,21 +3,18 @@
 #ifndef SLIDER_H
 #define SLIDER_H
 
-#include <View.h>
-#include <Rect.h>
 #include <Bitmap.h>
 #include <Message.h>
 #include <NumberFormat.h>
+#include <Rect.h>
 #include <TextControl.h>
+#include <View.h>
 #include "Build.h"
 
-class IMPEXP Slider : public BView
-{
-  public:
-	Slider(
-		BRect frame, float sep, const char* name, float _min, float _max, float step,
-		BMessage* _msg, orientation _posture = B_HORIZONTAL, int f = 0, const char* _fmt = "%.0f"
-	);
+class IMPEXP Slider : public BView {
+public:
+	Slider(BRect frame, float sep, const char* name, float _min, float _max, float step,
+		BMessage* _msg, orientation _posture = B_HORIZONTAL, int f = 0, const char* _fmt = "%.0f");
 	virtual ~Slider();
 	// void		 ValueChanged (long newValue);
 	virtual void MouseDown(BPoint point);
@@ -30,7 +27,7 @@ class IMPEXP Slider : public BView
 	float Value();
 	void SetValue(float _v);
 
-  private:
+private:
 	typedef BView inherited;
 	void NotifyTarget();
 	float min;

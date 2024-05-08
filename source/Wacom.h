@@ -46,43 +46,37 @@ enum {
  out of driver.
 */
 
-enum ECommandSet
-{
+enum ECommandSet {
 	WT_WacomIV = 3,
 	WT_WacomIIS = 2,
 	WT_MM1201 = 1,
 	WT_BitPad = 0
 };
 
-enum EBaudRate
-{
+enum EBaudRate {
 	WT_19200 = 3,
 	WT_9600 = 2,
 	WT_4800 = 1,
 	WT_2400 = 0
 };
 
-enum EParity
-{
+enum EParity {
 	WT_EVEN = 3,
 	WT_ODD = 2,
 	WT_NONE = 0
 };
 
-enum EDataBits
-{
+enum EDataBits {
 	WT_8bit = 1,
 	WT_7bit = 0
 };
 
-enum EStopBits
-{
+enum EStopBits {
 	WT_2STOPBITS = 1,
 	WT_1STOPBIT = 0
 };
 
-typedef struct
-{
+typedef struct {
 	int8 commandset;
 	int8 baudrate;
 	int8 parity;
@@ -109,8 +103,7 @@ typedef struct
 	int8 remotemode;
 } tablet_info;
 
-typedef struct
-{
+typedef struct {
 	int32 x;
 	int32 y;
 	uint32 buttons;
@@ -127,11 +120,8 @@ typedef struct
 	bool ytiltsign;
 } tablet_position;
 
-int
-GetLine(BSerialPort* port, char* buff, const long buffLen);
-status_t
-convertpositiontostruct(const char* data, tablet_position&, uint32 tablet_type);
-status_t
-convertinfotostruct(const uint32* data, tablet_info&);
+int GetLine(BSerialPort* port, char* buff, const long buffLen);
+status_t convertpositiontostruct(const char* data, tablet_position&, uint32 tablet_type);
+status_t convertinfotostruct(const uint32* data, tablet_info&);
 
 #endif

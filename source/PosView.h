@@ -1,19 +1,18 @@
 #ifndef POSVIEW_H
 #define POSVIEW_H
 
-#include <View.h>
-#include <Rect.h>
-#include <Point.h>
-#include <NumberFormat.h>
 #include <Message.h>
+#include <NumberFormat.h>
+#include <Point.h>
+#include <Rect.h>
+#include <View.h>
 #include "CanvasView.h"
 #include "Colors.h"
 
 #define POSWIDTH 130
 
-class PosView : public BView
-{
-  public:
+class PosView : public BView {
+public:
 	PosView(const BRect frame, const char* name, CanvasView* _canvas);
 	virtual void Draw(BRect updaterect);
 	virtual void Pulse();
@@ -22,7 +21,7 @@ class PosView : public BView
 	void DoRadius(const bool r);
 	void SetTextLayer(const bool t = true);
 
-  private:
+private:
 	typedef BView inherited;
 	CanvasView* canvas;
 	int mouse_x;

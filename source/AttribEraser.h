@@ -1,9 +1,9 @@
 #ifndef ATTRIBERASER_H
 #define ATTRIBERASER_H
 
-#include "AttribView.h"
 #include <Message.h>
 #include <PictureButton.h>
+#include "AttribView.h"
 #include "Slider.h"
 
 #define ERASER_RECT 1
@@ -13,15 +13,13 @@
 #define PROP_XSIZE 1
 #define PROP_YSIZE 3
 
-class AttribEraser : public AttribView
-{
-  public:
+class AttribEraser : public AttribView {
+public:
 	AttribEraser();
 	virtual ~AttribEraser();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 	float getXSize() { return fXSize; };
@@ -30,7 +28,7 @@ class AttribEraser : public AttribView
 
 	int getType() { return fType; };
 
-  private:
+private:
 	typedef AttribView inherited;
 	float fXSize;
 	float fYSize;

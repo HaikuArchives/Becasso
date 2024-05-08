@@ -17,7 +17,10 @@ PointStack::PointStack(LPoint p)
 	stack[0] = p;
 }
 
-PointStack::~PointStack() { delete[] stack; }
+PointStack::~PointStack()
+{
+	delete[] stack;
+}
 
 bool
 PointStack::push(LPoint point)

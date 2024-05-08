@@ -1,7 +1,7 @@
 #include "BGView.h"
-#include "Colors.h"
 #include <Region.h>
 #include <stdio.h>
+#include "Colors.h"
 
 BGView::BGView(BRect frame, const char* name, uint32 resizeMask, uint32 flags)
 	: BView(frame, name, resizeMask, flags)

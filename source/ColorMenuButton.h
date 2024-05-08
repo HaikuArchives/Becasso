@@ -1,12 +1,11 @@
 #ifndef COLORMENUBUTTON_H
 #define COLORMENUBUTTON_H
 
-#include <View.h>
+#include <Message.h>
+#include <NumberFormat.h>
 #include <Point.h>
 #include <Rect.h>
 #include <View.h>
-#include <Message.h>
-#include <NumberFormat.h>
 #include "ColorMenu.h"
 #include "Layer.h"
 // #include "ColorWindow.h"
@@ -16,9 +15,8 @@
 #define C_H_NUM 32
 #define C_SIZE 12
 
-class ColorMenuButton : public BView
-{
-  public:
+class ColorMenuButton : public BView {
+public:
 	ColorMenuButton(const char* ident, BRect frame, const char* name);
 	virtual ~ColorMenuButton();
 	virtual void MouseDown(BPoint point);
@@ -58,7 +56,7 @@ class ColorMenuButton : public BView
 	BLocker* lock;
 	bool MenuWinOnScreen;
 
-  private:
+private:
 	typedef BView inherited;
 	class ColorWindow* editor;
 	char _name[MAX_HLPNAME];

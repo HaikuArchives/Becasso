@@ -1,10 +1,10 @@
 #include "AddOn.h"
-#include <Path.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <Entry.h>
 #include <MenuField.h>
 #include <MenuItem.h>
+#include <Path.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static AddOnWindow* currentAddOnWindow = 0;
 static AddOn* currentAddOn = 0;
@@ -46,8 +46,7 @@ AddOn::AddOn(BEntry entry)
 			throw(1);
 		}
 	} else if (get_image_symbol(
-				   fAddOnID, "addon_make_config", B_SYMBOL_TYPE_TEXT, (void**)&addon_make_config
-			   )) {
+				   fAddOnID, "addon_make_config", B_SYMBOL_TYPE_TEXT, (void**)&addon_make_config)) {
 		if (VerbAddOns)
 			fprintf(stderr, "Problems finding addon_make_config routine in %s\n", path.Path());
 		throw(1);
@@ -61,15 +60,13 @@ AddOn::AddOn(BEntry entry)
 
 	// optional hooks
 	if (get_image_symbol(
-			fAddOnID, "addon_mode_changed", B_SYMBOL_TYPE_TEXT, (void**)&addon_mode_changed
-		))
+			fAddOnID, "addon_mode_changed", B_SYMBOL_TYPE_TEXT, (void**)&addon_mode_changed))
 		addon_mode_changed = 0;
 	else if (VerbAddOns)
 		fprintf(stderr, "Found addon_mode_changed() hook in %s\n", path.Path());
 
 	if (get_image_symbol(
-			fAddOnID, "addon_color_changed", B_SYMBOL_TYPE_TEXT, (void**)&addon_color_changed
-		))
+			fAddOnID, "addon_color_changed", B_SYMBOL_TYPE_TEXT, (void**)&addon_color_changed))
 		addon_color_changed = 0;
 	else if (VerbAddOns)
 		fprintf(stderr, "Found addon_color_changed() hook in %s\n", path.Path());
@@ -97,15 +94,12 @@ AddOn::Init(uint32 index)
 		return (res);
 	if (fInfo.becasso_version > atoi(Version)) {
 		fprintf(
-			stderr, "%s expects a newer Becasso version (%i)\n", fInfo.name, fInfo.becasso_version
-		);
+			stderr, "%s expects a newer Becasso version (%i)\n", fInfo.name, fInfo.becasso_version);
 		return (1);
 	}
 	if (VerbAddOns)
-		fprintf(
-			stderr, "%s version %i.%i successfully initialized.\n", fInfo.name, fInfo.version,
-			fInfo.release
-		);
+		fprintf(stderr, "%s version %i.%i successfully initialized.\n", fInfo.name, fInfo.version,
+			fInfo.release);
 	return 0;
 }
 
@@ -131,7 +125,7 @@ AddOn::Open(BWindow* client, const char* /*name*/)
 	//	printf ("AddOn::Open() [%s]\n", fInfo.name);
 
 	currentAddOn = this;
-	if (addon_open) // this is a capture add-on
+	if (addon_open)	 // this is a capture add-on
 	{
 		return (*addon_open)();
 	}
@@ -144,7 +138,7 @@ AddOn::Open(BWindow* client, const char* /*name*/)
 	if (frame.right < 188)
 		frame.right = 188;
 	frame.bottom += 64;
-	frame.OffsetBy(100, 100); // FIXME: make a setting or at least memorize
+	frame.OffsetBy(100, 100);  // FIXME: make a setting or at least memorize
 	// note: see AddOnWindow - ADDON_RESIZED
 
 	if (!currentAddOnWindow)
@@ -226,8 +220,7 @@ AddOn::Close(bool client_quits)
 		status_t err = (*addon_close)();
 		if (err)
 			fprintf(
-				stderr, "Warning: add-on %s returned 0x%lx from addon_close()\n", fInfo.name, err
-			);
+				stderr, "Warning: add-on %s returned 0x%lx from addon_close()\n", fInfo.name, err);
 	}
 
 	if (client_quits)
@@ -237,14 +230,11 @@ AddOn::Close(bool client_quits)
 }
 
 status_t
-AddOn::Process(
-	Layer* inLayer, Selection* inSelection, Layer** outLayer, Selection** outSelection, int32 mode,
-	BRect* frame, bool final, BPoint point, uint32 buttons
-)
+AddOn::Process(Layer* inLayer, Selection* inSelection, Layer** outLayer, Selection** outSelection,
+	int32 mode, BRect* frame, bool final, BPoint point, uint32 buttons)
 {
-	return (
-		(*process)(inLayer, inSelection, outLayer, outSelection, mode, frame, final, point, buttons)
-	);
+	return ((*process)(
+		inLayer, inSelection, outLayer, outSelection, mode, frame, final, point, buttons));
 }
 
 BBitmap*

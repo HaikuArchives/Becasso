@@ -1,10 +1,9 @@
 #include "BitmapView.h"
-#include "Colors.h"
 #include <stdio.h>
+#include "Colors.h"
 
 BitmapView::BitmapView(
-	BRect bounds, const char* name, BBitmap* map, drawing_mode mode, bool center, bool own
-)
+	BRect bounds, const char* name, BBitmap* map, drawing_mode mode, bool center, bool own)
 	: BView(bounds, name, B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	if (own)
@@ -25,7 +24,10 @@ BitmapView::BitmapView(BRect bounds, const char* name)
 	fCenter = true;
 }
 
-BitmapView::~BitmapView() { delete fBitmap; }
+BitmapView::~BitmapView()
+{
+	delete fBitmap;
+}
 
 void
 BitmapView::SetPosition(BPoint point)
@@ -46,10 +48,8 @@ BitmapView::Draw(BRect /*update*/)
 {
 	if (fBitmap) {
 		if (fCenter) {
-			BPoint place = BPoint(
-				(Bounds().Width() - fBitmap->Bounds().Width()) / 2,
-				(Bounds().Height() - fBitmap->Bounds().Height()) / 2
-			);
+			BPoint place = BPoint((Bounds().Width() - fBitmap->Bounds().Width()) / 2,
+				(Bounds().Height() - fBitmap->Bounds().Height()) / 2);
 			DrawBitmap(fBitmap, place);
 		} else
 			DrawBitmap(fBitmap, fPosition);

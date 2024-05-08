@@ -5,12 +5,11 @@
 
 #include <Bitmap.h>
 #include <Rect.h>
-#include "Build.h"
 #include "AddOnSupport.h"
+#include "Build.h"
 
-class IMPEXP Selection : public BBitmap
-{
-  public:
+class IMPEXP Selection : public BBitmap {
+public:
 	Selection(BRect bounds);
 	Selection(const Selection& selection);
 	virtual ~Selection();
@@ -23,7 +22,7 @@ class IMPEXP Selection : public BBitmap
 
 	void ClearTo(grey_pixel p);
 
-  private:
+private:
 	typedef BBitmap inherited;
 	BRect fRect;
 	int fMode;

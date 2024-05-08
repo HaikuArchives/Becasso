@@ -1,8 +1,7 @@
 #ifndef ROCOLOR_H
 #define ROCOLOR_H
 
-struct roSColor
-{
+struct roSColor {
 	float m_Red;
 	float m_Green;
 	float m_Blue;

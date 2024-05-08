@@ -110,10 +110,10 @@ SoundEffect8_11::SoundEffect8_11(void* data, size_t size)
 		// (some day that is - it seems to be broken using (1 - pan)...)
 		float val = (float(cd[i]) - 127.0) / 300.0;
 		float pan = float(i) / size;
-		myData[2 * i] = val * (pan); //?
+		myData[2 * i] = val * (pan);  //?
 		myData[2 * i + 1] = val * (pan);
 	}
-	fSize = size; // in frames, not bytes!!
+	fSize = size;  // in frames, not bytes!!
 }
 
 SoundEffect8_11::~SoundEffect8_11()

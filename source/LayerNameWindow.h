@@ -1,12 +1,11 @@
 #ifndef LAYERNAMEWINDOW_H
 #define LAYERNAMEWINDOW_H
 
-#include <Window.h>
 #include <TextControl.h>
+#include <Window.h>
 
-class LayerNameWindow : public BWindow
-{
-  public:
+class LayerNameWindow : public BWindow {
+public:
 	LayerNameWindow(const char* name);
 	virtual ~LayerNameWindow();
 
@@ -15,7 +14,7 @@ class LayerNameWindow : public BWindow
 
 	const char* name() { return fName->Text(); };
 
-  private:
+private:
 	typedef BWindow inherited;
 	sem_id wait_sem;
 	BTextControl* fName;

@@ -4,11 +4,11 @@
 #ifndef _BECASSOADDON_H
 #define _BECASSOADDON_H
 
-#include "Layer.h"
-#include "Selection.h"
-#include "Colors.h"
-#include "Modes.h"
 #include <stdio.h>
+#include "Colors.h"
+#include "Layer.h"
+#include "Modes.h"
+#include "Selection.h"
 
 class BView;
 
@@ -82,10 +82,10 @@ class BView;
 #define MAGENTA(x) (((x) >> 8) & 0xFF)
 #define YELLOW(x) (((x) >> 16) & 0xFF)
 #define BLACK(x) ((x) >> 24)
-#define PIXEL(r, g, b, a)                                                                          \
-	(((int(b) << 24) & 0xFF000000) | ((int(g) << 16) & 0xFF0000) | ((int(r) << 8) & 0xFF00) |      \
-	 (int(a) & 0xFF))
-#else // IA
+#define PIXEL(r, g, b, a)                                                                     \
+	(((int(b) << 24) & 0xFF000000) | ((int(g) << 16) & 0xFF0000) | ((int(r) << 8) & 0xFF00) | \
+		(int(a) & 0xFF))
+#else  // IA
 #define COLOR_MASK 0x00FFFFFF
 #define ALPHA_MASK 0xFF000000
 #define RED_MASK 0x00FF0000
@@ -118,70 +118,52 @@ class BView;
 #define MAGENTA(x) (((x) >> 8) & 0xFF)
 #define YELLOW(x) (((x) >> 16) & 0xFF)
 #define BLACK(x) ((x) >> 24)
-#define PIXEL(r, g, b, a)                                                                          \
-	(((int(a) << 24) & 0xFF000000) | ((int(r) << 16) & 0xFF0000) | ((int(g) << 8) & 0xFF00) |      \
-	 (int(b) & 0xFF))
+#define PIXEL(r, g, b, a)                                                                     \
+	(((int(a) << 24) & 0xFF000000) | ((int(r) << 16) & 0xFF0000) | ((int(g) << 8) & 0xFF00) | \
+		(int(b) & 0xFF))
 #endif
 
 // Rectangle constants
 const BRect EmptyRect = BRect(0, 0, 0, 0);
 
 // The becasso_addon_info struct
-typedef struct
-{
-	char name[80];		   // The name as it appears in the menu
-	uint32 index;		   // A unique index assigned at init time
-	int type;			   // Filter, Transformer, Generator, or Capture
-	int version;		   // Version of the add-on
-	int release;		   // Release of the add-on
-	int becasso_version;   // Required Becasso version (other won't load)
-	int becasso_release;   // Written for release (older will warn)
-	char author[128];	   // Author (company) of the add-on
-	char copyright[128];   // Copyright notice
-	char description[256]; // Explains what the add-on does
-	uint8 does_preview;	   // bitmask for various preview notifications
-	uint32 flags;		   // bitmask
+typedef struct {
+	char name[80];			// The name as it appears in the menu
+	uint32 index;			// A unique index assigned at init time
+	int type;				// Filter, Transformer, Generator, or Capture
+	int version;			// Version of the add-on
+	int release;			// Release of the add-on
+	int becasso_version;	// Required Becasso version (other won't load)
+	int becasso_release;	// Written for release (older will warn)
+	char author[128];		// Author (company) of the add-on
+	char copyright[128];	// Copyright notice
+	char description[256];	// Explains what the add-on does
+	uint8 does_preview;		// bitmask for various preview notifications
+	uint32 flags;			// bitmask
 } becasso_addon_info;
 
 // Function prototypes
-extern "C" ADDON_EXPORT status_t
-addon_init(uint32 index, becasso_addon_info* info);
-extern "C" ADDON_EXPORT status_t
-addon_exit(void);
-extern "C" ADDON_EXPORT status_t
-addon_close(void);
-extern "C" ADDON_EXPORT status_t
-addon_make_config(BView** view, BRect rect);
-extern "C" ADDON_EXPORT status_t
-process(
-	Layer* inLayer, Selection* inSelection, Layer** outLayer, Selection** outSelection, int32 mode,
-	BRect* frame, bool final, BPoint point, uint32 buttons
-);
+extern "C" ADDON_EXPORT status_t addon_init(uint32 index, becasso_addon_info* info);
+extern "C" ADDON_EXPORT status_t addon_exit(void);
+extern "C" ADDON_EXPORT status_t addon_close(void);
+extern "C" ADDON_EXPORT status_t addon_make_config(BView** view, BRect rect);
+extern "C" ADDON_EXPORT status_t process(Layer* inLayer, Selection* inSelection, Layer** outLayer,
+	Selection** outSelection, int32 mode, BRect* frame, bool final, BPoint point, uint32 buttons);
 // for Capture add-ons
-extern "C" ADDON_EXPORT status_t
-addon_open(void);
-extern "C" ADDON_EXPORT BBitmap*
-bitmap(char* title);
+extern "C" ADDON_EXPORT status_t addon_open(void);
+extern "C" ADDON_EXPORT BBitmap* bitmap(char* title);
 // optional hooks
-extern "C" ADDON_EXPORT void
-addon_color_changed(void);
-extern "C" ADDON_EXPORT void
-addon_mode_changed(void);
+extern "C" ADDON_EXPORT void addon_color_changed(void);
+extern "C" ADDON_EXPORT void addon_mode_changed(void);
 
 // Status updating calls
-IMPEXP void
-addon_start(void);
-IMPEXP bool
-addon_stop(void);
-IMPEXP void
-addon_done(void);
-IMPEXP void
-addon_update_statusbar(float delta, const char* text = NULL, const char* trailingText = NULL);
-IMPEXP void
-addon_reset_statusbar(const char* label = NULL, const char* trailingText = NULL);
-IMPEXP void
-addon_preview(void);
-IMPEXP void
-addon_refresh_config(void);
+IMPEXP void addon_start(void);
+IMPEXP bool addon_stop(void);
+IMPEXP void addon_done(void);
+IMPEXP void addon_update_statusbar(
+	float delta, const char* text = NULL, const char* trailingText = NULL);
+IMPEXP void addon_reset_statusbar(const char* label = NULL, const char* trailingText = NULL);
+IMPEXP void addon_preview(void);
+IMPEXP void addon_refresh_config(void);
 
 #endif

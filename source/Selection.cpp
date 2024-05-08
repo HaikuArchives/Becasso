@@ -1,7 +1,7 @@
 #include "Selection.h"
-#include "DModes.h"
 #include <stdlib.h>
 #include <string.h>
+#include "DModes.h"
 
 Selection::Selection(BRect bounds) : BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_GRAYSCALE_8_BIT)
 {

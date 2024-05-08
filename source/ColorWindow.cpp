@@ -1,17 +1,17 @@
-#include <Message.h>
+#include "ColorWindow.h"
+#include <Box.h>
+#include <Button.h>
 #include <Menu.h>
 #include <MenuItem.h>
-#include <View.h>
-#include <Button.h>
+#include <Message.h>
 #include <RadioButton.h>
-#include <Box.h>
-#include "TabView.h"
-#include "ColorWindow.h"
-#include "Colors.h"
-#include "hsv.h"
+#include <View.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "Colors.h"
 #include "Settings.h"
+#include "TabView.h"
+#include "hsv.h"
 
 ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	: BWindow(frame, name, B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE)
@@ -44,8 +44,7 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	menubar->ResizeToPreferred();
 	menubarFrame = menubar->Frame();
 	bg2Frame.Set(
-		0, menubarFrame.Height() + CE_HEIGHT - 145, CE_WIDTH, menubarFrame.Height() + CE_HEIGHT
-	);
+		0, menubarFrame.Height() + CE_HEIGHT - 145, CE_WIDTH, menubarFrame.Height() + CE_HEIGHT);
 	BView* bg2 = new BView(bg2Frame, "CE bg2", B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW);
 	bg2->SetViewColor(LightGrey);
 	AddChild(bg2);
@@ -119,8 +118,7 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	bg2->AddChild(slidBox2);
 	tFrame.Set(8, 13, 296, 29);
 	aSlid = new Slider(
-		tFrame, 84, lstring(203, "Opacity"), 0, 255, 1, new BMessage('CXac'), B_HORIZONTAL, 0
-	);
+		tFrame, 84, lstring(203, "Opacity"), 0, 255, 1, new BMessage('CXac'), B_HORIZONTAL, 0);
 	aSlid->SetValue(c.alpha);
 	slidBox2->AddChild(aSlid);
 
@@ -129,10 +127,8 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	slidBox->SetLabel(lstring(204, "Color Picker"));
 	bg2->AddChild(slidBox);
 	tFrame.Set(8, 13, 296, 29);
-	Slider* tSlid = new Slider(
-		tFrame, 84, lstring(205, "RGB Tolerance"), 0, 255, 1, new BMessage('CXtc'), B_HORIZONTAL, 0,
-		"%3.1f"
-	);
+	Slider* tSlid = new Slider(tFrame, 84, lstring(205, "RGB Tolerance"), 0, 255, 1,
+		new BMessage('CXtc'), B_HORIZONTAL, 0, "%3.1f");
 	tSlid->SetValue(button->getTolerance());
 	slidBox->AddChild(tSlid);
 
@@ -221,219 +217,231 @@ void
 ColorWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case B_PASTE: {
-		rgb_color* dropped;
-		long dummy;
-		if (msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) == B_OK) {
-			BMessage* cdrop = new BMessage('SetC');
-			cdrop->AddInt32("color", dropped->red);
-			cdrop->AddInt32("color", dropped->green);
-			cdrop->AddInt32("color", dropped->blue);
-			PostMessage(cdrop);
-			delete cdrop;
-			aSlid->SetValue(dropped->alpha);
-			button->setAlpha(dropped->alpha);
+		case B_PASTE:
+		{
+			rgb_color* dropped;
+			long dummy;
+			if (msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) ==
+				B_OK) {
+				BMessage* cdrop = new BMessage('SetC');
+				cdrop->AddInt32("color", dropped->red);
+				cdrop->AddInt32("color", dropped->green);
+				cdrop->AddInt32("color", dropped->blue);
+				PostMessage(cdrop);
+				delete cdrop;
+				aSlid->SetValue(dropped->alpha);
+				button->setAlpha(dropped->alpha);
+			}
+			//		char *htmlString;
+			//		if (msg->FindData ("text/plain", B_MIME_TYPE, (void **) &htmlString, &dummy) ==
+			// B_OK)
+			//		{
+			//			printf ("HTML: <%s>\n", htmlString);
+			//		}
+			//		else
+			//			printf ("HTML string not found...\n");
+			//		break;
 		}
-		//		char *htmlString;
-		//		if (msg->FindData ("text/plain", B_MIME_TYPE, (void **) &htmlString, &dummy) ==
-		// B_OK)
-		//		{
-		//			printf ("HTML: <%s>\n", htmlString);
-		//		}
-		//		else
-		//			printf ("HTML string not found...\n");
-		//		break;
-	}
-	case 'SetC': {
-		BString s;
-		c.red = msg->FindInt32("color", (int32)0);
-		c.green = msg->FindInt32("color", (int32)1);
-		c.blue = msg->FindInt32("color", (int32)2);
-		int32 alpha;
-		if (msg->FindInt32("alpha", &alpha) == B_OK) {
-			c.alpha = alpha;
+		case 'SetC':
+		{
+			BString s;
+			c.red = msg->FindInt32("color", (int32)0);
+			c.green = msg->FindInt32("color", (int32)1);
+			c.blue = msg->FindInt32("color", (int32)2);
+			int32 alpha;
+			if (msg->FindInt32("alpha", &alpha) == B_OK) {
+				c.alpha = alpha;
+			}
+			SetColor(c);
+			hsv_color h = rgb2hsv(c);
+			rgbSquare->SetColor(c);
+			hsvSquare->SetColor(h);
+			fNumberFormat.Format(s, c.red);
+			rTC->SetText(s.String());
+			fNumberFormat.Format(s, c.green);
+			gTC->SetText(s.String());
+			fNumberFormat.Format(s, c.blue);
+			bTC->SetText(s.String());
+			fNumberFormat.Format(s, h.hue);
+			hTC->SetText(s.String());
+			fNumberFormat.SetPrecision(3);
+			fNumberFormat.Format(s, h.saturation);
+			sTC->SetText(s.String());
+			fNumberFormat.SetPrecision(3);
+			fNumberFormat.Format(s, h.value);
+			vTC->SetText(s.String());
+			aSlid->SetValue(c.alpha);
+			button->setAlpha(c.alpha);
+			break;
 		}
-		SetColor(c);
-		hsv_color h = rgb2hsv(c);
-		rgbSquare->SetColor(c);
-		hsvSquare->SetColor(h);
-		fNumberFormat.Format(s, c.red);
-		rTC->SetText(s.String());
-		fNumberFormat.Format(s, c.green);
-		gTC->SetText(s.String());
-		fNumberFormat.Format(s, c.blue);
-		bTC->SetText(s.String());
-		fNumberFormat.Format(s, h.hue);
-		hTC->SetText(s.String());
-		fNumberFormat.SetPrecision(3);
-		fNumberFormat.Format(s, h.saturation);
-		sTC->SetText(s.String());
-		fNumberFormat.SetPrecision(3);
-		fNumberFormat.Format(s, h.value);
-		vTC->SetText(s.String());
-		aSlid->SetValue(c.alpha);
-		button->setAlpha(c.alpha);
-		break;
-	}
-	case 'BrbR':
-		rgbSquare->SetNotColor(0);
-		break;
-	case 'BrbG':
-		rgbSquare->SetNotColor(1);
-		break;
-	case 'BrbB':
-		rgbSquare->SetNotColor(2);
-		break;
-	case 'TrbR': {
-		BString s;
-		int r = atoi(rTC->Text());
-		r = clipchar(r);
-		fNumberFormat.Format(s, r);
-		rTC->SetText(s.String());
-		c.red = r;
-		rgbSquare->SetColor(c);
-		SetColor(c);
-		break;
-	}
-	case 'TrbG': {
-		BString s;
-		int g = atoi(gTC->Text());
-		g = clipchar(g);
-		fNumberFormat.Format(s, g);
-		gTC->SetText(s.String());
-		c.green = g;
-		rgbSquare->SetColor(c);
-		SetColor(c);
-		break;
-	}
-	case 'TrbB': {
-		BString s;
-		int b = atoi(bTC->Text());
-		b = clipchar(b);
-		fNumberFormat.Format(s, b);
-		bTC->SetText(s.String());
-		c.blue = b;
-		rgbSquare->SetColor(c);
-		SetColor(c);
-		break;
-	}
-	case 'CSQc': {
-		BString s;
-		c.red = msg->FindInt32("color", (int32)0);
-		c.green = msg->FindInt32("color", (int32)1);
-		c.blue = msg->FindInt32("color", (int32)2);
-		fNumberFormat.Format(s, c.red);
-		rTC->SetText(s.String());
-		fNumberFormat.Format(s, c.green);
-		gTC->SetText(s.String());
-		fNumberFormat.Format(s, c.blue);
-		bTC->SetText(s.String());
-		SetColor(c);
-		break;
-	}
-	case 'CSQh': {
-		BString s;
-		hsv_color h;
-		h.hue = msg->FindFloat("color", (int32)0);
-		h.saturation = msg->FindFloat("color", (int32)1);
-		h.value = msg->FindFloat("color", (int32)2);
-		fNumberFormat.Format(s, h.hue);
-		hTC->SetText(s.String());
-		fNumberFormat.SetPrecision(3);
-		fNumberFormat.Format(s, h.saturation);
-		sTC->SetText(s.String());
-		fNumberFormat.SetPrecision(3);
-		fNumberFormat.Format(s, h.value);
-		vTC->SetText(s.String());
-		c = hsv2rgb(h);
-		SetColor(c);
-		break;
-	}
-	case 'HSVc': // MouseDown on column
-	case 'RGBc':
-		ob = 1;
-		break;
-	case 'HSVs': // MouseDown on square
-	case 'RGBs':
-		ob = 2;
-		break;
-	case 'HSVu': // Mouse Up
-	case 'RGBu':
-		ob = 0;
-		break;
-	case 'HSVm': {
-		if (ob) {
-			BPoint point;
-			point.x = msg->FindFloat("x");
-			point.y = msg->FindFloat("y");
-			hsvSquare->mouseDown(point, ob);
+		case 'BrbR':
+			rgbSquare->SetNotColor(0);
+			break;
+		case 'BrbG':
+			rgbSquare->SetNotColor(1);
+			break;
+		case 'BrbB':
+			rgbSquare->SetNotColor(2);
+			break;
+		case 'TrbR':
+		{
+			BString s;
+			int r = atoi(rTC->Text());
+			r = clipchar(r);
+			fNumberFormat.Format(s, r);
+			rTC->SetText(s.String());
+			c.red = r;
+			rgbSquare->SetColor(c);
+			SetColor(c);
+			break;
 		}
-		break;
-	}
-	case 'RGBm': {
-		if (ob) {
-			BPoint point;
-			point.x = msg->FindFloat("x");
-			point.y = msg->FindFloat("y");
-			rgbSquare->mouseDown(point, ob);
+		case 'TrbG':
+		{
+			BString s;
+			int g = atoi(gTC->Text());
+			g = clipchar(g);
+			fNumberFormat.Format(s, g);
+			gTC->SetText(s.String());
+			c.green = g;
+			rgbSquare->SetColor(c);
+			SetColor(c);
+			break;
 		}
-		break;
-	}
-	case 'CXSc':
-		button->set(c);
-		break;
-	case 'CXSm':
-		button->set(c, true);
-		break;
-	case 'CXtc': // This is not nice.  Change this to take effect after a button press.
-		button->setTolerance(msg->FindFloat("value"));
-		break;
-	case 'CXac':
-		// printf ("Alpha set!\n");
-		button->setAlpha(msg->FindFloat("value"));
-		break;
-	case 'Csav':
-		savePanel->Show();
-		break;
-	case 'Clod':
-		openPanel->Show();
-		break;
-	case B_SAVE_REQUESTED: {
-		entry_ref lref;
-		char name[B_FILE_NAME_LENGTH];
-		msg->FindRef("directory", &lref);
-		BEntry entry = BEntry(&lref);
-		if (msg->FindString("name")) {
-			// The Save Panel returns the name separately
-			BDirectory dir = BDirectory(&lref);
-			strcpy(name, msg->FindString("name"));
-			entry.SetTo(&dir, name, false);
+		case 'TrbB':
+		{
+			BString s;
+			int b = atoi(bTC->Text());
+			b = clipchar(b);
+			fNumberFormat.Format(s, b);
+			bTC->SetText(s.String());
+			c.blue = b;
+			rgbSquare->SetColor(c);
+			SetColor(c);
+			break;
 		}
-		button->Save(entry);
-		break;
-	}
-	case B_REFS_RECEIVED:
-	case B_SIMPLE_DATA: {
-		entry_ref lref;
-		msg->FindRef("refs", &lref);
-		BEntry entry = BEntry(&lref);
-		button->Load(entry);
-		break;
-	}
-	case 'PGdf':
-	case 'PGG':
-	case 'PGr':
-	case 'PGg':
-	case 'PGb':
-	case 'PGrg':
-	case 'PGrb':
-	case 'PGgb':
-	case 'PGht':
-	case 'PGsp':
-		button->Generate(msg->what);
-		break;
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case 'CSQc':
+		{
+			BString s;
+			c.red = msg->FindInt32("color", (int32)0);
+			c.green = msg->FindInt32("color", (int32)1);
+			c.blue = msg->FindInt32("color", (int32)2);
+			fNumberFormat.Format(s, c.red);
+			rTC->SetText(s.String());
+			fNumberFormat.Format(s, c.green);
+			gTC->SetText(s.String());
+			fNumberFormat.Format(s, c.blue);
+			bTC->SetText(s.String());
+			SetColor(c);
+			break;
+		}
+		case 'CSQh':
+		{
+			BString s;
+			hsv_color h;
+			h.hue = msg->FindFloat("color", (int32)0);
+			h.saturation = msg->FindFloat("color", (int32)1);
+			h.value = msg->FindFloat("color", (int32)2);
+			fNumberFormat.Format(s, h.hue);
+			hTC->SetText(s.String());
+			fNumberFormat.SetPrecision(3);
+			fNumberFormat.Format(s, h.saturation);
+			sTC->SetText(s.String());
+			fNumberFormat.SetPrecision(3);
+			fNumberFormat.Format(s, h.value);
+			vTC->SetText(s.String());
+			c = hsv2rgb(h);
+			SetColor(c);
+			break;
+		}
+		case 'HSVc':  // MouseDown on column
+		case 'RGBc':
+			ob = 1;
+			break;
+		case 'HSVs':  // MouseDown on square
+		case 'RGBs':
+			ob = 2;
+			break;
+		case 'HSVu':  // Mouse Up
+		case 'RGBu':
+			ob = 0;
+			break;
+		case 'HSVm':
+		{
+			if (ob) {
+				BPoint point;
+				point.x = msg->FindFloat("x");
+				point.y = msg->FindFloat("y");
+				hsvSquare->mouseDown(point, ob);
+			}
+			break;
+		}
+		case 'RGBm':
+		{
+			if (ob) {
+				BPoint point;
+				point.x = msg->FindFloat("x");
+				point.y = msg->FindFloat("y");
+				rgbSquare->mouseDown(point, ob);
+			}
+			break;
+		}
+		case 'CXSc':
+			button->set(c);
+			break;
+		case 'CXSm':
+			button->set(c, true);
+			break;
+		case 'CXtc':  // This is not nice.  Change this to take effect after a button press.
+			button->setTolerance(msg->FindFloat("value"));
+			break;
+		case 'CXac':
+			// printf ("Alpha set!\n");
+			button->setAlpha(msg->FindFloat("value"));
+			break;
+		case 'Csav':
+			savePanel->Show();
+			break;
+		case 'Clod':
+			openPanel->Show();
+			break;
+		case B_SAVE_REQUESTED:
+		{
+			entry_ref lref;
+			char name[B_FILE_NAME_LENGTH];
+			msg->FindRef("directory", &lref);
+			BEntry entry = BEntry(&lref);
+			if (msg->FindString("name")) {
+				// The Save Panel returns the name separately
+				BDirectory dir = BDirectory(&lref);
+				strcpy(name, msg->FindString("name"));
+				entry.SetTo(&dir, name, false);
+			}
+			button->Save(entry);
+			break;
+		}
+		case B_REFS_RECEIVED:
+		case B_SIMPLE_DATA:
+		{
+			entry_ref lref;
+			msg->FindRef("refs", &lref);
+			BEntry entry = BEntry(&lref);
+			button->Load(entry);
+			break;
+		}
+		case 'PGdf':
+		case 'PGG':
+		case 'PGr':
+		case 'PGg':
+		case 'PGb':
+		case 'PGrg':
+		case 'PGrb':
+		case 'PGgb':
+		case 'PGht':
+		case 'PGsp':
+			button->Generate(msg->what);
+			break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

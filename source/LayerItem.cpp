@@ -1,12 +1,12 @@
 #include "LayerItem.h"
-#include "LayerView.h"
+#include <MenuField.h>
 #include "Becasso.h"
 #include "Colors.h"
-#include "LayerNameWindow.h"
 #include "DModes.h"
-#include "Slider.h"
-#include <MenuField.h>
+#include "LayerNameWindow.h"
+#include "LayerView.h"
 #include "Settings.h"
+#include "Slider.h"
 
 LayerItem::LayerItem(BRect frame, const char* name, int layerIndex, CanvasView* _myView)
 	: BView(frame, name, B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW | B_FRAME_EVENTS)
@@ -20,8 +20,7 @@ LayerItem::LayerItem(BRect frame, const char* name, int layerIndex, CanvasView* 
 	fThumbVSize = min_c(THUMBLAYERMAXHEIGHT, canvasRect.Height());
 	fThumbHSize = min_c(canvasRect.Width() / canvasRect.Height() * fThumbVSize, THUMBLAYERMAXWIDTH);
 	hide = new BCheckBox(
-		BRect(fThumbHSize + 8, 2, fThumbHSize + 50, 24), "hide", lstring(164, "Hide"), msg
-	);
+		BRect(fThumbHSize + 8, 2, fThumbHSize + 50, 24), "hide", lstring(164, "Hide"), msg);
 	AddChild(hide);
 	hide->SetTarget(fMyView->Window());
 	// hide->SetDrawingMode (B_OP_OVER);
@@ -29,8 +28,7 @@ LayerItem::LayerItem(BRect frame, const char* name, int layerIndex, CanvasView* 
 	msg = new BMessage('LIga');
 	msg->AddInt32("index", index);
 	Slider* ga = new Slider(
-		BRect(fThumbHSize + 54, 4, LAYERITEMWIDTH - 4, 20), 0, "", 0, 255, 1, msg, B_HORIZONTAL
-	);
+		BRect(fThumbHSize + 54, 4, LAYERITEMWIDTH - 4, 20), 0, "", 0, 255, 1, msg, B_HORIZONTAL);
 	ga->SetValue(fLayer->getGlobalAlpha());
 	AddChild(ga);
 	SetHighColor(Black);
@@ -53,10 +51,8 @@ LayerItem::LayerItem(BRect frame, const char* name, int layerIndex, CanvasView* 
 	item = new BMenuItem(lstring(166, "Multiply"), msg);
 	item->SetTarget(fMyView->Window());
 	fModePU->AddItem(item);
-	BMenuField* mode = new BMenuField(
-		BRect(fThumbHSize + 8, 22, fThumbHSize + 140, 34), "mode", lstring(167, "Operation:"),
-		fModePU
-	);
+	BMenuField* mode = new BMenuField(BRect(fThumbHSize + 8, 22, fThumbHSize + 140, 34), "mode",
+		lstring(167, "Operation:"), fModePU);
 	fModePU->ItemAt(fLayer->getMode())->SetMarked(true);
 	mode->SetDivider(58);
 	AddChild(mode);
@@ -153,7 +149,8 @@ LayerItem::MouseDown(BPoint point)
 		}
 		if (!bt && click != 2) {
 			click = 1;
-		} else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON && !(modifiers() & B_CONTROL_KEY)) {
+		} else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON &&
+				   !(modifiers() & B_CONTROL_KEY)) {
 			BMessage* dragmessage = new BMessage('ldrg');
 			dragmessage->AddInt32("startingindex", index);
 			BBitmap* dragbitmap = new BBitmap(Bounds(), B_RGBA32, true);
@@ -238,9 +235,8 @@ LayerItem::Draw(BRect /* update */)
 	thumbRect.OffsetTo(4, 4);
 	FillRect(Bounds(), B_SOLID_LOW);
 	DrawBitmapAsync(thumbnail, thumbRect.LeftTop());
-	DrawString(
-		fLayer->getName(), BPoint(thumbRect.right + 8, thumbRect.bottom - 4)
-	); // Should be dynamic...
+	DrawString(fLayer->getName(),
+		BPoint(thumbRect.right + 8, thumbRect.bottom - 4));	 // Should be dynamic...
 	StrokeRect(Bounds());
 	Sync();
 	thumbnail->RemoveChild(thumbView);

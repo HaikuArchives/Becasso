@@ -1,22 +1,21 @@
 #include "PatternMenu.h"
-#include "PatternMenuButton.h"
-#include "PatternItem.h"
-#include "PatternMenuView.h"
-#include "ColorMenuButton.h"
-#include "BecassoAddOn.h" // for some defines
-#include <InterfaceDefs.h>
-#include <Screen.h>
 #include <Application.h>
-#include <Roster.h>
-#include <Resources.h>
 #include <Bitmap.h>
+#include <InterfaceDefs.h>
+#include <Resources.h>
+#include <Roster.h>
+#include <Screen.h>
+#include "BecassoAddOn.h"  // for some defines
+#include "ColorMenuButton.h"
+#include "PatternItem.h"
+#include "PatternMenuButton.h"
+#include "PatternMenuView.h"
 #include "Settings.h"
 
 PatternMenu::PatternMenu(BView* _view, int h, int v, float s) : BMenu("PatternMenu", h * s, v * s)
 {
 	pattern patterns[MAX_PATTERNS];
-	uchar data[MAX_PATTERNS][8] = {
-		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+	uchar data[MAX_PATTERNS][8] = {{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
 		{0xFF, 0xDD, 0xFF, 0x77, 0xFF, 0xDD, 0xFF, 0x77},
 		{0xFF, 0xAA, 0xFF, 0xAA, 0xFF, 0xAA, 0xFF, 0xAA},
 		{0x77, 0xDD, 0x77, 0xDD, 0x77, 0xDD, 0x77, 0xDD},
@@ -39,8 +38,7 @@ PatternMenu::PatternMenu(BView* _view, int h, int v, float s) : BMenu("PatternMe
 		{0x88, 0x44, 0x22, 0x11, 0x88, 0x44, 0x22, 0x11},
 		{0xDD, 0xEE, 0x77, 0xBB, 0xDD, 0xEE, 0x77, 0xBB},
 		{0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00},
-		{0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88}
-	};
+		{0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88}};
 
 	for (int i = 0; i < h * v; i++)
 		for (int j = 0; j < 8; j++)
@@ -104,17 +102,15 @@ PatternMenu::FindMarked()
 	return (items[index]);
 }
 
-class patternTearInfo
-{
-  public:
+class patternTearInfo {
+public:
 	patternTearInfo(BRect r, PatternMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
 	PatternMenu* parent;
 	BView* someView;
 };
 
-int32
-pattern_tear_drag(void* data);
+int32 pattern_tear_drag(void* data);
 
 int32
 pattern_tear_drag(void* data)
@@ -127,7 +123,7 @@ pattern_tear_drag(void* data)
 	BView* view = tearInfo->someView;
 	// It might seem a good idea to use `menu' as the view, but
 	// this gave errors: `Method requires owner but doesn't have one'.
-	delete tearInfo; // The caller doesn't do this (race condition otherwise)
+	delete tearInfo;  // The caller doesn't do this (race condition otherwise)
 
 	// printf ("Entering loop; view = %p\n", view);
 	while (buttons) {
@@ -158,7 +154,7 @@ PatternMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* /* msg */)
 	if (!Parent())
 		return;
 	GetMouse(&point, &buttons);
-	if (transit == B_EXITED_VIEW && buttons) // Do the tear off thing!
+	if (transit == B_EXITED_VIEW && buttons)  // Do the tear off thing!
 	{
 #if defined(EASTER_EGG_SFX)
 		extern bool EasterEgg;
@@ -214,8 +210,7 @@ PatternMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* /* msg */)
 
 		patternTearInfo* tearInfo = new patternTearInfo(place, this, parent);
 		resume_thread(
-			spawn_thread(pattern_tear_drag, "Menu Tear Thread", B_NORMAL_PRIORITY, tearInfo)
-		);
+			spawn_thread(pattern_tear_drag, "Menu Tear Thread", B_NORMAL_PRIORITY, tearInfo));
 	}
 	//	inherited::MouseMoved (point, transit, msg);
 }

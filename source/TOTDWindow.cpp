@@ -1,23 +1,22 @@
 #include "TOTDWindow.h"
-#include "Colors.h"
-#include "BitmapView.h"
-#include "Settings.h"
-#include <string.h>
-#include <View.h>
-#include <CheckBox.h>
-#include <Button.h>
-#include <Bitmap.h>
-#include <Resources.h>
-#include <File.h>
-#include <Roster.h>
 #include <Application.h>
+#include <Bitmap.h>
+#include <Button.h>
+#include <CheckBox.h>
+#include <File.h>
 #include <Locker.h>
+#include <Resources.h>
+#include <Roster.h>
 #include <TextView.h>
+#include <View.h>
+#include <string.h>
+#include "BitmapView.h"
+#include "Colors.h"
+#include "Settings.h"
 
 TOTDWindow::TOTDWindow(const BRect frame, const int num)
 	: BWindow(
-		  frame, lstring(500, "Tip of the day"), B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE
-	  )
+		  frame, lstring(500, "Tip of the day"), B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE)
 {
 	fTotd = num;
 
@@ -43,22 +42,17 @@ TOTDWindow::TOTDWindow(const BRect frame, const int num)
 	AddChild(v);
 	rest.OffsetTo(B_ORIGIN);
 
-	BButton* next = new BButton(
-		BRect(rest.right - 80, rest.bottom - 32, rest.right - 4, rest.bottom - 4), "next",
-		lstring(502, "Next tip"), new BMessage('next')
-	);
+	BButton* next =
+		new BButton(BRect(rest.right - 80, rest.bottom - 32, rest.right - 4, rest.bottom - 4),
+			"next", lstring(502, "Next tip"), new BMessage('next'));
 	v->AddChild(next);
 
-	BCheckBox* show = new BCheckBox(
-		BRect(8, rest.bottom - 24, rest.right - 84, rest.bottom - 8), "show",
-		lstring(501, "Show tips at startup"), new BMessage('show')
-	);
+	BCheckBox* show = new BCheckBox(BRect(8, rest.bottom - 24, rest.right - 84, rest.bottom - 8),
+		"show", lstring(501, "Show tips at startup"), new BMessage('show'));
 	v->AddChild(show);
 
-	fTextView = new BTextView(
-		BRect(4, 4, rest.right - 4, rest.bottom - 36), "totd",
-		BRect(0, 0, rest.right - 8, rest.bottom - 44), B_FOLLOW_ALL, B_WILL_DRAW
-	);
+	fTextView = new BTextView(BRect(4, 4, rest.right - 4, rest.bottom - 36), "totd",
+		BRect(0, 0, rest.right - 8, rest.bottom - 44), B_FOLLOW_ALL, B_WILL_DRAW);
 	fTextView->SetViewColor(LightGrey);
 	fTextView->MakeEditable(false);
 	v->AddChild(fTextView);
@@ -104,28 +98,30 @@ void
 TOTDWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'show': {
-		extern BLocker g_settings_lock;
-		extern becasso_settings g_settings;
-		g_settings_lock.Lock();
-		if (msg->FindInt32("be:value"))
-			g_settings.totd = fTotd;
-		else
-			g_settings.totd = 0;
-		g_settings_lock.Unlock();
-		break;
-	}
-	case 'next': {
-		fTotd++;
-		const char* totdText = lstring(502 + fTotd, "@@@");
-		if (!strcmp(totdText, "@@@")) {
-			fTotd = 1;
-			fTextView->SetText(lstring(503, ""));
-		} else
-			fTextView->SetText(totdText);
-		break;
-	}
-	default:
-		BWindow::MessageReceived(msg);
+		case 'show':
+		{
+			extern BLocker g_settings_lock;
+			extern becasso_settings g_settings;
+			g_settings_lock.Lock();
+			if (msg->FindInt32("be:value"))
+				g_settings.totd = fTotd;
+			else
+				g_settings.totd = 0;
+			g_settings_lock.Unlock();
+			break;
+		}
+		case 'next':
+		{
+			fTotd++;
+			const char* totdText = lstring(502 + fTotd, "@@@");
+			if (!strcmp(totdText, "@@@")) {
+				fTotd = 1;
+				fTextView->SetText(lstring(503, ""));
+			} else
+				fTextView->SetText(totdText);
+			break;
+		}
+		default:
+			BWindow::MessageReceived(msg);
 	}
 }

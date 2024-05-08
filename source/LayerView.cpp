@@ -1,6 +1,6 @@
 #include "LayerView.h"
-#include "LayerWindow.h"
 #include "LayerItem.h"
+#include "LayerWindow.h"
 
 LayerView::LayerView(BRect frame, const char* name, CanvasView* _myView)
 	: BView(frame, name, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS | B_WILL_DRAW)

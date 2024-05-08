@@ -1,6 +1,6 @@
 #include "SplashWindow.h"
-#include "Becasso.h"
 #include "AboutView.h"
+#include "Becasso.h"
 
 #include <stdio.h>
 
@@ -17,15 +17,16 @@ void
 SplashWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'Iaos': {
-		const char* s;
-		msg->FindString("InitString", &s);
-		// 		printf ("s = %s\n", s);
-		abV->SetInitString(s);
-		break;
-	}
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case 'Iaos':
+		{
+			const char* s;
+			msg->FindString("InitString", &s);
+			// 		printf ("s = %s\n", s);
+			abV->SetInitString(s);
+			break;
+		}
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

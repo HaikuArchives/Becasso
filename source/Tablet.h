@@ -1,18 +1,17 @@
 #ifndef TABLET_H
 #define TABLET_H
 
-#include <device/SerialPort.h>
-#include "Wacom.h"
-#include <string.h>
 #include <Point.h>
 #include <Rect.h>
+#include <device/SerialPort.h>
+#include <string.h>
+#include "Wacom.h"
 
 #define UD_TABLET 1
-#define ET_TABLET 2 // Graphire
+#define ET_TABLET 2	 // Graphire
 
-class Tablet
-{
-  public:
+class Tablet {
+public:
 	Tablet(const char* portname);
 	virtual ~Tablet();
 	virtual bool Init();
@@ -46,13 +45,11 @@ class Tablet
 
 	virtual BPoint Tilt()
 	{
-		return (BPoint(
-			fPos.xtiltsign ? fPos.xtiltdata : -fPos.xtiltdata,
-			fPos.ytiltsign ? fPos.ytiltdata : -fPos.ytiltdata
-		));
+		return (BPoint(fPos.xtiltsign ? fPos.xtiltdata : -fPos.xtiltdata,
+			fPos.ytiltsign ? fPos.ytiltdata : -fPos.ytiltdata));
 	};
 
-  private:
+private:
 	float fMaxX, fMaxY;
 	float fScaleX, fScaleY;
 	float fTreshold;

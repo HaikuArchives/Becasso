@@ -1,19 +1,19 @@
 #ifndef CANVASWINDOW_H
 #define CANVASWINDOW_H
 
-#include <Window.h>
-#include <ScrollBar.h>
-#include <MenuBar.h>
-#include <MenuItem.h>
-#include <Menu.h>
-#include <Rect.h>
-#include <Point.h>
 #include <Alert.h>
 #include <Entry.h>
-#include <Path.h>
 #include <File.h>
 #include <FilePanel.h>
+#include <Menu.h>
+#include <MenuBar.h>
+#include <MenuItem.h>
 #include <NumberFormat.h>
+#include <Path.h>
+#include <Point.h>
+#include <Rect.h>
+#include <ScrollBar.h>
+#include <Window.h>
 #if defined(DATATYPES)
 #include <Datatypes.h>
 #else
@@ -39,15 +39,12 @@ class LayerWindow;
 class PosView;
 class XpalWindow;
 
-class CanvasWindow : public BWindow
-{
+class CanvasWindow : public BWindow {
 	friend class CanvasView;
 
-  public:
-	CanvasWindow(
-		BRect frame, const char* name, BBitmap* map = NULL, BMessenger* target = NULL,
-		bool AskForAlpha = true, rgb_color color = White
-	);
+public:
+	CanvasWindow(BRect frame, const char* name, BBitmap* map = NULL, BMessenger* target = NULL,
+		bool AskForAlpha = true, rgb_color color = White);
 	CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha = true, BMessenger* target = NULL);
 	virtual ~CanvasWindow();
 	virtual void Quit();
@@ -62,8 +59,7 @@ class CanvasWindow : public BWindow
 	virtual void FrameResized(float width, float height);
 	virtual void ScreenChanged(BRect frame, color_space mode);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 
@@ -91,11 +87,10 @@ class CanvasWindow : public BWindow
 
 	entry_ref MyRef() { return myRef; }
 
-  private:
+private:
 	typedef BWindow inherited;
-	void restOfCtor(
-		BRect frame, BBitmap* map, FILE* fp = NULL, bool AskForAlpha = true, rgb_color color = White
-	);
+	void restOfCtor(BRect frame, BBitmap* map, FILE* fp = NULL, bool AskForAlpha = true,
+		rgb_color color = White);
 	BMessage* sendbitmapreply();
 
 	char fName[B_FILE_NAME_LENGTH];
@@ -131,8 +126,8 @@ class CanvasWindow : public BWindow
 	BInvoker* of_selected;
 	entry_ref myRef;
 	bool fromRef;
-	BMessenger* myTarget; // InterfaceElements
-	BMessenger* ieTarget; // ImageElements
+	BMessenger* myTarget;  // InterfaceElements
+	BMessenger* ieTarget;  // ImageElements
 	bool menuIsOn;
 };
 

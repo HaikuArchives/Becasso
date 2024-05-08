@@ -1,12 +1,11 @@
 #ifndef BGVIEW_H
 #define BGVIEW_H
 
-#include <View.h>
 #include <ScrollBar.h>
+#include <View.h>
 
-class BGView : public BView
-{
-  public:
+class BGView : public BView {
+public:
 	BGView(BRect frame, const char* name, uint32 resizeMask, uint32 flags);
 	virtual ~BGView();
 	virtual void FrameResized(float width, float height);
@@ -23,7 +22,7 @@ class BGView : public BView
 
 	BRect getFrame() { return fFrame; };
 
-  private:
+private:
 	typedef BView inherited;
 	float fScale;
 	BRect fFrame;

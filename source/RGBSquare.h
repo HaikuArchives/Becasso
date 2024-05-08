@@ -1,14 +1,13 @@
 #ifndef RGBSQUARE_H
 #define RGBSQUARE_H
 
-#include <View.h>
 #include <Bitmap.h>
 #include <Rect.h>
+#include <View.h>
 #include "ColorWindow.h"
 
-class RGBSquare : public BView
-{
-  public:
+class RGBSquare : public BView {
+public:
 	RGBSquare(BRect frame, int nc, ColorWindow* ed);
 	virtual ~RGBSquare();
 	virtual void Draw(BRect update);
@@ -20,7 +19,7 @@ class RGBSquare : public BView
 	void SetNotColor(int nc);
 	rgb_color GetColor();
 
-  private:
+private:
 	typedef BView inherited;
 	void DrawLines();
 	BBitmap* colorsquare;
@@ -35,7 +34,6 @@ class RGBSquare : public BView
 	BPoint prev;
 };
 
-int32
-RGB_track_mouse(void* data);
+int32 RGB_track_mouse(void* data);
 
 #endif

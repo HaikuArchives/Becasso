@@ -1,16 +1,14 @@
-#include <Alert.h>
 #include "AddOnWindow.h"
+#include <Alert.h>
+#include <string.h>
+#include "AddOn.h"
 #include "CanvasWindow.h"
 #include "Colors.h"
-#include <string.h>
 #include "Settings.h"
-#include "AddOn.h"
 
 AddOnWindow::AddOnWindow(BRect frame)
-	: BWindow(
-		  frame, "Unopened", B_TITLED_WINDOW,
-		  B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_WILL_ACCEPT_FIRST_CLICK
-	  )
+	: BWindow(frame, "Unopened", B_TITLED_WINDOW,
+		  B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_WILL_ACCEPT_FIRST_CLICK)
 {
 	BRect mybounds = Bounds();
 	bg = new BView(mybounds, "addonbg", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
@@ -18,28 +16,22 @@ AddOnWindow::AddOnWindow(BRect frame)
 	AddChild(bg);
 	fStatusBar = new BStatusBar(
 		BRect(mybounds.left + 8, mybounds.bottom - 68, mybounds.right - 8, mybounds.bottom - 60),
-		"AddonStatusBar"
-	);
+		"AddonStatusBar");
 	fStatusBar->SetResizingMode(B_FOLLOW_BOTTOM);
 	bg->AddChild(fStatusBar);
 	fStatusBar->SetBarHeight(8);
-	fStop = new BButton(
-		BRect(
-			mybounds.right - 180, mybounds.bottom - 32, mybounds.right - 128, mybounds.bottom - 8
-		),
-		"AddonStop", lstring(370, "Stop"), new BMessage('ao_s'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT
-	);
+	fStop = new BButton(BRect(mybounds.right - 180, mybounds.bottom - 32, mybounds.right - 128,
+							mybounds.bottom - 8),
+		"AddonStop", lstring(370, "Stop"), new BMessage('ao_s'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
 	fStop->SetEnabled(false);
 	bg->AddChild(fStop);
 	fInfo = new BButton(
 		BRect(mybounds.right - 120, mybounds.bottom - 32, mybounds.right - 68, mybounds.bottom - 8),
-		"AddonInfo", lstring(371, "Info"), new BMessage('ao_i'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT
-	);
+		"AddonInfo", lstring(371, "Info"), new BMessage('ao_i'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
 	bg->AddChild(fInfo);
 	fApply = new BButton(
 		BRect(mybounds.right - 60, mybounds.bottom - 32, mybounds.right - 8, mybounds.bottom - 8),
-		"AddonApply", lstring(373, "Apply"), 0, B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT
-	);
+		"AddonApply", lstring(373, "Apply"), 0, B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
 	bg->AddChild(fApply);
 	fApply->MakeDefault(true);
 	fClient = 0;
@@ -51,18 +43,18 @@ AddOnWindow::SetAddOn(becasso_addon_info* info)
 	SetName(info->name);
 	BMessage* msg = NULL;
 	switch (info->type) {
-	case BECASSO_FILTER:
-		msg = new BMessage(ADDON_FILTER);
-		break;
-	case BECASSO_TRANSFORMER:
-		msg = new BMessage(ADDON_TRANSFORMER);
-		break;
-	case BECASSO_GENERATOR:
-		msg = new BMessage(ADDON_GENERATOR);
-		break;
-	default:
-		fprintf(stderr, "AddOnWindow: Unknown Add-On Type!\n");
-		throw(0);
+		case BECASSO_FILTER:
+			msg = new BMessage(ADDON_FILTER);
+			break;
+		case BECASSO_TRANSFORMER:
+			msg = new BMessage(ADDON_TRANSFORMER);
+			break;
+		case BECASSO_GENERATOR:
+			msg = new BMessage(ADDON_GENERATOR);
+			break;
+		default:
+			fprintf(stderr, "AddOnWindow: Unknown Add-On Type!\n");
+			throw(0);
 	}
 	msg->AddInt32("index", info->index);
 	fApply->SetMessage(msg);
@@ -76,8 +68,8 @@ bool
 AddOnWindow::QuitRequested()
 {
 	//	printf ("AddOnWindow::QuitRequested ()\n");
-	SetClient(NULL); // This sends a message to the previous client;
-					 // that'll notify the AddOn.
+	SetClient(NULL);  // This sends a message to the previous client;
+					  // that'll notify the AddOn.
 	return false;
 }
 
@@ -154,55 +146,57 @@ void
 AddOnWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'ao_i': {
-		char infostring[1024];
-		sprintf(infostring, "%s ", fInfoStruct.name);
-		switch (fInfoStruct.type) {
-		case BECASSO_FILTER:
-			strcat(infostring, "Filter ");
+		case 'ao_i':
+		{
+			char infostring[1024];
+			sprintf(infostring, "%s ", fInfoStruct.name);
+			switch (fInfoStruct.type) {
+				case BECASSO_FILTER:
+					strcat(infostring, "Filter ");
+					break;
+				case BECASSO_TRANSFORMER:
+					strcat(infostring, "Transformer ");
+					break;
+				case BECASSO_GENERATOR:
+					strcat(infostring, "Generator ");
+					break;
+				default:
+					fprintf(stderr, "AddOnWindow: Unknown Add-On Type!\n");
+			}
+			char version[16];
+			sprintf(version, "v%i.%i\n", fInfoStruct.version, fInfoStruct.release);
+			strcat(infostring, version);
+			strcat(infostring, fInfoStruct.author);
+			strcat(infostring, "\n");
+			strcat(infostring, fInfoStruct.copyright);
+			strcat(infostring, "\n");
+			strcat(infostring, fInfoStruct.description);
+			BAlert* infoBox = new BAlert("", infostring, "OK");
+			infoBox->Go();
 			break;
-		case BECASSO_TRANSFORMER:
-			strcat(infostring, "Transformer ");
-			break;
-		case BECASSO_GENERATOR:
-			strcat(infostring, "Generator ");
-			break;
-		default:
-			fprintf(stderr, "AddOnWindow: Unknown Add-On Type!\n");
 		}
-		char version[16];
-		sprintf(version, "v%i.%i\n", fInfoStruct.version, fInfoStruct.release);
-		strcat(infostring, version);
-		strcat(infostring, fInfoStruct.author);
-		strcat(infostring, "\n");
-		strcat(infostring, fInfoStruct.copyright);
-		strcat(infostring, "\n");
-		strcat(infostring, fInfoStruct.description);
-		BAlert* infoBox = new BAlert("", infostring, "OK");
-		infoBox->Go();
-		break;
-	}
-	case 'ao_s':
-		stop = true;
-		break;
-	case 'cack': // Closing is acknowledged by the client.
-		printf("cack\n");
-		break;
-	case ADDON_RESIZED: {
-		// Note: see AddOn::Open()
-		BView* config = FindView("config view");
-		if (config) {
-			BRect bounds = config->Bounds();
-			if (bounds.right < 188)
-				bounds.right = 188;
-			bounds.bottom += 64;
-			ResizeTo(bounds.Width(), bounds.Height());
-		} else
-			fprintf(stderr, "AddOnWindow: ADDON_RESIZED but couldn't find config view\n");
-		break;
-	}
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case 'ao_s':
+			stop = true;
+			break;
+		case 'cack':  // Closing is acknowledged by the client.
+			printf("cack\n");
+			break;
+		case ADDON_RESIZED:
+		{
+			// Note: see AddOn::Open()
+			BView* config = FindView("config view");
+			if (config) {
+				BRect bounds = config->Bounds();
+				if (bounds.right < 188)
+					bounds.right = 188;
+				bounds.bottom += 64;
+				ResizeTo(bounds.Width(), bounds.Height());
+			} else
+				fprintf(stderr, "AddOnWindow: ADDON_RESIZED but couldn't find config view\n");
+			break;
+		}
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

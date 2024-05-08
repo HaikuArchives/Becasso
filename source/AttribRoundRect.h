@@ -1,10 +1,10 @@
 #ifndef ATTRIBROUNDRECT_H
 #define ATTRIBROUNDRECT_H
 
-#include "AttribView.h"
 #include <Message.h>
 #include <PictureButton.h>
 #include <RadioButton.h>
+#include "AttribView.h"
 #include "Slider.h"
 
 #define RRECT_OUTLINE 1
@@ -22,15 +22,13 @@
 #define PROP_ABSY 6
 #define PROP_CORNERS 7
 
-class AttribRoundRect : public AttribView
-{
-  public:
+class AttribRoundRect : public AttribView {
+public:
 	AttribRoundRect();
 	virtual ~AttribRoundRect();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 	float getPenSize() { return fPenSize; };
@@ -47,7 +45,7 @@ class AttribRoundRect : public AttribView
 
 	float getRadYrel() { return fRadYrel; };
 
-  private:
+private:
 	typedef AttribView inherited;
 	float fPenSize;
 	float fRadXabs;

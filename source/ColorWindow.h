@@ -1,26 +1,25 @@
 #ifndef COLORWINDOW_H
 #define COLORWINDOW_H
 
-#include <Window.h>
-#include <Rect.h>
-#include <MenuBar.h>
-#include <TextControl.h>
-#include <StringView.h>
 #include <FilePanel.h>
+#include <MenuBar.h>
 #include <NumberFormat.h>
+#include <Rect.h>
+#include <StringView.h>
+#include <TextControl.h>
+#include <Window.h>
 #include "ColorMenuButton.h"
-#include "Slider.h"
-#include "RGBSquare.h"
-#include "HSVSquare.h"
-#include "hsv.h"
 #include "ColorView.h"
+#include "HSVSquare.h"
+#include "RGBSquare.h"
+#include "Slider.h"
+#include "hsv.h"
 
 #define CE_WIDTH 320
 #define CE_HEIGHT 502
 
-class ColorWindow : public BWindow
-{
-  public:
+class ColorWindow : public BWindow {
+public:
 	ColorWindow(BRect frame, const char* name, ColorMenuButton* but);
 	virtual ~ColorWindow();
 	virtual void MessageReceived(BMessage* msg);
@@ -31,7 +30,7 @@ class ColorWindow : public BWindow
 
 	hsv_color hsv() { return rgb2hsv(c); };
 
-  private:
+private:
 	typedef BWindow inherited;
 	void SetColor(rgb_color _c);
 	ColorMenuButton* button;

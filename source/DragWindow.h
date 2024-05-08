@@ -6,14 +6,11 @@
 #include <string.h>
 #include "Settings.h"
 
-class DragWindow : public BWindow
-{
-  public:
+class DragWindow : public BWindow {
+public:
 	DragWindow(const char* kind, BRect frame, const char* title)
-		: BWindow(
-			  frame, title, B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL,
-			  B_WILL_ACCEPT_FIRST_CLICK | B_NOT_RESIZABLE | B_NOT_ZOOMABLE
-		  )
+		: BWindow(frame, title, B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL,
+			  B_WILL_ACCEPT_FIRST_CLICK | B_NOT_RESIZABLE | B_NOT_ZOOMABLE)
 	// Do not add B_AVOID_FOCUS since you then can't close it using the closer widget anymore
 	{
 		strcpy(fKind, kind);
@@ -43,7 +40,7 @@ class DragWindow : public BWindow
 	}
 
 
-  private:
+private:
 	char fKind[64];
 };
 

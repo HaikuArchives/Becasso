@@ -1,13 +1,13 @@
-#include <MenuItem.h>
-#include <MenuField.h>
 #include "AttribDraw.h"
+#include <Box.h>
+#include <MenuField.h>
+#include <MenuItem.h>
+#include <stdio.h>
+#include <string.h>
 #include "Colors.h"
+#include "Settings.h"
 #include "Slider.h"
 #include "Tablet.h"
-#include <Box.h>
-#include <string.h>
-#include <stdio.h>
-#include "Settings.h"
 
 static property_info prop_list[] = {0};
 
@@ -71,8 +71,7 @@ AttribDraw::GetSupportedSuites(BMessage* message)
 
 BHandler*
 AttribDraw::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	return inherited::ResolveSpecifier(message, index, specifier, command, property);
 }
@@ -81,36 +80,40 @@ void
 AttribDraw::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'TBL1': {
-		extern Tablet* wacom;
-		delete wacom;
-		wacom = new Tablet("serial1");
-		wacom->Init();
-		break;
-	}
-	case 'TBL2': {
-		extern Tablet* wacom;
-		delete wacom;
-		wacom = new Tablet("serial2");
-		wacom->Init();
-		break;
-	}
-	case 'TBL3': {
-		extern Tablet* wacom;
-		delete wacom;
-		wacom = new Tablet("serial3");
-		wacom->Init();
-		break;
-	}
-	case 'TBL4': {
-		extern Tablet* wacom;
-		delete wacom;
-		wacom = new Tablet("serial4");
-		wacom->Init();
-		break;
-	}
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case 'TBL1':
+		{
+			extern Tablet* wacom;
+			delete wacom;
+			wacom = new Tablet("serial1");
+			wacom->Init();
+			break;
+		}
+		case 'TBL2':
+		{
+			extern Tablet* wacom;
+			delete wacom;
+			wacom = new Tablet("serial2");
+			wacom->Init();
+			break;
+		}
+		case 'TBL3':
+		{
+			extern Tablet* wacom;
+			delete wacom;
+			wacom = new Tablet("serial3");
+			wacom->Init();
+			break;
+		}
+		case 'TBL4':
+		{
+			extern Tablet* wacom;
+			delete wacom;
+			wacom = new Tablet("serial4");
+			wacom->Init();
+			break;
+		}
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

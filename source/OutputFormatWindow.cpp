@@ -8,22 +8,22 @@
 // Modifications by Sander Stoks marked --SS
 
 // Includes
-#include <string.h>
-#include <stdio.h>
-#include <View.h>
-#include <ListView.h>
-#include <ScrollView.h>
-#include <Font.h>
+#include "OutputFormatWindow.h"
 #include <Button.h>
-#include <Rect.h>
+#include <DataIO.h>
 #include <Errors.h>
+#include <Font.h>
+#include <Invoker.h>
+#include <ListView.h>
+#include <Rect.h>
+#include <ScrollView.h>
 #include <TranslationDefs.h>
 #include <TranslatorRoster.h>
-#include <DataIO.h>
+#include <View.h>
 #include <Window.h>
-#include <Invoker.h>
+#include <stdio.h>
+#include <string.h>
 #include <translation/TranslatorFormats.h>
-#include "OutputFormatWindow.h"
 
 
 // Defines
@@ -34,68 +34,63 @@
 #define INVOKE_LIST 'invk'
 
 // Struct for keeping output format info together
-struct OutputFormat
-{
+struct OutputFormat {
 	uint32 type;
 	translator_id translator;
 };
 
 // CaptionView class for displaying a caption with a separator line
-class CaptionView : public BView
-{
-  public:
+class CaptionView : public BView {
+public:
 	CaptionView(BRect frame, const char* caption);
 	virtual ~CaptionView();
 	virtual void Draw(BRect updateRect);
 
-  private:
+private:
 	char* mCaption;
 	float text_height, text_descent;
 };
 
 // View for displaying the three info lines
-class InfoLinesView : public BView
-{
-  public:
+class InfoLinesView : public BView {
+public:
 	InfoLinesView(BRect frame, int32 nLines);
 	virtual ~InfoLinesView();
 	void SetInfoLines(const char** LineTexts);
 	virtual void Draw(BRect updateRect);
 
-  private:
+private:
 	int32 mLines;
 	const char** mLineTexts;
 	float text_height, text_descent;
 };
 
 // The main view
-class OutputFormatView : public BView
-{
-  public:
+class OutputFormatView : public BView {
+public:
 	OutputFormatView(
-		BRect frame, BPositionIO* stream, BInvoker* item_selected, BTranslatorRoster* roster
-	);
+		BRect frame, BPositionIO* stream, BInvoker* item_selected, BTranslatorRoster* roster);
 	virtual ~OutputFormatView();
 	virtual void AttachedToWindow();
 	virtual void MessageReceived(BMessage* msg);
 
-  private:
+private:
 	void AddConfigView();
 	void MakeFollowBottom(bool flag = true);
 	void RecursiveSetMode(BView* view);
 	BInvoker* selected_invoker;
-	bool message_sent;			   // --SS
-	BTranslatorRoster* the_roster; // switched to avoid compiler warning
+	bool message_sent;				// --SS
+	BTranslatorRoster* the_roster;	// switched to avoid compiler warning
 	BListView* list_view;
 	BScrollView* scroll_view;
 	BButton* cancel_button;
 	BButton* the_button;
 	CaptionView* info_caption;
 	InfoLinesView* info_view;
-	OutputFormat* output_list;	 // -SS
-	CaptionView* config_caption; // switched
-	BView* config_view;			 // --SS
-	BWindow* the_window;		 // switched
+	OutputFormat* output_list;	  // -SS
+	CaptionView* config_caption;  // switched
+	BView* config_view;			  // --SS
+	BWindow* the_window;		  // switched
 	int32 index;
 	const char* name_line;
 	const char* info_line;
@@ -103,14 +98,16 @@ class OutputFormatView : public BView
 };
 
 // OutputFormatWindow constructor
-OutputFormatWindow::OutputFormatWindow(
-	BPositionIO* in_stream, BInvoker* item_selected, BInvoker* window_cancelled,
-	BTranslatorRoster* roster
-)
+OutputFormatWindow::OutputFormatWindow(BPositionIO* in_stream, BInvoker* item_selected,
+	BInvoker* window_cancelled, BTranslatorRoster* roster)
 
 	: BWindow(BRect(100.0, 45.0, 425.0, 322.0), "Select Format", B_TITLED_WINDOW, 0),
-	  the_stream(in_stream), selected_invoker(item_selected), cancelled_invoker(window_cancelled),
-	  the_roster(roster), message_sent(false), setup_done(false)
+	  the_stream(in_stream),
+	  selected_invoker(item_selected),
+	  cancelled_invoker(window_cancelled),
+	  the_roster(roster),
+	  message_sent(false),
+	  setup_done(false)
 {
 	// Don't do anything time consuming in the contructor,
 	// let's get the message looper thread going first
@@ -123,30 +120,30 @@ void
 OutputFormatWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case DO_SETUP:
-		if (!setup_done) {
-			if (the_roster == 0)
-				the_roster = BTranslatorRoster::Default();
+		case DO_SETUP:
+			if (!setup_done) {
+				if (the_roster == 0)
+					the_roster = BTranslatorRoster::Default();
 
-			OutputFormatView* main_view =
-				new OutputFormatView(Bounds(), the_stream, selected_invoker, the_roster);
-			ResizeTo(main_view->Bounds().Width(), main_view->Bounds().Height());
-			Lock();
-			AddChild(main_view);
-			Unlock();
-			Show();
-			setup_done = true;
-		}
-		break;
+				OutputFormatView* main_view =
+					new OutputFormatView(Bounds(), the_stream, selected_invoker, the_roster);
+				ResizeTo(main_view->Bounds().Width(), main_view->Bounds().Height());
+				Lock();
+				AddChild(main_view);
+				Unlock();
+				Show();
+				setup_done = true;
+			}
+			break;
 
-	case MESSAGE_SENT:
-		message_sent = true;
-		PostMessage(B_QUIT_REQUESTED);
-		break;
+		case MESSAGE_SENT:
+			message_sent = true;
+			PostMessage(B_QUIT_REQUESTED);
+			break;
 
-	default:
-		BWindow::MessageReceived(msg);
-		break;
+		default:
+			BWindow::MessageReceived(msg);
+			break;
 	}
 }
 
@@ -168,10 +165,14 @@ OutputFormatWindow::QuitRequested()
 
 // Main view constructor
 OutputFormatView::OutputFormatView(
-	BRect frame, BPositionIO* stream, BInvoker* item_selected, BTranslatorRoster* roster
-)
-	: BView(frame, "", B_FOLLOW_ALL_SIDES, B_WILL_DRAW), selected_invoker(item_selected),
-	  message_sent(false), the_roster(roster), output_list(0), config_caption(0), config_view(0)
+	BRect frame, BPositionIO* stream, BInvoker* item_selected, BTranslatorRoster* roster)
+	: BView(frame, "", B_FOLLOW_ALL_SIDES, B_WILL_DRAW),
+	  selected_invoker(item_selected),
+	  message_sent(false),
+	  the_roster(roster),
+	  output_list(0),
+	  config_caption(0),
+	  config_view(0)
 {
 	index = -1;
 	version_line[0] = '\0';
@@ -188,12 +189,9 @@ OutputFormatView::OutputFormatView(
 
 	// Create the main list view; we'll put it in a scroll view later
 	list_view = new BListView(
-		BRect(
-			10.0, caption_view->Frame().bottom + 3.0, Bounds().right - 10.0 - B_V_SCROLL_BAR_WIDTH,
-			caption_view->Frame().bottom + 108.0
-		),
-		""
-	);
+		BRect(10.0, caption_view->Frame().bottom + 3.0,
+			Bounds().right - 10.0 - B_V_SCROLL_BAR_WIDTH, caption_view->Frame().bottom + 108.0),
+		"");
 	list_view->SetResizingMode(B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP_BOTTOM);
 	list_view->SetSelectionMessage(new BMessage(ITEM_SELECTED));
 	list_view->SetInvocationMessage(new BMessage(SEND_MESSAGE));
@@ -219,11 +217,10 @@ OutputFormatView::OutputFormatView(
 			int32 output_count = 0;
 			//			printf ("%ld translators found\n", info_count);	// --SS
 			for (int32 i = 0; i < info_count; ++i) {
-				const translation_format* format_list = 0; // --SS const
+				const translation_format* format_list = 0;	// --SS const
 				int32 format_count = 0;
 				if (the_roster->GetOutputFormats(
-						info_list[i].translator, &format_list, &format_count
-					) == B_NO_ERROR) {
+						info_list[i].translator, &format_list, &format_count) == B_NO_ERROR) {
 					for (int32 j = 0; j < format_count; ++j) {
 						// Only list formats that differ from the input format
 						// and belong to the same group.
@@ -260,48 +257,38 @@ OutputFormatView::OutputFormatView(
 	}
 
 	// Put the list view in a scroll view with a vertical scroll bar
-	scroll_view = new BScrollView(
-		"", list_view, B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW, false, true, B_PLAIN_BORDER
-	);
+	scroll_view = new BScrollView("", list_view, B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW,
+		false, true, B_PLAIN_BORDER);
 	AddChild(scroll_view);
 
 	// Cancel button
-	cancel_button = new BButton(
-		BRect(0.0, 0.0, 0.0, 0.0), "", "Cancel", new BMessage(B_QUIT_REQUESTED),
-		B_FOLLOW_RIGHT | B_FOLLOW_TOP
-	);
+	cancel_button = new BButton(BRect(0.0, 0.0, 0.0, 0.0), "", "Cancel",
+		new BMessage(B_QUIT_REQUESTED), B_FOLLOW_RIGHT | B_FOLLOW_TOP);
 	// Resize to make the text fit the button
 	cancel_button->ResizeToPreferred();
 	AddChild(cancel_button);
 
 	// Main button
-	the_button = new BButton(
-		BRect(0.0, 0.0, 0.0, 0.0), "", "Use", new BMessage(INVOKE_LIST),
-		B_FOLLOW_RIGHT | B_FOLLOW_TOP
-	);
+	the_button = new BButton(BRect(0.0, 0.0, 0.0, 0.0), "", "Use", new BMessage(INVOKE_LIST),
+		B_FOLLOW_RIGHT | B_FOLLOW_TOP);
 	// Make it the default button
 	the_button->MakeDefault(true);
 	// Resize to make the text fit the button
 	the_button->ResizeToPreferred();
 	// Move it to the extreme right
-	the_button->MoveBy(
-		scroll_view->Frame().right - the_button->Frame().right,
-		scroll_view->Frame().bottom - the_button->Frame().top + 7.0
-	);
+	the_button->MoveBy(scroll_view->Frame().right - the_button->Frame().right,
+		scroll_view->Frame().bottom - the_button->Frame().top + 7.0);
 	AddChild(the_button);
 
 	// Center the cancel button next to the main button
-	cancel_button->MoveBy(
-		the_button->Frame().left - cancel_button->Frame().right - 10.0,
+	cancel_button->MoveBy(the_button->Frame().left - cancel_button->Frame().right - 10.0,
 		the_button->Frame().top - cancel_button->Frame().top +
-			(the_button->Frame().Height() - cancel_button->Frame().Height()) / 2.0
-	);
+			(the_button->Frame().Height() - cancel_button->Frame().Height()) / 2.0);
 
 	// Caption for the info view
-	info_caption = new CaptionView(
-		BRect(8.0, the_button->Frame().bottom + 1.0, Bounds().right - 8.0, 0.0),
-		"Translator Information"
-	);
+	info_caption =
+		new CaptionView(BRect(8.0, the_button->Frame().bottom + 1.0, Bounds().right - 8.0, 0.0),
+			"Translator Information");
 	AddChild(info_caption);
 
 	// Info view
@@ -316,7 +303,10 @@ OutputFormatView::OutputFormatView(
 }
 
 // Main view destructor
-OutputFormatView::~OutputFormatView() { delete[] output_list; }
+OutputFormatView::~OutputFormatView()
+{
+	delete[] output_list;
+}
 
 // Stuff we can only do when the main view is attached to a window
 void
@@ -328,8 +318,7 @@ OutputFormatView::AttachedToWindow()
 
 	// Set some size limits on the window
 	the_window->SetSizeLimits(
-		200.0, 32767.0, Bounds().Height() - scroll_view->Bounds().Height() + 50.0, 32767.0
-	);
+		200.0, 32767.0, Bounds().Height() - scroll_view->Bounds().Height() + 50.0, 32767.0);
 	// Set the target for messages sent to this view
 	list_view->SetTarget(this);
 	the_button->SetTarget(this);
@@ -359,67 +348,67 @@ OutputFormatView::MessageReceived(BMessage* msg)
 	const char* info_lines[3];
 
 	switch (msg->what) {
-	case ITEM_SELECTED:
-		if (msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
-			item_index < list_view->CountItems()) {
-			// Store the currently selected item
-			// in the class member 'index'
-			index = item_index;
-			// Update the info view and config view
-			int32 outVersion;
-			the_roster->GetTranslatorInfo(
-				output_list[item_index].translator, &name_line, &info_line, &outVersion
-			);
-			int32 ver = outVersion / 100;
-			int32 rev1 = (outVersion % 100) / 10;
-			int32 rev2 = outVersion % 10;
-			sprintf(version_line, "Version %ld.%ld.%ld", ver, rev1, rev2); // --SS %ld
-			info_lines[0] = name_line;
-			info_lines[1] = info_line;
-			info_lines[2] = version_line;
-			info_view->SetInfoLines(info_lines);
-			AddConfigView();
-		} else {
-			// Reselect the original item
-			if (index >= 0)
-				list_view->Select(index);
-		}
-		break;
-
-	case INVOKE_LIST: {
-		// The main button was pressed
-		// Find out which item is selected, and invoke it
-		int32 item_count = list_view->CountItems();
-		for (int32 i = 0; i < item_count; ++i) {
-			if (list_view->IsItemSelected(i)) {
-				list_view->Invoke();
-				break;
+		case ITEM_SELECTED:
+			if (msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
+				item_index < list_view->CountItems()) {
+				// Store the currently selected item
+				// in the class member 'index'
+				index = item_index;
+				// Update the info view and config view
+				int32 outVersion;
+				the_roster->GetTranslatorInfo(
+					output_list[item_index].translator, &name_line, &info_line, &outVersion);
+				int32 ver = outVersion / 100;
+				int32 rev1 = (outVersion % 100) / 10;
+				int32 rev2 = outVersion % 10;
+				sprintf(version_line, "Version %ld.%ld.%ld", ver, rev1, rev2);	// --SS %ld
+				info_lines[0] = name_line;
+				info_lines[1] = info_line;
+				info_lines[2] = version_line;
+				info_view->SetInfoLines(info_lines);
+				AddConfigView();
+			} else {
+				// Reselect the original item
+				if (index >= 0)
+					list_view->Select(index);
 			}
+			break;
+
+		case INVOKE_LIST:
+		{
+			// The main button was pressed
+			// Find out which item is selected, and invoke it
+			int32 item_count = list_view->CountItems();
+			for (int32 i = 0; i < item_count; ++i) {
+				if (list_view->IsItemSelected(i)) {
+					list_view->Invoke();
+					break;
+				}
+			}
+			break;
 		}
-		break;
-	}
 
-	case SEND_MESSAGE:
-		// An output format has been selected
-		if (!message_sent && msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
-			item_index < list_view->CountItems()) {
-			// Get the message from the invoker
-			BMessage the_message(*(selected_invoker->Message()));
+		case SEND_MESSAGE:
+			// An output format has been selected
+			if (!message_sent && msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
+				item_index < list_view->CountItems()) {
+				// Get the message from the invoker
+				BMessage the_message(*(selected_invoker->Message()));
 
-			// Add some info about the selected output format to it
-			the_message.AddInt32("translator", output_list[item_index].translator);
-			the_message.AddInt32("type", output_list[item_index].type);
+				// Add some info about the selected output format to it
+				the_message.AddInt32("translator", output_list[item_index].translator);
+				the_message.AddInt32("type", output_list[item_index].type);
 
-			// Send the message
-			selected_invoker->Invoke(&the_message);
-			message_sent = true;
-			the_window->PostMessage(MESSAGE_SENT);
-		}
-		break;
+				// Send the message
+				selected_invoker->Invoke(&the_message);
+				message_sent = true;
+				the_window->PostMessage(MESSAGE_SENT);
+			}
+			break;
 
-	default:
-		BView::MessageReceived(msg);
-		break;
+		default:
+			BView::MessageReceived(msg);
+			break;
 	}
 }
 
@@ -445,25 +434,21 @@ OutputFormatView::AddConfigView()
 
 	BRect config_rect;
 	if (the_roster->MakeConfigurationView(
-			output_list[index].translator, 0, &config_view, &config_rect
-		) == B_NO_ERROR &&
+			output_list[index].translator, 0, &config_view, &config_rect) == B_NO_ERROR &&
 		config_view != 0) {
 		// Create a caption for the config view
 		// if there wasn't one already
 		if (!config_caption) {
 			config_caption = new CaptionView(
 				BRect(8.0, info_view->Frame().bottom + 1.0, Bounds().right - 8.0, 0.0),
-				"Translator Settings"
-			);
+				"Translator Settings");
 			config_caption->SetResizingMode(B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP);
 			AddChild(config_caption);
 		}
 
 		// Move the config view to just below the config caption
-		config_view->MoveBy(
-			16.0 - config_view->Frame().left,
-			config_caption->Frame().bottom + 1.0 - config_view->Frame().top
-		);
+		config_view->MoveBy(16.0 - config_view->Frame().left,
+			config_caption->Frame().bottom + 1.0 - config_view->Frame().top);
 
 		// Colour it gray
 		config_view->SetViewColor(222, 222, 222);
@@ -472,10 +457,8 @@ OutputFormatView::AddConfigView()
 		// First resize the window so that the config view will fit,
 		// otherwise the config view may want to change with us
 		float width_diff = config_view->Frame().right + 16.0 - Bounds().Width();
-		the_window->ResizeTo(
-			Bounds().Width() + (width_diff > 0.0 ? width_diff : 0.0),
-			config_view->Frame().bottom + 8.0
-		);
+		the_window->ResizeTo(Bounds().Width() + (width_diff > 0.0 ? width_diff : 0.0),
+			config_view->Frame().bottom + 8.0);
 
 		// Add it to the main view
 		AddChild(config_view);
@@ -500,8 +483,7 @@ OutputFormatView::AddConfigView()
 	if (min_width < 200.0)
 		min_width = 200.0;
 	the_window->SetSizeLimits(
-		min_width, 32767.0, Bounds().Height() - scroll_view->Bounds().Height() + 50.0, 32767.0
-	);
+		min_width, 32767.0, Bounds().Height() - scroll_view->Bounds().Height() + 50.0, 32767.0);
 
 	the_window->Unlock();
 }
@@ -517,8 +499,7 @@ OutputFormatView::MakeFollowBottom(bool flag)
 	info_view->SetResizingMode(B_FOLLOW_LEFT_RIGHT | (flag ? B_FOLLOW_BOTTOM : B_FOLLOW_TOP));
 	if (config_caption)
 		config_caption->SetResizingMode(
-			B_FOLLOW_LEFT_RIGHT | (flag ? B_FOLLOW_BOTTOM : B_FOLLOW_TOP)
-		);
+			B_FOLLOW_LEFT_RIGHT | (flag ? B_FOLLOW_BOTTOM : B_FOLLOW_TOP));
 }
 
 // Recursively set the resizing mode of a view and its children
@@ -542,7 +523,7 @@ OutputFormatView::RecursiveSetMode(BView* view)
 InfoLinesView::InfoLinesView(BRect frame, int32 nLines)
 	: BView(frame, "", B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW), mLines(nLines)
 {
-	mLineTexts = new const char*[mLines]; // --SS const
+	mLineTexts = new const char*[mLines];  // --SS const
 	for (int32 i = 0; i < mLines; ++i)
 		mLineTexts[i] = 0;
 
@@ -560,7 +541,10 @@ InfoLinesView::InfoLinesView(BRect frame, int32 nLines)
 }
 
 // InfoLinesView destructor
-InfoLinesView::~InfoLinesView() { delete[] mLineTexts; }
+InfoLinesView::~InfoLinesView()
+{
+	delete[] mLineTexts;
+}
 
 // Update the texts in the info lines
 void
@@ -602,7 +586,10 @@ CaptionView::CaptionView(BRect frame, const char* caption)
 }
 
 // CaptionView destructor
-CaptionView::~CaptionView() { delete[] mCaption; }
+CaptionView::~CaptionView()
+{
+	delete[] mCaption;
+}
 
 // Draw the caption
 void

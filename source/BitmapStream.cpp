@@ -75,7 +75,7 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 		}
 		if (toWrite > size)
 			toWrite = size;
-		if (!toWrite && size) //	i e we've been told to write too much
+		if (!toWrite && size)  //	i e we've been told to write too much
 			return B_BAD_VALUE;
 		memcpy(dest, data, toWrite);
 		pos += toWrite;
@@ -88,8 +88,8 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 		if (pos == sizeof(DATABitmap)) {
 			if (fMap &&
 				((fMap->Bounds() != fHeader.bounds) || (fMap->ColorSpace() != fHeader.colors) ||
-				 (fMap->BytesPerRow() != fHeader.rowBytes))) {
-				if (!fDetached) //	if someone detached, we don't delete
+					(fMap->BytesPerRow() != fHeader.rowBytes))) {
+				if (!fDetached)	 //	if someone detached, we don't delete
 					delete fMap;
 				fMap = NULL;
 			}
@@ -112,9 +112,8 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 }
 
 off_t
-BitmapStream::Seek( //	returns 0 for success
-	off_t position, uint32 whence
-)
+BitmapStream::Seek(	 //	returns 0 for success
+	off_t position, uint32 whence)
 {
 	if (whence == SEEK_CUR)
 		position += fPosition;
@@ -141,9 +140,8 @@ BitmapStream::Size() const
 }
 
 status_t
-BitmapStream::SetSize( //	returns 0 for success
-	off_t size
-)
+BitmapStream::SetSize(	//	returns 0 for success
+	off_t size)
 {
 	if (size < 0)
 		return B_BAD_VALUE;
@@ -156,7 +154,7 @@ BitmapStream::SetSize( //	returns 0 for success
 	 *	We assume people will write the header before any data,
 	 *	so SetSize() is really not going to do anything.
 	 */
-	if (fMap) //	if we checked that the size was OK
+	if (fMap)  //	if we checked that the size was OK
 		fSize = size;
 	return B_NO_ERROR;
 }

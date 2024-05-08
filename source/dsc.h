@@ -25,28 +25,24 @@ typedef uint32_t u_int32_t;
 #endif
 #endif
 
-typedef enum
-{
+typedef enum {
 	unknown = 0,
 	dsc1 = 1,
 	dsc2 = 2
 } dsc_protocol_t;
 
-typedef enum
-{
+typedef enum {
 	unavailable = -1,
 	normal = 0,
 	fine = 1,
 	superfine = 2
 } dsc_quality_t;
 
-typedef struct
-{
+typedef struct {
 	int lerror, lerrno;
 } dsc_error;
 
-typedef struct
-{
+typedef struct {
 	int fd;
 	struct termios term;
 	dsc_protocol_t type;
@@ -72,23 +68,22 @@ typedef struct
 
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 
-	ssize_t dsc_read(dsc_t*, void*, size_t);
-	int dsc2_send_cmd(dsc_t*, int, int, int);
+ssize_t dsc_read(dsc_t*, void*, size_t);
+int dsc2_send_cmd(dsc_t*, int, int, int);
 
-	dsc_t* dsc_open(const char*, speed_t, dsc_error*);
-	int dsc_close(dsc_t*);
-	int dsc_getindex(dsc_t*, dsc_quality_t*);
-	int dsc_preview(dsc_t*, int);
-	int dsc_delete(dsc_t*, int);
-	ssize_t dsc_requestimage(dsc_t*, int);
-	ssize_t dsc_readimageblock(dsc_t*, int, void*);
+dsc_t* dsc_open(const char*, speed_t, dsc_error*);
+int dsc_close(dsc_t*);
+int dsc_getindex(dsc_t*, dsc_quality_t*);
+int dsc_preview(dsc_t*, int);
+int dsc_delete(dsc_t*, int);
+ssize_t dsc_requestimage(dsc_t*, int);
+ssize_t dsc_readimageblock(dsc_t*, int, void*);
 
-	const char* dsc_strerror(const dsc_error*);
+const char* dsc_strerror(const dsc_error*);
 
 
 #ifdef __cplusplus

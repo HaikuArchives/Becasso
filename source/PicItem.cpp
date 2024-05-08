@@ -1,10 +1,9 @@
 #include "PicItem.h"
-#include "MainWindow.h" // Hack alert!
 #include "Colors.h"
+#include "MainWindow.h"	 // Hack alert!
 
 PicItem::PicItem(
-	const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help
-)
+	const BPicture* _picture, AttribView* _attrib, AttribWindow* _myWindow, const char* _help)
 	: BMenuItem("", NULL)
 {
 	picture = new BPicture(*_picture);

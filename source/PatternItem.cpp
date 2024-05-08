@@ -1,9 +1,12 @@
 #include "PatternItem.h"
-#include "PatternMenuButton.h"
 #include "ColorMenuButton.h"
 #include "Colors.h"
+#include "PatternMenuButton.h"
 
-PatternItem::PatternItem(const pattern _p) : BMenuItem("", NULL) { pat = _p; }
+PatternItem::PatternItem(const pattern _p) : BMenuItem("", NULL)
+{
+	pat = _p;
+}
 
 PatternItem::~PatternItem() {}
 

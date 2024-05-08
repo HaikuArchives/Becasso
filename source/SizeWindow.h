@@ -1,9 +1,9 @@
 #ifndef SIZEWINDOW_H
 #define SIZEWINDOW_H
 
-#include <Window.h>
 #include <NumberFormat.h>
 #include <TextControl.h>
+#include <Window.h>
 #include <stdlib.h>
 
 // Returns 1 if the `Open' button was pressed,
@@ -17,9 +17,8 @@
 #define COLOR_BG 1
 #define COLOR_TR 2
 
-class SizeWindow : public BWindow
-{
-  public:
+class SizeWindow : public BWindow {
+public:
 	SizeWindow(int32 h, int32 w, int32 c);
 	virtual ~SizeWindow();
 
@@ -32,7 +31,7 @@ class SizeWindow : public BWindow
 
 	int32 color() { return fColor; };
 
-  private:
+private:
 	void recalc();
 	void readvalues();
 

@@ -1,7 +1,7 @@
 #include "hsv.h"
-#include <math.h>
 #include <SupportDefs.h>
-#include "BecassoAddOn.h" // For HUE_UNDEF
+#include <math.h>
+#include "BecassoAddOn.h"  // For HUE_UNDEF
 
 IMPEXP hsv_color
 rgb2hsv(rgb_color c)
@@ -64,36 +64,36 @@ hsv2rgb(hsv_color c)
 		q = v * (1.0 - s * f);
 		t = v * (1.0 - s * (1.0 - f));
 		switch (i) {
-		case 0:
-			r = v;
-			g = t;
-			b = p;
-			break;
-		case 1:
-			r = q;
-			g = v;
-			b = p;
-			break;
-		case 2:
-			r = p;
-			g = v;
-			b = t;
-			break;
-		case 3:
-			r = p;
-			g = q;
-			b = v;
-			break;
-		case 4:
-			r = t;
-			g = p;
-			b = v;
-			break;
-		case 5:
-			r = v;
-			g = p;
-			b = q;
-			break;
+			case 0:
+				r = v;
+				g = t;
+				b = p;
+				break;
+			case 1:
+				r = q;
+				g = v;
+				b = p;
+				break;
+			case 2:
+				r = p;
+				g = v;
+				b = t;
+				break;
+			case 3:
+				r = p;
+				g = q;
+				b = v;
+				break;
+			case 4:
+				r = t;
+				g = p;
+				b = v;
+				break;
+			case 5:
+				r = v;
+				g = p;
+				b = q;
+				break;
 		}
 	}
 	res.red = uint8(r * 255);
@@ -127,7 +127,7 @@ diff(rgb_color a, rgb_color b)
 		int dr = (int)a.red - b.red;
 		int dg = (int)a.green - b.green;
 		int db = (int)a.blue - b.blue;
-		return (sqrt(irlut[dr] + iglut[dg] + iblut[db]) / 32); // 32 ~ sqrt(1000); 1% error.
+		return (sqrt(irlut[dr] + iglut[dg] + iblut[db]) / 32);	// 32 ~ sqrt(1000); 1% error.
 	} else {
 		for (int i = 0; i < 512; i++) {
 			long j = (i - 256) * (i - 256);
@@ -152,10 +152,8 @@ IMPEXP float
 cdiff(rgb_color a, rgb_color b)
 // Note: Doesn't take alpha channel into account.
 {
-	return (sqrt(
-		(a.red - b.red) * (a.red - b.red) + (a.green - b.green) * (a.green - b.green) +
-		(a.blue - b.blue) * (a.blue - b.blue)
-	));
+	return (sqrt((a.red - b.red) * (a.red - b.red) + (a.green - b.green) * (a.green - b.green) +
+				 (a.blue - b.blue) * (a.blue - b.blue)));
 }
 
 #endif
@@ -249,15 +247,11 @@ IMPEXP bgra_pixel
 rgb2bgra(rgb_color c)
 {
 #if defined(__POWERPC__)
-	return (
-		((c.blue << 24) & 0xFF000000) | ((c.green << 16) & 0x00FF0000) |
-		((c.red << 8) & 0x0000FF00) | ((c.alpha) & 0x000000FF)
-	);
+	return (((c.blue << 24) & 0xFF000000) | ((c.green << 16) & 0x00FF0000) |
+			((c.red << 8) & 0x0000FF00) | ((c.alpha) & 0x000000FF));
 #else
-	return (
-		((c.blue) & 0x000000FF) | ((c.green << 8) & 0x0000FF00) | ((c.red << 16) & 0x00FF0000) |
-		((c.alpha << 24) & 0xFF000000)
-	);
+	return (((c.blue) & 0x000000FF) | ((c.green << 8) & 0x0000FF00) | ((c.red << 16) & 0x00FF0000) |
+			((c.alpha << 24) & 0xFF000000));
 #endif
 }
 

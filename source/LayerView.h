@@ -1,17 +1,16 @@
 #ifndef LAYERVIEW_H
 #define LAYERVIEW_H
 
-#include <View.h>
-#include <Rect.h>
 #include <Point.h>
+#include <Rect.h>
 #include <ScrollBar.h>
+#include <View.h>
+#include "AttribDraw.h"	 // For MAX_LAYERS
 #include "CanvasView.h"
 #include "LayerItem.h"
-#include "AttribDraw.h" // For MAX_LAYERS
 
-class LayerView : public BView
-{
-  public:
+class LayerView : public BView {
+public:
 	LayerView(BRect frame, const char* name, CanvasView* _myView);
 	virtual ~LayerView();
 	virtual void Draw(BRect updateRect);
@@ -24,7 +23,7 @@ class LayerView : public BView
 
 	void setCanvasView(CanvasView* _myView) { fMyView = _myView; };
 
-  private:
+private:
 	typedef BView inherited;
 	BScrollBar *mh, *mv;
 	CanvasView* fMyView;

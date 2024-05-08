@@ -1,12 +1,11 @@
 #ifndef PATTERNMENUWINDOW_H
 #define PATTERNMENUWINDOW_H
 
-#include "View.h"
 #include "PatternMenuButton.h"
+#include "View.h"
 
-class PatternMenuView : public BView
-{
-  public:
+class PatternMenuView : public BView {
+public:
 	PatternMenuView(BRect rect, const char* name, PatternMenuButton* pmb);
 	virtual ~PatternMenuView();
 	virtual void Draw(BRect updateRect);
@@ -14,7 +13,7 @@ class PatternMenuView : public BView
 	virtual void MouseMoved(BPoint point, uint32 transit, const BMessage* msg);
 	BRect RectForIndex(int ind);
 
-  private:
+private:
 	typedef BView inherited;
 	PatternMenuButton* fPMB;
 	int index;

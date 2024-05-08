@@ -1,9 +1,8 @@
-#include "Datatypes.h"
 #include <DataFormats.h>
+#include "Datatypes.h"
 
-class MyWindow : public BWindow
-{
-  public:
+class MyWindow : public BWindow {
+public:
 	MyWindow();
 	~MyWindow();
 
@@ -16,9 +15,8 @@ class MyWindow : public BWindow
 	BView* fCapture;
 };
 
-class TestApplication : public BApplication
-{
-  public:
+class TestApplication : public BApplication {
+public:
 	TestApplication();
 	void preRun(void);
 	MyWindow* mw;
@@ -39,15 +37,14 @@ const char* SIGNATURE = "application/x-redrackam-testCaptureHandler";
 
 TestApplication::TestApplication() : BApplication(SIGNATURE) {}
 
-class BitmapView : public BView
-{
-  public:
+class BitmapView : public BView {
+public:
 	BitmapView(BRect a);
 	void Draw(BRect area);
 	void Decode(BPositionIO* stream);
 	void MouseDown(BPoint point);
 
-  private:
+private:
 	BBitmap* bitmap;
 };
 
@@ -66,8 +63,7 @@ BitmapView ::Draw(BRect area)
 
 		// Centrer l'image
 		rect.OffsetTo(
-			0.5 * (Bounds().Width() - rect.Width()), 0.5 * (Bounds().Height() - rect.Height())
-		);
+			0.5 * (Bounds().Width() - rect.Width()), 0.5 * (Bounds().Height() - rect.Height()));
 
 		// dessine l'image
 		DrawBitmap(bitmap, rect);
@@ -98,7 +94,7 @@ BitmapView::MouseDown(BPoint point)
 			// (avec un SetTarget et en completant le message pour qu'il contienne ce qu'il faut)
 
 			// Quelques variables utiles
-			BMessage* setup = NULL; // normalement, c'est le message de configuration
+			BMessage* setup = NULL;	 // normalement, c'est le message de configuration
 			status_t err;
 
 			// On cree un print job avec un nom pour le spool
@@ -176,12 +172,10 @@ TestApplication::preRun(void)
 	BMallocIO stream;
 	BMessage message;
 	do {
-		res = DATACapture(
-			mw->fHandler,
-			mw->fCapture, //	can be NULL
-			&message,	  //	can be NULL
-			stream, DATA_BITMAP
-		);
+		res = DATACapture(mw->fHandler,
+			mw->fCapture,  //	can be NULL
+			&message,	   //	can be NULL
+			stream, DATA_BITMAP);
 		if (mw) {
 			mw->Lock();
 			BRect area = mw->fCapture->Frame();
@@ -200,12 +194,14 @@ TestApplication::preRun(void)
 	} while (res == B_OK);
 }
 
-MyWindow::~MyWindow() { be_app->PostMessage(B_QUIT_REQUESTED); }
+MyWindow::~MyWindow()
+{
+	be_app->PostMessage(B_QUIT_REQUESTED);
+}
 
 MyWindow::MyWindow()
 	: BWindow(
-		  BRect(200, 200, 400, 400), "Capture", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE
-	  )
+		  BRect(200, 200, 400, 400), "Capture", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE)
 {
 	DATAID* list = NULL;
 	int32 count = 0;

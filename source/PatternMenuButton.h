@@ -1,21 +1,19 @@
 #ifndef PATTERNMENUBUTTON_H
 #define PATTERNMENUBUTTON_H
 
-#include <View.h>
+#include <Message.h>
 #include <Point.h>
 #include <Rect.h>
 #include <View.h>
-#include <Message.h>
-#include "PatternMenu.h"
 #include "HelpView.h"
+#include "PatternMenu.h"
 
 #define P_V_NUM 2
 #define P_H_NUM 10
 #define P_SIZE 24
 
-class PatternMenuButton : public BView
-{
-  public:
+class PatternMenuButton : public BView {
+public:
 	PatternMenuButton(BRect frame, const char* name);
 	virtual ~PatternMenuButton();
 	virtual void MouseDown(BPoint point);
@@ -37,7 +35,7 @@ class PatternMenuButton : public BView
 	BLocker* lock;
 	bool MenuWinOnScreen;
 
-  private:
+private:
 	typedef BView inherited;
 	// class PatternWindow *editor;
 	char _name[MAX_HLPNAME];

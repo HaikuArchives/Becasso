@@ -1,6 +1,6 @@
 #include "PicMenuView.h"
-#include "PicMenu.h"
 #include <string.h>
+#include "PicMenu.h"
 
 PicMenuView::PicMenuView(BRect frame, int _hnum, const char* name, PicMenuButton* pmb)
 	: BView(frame, name, B_FOLLOW_ALL, B_WILL_DRAW)
@@ -37,8 +37,7 @@ PicMenuView::Draw(BRect updateRect)
 		// printf ("numitems = %i, index = %i\n", numitems, index);
 		for (int i = 0; i < numitems; i++) {
 			thisbutton.Set(
-				(i % hnum) * bw, (i / hnum) * bw, (i % hnum + 1) * bw, (i / hnum + 1) * bw
-			);
+				(i % hnum) * bw, (i / hnum) * bw, (i % hnum + 1) * bw, (i / hnum + 1) * bw);
 			SetLowColor(LightGrey);
 			SetHighColor(DarkGrey);
 			FillRect(thisbutton, index == i ? B_SOLID_HIGH : B_SOLID_LOW);
@@ -92,8 +91,7 @@ PicMenuView::RectForIndex(int i)
 {
 	float bw = Bounds().Width() / hnum;
 	return BRect(
-		(i % hnum) * bw, (i / hnum) * bw, (i % hnum + 1) * bw - 1, (i / hnum + 1) * bw - 1
-	);
+		(i % hnum) * bw, (i / hnum) * bw, (i % hnum + 1) * bw - 1, (i / hnum + 1) * bw - 1);
 }
 
 void

@@ -5,15 +5,14 @@
 
 class BTextView;
 
-class TOTDWindow : public BWindow
-{
-  public:
+class TOTDWindow : public BWindow {
+public:
 	TOTDWindow(const BRect frame, const int num);
 	virtual ~TOTDWindow();
 	virtual void MessageReceived(BMessage* msg);
 	virtual bool QuitRequested();
 
-  private:
+private:
 	int32 fTotd;
 	BTextView* fTextView;
 };
