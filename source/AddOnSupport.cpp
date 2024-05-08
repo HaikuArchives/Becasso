@@ -22,43 +22,41 @@ average6(bgra_pixel a, bgra_pixel b, bgra_pixel c, bgra_pixel d, bgra_pixel e, b
 	bgra_pixel r = (((a >> 24) + (b >> 24) + (c >> 24) + (d >> 24) + (e >> 24) + (f >> 24)) / 6)
 				   << 24;
 	r += ((a & 0x00FF0000) + (b & 0x00FF0000) + (c & 0x00FF0000) + (d & 0x00FF0000) +
-		  (e & 0x00FF0000) + (f & 0x00FF0000)) /
+			 (e & 0x00FF0000) + (f & 0x00FF0000)) /
 		 6;
 	r &= 0xFFFF0000;
 	r += ((a & 0x0000FF00) + (b & 0x0000FF00) + (c & 0x0000FF00) + (d & 0x0000FF00) +
-		  (e & 0x0000FF00) + (f & 0x0000FF00)) /
+			 (e & 0x0000FF00) + (f & 0x0000FF00)) /
 		 6;
 	r &= 0xFFFFFF00;
 	r += ((a & 0x000000FF) + (b & 0x000000FF) + (c & 0x000000FF) + (d & 0x000000FF) +
-		  (e & 0x000000FF) + (f & 0x000000FF)) /
+			 (e & 0x000000FF) + (f & 0x000000FF)) /
 		 6;
 	return (r);
 }
 
 bgra_pixel
-average9(
-	bgra_pixel a, bgra_pixel b, bgra_pixel c, bgra_pixel d, bgra_pixel e, bgra_pixel f,
-	bgra_pixel g, bgra_pixel h, bgra_pixel i
-)
+average9(bgra_pixel a, bgra_pixel b, bgra_pixel c, bgra_pixel d, bgra_pixel e, bgra_pixel f,
+	bgra_pixel g, bgra_pixel h, bgra_pixel i)
 {
 	//  This is valid for both IA and PPC
 	bgra_pixel r = (((a >> 24) + (b >> 24) + (c >> 24) + (d >> 24) + (e >> 24) + (f >> 24) +
-					 (g >> 24) + (h >> 24) + (i >> 24)) /
-					9)
+						(g >> 24) + (h >> 24) + (i >> 24)) /
+					   9)
 				   << 24;
 	r += ((a & 0x00FF0000) + (b & 0x00FF0000) + (c & 0x00FF0000) + (d & 0x00FF0000) +
-		  (e & 0x00FF0000) + (f & 0x00FF0000) + (g & 0x00FF0000) + (h & 0x00FF0000) +
-		  (i & 0x00FF0000)) /
+			 (e & 0x00FF0000) + (f & 0x00FF0000) + (g & 0x00FF0000) + (h & 0x00FF0000) +
+			 (i & 0x00FF0000)) /
 		 9;
 	r &= 0xFFFF0000;
 	r += ((a & 0x0000FF00) + (b & 0x0000FF00) + (c & 0x0000FF00) + (d & 0x0000FF00) +
-		  (e & 0x0000FF00) + (f & 0x0000FF00) + (g & 0x0000FF00) + (h & 0x0000FF00) +
-		  (i & 0x0000FF00)) /
+			 (e & 0x0000FF00) + (f & 0x0000FF00) + (g & 0x0000FF00) + (h & 0x0000FF00) +
+			 (i & 0x0000FF00)) /
 		 9;
 	r &= 0xFFFFFF00;
 	r += ((a & 0x000000FF) + (b & 0x000000FF) + (c & 0x000000FF) + (d & 0x000000FF) +
-		  (e & 0x000000FF) + (f & 0x000000FF) + (g & 0x000000FF) + (h & 0x000000FF) +
-		  (i & 0x000000FF)) /
+			 (e & 0x000000FF) + (f & 0x000000FF) + (g & 0x000000FF) + (h & 0x000000FF) +
+			 (i & 0x000000FF)) /
 		 9;
 	return (r);
 }
@@ -71,10 +69,10 @@ pixelblend(bgra_pixel d, bgra_pixel s)
 	int sa = s & 0xFF;
 	int da = 255 - sa;
 	int ta = 255;
-	if (sa == 255 || !(d & 0xFF)) // Fully opaque
+	if (sa == 255 || !(d & 0xFF))  // Fully opaque
 	{
 		res = s;
-	} else if (sa == 0) // Fully transparent
+	} else if (sa == 0)	 // Fully transparent
 	{
 		res = d;
 	} else {
@@ -91,10 +89,10 @@ pixelblend(bgra_pixel d, bgra_pixel s)
 	int sa = s >> 24;
 	int da = 255 - sa;
 	int ta = 255;
-	if (sa == 255 || !(d >> 24)) // Fully opaque
+	if (sa == 255 || !(d >> 24))  // Fully opaque
 	{
 		res = s;
-	} else if (sa == 0) // Fully transparent
+	} else if (sa == 0)	 // Fully transparent
 	{
 		res = d;
 	} else {
@@ -187,9 +185,9 @@ rgb_color
 contrastingcolor(rgb_color a, rgb_color b)
 {
 	if ((a.red > a.green + 100 && a.red > a.blue + 100) ||
-		(b.red > b.green + 100 && b.red > b.blue + 100)) // "one is sort of red"
+		(b.red > b.green + 100 && b.red > b.blue + 100))  // "one is sort of red"
 	{
-		if (a.red + a.green + a.blue + b.red + b.green + b.blue > 768) // light colors
+		if (a.red + a.green + a.blue + b.red + b.green + b.blue > 768)	// light colors
 			return (Black);
 		else
 			return (White);
@@ -206,12 +204,10 @@ weighted_average(bgra_pixel a, uint8 wa, bgra_pixel b, uint8 wb)
 	//			(((((a & 0x00FF0000)/t)*wa + (b & 0x00FF0000)/t)*wb) & 0x00FF0000) |
 	//			 ((((a & 0x0000FF00)*wa + (b & 0x0000FF00)*wb)/t) & 0x0000FF00) |
 	//			 ((((a & 0x000000FF)*wa + (b & 0x000000FF)*wb)/t) & 0x000000FF));
-	return (
-		(((((a >> 24) * wa + (b >> 24) * wb) / t) << 24) & 0xFF000000) |
-		((((((a >> 16) & 0xFF) * wa + ((b >> 16) & 0xFF) * wb) / t) << 16) & 0x00FF0000) |
-		((((((a >> 8) & 0xFF) * wa + ((b >> 8) & 0xFF) * wb) / t) << 8) & 0x0000FF00) |
-		(((a & 0xFF) * wa + (b & 0xFF) * wb) / t & 0x000000FF)
-	);
+	return ((((((a >> 24) * wa + (b >> 24) * wb) / t) << 24) & 0xFF000000) |
+			((((((a >> 16) & 0xFF) * wa + ((b >> 16) & 0xFF) * wb) / t) << 16) & 0x00FF0000) |
+			((((((a >> 8) & 0xFF) * wa + ((b >> 8) & 0xFF) * wb) / t) << 8) & 0x0000FF00) |
+			(((a & 0xFF) * wa + (b & 0xFF) * wb) / t & 0x000000FF));
 }
 
 bgra_pixel

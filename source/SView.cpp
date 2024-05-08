@@ -1,9 +1,9 @@
 #include "SView.h"
+#include <ClassInfo.h>
+#include <Message.h>
 #include <SupportDefs.h>
 #include <WindowScreen.h>
 #include <stdio.h>
-#include <ClassInfo.h>
-#include <Message.h>
 
 SView::SView(BRect frame, const char* name, uint32 resizeMask, uint32 flags)
 	: BView(frame, name, resizeMask, flags)
@@ -48,24 +48,24 @@ SView::GetPosition(Position* position, bool setcursor)
 			}
 			// printf ("%d\n", wacom->Buttons());
 			switch (wacom->Buttons()) {
-			case 0: // Actually, only proximity here...
-				position->fButtons = 0;
-				break;
-			case 1:
-			case 2: // Stylus point
-				position->fButtons = B_PRIMARY_MOUSE_BUTTON;
-				break;
-			case 3: // Side switch
-				position->fButtons = B_SECONDARY_MOUSE_BUTTON;
-				break;
-			case 4:
-				position->fButtons = 0;
-				break;
-			case 5: // "Eraser"
-				position->fButtons = B_TERTIARY_MOUSE_BUTTON;
-				break;
-			default:
-				fprintf(stderr, "Unsupported button combination\n");
+				case 0:	 // Actually, only proximity here...
+					position->fButtons = 0;
+					break;
+				case 1:
+				case 2:	 // Stylus point
+					position->fButtons = B_PRIMARY_MOUSE_BUTTON;
+					break;
+				case 3:	 // Side switch
+					position->fButtons = B_SECONDARY_MOUSE_BUTTON;
+					break;
+				case 4:
+					position->fButtons = 0;
+					break;
+				case 5:	 // "Eraser"
+					position->fButtons = B_TERTIARY_MOUSE_BUTTON;
+					break;
+				default:
+					fprintf(stderr, "Unsupported button combination\n");
 			}
 			// end = clock();
 			// printf ("Took %d ms\n", (end - start));

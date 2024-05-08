@@ -1,24 +1,24 @@
 // SBitmap: BBitmap replacement which doesn't clear on ctor
 
 #include "SBitmap.h"
+#include <Debug.h>
 #include <stdlib.h>
 #include <string.h>
-#include <Debug.h>
 
 SBitmap::SBitmap(BBitmap* src)
 {
 	fBounds = src->Bounds();
 	switch (src->ColorSpace()) {
-	case B_COLOR_8_BIT:
-	case B_GRAYSCALE_8_BIT:
-		fBPP = 1;
-		break;
-	default:
-		fBPP = 4;
-		break;
+		case B_COLOR_8_BIT:
+		case B_GRAYSCALE_8_BIT:
+			fBPP = 1;
+			break;
+		default:
+			fBPP = 4;
+			break;
 	}
 	fBPR = fBPP * (fBounds.IntegerWidth() + 1);
-	if (fBPR % 4) // padding required
+	if (fBPR % 4)  // padding required
 	{
 		uint32 pad = 4 - ((uint32)fBPR % 4);
 		fBPR += pad;
@@ -37,16 +37,16 @@ SBitmap::SBitmap(BBitmap* src)
 SBitmap::SBitmap(const BRect bounds, const color_space cs) : fBounds(bounds), fCS(cs)
 {
 	switch (cs) {
-	case B_COLOR_8_BIT:
-	case B_GRAYSCALE_8_BIT:
-		fBPP = 1;
-		break;
-	default:
-		fBPP = 4;
-		break;
+		case B_COLOR_8_BIT:
+		case B_GRAYSCALE_8_BIT:
+			fBPP = 1;
+			break;
+		default:
+			fBPP = 4;
+			break;
 	}
 	fBPR = fBPP * (fBounds.IntegerWidth() + 1);
-	if (fBPR % 4) // padding required
+	if (fBPR % 4)  // padding required
 	{
 		uint32 pad = 4 - ((uint32)fBPR % 4);
 		fBPR += pad;
@@ -56,7 +56,10 @@ SBitmap::SBitmap(const BRect bounds, const color_space cs) : fBounds(bounds), fC
 	fBits = malloc(bitslength);
 }
 
-SBitmap::~SBitmap() { free(fBits); }
+SBitmap::~SBitmap()
+{
+	free(fBits);
+}
 
 int32
 SBitmap::BytesPerRow() const

@@ -2,9 +2,9 @@
 #define BECASSO_H
 
 #include <Application.h>
+#include <Entry.h>
 #include <Message.h>
 #include <NumberFormat.h>
-#include <Entry.h>
 #include "AboutWindow.h"
 
 #define MAX_CANVAS_NAME 1024
@@ -19,9 +19,8 @@
 #define CURSOR_OPEN_HAND 7
 #define CURSOR_GRAB 8
 
-class Becasso : public BApplication
-{
-  public:
+class Becasso : public BApplication {
+public:
 	Becasso();
 	virtual ~Becasso();
 
@@ -33,8 +32,7 @@ class Becasso : public BApplication
 	virtual void ArgvReceived(int32 argc, char** argv);
 	virtual void Pulse();
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 	void setHand();
 	void setCross();
@@ -50,7 +48,7 @@ class Becasso : public BApplication
 	void LoadAddOns();
 	void PrintSetup();
 
-  private:
+private:
 	typedef BApplication inherited;
 	AboutWindow* about;
 	BMessage* launchMessage;
@@ -68,9 +66,8 @@ class Becasso : public BApplication
 	int32 canvas_index;
 };
 
-class canvas
-{
-  public:
+class canvas {
+public:
 	int32 index;
 	char name[MAX_CANVAS_NAME];
 	BLooper* its_looper;

@@ -4,8 +4,7 @@
 const ulong _GO_AWAY = 0;
 const ulong _DRAG = 1;
 
-long
-MouseThread(void* data);
+long MouseThread(void* data);
 
 long
 MouseThread(void* data)
@@ -27,44 +26,43 @@ MouseThread(void* data)
 
 		// If going away
 		switch (This->mouse_status) {
+			case _GO_AWAY:
 
-		case _GO_AWAY:
-
-			while (mouseDown) {
-				This->GetMouse(&where, &mouseDown);
-				if (goAwayRect.Contains(where)) {
-					if (This->goAwayState == 1) {
-						This->goAwayState = 0;
+				while (mouseDown) {
+					This->GetMouse(&where, &mouseDown);
+					if (goAwayRect.Contains(where)) {
+						if (This->goAwayState == 1) {
+							This->goAwayState = 0;
+							This->Draw(goAwayRect);
+						}
+					} else if (This->goAwayState != 1) {
+						This->goAwayState = 1;
 						This->Draw(goAwayRect);
 					}
-				} else if (This->goAwayState != 1) {
-					This->goAwayState = 1;
-					This->Draw(goAwayRect);
+					snooze(20000);
 				}
-				snooze(20000);
-			}
-			break;
+				break;
 
-		case _DRAG:
+			case _DRAG:
 
-			old_where = where;
-			while (mouseDown) {
-				This->GetMouse(&where, &mouseDown);
-				if (old_where != where) {
-					This->Window()->MoveBy(where.x - old_where.x, where.y - old_where.y);
-					This->Draw(BRect(0, 0, 15, 13));
-					BView* contents = This->NextSibling();
-					if (contents) {
-						contents->Draw(contents->Bounds());
+				old_where = where;
+				while (mouseDown) {
+					This->GetMouse(&where, &mouseDown);
+					if (old_where != where) {
+						This->Window()->MoveBy(where.x - old_where.x, where.y - old_where.y);
+						This->Draw(BRect(0, 0, 15, 13));
+						BView* contents = This->NextSibling();
+						if (contents) {
+							contents->Draw(contents->Bounds());
+						}
 					}
+					snooze(20000);
 				}
-				snooze(20000);
-			}
-			break;
+				break;
 
-		default:
+			default:
 
-			break;
+				break;
 		}
 		This->Window()->Unlock();
 		if (This->goAwayState == 0)
@@ -90,7 +88,10 @@ DragView::DragView(BRect frame, const char* Title, int Orientation = DV_HORZ)
 	goAwayState = 1;
 }
 
-DragView::~DragView() { suspend_thread(thMouseID); }
+DragView::~DragView()
+{
+	suspend_thread(thMouseID);
+}
 
 void
 DragView::Draw(BRect updateRect)

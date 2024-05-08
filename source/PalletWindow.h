@@ -13,10 +13,8 @@
 
 #define PW_TABSIZE 16
 
-class PalletWindow : public BWindow
-{
-
-  public:
+class PalletWindow : public BWindow {
+public:
 	PalletWindow(BRect Frame, const char* name = "PalletWindow", int Orientation = 0);
 	virtual ~PalletWindow();
 	DragView* dv;

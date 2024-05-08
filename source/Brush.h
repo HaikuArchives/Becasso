@@ -3,9 +3,8 @@
 
 #include <Bitmap.h>
 
-class Brush
-{
-  public:
+class Brush {
+public:
 	Brush(int h, int w, float s);
 	~Brush();
 	void Set(int x, int y, uchar v);
@@ -23,7 +22,7 @@ class Brush
 
 	uchar* Data() { return data; };
 
-  private:
+private:
 	int fHeight;
 	int fWidth;
 	float fSpacing;

@@ -3,16 +3,15 @@
 #ifndef ADDONWINDOW_H
 #define ADDONWINDOW_H
 
-#include <Window.h>
-#include <Message.h>
 #include <Button.h>
+#include <Message.h>
 #include <StatusBar.h>
+#include <Window.h>
 #include "BecassoAddOn.h"
 #include "Build.h"
 
-class AddOnWindow : public BWindow
-{
-  public:
+class AddOnWindow : public BWindow {
+public:
 	AddOnWindow(BRect frame);
 	virtual ~AddOnWindow();
 	void SetAddOn(becasso_addon_info* info);
@@ -32,7 +31,7 @@ class AddOnWindow : public BWindow
 
 	BView* Background() { return bg; };
 
-  private:
+private:
 	typedef BWindow inherited;
 	bool stop;
 	BWindow* fClient;

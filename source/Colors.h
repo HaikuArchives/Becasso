@@ -3,8 +3,8 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-#include "Build.h"
 #include <interface/GraphicsDefs.h>
+#include "Build.h"
 
 extern IMPEXP rgb_color Black, LightGrey, DarkGrey, White, Transparent;
 extern IMPEXP rgb_color Red, Green, Blue;

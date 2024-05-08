@@ -1,13 +1,13 @@
 #include "PicMenuButton.h"
 #include <MenuItem.h>
-#include <Point.h>
 #include <Message.h>
+#include <Point.h>
 #include <string.h>
-#include "PicItem.h"
-#include "MainWindow.h" // Hack alert!
 #include "AttribView.h"
 #include "AttribWindow.h"
 #include "Colors.h"
+#include "MainWindow.h"	 // Hack alert!
+#include "PicItem.h"
 #include "Settings.h"
 
 #define OPEN_RAD 4
@@ -81,11 +81,10 @@ PicMenuButton::MouseDown(BPoint point)
 		}
 		if (click != 2) {
 			BMenuItem* mselected;
-			point = BPoint(0, -index * (BUTTON_SIZE + 3)); // Hack!
+			point = BPoint(0, -index * (BUTTON_SIZE + 3));	// Hack!
 			ConvertToScreen(&point);
 			BRect openRect = BRect(
-				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD
-			);
+				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD);
 			menu->Show();
 			if ((mselected = menu->Track(true, &openRect)) != NULL) {
 				index = menu->IndexOf(mselected);

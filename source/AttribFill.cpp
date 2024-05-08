@@ -1,21 +1,17 @@
 #include "AttribFill.h"
-#include "Colors.h"
-#include "TabView.h"
-#include <RadioButton.h>
-#include <View.h>
 #include <Box.h>
+#include <RadioButton.h>
 #include <StringView.h>
+#include <View.h>
 #include <string.h>
+#include "Colors.h"
 #include "Settings.h"
+#include "TabView.h"
 
 static property_info prop_list[] = {
 	{"ToleranceType|Type", SET, DIRECT, "string: Visual, Absolute|RGB"},
-	{"Tolerance|Visual", SET, DIRECT, "float: 0 .. 255"},
-	{"Red", SET, DIRECT, "int: 0 .. 255"},
-	{"Green", SET, DIRECT, "int: 0 .. 255"},
-	{"Blue", SET, DIRECT, "int: 0 .. 255"},
-	0
-};
+	{"Tolerance|Visual", SET, DIRECT, "float: 0 .. 255"}, {"Red", SET, DIRECT, "int: 0 .. 255"},
+	{"Green", SET, DIRECT, "int: 0 .. 255"}, {"Blue", SET, DIRECT, "int: 0 .. 255"}, 0};
 
 AttribFill::AttribFill() : AttribView(BRect(0, 0, 146, 146), lstring(24, "Fill"))
 {
@@ -24,24 +20,18 @@ AttribFill::AttribFill() : AttribView(BRect(0, 0, 146, 146), lstring(24, "Fill")
 	tolSets->SetLabel(lstring(338, "Tolerance"));
 	AddChild(tolSets);
 	tol = new BRadioButton(
-		BRect(8, 13, 124, 30), "tol", lstring(339, "Visual Distance"), new BMessage('AFtV')
-	);
+		BRect(8, 13, 124, 30), "tol", lstring(339, "Visual Distance"), new BMessage('AFtV'));
 	rgb = new BRadioButton(
-		BRect(8, 30, 124, 46), "rgb", lstring(340, "Absolute RGB"), new BMessage('AFtS')
-	);
+		BRect(8, 30, 124, 46), "rgb", lstring(340, "Absolute RGB"), new BMessage('AFtS'));
 	tol->SetValue(B_CONTROL_ON);
 	tolSets->AddChild(tol);
 	tolSets->AddChild(rgb);
 	TabView* bgTab = new TabView(BRect(4, 50, 132, 134), "AttribFill Tab");
 	tolSets->AddChild(bgTab);
-	BView* tolTab = new BView(
-		BRect(2, TAB_HEIGHT + 4, 126, TAB_HEIGHT + 63), "tol View", B_FOLLOW_LEFT | B_FOLLOW_TOP,
-		B_WILL_DRAW
-	);
-	BView* rgbTab = new BView(
-		BRect(2, TAB_HEIGHT + 4, 126, TAB_HEIGHT + 63), "rgb View", B_FOLLOW_LEFT | B_FOLLOW_TOP,
-		B_WILL_DRAW
-	);
+	BView* tolTab = new BView(BRect(2, TAB_HEIGHT + 4, 126, TAB_HEIGHT + 63), "tol View",
+		B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW);
+	BView* rgbTab = new BView(BRect(2, TAB_HEIGHT + 4, 126, TAB_HEIGHT + 63), "rgb View",
+		B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW);
 	tolTab->SetViewColor(LightGrey);
 	rgbTab->SetViewColor(LightGrey);
 	bgTab->AddView(tolTab, lstring(341, "Visual"));
@@ -83,8 +73,7 @@ AttribFill::GetSupportedSuites(BMessage* message)
 
 BHandler*
 AttribFill::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	if (!strcasecmp(property, "ToleranceType") || !strcasecmp(property, "Type")) {
 		fCurrentProperty = PROP_TOLTYPE;
@@ -113,136 +102,138 @@ void
 AttribFill::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case B_GET_PROPERTY: {
-		switch (fCurrentProperty) {
-		}
-		fCurrentProperty = 0;
-		inherited::MessageReceived(msg);
-		break;
-	}
-	case B_SET_PROPERTY: {
-		switch (fCurrentProperty) {
-		case PROP_VISUAL: // float, 0 .. 255
+		case B_GET_PROPERTY:
 		{
-			float value;
-			int32 ivalue;
-			bool floatvalid = false;
-			if (msg->FindInt32("data", &ivalue) == B_OK) // OK, we'll take int32's too.
-			{
-				value = ivalue;
-				floatvalid = true;
+			switch (fCurrentProperty) {
 			}
-			if (floatvalid || msg->FindFloat("data", &value) == B_OK) {
-				if (value >= 0 && value <= 255) {
-					fTolerance = value;
-					sT->SetValue(value);
-					if (msg->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						msg->SendReply(&error);
-					}
-				}
-			}
-			break;
-		}
-		case PROP_DRED: // int, 0 .. 255
-		{
-			int32 value;
-			if (msg->FindInt32("data", &value) == B_OK) {
-				if (value >= 0 && value <= 255) {
-					fToleranceRGB.red = value;
-					sR->SetValue(value);
-					if (msg->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						msg->SendReply(&error);
-					}
-				}
-			}
-			break;
-		}
-		case PROP_DGREEN: // int, 0 .. 255
-		{
-			int32 value;
-			if (msg->FindInt32("data", &value) == B_OK) {
-				if (value >= 0 && value <= 255) {
-					fToleranceRGB.green = value;
-					sG->SetValue(value);
-					if (msg->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						msg->SendReply(&error);
-					}
-				}
-			}
-			break;
-		}
-		case PROP_DBLUE: // int, 0 .. 255
-		{
-			int32 value;
-			if (msg->FindInt32("data", &value) == B_OK) {
-				if (value >= 0 && value <= 255) {
-					fToleranceRGB.blue = value;
-					sB->SetValue(value);
-					if (msg->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						msg->SendReply(&error);
-					}
-				}
-			}
-			break;
-		}
-		case PROP_TOLTYPE: // Visual, RGB|Absolute
-		{
-			const char* name;
-			int value = 0;
-			if (msg->FindString("data", &name) == B_OK) {
-				if (!strcasecmp(name, "Visual")) {
-					tol->SetValue(B_CONTROL_ON);
-					value = FILLTOL_TOL;
-				} else if (!strcasecmp(name, "RGB") || !strcasecmp(name, "Absolute")) {
-					rgb->SetValue(B_CONTROL_ON);
-					value = FILLTOL_RGB;
-				}
-				if (value) {
-					fTolMode = value;
-					if (msg->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						msg->SendReply(&error);
-					}
-				} else {
-					// Error report...
-				}
-			}
-		}
 			fCurrentProperty = 0;
+			inherited::MessageReceived(msg);
 			break;
 		}
-		inherited::MessageReceived(msg);
-		break;
-	}
-	case 'AFtV':
-		fTolMode = FILLTOL_TOL;
-		break;
-	case 'AFtS':
-		fTolMode = FILLTOL_RGB;
-		break;
-	case 'AFcT':
-		fTolerance = msg->FindFloat("value");
-		break;
-	case 'AFcR':
-		fToleranceRGB.red = uint8(msg->FindFloat("value"));
-		break;
-	case 'AFcG':
-		fToleranceRGB.green = uint8(msg->FindFloat("value"));
-		break;
-	case 'AFcB':
-		fToleranceRGB.blue = uint8(msg->FindFloat("value"));
-		break;
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case B_SET_PROPERTY:
+		{
+			switch (fCurrentProperty) {
+				case PROP_VISUAL:  // float, 0 .. 255
+				{
+					float value;
+					int32 ivalue;
+					bool floatvalid = false;
+					if (msg->FindInt32("data", &ivalue) == B_OK)  // OK, we'll take int32's too.
+					{
+						value = ivalue;
+						floatvalid = true;
+					}
+					if (floatvalid || msg->FindFloat("data", &value) == B_OK) {
+						if (value >= 0 && value <= 255) {
+							fTolerance = value;
+							sT->SetValue(value);
+							if (msg->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								msg->SendReply(&error);
+							}
+						}
+					}
+					break;
+				}
+				case PROP_DRED:	 // int, 0 .. 255
+				{
+					int32 value;
+					if (msg->FindInt32("data", &value) == B_OK) {
+						if (value >= 0 && value <= 255) {
+							fToleranceRGB.red = value;
+							sR->SetValue(value);
+							if (msg->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								msg->SendReply(&error);
+							}
+						}
+					}
+					break;
+				}
+				case PROP_DGREEN:  // int, 0 .. 255
+				{
+					int32 value;
+					if (msg->FindInt32("data", &value) == B_OK) {
+						if (value >= 0 && value <= 255) {
+							fToleranceRGB.green = value;
+							sG->SetValue(value);
+							if (msg->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								msg->SendReply(&error);
+							}
+						}
+					}
+					break;
+				}
+				case PROP_DBLUE:  // int, 0 .. 255
+				{
+					int32 value;
+					if (msg->FindInt32("data", &value) == B_OK) {
+						if (value >= 0 && value <= 255) {
+							fToleranceRGB.blue = value;
+							sB->SetValue(value);
+							if (msg->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								msg->SendReply(&error);
+							}
+						}
+					}
+					break;
+				}
+				case PROP_TOLTYPE:	// Visual, RGB|Absolute
+				{
+					const char* name;
+					int value = 0;
+					if (msg->FindString("data", &name) == B_OK) {
+						if (!strcasecmp(name, "Visual")) {
+							tol->SetValue(B_CONTROL_ON);
+							value = FILLTOL_TOL;
+						} else if (!strcasecmp(name, "RGB") || !strcasecmp(name, "Absolute")) {
+							rgb->SetValue(B_CONTROL_ON);
+							value = FILLTOL_RGB;
+						}
+						if (value) {
+							fTolMode = value;
+							if (msg->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								msg->SendReply(&error);
+							}
+						} else {
+							// Error report...
+						}
+					}
+				}
+					fCurrentProperty = 0;
+					break;
+			}
+			inherited::MessageReceived(msg);
+			break;
+		}
+		case 'AFtV':
+			fTolMode = FILLTOL_TOL;
+			break;
+		case 'AFtS':
+			fTolMode = FILLTOL_RGB;
+			break;
+		case 'AFcT':
+			fTolerance = msg->FindFloat("value");
+			break;
+		case 'AFcR':
+			fToleranceRGB.red = uint8(msg->FindFloat("value"));
+			break;
+		case 'AFcG':
+			fToleranceRGB.green = uint8(msg->FindFloat("value"));
+			break;
+		case 'AFcB':
+			fToleranceRGB.blue = uint8(msg->FindFloat("value"));
+			break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

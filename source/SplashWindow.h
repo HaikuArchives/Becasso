@@ -5,14 +5,13 @@
 
 class SAboutView;
 
-class SplashWindow : public BWindow
-{
-  public:
+class SplashWindow : public BWindow {
+public:
 	SplashWindow(BRect rect, BBitmap* becasso, BBitmap* sum);
 	virtual ~SplashWindow();
 	virtual void MessageReceived(BMessage* msg);
 
-  private:
+private:
 	typedef BWindow inherited;
 	SAboutView* abV;
 };

@@ -2,49 +2,49 @@
 #if defined(DATATYPES)
 #include <Datatypes.h>
 #endif
-#include <Entry.h>
-#include <Path.h>
-#include <Directory.h>
-#include <FindDirectory.h>
-#include <FilePanel.h>
-#include "ThumbnailFilePanel.h"
 #include <Alert.h>
 #include <ClassInfo.h>
+#include <Directory.h>
+#include <Entry.h>
+#include <FilePanel.h>
+#include <FindDirectory.h>
 #include <List.h>
+#include <Path.h>
 #include <device/SerialPort.h>
-#include "PrintJob.h"
-#include "Tablet.h"
+#include "AboutView.h"
+#include "AboutWindow.h"
 #include "AddOn.h"
 #include "AddOnWindow.h"
 #include "AttribWindow.h"
+#include "BBP.h"
+#include "Becasso.h"
 #include "CanvasWindow.h"
-#include "MainWindow.h"
-#include "SizeWindow.h"
-#include "PrefsWindow.h"
+#include "DragWindow.h"
 #include "LayerWindow.h"
 #include "MagWindow.h"
-#include "Becasso.h"
-#include "AboutWindow.h"
-#include "AboutView.h"
-#include "SplashWindow.h"
-#include "DragWindow.h"
-#include "BBP.h"
+#include "MainWindow.h"
 #include "Position.h"
+#include "PrefsWindow.h"
+#include "PrintJob.h"
+#include "SizeWindow.h"
+#include "SplashWindow.h"
+#include "Tablet.h"
+#include "ThumbnailFilePanel.h"
 #if defined(EASTER_EGG_SFX)
 #include "sfx.h"
 #endif
-#include "PicMenuButton.h" // for the scripting
-#include "ColorMenuButton.h"
-#include "Properties.h"
-#include "debug.h"
+#include <PropertyInfo.h>
 #include <Resources.h>
-#include <string.h>
+#include <Roster.h>
 #include <Screen.h>
 #include <TranslatorRoster.h>
-#include <Roster.h>
-#include <PropertyInfo.h>
-#include "TOTDWindow.h"
+#include <string.h>
+#include "ColorMenuButton.h"
+#include "PicMenuButton.h"	// for the scripting
+#include "Properties.h"
 #include "Settings.h"
+#include "TOTDWindow.h"
+#include "debug.h"
 
 #define MAXTITLE 128
 #define SHOW_EXTRA_COLOR_INFO 0
@@ -76,116 +76,110 @@ translator_id def_out_translator;
 //__declspec (dllexport) const int32 NumTools = 13;
 //__declspec (dllexport) const int32 NumModes = 2;
 const char* ModeSpecifiers[NumModes] = {"Draw", "Select"};
-const char* ToolSpecifiers[NumTools] = {"Brush",	  "Eraser",	  "Fill",		"Text",
-										"Spray Can",  "Clone",	  "Freehand",	"Lines",
-										"Free Shape", "Polygons", "Rectangles", "Ovals",
-										"Circles",	  "Ellipses"};
+const char* ToolSpecifiers[NumTools] = {"Brush", "Eraser", "Fill", "Text", "Spray Can", "Clone",
+	"Freehand", "Lines", "Free Shape", "Polygons", "Rectangles", "Ovals", "Circles", "Ellipses"};
 
-uchar cross[3][68] = {
-	{16,											 // Size
-	 1,												 // Bit depth
-	 7,	   7,										 // hot spot
-	 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, // Image
-	 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7C, 0x7C, 0x00, 0x00, 0x01, 0x00,
-	 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-	 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, // Mask
-	 0x03, 0x80, 0x03, 0x80, 0xFC, 0x7E, 0xFC, 0x7E, 0xFC, 0x7E, 0x03, 0x80,
-	 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x00, 0x00},
-	{16,   1,	 7,	   7,	 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40,
-	 0x18, 0x80, 0x04, 0x00, 0x00, 0x00, 0x00, 0x40, 0x02, 0x30, 0x04, 0x08, 0x04, 0x00,
-	 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x00, 0xF0,
-	 0x70, 0xF0, 0x7D, 0xE0, 0x7F, 0xE0, 0x3F, 0xC0, 0x0E, 0x70, 0x07, 0xF8, 0x0F, 0xFc,
-	 0x0F, 0x7C, 0x1E, 0x1C, 0x1E, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00},
-	{16,   1,	 7,	   7,	 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x04, 0x08,
-	 0x02, 0x30, 0x00, 0x40, 0x00, 0x00, 0x04, 0x00, 0x18, 0x00, 0x40, 0x80, 0x00, 0x40,
-	 0x00, 0x40, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x1E, 0x00,
-	 0x1E, 0x1C, 0x0F, 0x7C, 0x0F, 0xFC, 0x07, 0xF8, 0x0E, 0xE0, 0x3F, 0xC0, 0x7F, 0xE0,
-	 0x7D, 0xE0, 0x70, 0xF0, 0x00, 0xE0, 0x00, 0x70, 0x00, 0x00, 0x00, 0x00}
-};
+uchar cross[3][68] = {{16,												   // Size
+						  1,											   // Bit depth
+						  7, 7,											   // hot spot
+						  0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,  // Image
+						  0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7C, 0x7C, 0x00, 0x00, 0x01, 0x00,
+						  0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+						  0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80,  // Mask
+						  0x03, 0x80, 0x03, 0x80, 0xFC, 0x7E, 0xFC, 0x7E, 0xFC, 0x7E, 0x03, 0x80,
+						  0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x00, 0x00},
+	{16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x18, 0x80, 0x04,
+		0x00, 0x00, 0x00, 0x00, 0x40, 0x02, 0x30, 0x04, 0x08, 0x04, 0x00, 0x08, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x00, 0xF0, 0x70, 0xF0, 0x7D, 0xE0, 0x7F,
+		0xE0, 0x3F, 0xC0, 0x0E, 0x70, 0x07, 0xF8, 0x0F, 0xFc, 0x0F, 0x7C, 0x1E, 0x1C, 0x1E, 0x00,
+		0x1C, 0x00, 0x00, 0x00, 0x00, 0x00},
+	{16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x04, 0x08, 0x02, 0x30, 0x00,
+		0x40, 0x00, 0x00, 0x04, 0x00, 0x18, 0x00, 0x40, 0x80, 0x00, 0x40, 0x00, 0x40, 0x00, 0x20,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x1E, 0x00, 0x1E, 0x1C, 0x0F, 0x7C, 0x0F,
+		0xFC, 0x07, 0xF8, 0x0E, 0xE0, 0x3F, 0xC0, 0x7F, 0xE0, 0x7D, 0xE0, 0x70, 0xF0, 0x00, 0xE0,
+		0x00, 0x70, 0x00, 0x00, 0x00, 0x00}};
 
-uchar ccross[68] = {16,												// Size,
-					1,												// Bit depth,
-					7,	  7,										// hot spot
-					0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x09, 0x20, // Image
-					0x11, 0x10, 0x01, 0x00, 0x20, 0x08, 0x7C, 0x7C, 0x20, 0x08, 0x01, 0x00,
-					0x11, 0x10, 0x09, 0x20, 0x03, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-					0x03, 0x80, 0x07, 0xC0, 0x0F, 0xE0, 0x1F, 0xF0, // Mask
-					0x3B, 0xB8, 0x73, 0x9C, 0xFF, 0xFE, 0xFE, 0xFE, 0xFF, 0xFE, 0x73, 0x9C,
-					0x3B, 0xB8, 0x1F, 0xF0, 0x0F, 0xE0, 0x07, 0xC0, 0x03, 0x80, 0x00, 0x00};
+uchar ccross[68] = {16,								 // Size,
+	1,												 // Bit depth,
+	7, 7,											 // hot spot
+	0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x09, 0x20,	 // Image
+	0x11, 0x10, 0x01, 0x00, 0x20, 0x08, 0x7C, 0x7C, 0x20, 0x08, 0x01, 0x00, 0x11, 0x10, 0x09, 0x20,
+	0x03, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x0F, 0xE0, 0x1F,
+	0xF0,  // Mask
+	0x3B, 0xB8, 0x73, 0x9C, 0xFF, 0xFE, 0xFE, 0xFE, 0xFF, 0xFE, 0x73, 0x9C, 0x3B, 0xB8, 0x1F, 0xF0,
+	0x0F, 0xE0, 0x07, 0xC0, 0x03, 0x80, 0x00, 0x00};
 
-uchar scross[68] = {16,												// Size
-					1,												// Bit depth
-					7,	  7,										// hot spot
-					0x00, 0x00, 0x03, 0x80, 0x02, 0x80, 0x02, 0x80, // Image
-					0x02, 0x80, 0x01, 0x00, 0x78, 0x3C, 0x44, 0x44, 0x78, 0x3C, 0x01, 0x00,
-					0x02, 0x80, 0x02, 0x80, 0x02, 0x80, 0x03, 0x80, 0x00, 0x00, 0x00, 0x00,
-					0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, // Mask
-					0x07, 0xC0, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E,
-					0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x00, 0x00};
+uchar scross[68] = {16,								 // Size
+	1,												 // Bit depth
+	7, 7,											 // hot spot
+	0x00, 0x00, 0x03, 0x80, 0x02, 0x80, 0x02, 0x80,	 // Image
+	0x02, 0x80, 0x01, 0x00, 0x78, 0x3C, 0x44, 0x44, 0x78, 0x3C, 0x01, 0x00, 0x02, 0x80, 0x02, 0x80,
+	0x02, 0x80, 0x03, 0x80, 0x00, 0x00, 0x00, 0x00, 0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x07,
+	0xC0,  // Mask
+	0x07, 0xC0, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0x07, 0xC0, 0x07, 0xC0,
+	0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x00, 0x00};
 
-uchar hand[68] = {16,											  // Size
-				  1,											  // Bit depth
-				  7,	7,										  // hot spot
-				  0x01, 0x80, 0x1A, 0x70, 0x26, 0x48, 0x26, 0x4A, // Image
-				  0x12, 0x4D, 0x12, 0x49, 0x68, 0x09, 0x98, 0x01, 0x88, 0x02, 0x40, 0x02,
-				  0x20, 0x02, 0x20, 0x04, 0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08,
-				  0x01, 0x80, 0x1B, 0xF0, 0x3F, 0xF8, 0x3F, 0xFA, // Mask
-				  0x1F, 0xFF, 0x1F, 0xFF, 0x6F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0x7F, 0xFE,
-				  0x3F, 0xFE, 0x3F, 0xFC, 0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
+uchar hand[68] = {16,								 // Size
+	1,												 // Bit depth
+	7, 7,											 // hot spot
+	0x01, 0x80, 0x1A, 0x70, 0x26, 0x48, 0x26, 0x4A,	 // Image
+	0x12, 0x4D, 0x12, 0x49, 0x68, 0x09, 0x98, 0x01, 0x88, 0x02, 0x40, 0x02, 0x20, 0x02, 0x20, 0x04,
+	0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08, 0x01, 0x80, 0x1B, 0xF0, 0x3F, 0xF8, 0x3F,
+	0xFA,  // Mask
+	0x1F, 0xFF, 0x1F, 0xFF, 0x6F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0x7F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFC,
+	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
 
-uchar grab[68] = {16,											  // Size
-				  1,											  // Bit depth
-				  7,	7,										  // hot spot
-				  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Image
-				  0x0D, 0xB0, 0x12, 0x4C, 0x10, 0x0A, 0x08, 0x02, 0x18, 0x02, 0x20, 0x02,
-				  0x20, 0x02, 0x20, 0x04, 0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08,
-				  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Mask
-				  0x0D, 0xB0, 0x1F, 0xFC, 0x1F, 0xFE, 0x0F, 0xFE, 0x1F, 0xFE, 0x3F, 0xFE,
-				  0x3F, 0xFE, 0x3F, 0xFC, 0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
+uchar grab[68] = {16,								 // Size
+	1,												 // Bit depth
+	7, 7,											 // hot spot
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	 // Image
+	0x0D, 0xB0, 0x12, 0x4C, 0x10, 0x0A, 0x08, 0x02, 0x18, 0x02, 0x20, 0x02, 0x20, 0x02, 0x20, 0x04,
+	0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00,  // Mask
+	0x0D, 0xB0, 0x1F, 0xFC, 0x1F, 0xFE, 0x0F, 0xFE, 0x1F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFC,
+	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
 
-uchar picker[68] = {16,												// Size,
-					1,												// Bit depth,
-					14,	  1,										// hot spot
-					0x00, 0x00, 0x00, 0x0C, 0x00, 0x1E, 0x00, 0x2E, // Image
-					0x01, 0xBC, 0x01, 0x38, 0x00, 0xE0, 0x01, 0x70, 0x02, 0xB0, 0x05, 0x00,
-					0x0A, 0x00, 0x14, 0x00, 0x28, 0x00, 0x50, 0x00, 0x60, 0x00, 0x00, 0x00,
-					0x00, 0x1E, 0x00, 0x3F, 0x00, 0x7F, 0x03, 0xFF, // Mask
-					0x03, 0xFF, 0x03, 0xFE, 0x03, 0xFC, 0x07, 0xF8, 0x0F, 0xF8, 0x1F, 0xF8,
-					0x3F, 0x80, 0x7F, 0x00, 0xFE, 0x00, 0xFC, 0x00, 0xF8, 0x00, 0xF0, 0x00};
+uchar picker[68] = {16,								 // Size,
+	1,												 // Bit depth,
+	14, 1,											 // hot spot
+	0x00, 0x00, 0x00, 0x0C, 0x00, 0x1E, 0x00, 0x2E,	 // Image
+	0x01, 0xBC, 0x01, 0x38, 0x00, 0xE0, 0x01, 0x70, 0x02, 0xB0, 0x05, 0x00, 0x0A, 0x00, 0x14, 0x00,
+	0x28, 0x00, 0x50, 0x00, 0x60, 0x00, 0x00, 0x00, 0x00, 0x1E, 0x00, 0x3F, 0x00, 0x7F, 0x03,
+	0xFF,  // Mask
+	0x03, 0xFF, 0x03, 0xFE, 0x03, 0xFC, 0x07, 0xF8, 0x0F, 0xF8, 0x1F, 0xF8, 0x3F, 0x80, 0x7F, 0x00,
+	0xFE, 0x00, 0xFC, 0x00, 0xF8, 0x00, 0xF0, 0x00};
 
-uchar mover[68] = {16,	 1,	   7,	 7,	   0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x07, 0xC0,
-				   0x01, 0x00, 0x11, 0x10, 0x31, 0x18, 0x7F, 0xFC, 0x31, 0x18, 0x11, 0x10,
-				   0x01, 0x00, 0x07, 0xC0, 0x03, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-				   0x03, 0x80, 0x07, 0xC0, 0x07, 0xE0, 0x0F, 0xF0, 0x3F, 0xF8, 0x7B, 0xBC,
-				   0xFF, 0xFE, 0xFF, 0xFE, 0xFF, 0xFE, 0x7B, 0xBC, 0x3F, 0xF8, 0x0F, 0xE0,
-				   0x0F, 0xE0, 0x07, 0xC0, 0x03, 0x80, 0x00, 0x00};
+uchar mover[68] = {16, 1, 7, 7, 0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x01, 0x00, 0x11,
+	0x10, 0x31, 0x18, 0x7F, 0xFC, 0x31, 0x18, 0x11, 0x10, 0x01, 0x00, 0x07, 0xC0, 0x03, 0x80, 0x01,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x07, 0xE0, 0x0F, 0xF0, 0x3F, 0xF8, 0x7B,
+	0xBC, 0xFF, 0xFE, 0xFF, 0xFE, 0xFF, 0xFE, 0x7B, 0xBC, 0x3F, 0xF8, 0x0F, 0xE0, 0x0F, 0xE0, 0x07,
+	0xC0, 0x03, 0x80, 0x00, 0x00};
 
-uchar rotator[68] = {16,   1,	 7,	   7,	 0x00, 0x00, 0x03, 0x80, 0x0C, 0x60, 0x10, 0x10,
-					 0x20, 0x08, 0x20, 0x08, 0x41, 0x04, 0x42, 0x84, 0x41, 0x04, 0x20, 0x00,
-					 0x20, 0x00, 0x10, 0xF0, 0x0C, 0x38, 0x03, 0xD0, 0x00, 0x10, 0x00, 0x00,
-					 0x07, 0xC0, 0x1F, 0xF0, 0x3F, 0xF8, 0x7E, 0xFC, 0x78, 0x3C, 0xF3, 0x9E,
-					 0xF7, 0xDE, 0xE7, 0xCE, 0xF7, 0xCE, 0xF3, 0x8E, 0x79, 0xF8, 0x7F, 0xF8,
-					 0x3F, 0xF8, 0x1F, 0xF8, 0x07, 0xF8, 0x00, 0x38};
+uchar rotator[68] = {16, 1, 7, 7, 0x00, 0x00, 0x03, 0x80, 0x0C, 0x60, 0x10, 0x10, 0x20, 0x08, 0x20,
+	0x08, 0x41, 0x04, 0x42, 0x84, 0x41, 0x04, 0x20, 0x00, 0x20, 0x00, 0x10, 0xF0, 0x0C, 0x38, 0x03,
+	0xD0, 0x00, 0x10, 0x00, 0x00, 0x07, 0xC0, 0x1F, 0xF0, 0x3F, 0xF8, 0x7E, 0xFC, 0x78, 0x3C, 0xF3,
+	0x9E, 0xF7, 0xDE, 0xE7, 0xCE, 0xF7, 0xCE, 0xF3, 0x8E, 0x79, 0xF8, 0x7F, 0xF8, 0x3F, 0xF8, 0x1F,
+	0xF8, 0x07, 0xF8, 0x00, 0x38};
 
-#define GET_AND_SET                                                                                \
-	{                                                                                              \
-		B_GET_PROPERTY, B_SET_PROPERTY, 0                                                          \
+#define GET_AND_SET                       \
+	{                                     \
+		B_GET_PROPERTY, B_SET_PROPERTY, 0 \
 	}
-#define GET_SET_AND_PROP                                                                           \
-	{                                                                                              \
-		B_GET_PROPERTY, B_SET_PROPERTY, B_GET_SUPPORTED_SUITES, 0                                  \
+#define GET_SET_AND_PROP                                          \
+	{                                                             \
+		B_GET_PROPERTY, B_SET_PROPERTY, B_GET_SUPPORTED_SUITES, 0 \
 	}
-#define SET                                                                                        \
-	{                                                                                              \
-		B_SET_PROPERTY, 0                                                                          \
+#define SET               \
+	{                     \
+		B_SET_PROPERTY, 0 \
 	}
-#define DIRECT_AND_INDEX                                                                           \
-	{                                                                                              \
-		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0                                                   \
+#define DIRECT_AND_INDEX                         \
+	{                                            \
+		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 \
 	}
-#define DIRECT                                                                                     \
-	{                                                                                              \
-		B_DIRECT_SPECIFIER, 0                                                                      \
+#define DIRECT                \
+	{                         \
+		B_DIRECT_SPECIFIER, 0 \
 	}
 
 static property_info prop_list[] = {
@@ -196,15 +190,11 @@ static property_info prop_list[] = {
 	{"TabletArea", GET_AND_SET, DIRECT, "BRect (only useful with -t switch)"},
 	{"ExportFormat", GET_AND_SET, DIRECT, "by MIME type or type code"},
 	{"Scriptee", GET_AND_SET, DIRECT_AND_INDEX, "Get or set current scripting target (canvas)"},
-	{"Canvas", {B_CREATE_PROPERTY, 0}, DIRECT, "Name (string), Size (BRect)"},
-	0
-};
+	{"Canvas", {B_CREATE_PROPERTY, 0}, DIRECT, "Name (string), Size (BRect)"}, 0};
 
 static value_info value_list[] = {
 	{"Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)"},
-	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"},
-	0
-};
+	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"}, 0};
 
 static property_info prop_list_BBP[] = {{"", {0}, {0}, ""}, 0};
 
@@ -223,10 +213,10 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 		//		dir.GetEntry (&entry);
 		//		entry.GetPath (&path);
 		//		printf ("Path now: %s\n", path.Path());
-		dir.CreateDirectory("Becasso", &dummy); // this won't clobber anyway
-												//		dir.GetEntry (&entry);
-												//		entry.GetPath (&path);
-												//		printf ("Path now: %s\n", path.Path());
+		dir.CreateDirectory("Becasso", &dummy);	 // this won't clobber anyway
+												 //		dir.GetEntry (&entry);
+												 //		entry.GetPath (&path);
+												 //		printf ("Path now: %s\n", path.Path());
 		path.Append("Becasso");
 		dir.SetTo(path.Path());
 
@@ -264,7 +254,7 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 		if (DATAInit("application/x-sum-becasso"))
 			DataTypes = false;
 #else
-	DataTypes = true; // Called the Translation Kit here, but it's basically the same thing.
+	DataTypes = true;  // Called the Translation Kit here, but it's basically the same thing.
 #endif
 	def_out_type = 0;
 	def_out_translator = 0;
@@ -311,10 +301,8 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 				*ti++ = *cdata++;
 			*ti++ = *cdata++;
 			if (ShowColors)
-				printf(
-					"%3d %3d %3d %s\n", (int)RGBColors[i][0], (int)RGBColors[i][1],
-					(int)RGBColors[i][2], &RGBColors[i][3]
-				);
+				printf("%3d %3d %3d %s\n", (int)RGBColors[i][0], (int)RGBColors[i][1],
+					(int)RGBColors[i][2], &RGBColors[i][3]);
 		}
 	} else
 		fprintf(stderr, "Warning: Couldn't find RGB color resource\n");
@@ -330,8 +318,7 @@ Becasso::Becasso() : BApplication("application/x-sum-becasso")
 	newnum = 1;
 	refvalid = false;
 	openPanel = new ThumbnailFilePanel(
-		B_OPEN_PANEL, new BMessenger(this), NULL, B_FILE_NODE, false, new BMessage('opnf'), NULL
-	);
+		B_OPEN_PANEL, new BMessenger(this), NULL, B_FILE_NODE, false, new BMessage('opnf'), NULL);
 	openPanel->GetPanelDirectory(&gSaveRef);
 	clip = NULL;
 	inDrag = false;
@@ -452,12 +439,12 @@ Becasso::QuitRequested()
 			if (VerbQuit)
 				printf("   AttribWindow\n");
 			kill_list[windex++] = win;
-			continue; // These will have to be killed the hard way or they'll hide.
+			continue;  // These will have to be killed the hard way or they'll hide.
 		}
 		if (is_kind_of(win, LayerWindow)) {
 			if (VerbQuit)
 				printf("   LayerWindow\n");
-			continue; // These will go down with their associated CanvasWindow.
+			continue;  // These will go down with their associated CanvasWindow.
 		}
 		if (is_kind_of(win, AddOnWindow)) {
 			if (VerbQuit)
@@ -489,7 +476,7 @@ Becasso::QuitRequested()
 			if (VerbQuit)
 				printf("   DragWindow\n");
 			dw->SavePos();
-			kill_list[windex++] = win; // Before the Main Window exits, killing the PicMenuButtons.
+			kill_list[windex++] = win;	// Before the Main Window exits, killing the PicMenuButtons.
 		}
 		// The rest are probably File Panels and whatnot.
 		// Just kill them.
@@ -519,7 +506,7 @@ Becasso::QuitRequested()
 		if (VerbQuit)
 			printf("Closing Main Window\n");
 		mainWindow->Lock();
-		mainWindow->Quit(); // It'll take the openPanel with it.
+		mainWindow->Quit();	 // It'll take the openPanel with it.
 	}
 	delete[] kill_list;
 	return (canQuit);
@@ -593,7 +580,7 @@ Becasso::ReadyToRun()
 	if (launchMessage) {
 		PostMessage(launchMessage);
 		delete launchMessage;
-		launchMessage = NULL; // Just to make sure.  It won't be used anymore, though.
+		launchMessage = NULL;  // Just to make sure.  It won't be used anymore, though.
 	}
 	// printf ("ReadyToRun() Done\n");
 
@@ -630,7 +617,8 @@ Becasso::RefsReceived(BMessage* message)
 			// message->PrintToStream();
 			if (message->FindBool("AskForAlpha", &AskForAlpha) == B_OK)
 				refmsg->AddBool("AskForAlpha", AskForAlpha);
-			else if ((message->FindString("AskForAlpha", &AskForAlphaString) == B_OK) && (!strcasecmp(AskForAlphaString, "false")))
+			else if ((message->FindString("AskForAlpha", &AskForAlphaString) == B_OK) &&
+					 (!strcasecmp(AskForAlphaString, "false")))
 				refmsg->AddBool("AskForAlpha", false);
 			// refmsg->PrintToStream();
 			PostMessage(refmsg);
@@ -675,8 +663,7 @@ Becasso::GetSupportedSuites(BMessage* message)
 
 BHandler*
 Becasso::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	//	printf ("message:\n");
 	//	message->PrintToStream();
@@ -686,7 +673,7 @@ Becasso::ResolveSpecifier(
 
 	if (!strcasecmp(property, "Tool")) {
 		if (specifier->HasString("name") ||
-			specifier->HasInt32("index")) // Part of a specifier for Tool settings.
+			specifier->HasInt32("index"))  // Part of a specifier for Tool settings.
 		{
 			// Note: Don't PopSpecifier() !!
 			// We'll let the AttribWindow resolve the exact tool specifier first...
@@ -700,7 +687,7 @@ Becasso::ResolveSpecifier(
 	}
 	if (!strcasecmp(property, "Mode")) {
 		if (specifier->HasString("name") ||
-			specifier->HasInt32("index")) // Part of a specifier for Mode settings.
+			specifier->HasInt32("index"))  // Part of a specifier for Mode settings.
 		{
 			// Note: Don't PopSpecifier() !!
 			// We'll let the AttribWindow resolve the exact mode specifier first...
@@ -743,63 +730,65 @@ Becasso::ResolveSpecifier(
 	if (!strcasecmp(property, "Canvas")) {
 		fCurrentProperty = PROP_CANVAS;
 		switch (specifier->what) {
-		case B_DIRECT_SPECIFIER:
-			return this;
-			break;
-		case B_INDEX_SPECIFIER: {
-			int32 index;
-			if (specifier->FindInt32("index", &index) == B_OK) {
-				canvas* current = (canvas*)canvases.ItemAt(index);
-				if (current) {
-					message->PopSpecifier();
-					if (current->its_looper != Looper()) {
-						current->its_looper->PostMessage(message);
-						return NULL;
-					}
-				} else {
-					BString indexData, errorString;
-					fNumberFormat.Format(indexData, index);
-					errorString.SetToFormat("Index out of range: %s", indexData.String());
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errorString);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errorString);
-				}
-			}
-			break;
-		}
-		case B_NAME_SPECIFIER: {
-			const char* name;
-			if (specifier->FindString("name", &name) == B_OK) {
-				int32 m = canvases.CountItems();
-				int32 i;
-				for (i = 0; i < m; i++) {
-					canvas* current = (canvas*)canvases.ItemAt(i);
-					if (!strcmp(name, current->name)) {
+			case B_DIRECT_SPECIFIER:
+				return this;
+				break;
+			case B_INDEX_SPECIFIER:
+			{
+				int32 index;
+				if (specifier->FindInt32("index", &index) == B_OK) {
+					canvas* current = (canvas*)canvases.ItemAt(index);
+					if (current) {
 						message->PopSpecifier();
-						current->its_looper->PostMessage(message);
-						return NULL;
+						if (current->its_looper != Looper()) {
+							current->its_looper->PostMessage(message);
+							return NULL;
+						}
+					} else {
+						BString indexData, errorString;
+						fNumberFormat.Format(indexData, index);
+						errorString.SetToFormat("Index out of range: %s", indexData.String());
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errorString);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errorString);
 					}
 				}
-				if (i == m) {
-					char errstring[256];
-					sprintf(errstring, "Unknown Canvas: '%s'", name);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
+				break;
 			}
-			break;
-		}
-		default:
-			return inherited::ResolveSpecifier(message, index, specifier, command, property);
+			case B_NAME_SPECIFIER:
+			{
+				const char* name;
+				if (specifier->FindString("name", &name) == B_OK) {
+					int32 m = canvases.CountItems();
+					int32 i;
+					for (i = 0; i < m; i++) {
+						canvas* current = (canvas*)canvases.ItemAt(i);
+						if (!strcmp(name, current->name)) {
+							message->PopSpecifier();
+							current->its_looper->PostMessage(message);
+							return NULL;
+						}
+					}
+					if (i == m) {
+						char errstring[256];
+						sprintf(errstring, "Unknown Canvas: '%s'", name);
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+				}
+				break;
+			}
+			default:
+				return inherited::ResolveSpecifier(message, index, specifier, command, property);
 		}
 	}
 	return inherited::ResolveSpecifier(message, index, specifier, command, property);
@@ -831,639 +820,314 @@ Becasso::MessageReceived(BMessage* message)
 	BString title, windowNumber;
 
 	switch (message->what) {
-	case 'creg': {
-		// printf ("Registering canvas...\n");
-		canvas* newcanvas = new canvas();
-		const char* name;
-		if (message->FindString("name", &name) == B_OK)
-			strcpy(newcanvas->name, name);
-		else
-			strcpy(newcanvas->name, "<untitled>");
-		newcanvas->index = canvas_index++;
-		BLooper* its_looper;
-		if (message->FindPointer("looper", (void**)&its_looper) == B_OK)
-			newcanvas->its_looper = its_looper;
-		else
-			fprintf(stderr, "BIG error!!\n");
-
-		canvases.AddItem(newcanvas);
-		verbose(1, "Canvas '%s' registered...\n", newcanvas->name);
-		break;
-	}
-	case 'cdel': {
-		BLooper* its_looper;
-		if (message->FindPointer("looper", (void**)&its_looper) == B_OK) {
-			int32 m = canvases.CountItems();
-			int32 i;
-			for (i = 0; i < m; i++) {
-				canvas* current = (canvas*)canvases.ItemAt(i);
-				if (its_looper == current->its_looper) {
-					delete ((canvas*)canvases.RemoveItem(i));
-					break;
-				}
-			}
-			if (i == m)
-				fprintf(stderr, "Unknown Canvas %p (?!)\n", its_looper);
-		} else
-			fprintf(stderr, "BIG error!!\n");
-		break;
-	}
-	case 'aURL': {
-		char* argv[1] = {"https://github.com/HaikuArchives/Becasso"};
-		be_roster->Launch("text/html", 1, argv);
-		break;
-	}
-	case 'aDOC': {
-		app_info info;
-		GetAppInfo(&info);
-		BEntry appEntry = BEntry(&info.ref);
-		BEntry appDir;
-		BPath appPath;
-		BDirectory addonDir;
-		appEntry.GetParent(&appDir);
-		appDir.GetPath(&appPath);
-		char dirname[B_FILE_NAME_LENGTH];
-		strcpy(dirname, appPath.Path());
-		char* argv[1];
-		argv[0] = new char[B_FILE_NAME_LENGTH];
-		sprintf(argv[0], "file://%s/Documentation/Becasso.html", dirname);
-		be_roster->Launch("text/html", 1, argv);
-		break;
-	}
-	case B_SIMPLE_DATA: {
-		uint32 type;
-		int32 count;
-		message->GetInfo("refs", &type, &count);
-		for (long i = --count; i >= 0; i--) {
-			if (message->FindRef("refs", i, &fRef) == B_OK) {
-				refvalid = true;
-				BMessage* refmsg = new BMessage('opnf');
-				refmsg->AddRef("refs", &fRef);
-				PostMessage(refmsg);
-				delete refmsg;
-				snooze(20000);
-			}
-		}
-		break;
-	}
-	case 'expt': {
-		if (!fCurrentScriptee)
-		// There's no current "scriptee" window yet!
+		case 'creg':
 		{
-			char errstring[256];
-			sprintf(
-				errstring, "There is no current "
-						   "scriptee"
-						   " window yet"
-			);
-			if (message->IsSourceWaiting()) {
-				BMessage error(B_ERROR);
-				error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-				error.AddString("message", errstring);
-				message->SendReply(&error);
-			} else
-				fprintf(stderr, "%s\n", errstring);
+			// printf ("Registering canvas...\n");
+			canvas* newcanvas = new canvas();
+			const char* name;
+			if (message->FindString("name", &name) == B_OK)
+				strcpy(newcanvas->name, name);
+			else
+				strcpy(newcanvas->name, "<untitled>");
+			newcanvas->index = canvas_index++;
+			BLooper* its_looper;
+			if (message->FindPointer("looper", (void**)&its_looper) == B_OK)
+				newcanvas->its_looper = its_looper;
+			else
+				fprintf(stderr, "BIG error!!\n");
+
+			canvases.AddItem(newcanvas);
+			verbose(1, "Canvas '%s' registered...\n", newcanvas->name);
 			break;
 		}
-
-		BMessage exportMessage('expt');
-		const char* namestring;
-		if (message->FindString("name", &namestring) == B_OK ||
-			message->FindString("Name", &namestring) == B_OK ||
-			message->FindString("filename", &namestring) == B_OK ||
-			message->FindString("Filename", &namestring) == B_OK) {
-			exportMessage.AddString("filename", namestring);
-			// printf ("File name: %s\n", namestring);
-		}
-
-		BMessage reply;
-		fCurrentScriptee->SendMessage(&exportMessage, &reply);
-		if (message->IsSourceWaiting()) {
-			message->SendReply(&reply);
-		}
-		break;
-	}
-	case 'Crop': {
-		if (!fCurrentScriptee)
-		// There's no current "scriptee" window yet!
+		case 'cdel':
 		{
-			char errstring[256];
-			sprintf(
-				errstring, "There is no current "
-						   "scriptee"
-						   " window yet"
-			);
-			if (message->IsSourceWaiting()) {
-				BMessage error(B_ERROR);
-				error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-				error.AddString("message", errstring);
-				message->SendReply(&error);
-			} else
-				fprintf(stderr, "%s\n", errstring);
-			break;
-		}
-
-		BMessage cropMessage('Crop');
-		BRect rect;
-		if (message->FindRect("data", &rect) == B_OK || message->FindRect("rect", &rect) == B_OK ||
-			message->FindRect("croprect", &rect) == B_OK ||
-			message->FindRect("CropRect", &rect) == B_OK) {
-			cropMessage.AddRect("data", rect);
-		}
-
-		BMessage reply;
-		fCurrentScriptee->SendMessage(&cropMessage, &reply);
-		if (message->IsSourceWaiting()) {
-			message->SendReply(&reply);
-		}
-		break;
-	}
-	case 'newc': {
-		Unlock();
-		static int32 newWidth = 256, newHeight = 256;
-		static int32 newColor = COLOR_BG;
-		SizeWindow* sizeWindow = new SizeWindow(newHeight, newWidth, newColor);
-		if (sizeWindow->Go()) {
-			fNumberFormat.Format(windowNumber, newnum++);
-			title.SetToFormat("%s %s", "Untitled", windowNumber.String());
-			newWidth = sizeWindow->w();
-			newHeight = sizeWindow->h();
-			newColor = sizeWindow->color();
-			BRect canvasWindowFrame;
-			canvasWindowFrame.Set(
-				128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-				128 + newnum * 16 + newHeight - 1
-			);
-			rgb_color color = White;
-			extern ColorMenuButton *hicolor, *locolor;
-			switch (newColor) {
-			case COLOR_FG:
-				color = hicolor->color();
-				break;
-			case COLOR_BG:
-				color = locolor->color();
-				break;
-			case COLOR_TR:
-				color.red = 255;
-				color.green = 255;
-				color.blue = 255;
-				color.alpha = 0;
-				break;
-			}
-			CanvasWindow* canvasWindow =
-				new CanvasWindow(canvasWindowFrame, title, NULL, NULL, false, color);
-			delete fCurrentScriptee;
-			fCurrentScriptee = new BMessenger(canvasWindow);
-			canvasWindow->Show();
-		}
-		Lock();
-		sizeWindow->Lock();
-		sizeWindow->Quit();
-		break;
-	}
-	case 'cnew': // Deprecated!!!
-	{
-		// message->PrintToStream();
-		fNumberFormat.Format(windowNumber, newnum++);
-		title.SetToFormat("Untitled %s", windowNumber.String());
-		BRect canvasWindowFrame;
-		canvasWindowFrame.Set(
-			128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + 255, 128 + newnum * 16 + 255
-		);
-
-		BMessage specifier;
-		int32 index;
-		while (message->GetCurrentSpecifier(&index, &specifier) == B_OK) {
-			// printf ("Found a specifier:\n");
-			// specifier.PrintToStream();
-			const char* property;
-			if (specifier.FindString("property", &property) == B_OK) {
-				// printf ("Found property: %s\n", property);
-				if (!strcasecmp(property, "Size")) {
-					char* sizestring;
-					if (specifier.FindString("name", (const char**)&sizestring) == B_OK) {
-						if (!strncmp(sizestring, "BRect", 5))
-							sizestring += 6;
-
-						canvasWindowFrame.left = atof(strtok(sizestring, " ,"));
-						canvasWindowFrame.top = atof(strtok(NULL, " ,"));
-						canvasWindowFrame.right = atof(strtok(NULL, " ,"));
-						canvasWindowFrame.bottom = atof(strtok(NULL, " ,"));
-					}
-				} else if (!strcasecmp(property, "Name")) {
-					const char* namestring;
-					if (specifier.FindString("name", &namestring) == B_OK) {
-						title.SetTo(namestring);
-					}
-				}
-			}
-			message->PopSpecifier();
-		}
-		// canvasWindowFrame.PrintToStream();
-		CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title);
-		delete fCurrentScriptee;
-		fCurrentScriptee = new BMessenger(canvasWindow);
-		canvasWindow->Show();
-		if (message->IsSourceWaiting()) {
-			BMessage error(B_REPLY);
-			error.AddInt32("error", B_NO_ERROR);
-			message->SendReply(&error);
-		}
-		break;
-	}
-	case 'open':
-		openPanel->Show(); // Don't ask.
-		openPanel->Show();
-		break;
-	case 'opnR': // open Recent
-	{
-		entry_ref ref;
-		if (message->FindRef("ref", &ref) == B_NO_ERROR) {
-			BEntry entry;
-			if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
-				bool AskForAlpha = true;
-				char buffer[1024];
-				BNode node(&ref);
-				ssize_t s;
-				if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
-					buffer[s] = 0;
-					if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
-						BAlert* alert = new BAlert(
-							"",
-							lstring(
-								6, "Please drop Becasso Palette files on the appropriate Color "
-								   "button or on the associated Color Editor window."
-							),
-							lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT
-						);
-						alert->Go();
+			BLooper* its_looper;
+			if (message->FindPointer("looper", (void**)&its_looper) == B_OK) {
+				int32 m = canvases.CountItems();
+				int32 i;
+				for (i = 0; i < m; i++) {
+					canvas* current = (canvas*)canvases.ItemAt(i);
+					if (its_looper == current->its_looper) {
+						delete ((canvas*)canvases.RemoveItem(i));
 						break;
 					}
 				}
-				try {
-					// message->PrintToStream();
-					if (message->HasBool("AskForAlpha"))
-						message->FindBool("AskForAlpha", &AskForAlpha);
-					CanvasWindow* canvasWindow;
-					BRect canvasWindowFrame;
-					canvasWindowFrame.Set(100, 180, 500, 500);
-					canvasWindow = new CanvasWindow(canvasWindowFrame, ref, AskForAlpha);
-					delete fCurrentScriptee;
-					fCurrentScriptee = new BMessenger(canvasWindow);
-					BScreen screen;
-					canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
-					canvasWindow->ResizeTo(canvasWindowFrame.Width(), canvasWindowFrame.Height());
-					canvasWindow->Show();
-				} catch (...) {
-					printf("Caught in the act!\n");
-				}
-			} else {
-				char name[B_FILE_NAME_LENGTH];
-				if (entry.GetName(name) == B_OK) {
-					printf("Couldn't find %s\n", name);
-				} else {
-					printf("Not a file?\n");
-				}
-				// Not a file?
-			}
-		} else {
-			printf("No ref?\n");
-			// No refs?
+				if (i == m)
+					fprintf(stderr, "Unknown Canvas %p (?!)\n", its_looper);
+			} else
+				fprintf(stderr, "BIG error!!\n");
+			break;
 		}
-		break;
-	}
-	case 'opnf': {
-		entry_ref ref;
-		openPanel->Hide();
-		if (message->FindRef("refs", &ref) == B_NO_ERROR) {
-			BEntry entry;
-			if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
-				bool AskForAlpha = true;
-				char buffer[1024];
-				BNode node = BNode(&ref);
-				ssize_t s;
-				if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
-					buffer[s] = 0;
-					if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
-						BAlert* alert = new BAlert(
-							"",
-							lstring(
-								6, "Please drop Becasso Palette files on the appropriate Color "
-								   "button or on the associated Color Editor window."
-							),
-							lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT
-						);
-						alert->Go();
-						break;
-					}
-				}
-				try {
-					// message->PrintToStream();
-					if (message->HasBool("AskForAlpha"))
-						message->FindBool("AskForAlpha", &AskForAlpha);
-					CanvasWindow* canvasWindow;
-					BRect canvasWindowFrame;
-					canvasWindowFrame.Set(100, 180, 500, 500);
-					canvasWindow = new CanvasWindow(canvasWindowFrame, ref, AskForAlpha);
-					delete fCurrentScriptee;
-					fCurrentScriptee = new BMessenger(canvasWindow);
-					BScreen screen;
-					canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
-					canvasWindow->ResizeTo(canvasWindowFrame.Width(), canvasWindowFrame.Height());
-					extern int SilentOperation;
-					canvasWindow->Minimize(SilentOperation >= 1);
-					canvasWindow->Show();
-				} catch (...) {
-					printf("Caught in the act!\n");
-					break;
-				}
-			} else {
-				char name[B_FILE_NAME_LENGTH];
-				if (entry.GetName(name) == B_OK) {
-					printf("Couldn't find %s\n", name);
-				} else {
-					printf("Not a file?\n");
-				}
-				// Not a file?
-			}
-		} else {
-			printf("No refs?\n");
-			// No refs?
-		}
-		break;
-	}
-	case 'aliv': // Sent by CanvasWindow itself, due to scripting AskForAlpha switch
-	{
-		BMessenger msgr;
-		message->FindMessenger("canvas", &msgr);
-		message->AddInt32("which", 1);
-		msgr.SendMessage(message);
-		break;
-	}
-	case 'SPst': {
-		BWindow* win;
-		for (int i = 1; i < CountWindows(); i++) {
-			win = WindowAt(i);
-			if (is_instance_of(win, CanvasWindow))
-				win->PostMessage(message);
-		}
-		break;
-	}
-	case 'clrX': // color changed - warn all the windows
-	{
-		BWindow* win;
-		for (int i = 1; i < CountWindows(); i++) {
-			win = WindowAt(i);
-			if (is_instance_of(win, CanvasWindow))
-				win->PostMessage(message);
-		}
-		break;
-	}
-	case 0: // Icon dropped from FileTypes (yes, 0!!)
-	{
-		BMessage msg;
-		if (message->FindMessage("icon/large", &msg) == B_OK) {
-			BBitmap* map = new BBitmap(&msg);
-			if (map->IsValid()) {
-				fNumberFormat.Format(windowNumber, newnum++);
-				title.SetToFormat("Untitled (Icon) %s", windowNumber.String());
-				float newWidth = map->Bounds().Width();
-				float newHeight = map->Bounds().Height();
-				BRect canvasWindowFrame;
-				canvasWindowFrame.Set(
-					128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-					128 + newnum * 16 + newHeight - 1
-				);
-				CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
-				delete fCurrentScriptee;
-				fCurrentScriptee = new BMessenger(canvasWindow);
-				canvasWindow->Show();
-				BMessage* m = new BMessage('M4');
-				canvasWindow->PostMessage(m);
-				delete m;
-				m = new BMessage('rstf');
-				canvasWindow->PostMessage(m);
-				delete m;
-			} else {
-				fprintf(stderr, "Invalid BBitmap\n");
-				// Error
-			}
-		}
-		if (message->FindMessage("icon/mini", &msg) == B_OK) {
-			BBitmap* map = new BBitmap(&msg);
-			if (map->IsValid()) {
-				fNumberFormat.Format(windowNumber, newnum++);
-				title.SetToFormat("Untitled (MIcon) %s", windowNumber.String());
-				float newWidth = map->Bounds().Width();
-				float newHeight = map->Bounds().Height();
-				BRect canvasWindowFrame;
-				canvasWindowFrame.Set(
-					128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-					128 + newnum * 16 + newHeight - 1
-				);
-				CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
-				delete fCurrentScriptee;
-				fCurrentScriptee = new BMessenger(canvasWindow);
-				canvasWindow->Show();
-				BMessage* m = new BMessage('M4');
-				canvasWindow->PostMessage(m);
-				delete m;
-				m = new BMessage('rstf');
-				canvasWindow->PostMessage(m);
-				delete m;
-			} else {
-				fprintf(stderr, "Invalid BBitmap\n");
-				// Error
-			}
-		}
-		break;
-	}
-	case 'PPNT': // RRaster drop
-	{
-		if (launching) {
-			launchMessage = new BMessage(*message);
-		} else {
-			BRect bounds;
-			color_space colorspace;
-			ssize_t bits_length;
-			message->FindRect("bounds", &bounds);
-			message->FindInt32("bits_length", (int32*)&bits_length);
-			message->FindInt32("color_space", (int32*)&colorspace);
-			fNumberFormat.Format(windowNumber, newnum++);
-			title.SetToFormat("Untitled (RRaster) %s", windowNumber.String());
-			BBitmap* map = new BBitmap(bounds, colorspace);
-			char* bits;
-			ssize_t numbytes;
-			message->FindData("bits", B_RAW_TYPE, (const void**)&bits, &numbytes);
-			if (numbytes != bits_length) {
-				fprintf(stderr, "Hey, bits_length != num_bytes!!\n");
-			}
-			memcpy(map->Bits(), bits, numbytes);
-			float newWidth = bounds.Width();
-			float newHeight = bounds.Height();
-			BRect canvasWindowFrame;
-			canvasWindowFrame.Set(
-				128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-				128 + newnum * 16 + newHeight - 1
-			);
-			CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
-			delete fCurrentScriptee;
-			fCurrentScriptee = new BMessenger(canvasWindow);
-			canvasWindow->Show();
-		}
-		break;
-	}
-	case BBP_REQUEST_BBITMAP: // BeDC Hack for interaction with ImageElements
-	{
-		// Find the active Canvas Window
-		CanvasWindow* activeWin = NULL;
-		CanvasWindow* firstWin = NULL;
-		for (int i = 0; i < CountWindows(); i++) {
-			BWindow* win = WindowAt(i);
-			if (is_instance_of(win, CanvasWindow)) {
-				if (!firstWin)
-					firstWin = dynamic_cast<CanvasWindow*>(win);
-				if (win->IsActive())
-					activeWin = dynamic_cast<CanvasWindow*>(win);
-			}
-		}
-		if (!activeWin) // No active window?  Hmmm.
+		case 'aURL':
 		{
-			if (firstWin) {
-				activeWin = firstWin; // Just take the first Canvas Window you found.
-			} else					  // no canvas windows at all!
+			char* argv[1] = {"https://github.com/HaikuArchives/Becasso"};
+			be_roster->Launch("text/html", 1, argv);
+			break;
+		}
+		case 'aDOC':
+		{
+			app_info info;
+			GetAppInfo(&info);
+			BEntry appEntry = BEntry(&info.ref);
+			BEntry appDir;
+			BPath appPath;
+			BDirectory addonDir;
+			appEntry.GetParent(&appDir);
+			appDir.GetPath(&appPath);
+			char dirname[B_FILE_NAME_LENGTH];
+			strcpy(dirname, appPath.Path());
+			char* argv[1];
+			argv[0] = new char[B_FILE_NAME_LENGTH];
+			sprintf(argv[0], "file://%s/Documentation/Becasso.html", dirname);
+			be_roster->Launch("text/html", 1, argv);
+			break;
+		}
+		case B_SIMPLE_DATA:
+		{
+			uint32 type;
+			int32 count;
+			message->GetInfo("refs", &type, &count);
+			for (long i = --count; i >= 0; i--) {
+				if (message->FindRef("refs", i, &fRef) == B_OK) {
+					refvalid = true;
+					BMessage* refmsg = new BMessage('opnf');
+					refmsg->AddRef("refs", &fRef);
+					PostMessage(refmsg);
+					delete refmsg;
+					snooze(20000);
+				}
+			}
+			break;
+		}
+		case 'expt':
+		{
+			if (!fCurrentScriptee)
+			// There's no current "scriptee" window yet!
 			{
-				fprintf(stderr, "No canvas windows open...\n");
-				if (message->IsSourceWaiting()) // Disappoint our friend.
-				{
-					BMessage* reply = new BMessage(BBP_NO_WINDOWS);
-					message->SendReply(reply);
-					delete reply;
-				}
+				char errstring[256];
+				sprintf(errstring,
+					"There is no current "
+					"scriptee"
+					" window yet");
+				if (message->IsSourceWaiting()) {
+					BMessage error(B_ERROR);
+					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+					error.AddString("message", errstring);
+					message->SendReply(&error);
+				} else
+					fprintf(stderr, "%s\n", errstring);
 				break;
 			}
-		}
-		message->AddString("hack", "");
-		activeWin->MessageReceived(message);
-		break;
-	}
-	case BBP_REPLACE_BBITMAP: // This is a _copy_!!!
-	{
-		// printf ("Got to the main app...\n");
-		BMessage realmessage;
-		if (message->FindMessage("message", &realmessage) == B_OK) {
-			const char* name;
-			if (message->FindString("name", &name) == B_OK) {
-				title.SetTo(name);
-			} else {
-				fNumberFormat.Format(windowNumber, newnum++);
-				title.SetToFormat("Untitled %s", windowNumber.String());
+
+			BMessage exportMessage('expt');
+			const char* namestring;
+			if (message->FindString("name", &namestring) == B_OK ||
+				message->FindString("Name", &namestring) == B_OK ||
+				message->FindString("filename", &namestring) == B_OK ||
+				message->FindString("Filename", &namestring) == B_OK) {
+				exportMessage.AddString("filename", namestring);
+				// printf ("File name: %s\n", namestring);
 			}
-			BMessage archive;
-			if (realmessage.FindMessage("BBitmap", &archive) == B_OK) {
-				BBitmap* map = new BBitmap(&archive);
-				if (map->IsValid()) {
-					BMessenger ie;
-					message->FindMessenger("target", &ie);
-					float newWidth = map->Bounds().Width();
-					float newHeight = map->Bounds().Height();
-					BRect canvasWindowFrame;
-					canvasWindowFrame.Set(
-						128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-						128 + newnum * 16 + newHeight - 1
-					);
-					CanvasWindow* canvasWindow =
-						new CanvasWindow(canvasWindowFrame, title, map, &ie);
-					delete fCurrentScriptee;
-					fCurrentScriptee = new BMessenger(canvasWindow);
-					extern int SilentOperation;
-					canvasWindow->Minimize(SilentOperation >= 1);
-					canvasWindow->Show();
-					BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
-					ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
-					if (realmessage.IsSourceWaiting()) {
-						realmessage.SendReply(ok);
-					} else {
-						ie.SendMessage(ok);
-					}
-					delete ok;
-					float zoom;
-					if (realmessage.FindFloat("zoom", &zoom) == B_OK) {
-						BMessage* m = new BMessage('Mnnn');
-						m->AddFloat("zoom", zoom);
-						canvasWindow->PostMessage(m);
-						delete m;
-					}
-				} else {
-					fprintf(stderr, "Invalid BBitmap\n");
-					// Error
-				}
-			} else {
-				fprintf(stderr, "Message didn't contain a valid BBitmap\n");
-				// Error
+
+			BMessage reply;
+			fCurrentScriptee->SendMessage(&exportMessage, &reply);
+			if (message->IsSourceWaiting()) {
+				message->SendReply(&reply);
 			}
 			break;
-		} else {
-			// Fall through to BBP_OPEN_BBITMAP.
-			// Explanation:  Becasso received a BBP_REPLACE_BBITMAP message itself,
-			// which doesn't make sense (which bitmap should be replaced?).
-			// Apart from simply erroring out, the most sensible thing to do would be
-			// opening the bitmap in a new window.
 		}
-	}
-	case BBP_OPEN_BBITMAP: {
-		// printf ("BBP_OPEN_BBITMAP\n");
-		if (launching) {
-			launchMessage = new BMessage(*message);
-		} else {
-			const char* name;
-			if (message->FindString("name", &name) == B_OK) {
-				title.SetTo(name);
-			} else {
-				fNumberFormat.Format(windowNumber, newnum++);
-				title.SetToFormat("Untitled %s", windowNumber.String());
+		case 'Crop':
+		{
+			if (!fCurrentScriptee)
+			// There's no current "scriptee" window yet!
+			{
+				char errstring[256];
+				sprintf(errstring,
+					"There is no current "
+					"scriptee"
+					" window yet");
+				if (message->IsSourceWaiting()) {
+					BMessage error(B_ERROR);
+					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+					error.AddString("message", errstring);
+					message->SendReply(&error);
+				} else
+					fprintf(stderr, "%s\n", errstring);
+				break;
 			}
-			BMessage archive;
-			entry_ref ref;
-			if (message->FindMessage("BBitmap", &archive) == B_OK) {
-				BBitmap* map = new BBitmap(&archive);
-				if (map->IsValid()) {
-					BMessenger ie;
-					message->FindMessenger("target", &ie);
-					float newWidth = map->Bounds().Width();
-					float newHeight = map->Bounds().Height();
-					BRect canvasWindowFrame;
-					canvasWindowFrame.Set(
-						128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + newWidth - 1,
-						128 + newnum * 16 + newHeight - 1
-					);
-					CanvasWindow* canvasWindow =
-						new CanvasWindow(canvasWindowFrame, title, map, &ie);
-					delete fCurrentScriptee;
-					fCurrentScriptee = new BMessenger(canvasWindow);
-					extern int SilentOperation;
-					canvasWindow->Minimize(SilentOperation >= 1);
-					canvasWindow->Show();
-					BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
-					ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
-					if (message->IsSourceWaiting()) {
-						message->SendReply(ok);
-					} else {
-						ie.SendMessage(ok);
+
+			BMessage cropMessage('Crop');
+			BRect rect;
+			if (message->FindRect("data", &rect) == B_OK ||
+				message->FindRect("rect", &rect) == B_OK ||
+				message->FindRect("croprect", &rect) == B_OK ||
+				message->FindRect("CropRect", &rect) == B_OK) {
+				cropMessage.AddRect("data", rect);
+			}
+
+			BMessage reply;
+			fCurrentScriptee->SendMessage(&cropMessage, &reply);
+			if (message->IsSourceWaiting()) {
+				message->SendReply(&reply);
+			}
+			break;
+		}
+		case 'newc':
+		{
+			Unlock();
+			static int32 newWidth = 256, newHeight = 256;
+			static int32 newColor = COLOR_BG;
+			SizeWindow* sizeWindow = new SizeWindow(newHeight, newWidth, newColor);
+			if (sizeWindow->Go()) {
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("%s %s", "Untitled", windowNumber.String());
+				newWidth = sizeWindow->w();
+				newHeight = sizeWindow->h();
+				newColor = sizeWindow->color();
+				BRect canvasWindowFrame;
+				canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+					128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+				rgb_color color = White;
+				extern ColorMenuButton *hicolor, *locolor;
+				switch (newColor) {
+					case COLOR_FG:
+						color = hicolor->color();
+						break;
+					case COLOR_BG:
+						color = locolor->color();
+						break;
+					case COLOR_TR:
+						color.red = 255;
+						color.green = 255;
+						color.blue = 255;
+						color.alpha = 0;
+						break;
+				}
+				CanvasWindow* canvasWindow =
+					new CanvasWindow(canvasWindowFrame, title, NULL, NULL, false, color);
+				delete fCurrentScriptee;
+				fCurrentScriptee = new BMessenger(canvasWindow);
+				canvasWindow->Show();
+			}
+			Lock();
+			sizeWindow->Lock();
+			sizeWindow->Quit();
+			break;
+		}
+		case 'cnew':  // Deprecated!!!
+		{
+			// message->PrintToStream();
+			fNumberFormat.Format(windowNumber, newnum++);
+			title.SetToFormat("Untitled %s", windowNumber.String());
+			BRect canvasWindowFrame;
+			canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + 255,
+				128 + newnum * 16 + 255);
+
+			BMessage specifier;
+			int32 index;
+			while (message->GetCurrentSpecifier(&index, &specifier) == B_OK) {
+				// printf ("Found a specifier:\n");
+				// specifier.PrintToStream();
+				const char* property;
+				if (specifier.FindString("property", &property) == B_OK) {
+					// printf ("Found property: %s\n", property);
+					if (!strcasecmp(property, "Size")) {
+						char* sizestring;
+						if (specifier.FindString("name", (const char**)&sizestring) == B_OK) {
+							if (!strncmp(sizestring, "BRect", 5))
+								sizestring += 6;
+
+							canvasWindowFrame.left = atof(strtok(sizestring, " ,"));
+							canvasWindowFrame.top = atof(strtok(NULL, " ,"));
+							canvasWindowFrame.right = atof(strtok(NULL, " ,"));
+							canvasWindowFrame.bottom = atof(strtok(NULL, " ,"));
+						}
+					} else if (!strcasecmp(property, "Name")) {
+						const char* namestring;
+						if (specifier.FindString("name", &namestring) == B_OK) {
+							title.SetTo(namestring);
+						}
 					}
-					delete ok;
-					float zoom;
-					if (message->FindFloat("zoom", &zoom) == B_OK) {
-						BMessage* m = new BMessage('Mnnn');
-						m->AddFloat("zoom", zoom);
-						canvasWindow->PostMessage(m);
-						delete m;
+				}
+				message->PopSpecifier();
+			}
+			// canvasWindowFrame.PrintToStream();
+			CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title);
+			delete fCurrentScriptee;
+			fCurrentScriptee = new BMessenger(canvasWindow);
+			canvasWindow->Show();
+			if (message->IsSourceWaiting()) {
+				BMessage error(B_REPLY);
+				error.AddInt32("error", B_NO_ERROR);
+				message->SendReply(&error);
+			}
+			break;
+		}
+		case 'open':
+			openPanel->Show();	// Don't ask.
+			openPanel->Show();
+			break;
+		case 'opnR':  // open Recent
+		{
+			entry_ref ref;
+			if (message->FindRef("ref", &ref) == B_NO_ERROR) {
+				BEntry entry;
+				if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
+					bool AskForAlpha = true;
+					char buffer[1024];
+					BNode node(&ref);
+					ssize_t s;
+					if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
+						buffer[s] = 0;
+						if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
+							BAlert* alert = new BAlert("",
+								lstring(6,
+									"Please drop Becasso Palette files on the appropriate Color "
+									"button or on the associated Color Editor window."),
+								lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+							alert->Go();
+							break;
+						}
+					}
+					try {
+						// message->PrintToStream();
+						if (message->HasBool("AskForAlpha"))
+							message->FindBool("AskForAlpha", &AskForAlpha);
+						CanvasWindow* canvasWindow;
+						BRect canvasWindowFrame;
+						canvasWindowFrame.Set(100, 180, 500, 500);
+						canvasWindow = new CanvasWindow(canvasWindowFrame, ref, AskForAlpha);
+						delete fCurrentScriptee;
+						fCurrentScriptee = new BMessenger(canvasWindow);
+						BScreen screen;
+						canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
+						canvasWindow->ResizeTo(
+							canvasWindowFrame.Width(), canvasWindowFrame.Height());
+						canvasWindow->Show();
+					} catch (...) {
+						printf("Caught in the act!\n");
 					}
 				} else {
-					fprintf(stderr, "Invalid BBitmap\n");
-					// Error
+					char name[B_FILE_NAME_LENGTH];
+					if (entry.GetName(name) == B_OK) {
+						printf("Couldn't find %s\n", name);
+					} else {
+						printf("Not a file?\n");
+					}
+					// Not a file?
 				}
-			} else if (message->FindRef("ref", &ref) == B_OK) {
+			} else {
+				printf("No ref?\n");
+				// No refs?
+			}
+			break;
+		}
+		case 'opnf':
+		{
+			entry_ref ref;
+			openPanel->Hide();
+			if (message->FindRef("refs", &ref) == B_NO_ERROR) {
 				BEntry entry;
 				if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
 					bool AskForAlpha = true;
@@ -1473,35 +1137,292 @@ Becasso::MessageReceived(BMessage* message)
 					if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
 						buffer[s] = 0;
 						if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
-							BAlert* alert = new BAlert(
-								"",
-								lstring(
-									6, "Please drop Becasso Palette files on the appropriate Color "
-									   "button or on the associated Color Editor window."
-								),
-								lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT
-							);
+							BAlert* alert = new BAlert("",
+								lstring(6,
+									"Please drop Becasso Palette files on the appropriate Color "
+									"button or on the associated Color Editor window."),
+								lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 							alert->Go();
 							break;
 						}
 					}
 					try {
-						BMessenger ie;
-						message->FindMessenger("target", &ie);
 						// message->PrintToStream();
 						if (message->HasBool("AskForAlpha"))
 							message->FindBool("AskForAlpha", &AskForAlpha);
 						CanvasWindow* canvasWindow;
 						BRect canvasWindowFrame;
 						canvasWindowFrame.Set(100, 180, 500, 500);
-						canvasWindow = new CanvasWindow(canvasWindowFrame, ref, AskForAlpha, &ie);
+						canvasWindow = new CanvasWindow(canvasWindowFrame, ref, AskForAlpha);
 						delete fCurrentScriptee;
 						fCurrentScriptee = new BMessenger(canvasWindow);
 						BScreen screen;
 						canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
 						canvasWindow->ResizeTo(
-							canvasWindowFrame.Width(), canvasWindowFrame.Height()
-						);
+							canvasWindowFrame.Width(), canvasWindowFrame.Height());
+						extern int SilentOperation;
+						canvasWindow->Minimize(SilentOperation >= 1);
+						canvasWindow->Show();
+					} catch (...) {
+						printf("Caught in the act!\n");
+						break;
+					}
+				} else {
+					char name[B_FILE_NAME_LENGTH];
+					if (entry.GetName(name) == B_OK) {
+						printf("Couldn't find %s\n", name);
+					} else {
+						printf("Not a file?\n");
+					}
+					// Not a file?
+				}
+			} else {
+				printf("No refs?\n");
+				// No refs?
+			}
+			break;
+		}
+		case 'aliv':  // Sent by CanvasWindow itself, due to scripting AskForAlpha switch
+		{
+			BMessenger msgr;
+			message->FindMessenger("canvas", &msgr);
+			message->AddInt32("which", 1);
+			msgr.SendMessage(message);
+			break;
+		}
+		case 'SPst':
+		{
+			BWindow* win;
+			for (int i = 1; i < CountWindows(); i++) {
+				win = WindowAt(i);
+				if (is_instance_of(win, CanvasWindow))
+					win->PostMessage(message);
+			}
+			break;
+		}
+		case 'clrX':  // color changed - warn all the windows
+		{
+			BWindow* win;
+			for (int i = 1; i < CountWindows(); i++) {
+				win = WindowAt(i);
+				if (is_instance_of(win, CanvasWindow))
+					win->PostMessage(message);
+			}
+			break;
+		}
+		case 0:	 // Icon dropped from FileTypes (yes, 0!!)
+		{
+			BMessage msg;
+			if (message->FindMessage("icon/large", &msg) == B_OK) {
+				BBitmap* map = new BBitmap(&msg);
+				if (map->IsValid()) {
+					fNumberFormat.Format(windowNumber, newnum++);
+					title.SetToFormat("Untitled (Icon) %s", windowNumber.String());
+					float newWidth = map->Bounds().Width();
+					float newHeight = map->Bounds().Height();
+					BRect canvasWindowFrame;
+					canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+						128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+					CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
+					delete fCurrentScriptee;
+					fCurrentScriptee = new BMessenger(canvasWindow);
+					canvasWindow->Show();
+					BMessage* m = new BMessage('M4');
+					canvasWindow->PostMessage(m);
+					delete m;
+					m = new BMessage('rstf');
+					canvasWindow->PostMessage(m);
+					delete m;
+				} else {
+					fprintf(stderr, "Invalid BBitmap\n");
+					// Error
+				}
+			}
+			if (message->FindMessage("icon/mini", &msg) == B_OK) {
+				BBitmap* map = new BBitmap(&msg);
+				if (map->IsValid()) {
+					fNumberFormat.Format(windowNumber, newnum++);
+					title.SetToFormat("Untitled (MIcon) %s", windowNumber.String());
+					float newWidth = map->Bounds().Width();
+					float newHeight = map->Bounds().Height();
+					BRect canvasWindowFrame;
+					canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+						128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+					CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
+					delete fCurrentScriptee;
+					fCurrentScriptee = new BMessenger(canvasWindow);
+					canvasWindow->Show();
+					BMessage* m = new BMessage('M4');
+					canvasWindow->PostMessage(m);
+					delete m;
+					m = new BMessage('rstf');
+					canvasWindow->PostMessage(m);
+					delete m;
+				} else {
+					fprintf(stderr, "Invalid BBitmap\n");
+					// Error
+				}
+			}
+			break;
+		}
+		case 'PPNT':  // RRaster drop
+		{
+			if (launching) {
+				launchMessage = new BMessage(*message);
+			} else {
+				BRect bounds;
+				color_space colorspace;
+				ssize_t bits_length;
+				message->FindRect("bounds", &bounds);
+				message->FindInt32("bits_length", (int32*)&bits_length);
+				message->FindInt32("color_space", (int32*)&colorspace);
+				fNumberFormat.Format(windowNumber, newnum++);
+				title.SetToFormat("Untitled (RRaster) %s", windowNumber.String());
+				BBitmap* map = new BBitmap(bounds, colorspace);
+				char* bits;
+				ssize_t numbytes;
+				message->FindData("bits", B_RAW_TYPE, (const void**)&bits, &numbytes);
+				if (numbytes != bits_length) {
+					fprintf(stderr, "Hey, bits_length != num_bytes!!\n");
+				}
+				memcpy(map->Bits(), bits, numbytes);
+				float newWidth = bounds.Width();
+				float newHeight = bounds.Height();
+				BRect canvasWindowFrame;
+				canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+					128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+				CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
+				delete fCurrentScriptee;
+				fCurrentScriptee = new BMessenger(canvasWindow);
+				canvasWindow->Show();
+			}
+			break;
+		}
+		case BBP_REQUEST_BBITMAP:  // BeDC Hack for interaction with ImageElements
+		{
+			// Find the active Canvas Window
+			CanvasWindow* activeWin = NULL;
+			CanvasWindow* firstWin = NULL;
+			for (int i = 0; i < CountWindows(); i++) {
+				BWindow* win = WindowAt(i);
+				if (is_instance_of(win, CanvasWindow)) {
+					if (!firstWin)
+						firstWin = dynamic_cast<CanvasWindow*>(win);
+					if (win->IsActive())
+						activeWin = dynamic_cast<CanvasWindow*>(win);
+				}
+			}
+			if (!activeWin)	 // No active window?  Hmmm.
+			{
+				if (firstWin) {
+					activeWin = firstWin;  // Just take the first Canvas Window you found.
+				} else					   // no canvas windows at all!
+				{
+					fprintf(stderr, "No canvas windows open...\n");
+					if (message->IsSourceWaiting())	 // Disappoint our friend.
+					{
+						BMessage* reply = new BMessage(BBP_NO_WINDOWS);
+						message->SendReply(reply);
+						delete reply;
+					}
+					break;
+				}
+			}
+			message->AddString("hack", "");
+			activeWin->MessageReceived(message);
+			break;
+		}
+		case BBP_REPLACE_BBITMAP:  // This is a _copy_!!!
+		{
+			// printf ("Got to the main app...\n");
+			BMessage realmessage;
+			if (message->FindMessage("message", &realmessage) == B_OK) {
+				const char* name;
+				if (message->FindString("name", &name) == B_OK) {
+					title.SetTo(name);
+				} else {
+					fNumberFormat.Format(windowNumber, newnum++);
+					title.SetToFormat("Untitled %s", windowNumber.String());
+				}
+				BMessage archive;
+				if (realmessage.FindMessage("BBitmap", &archive) == B_OK) {
+					BBitmap* map = new BBitmap(&archive);
+					if (map->IsValid()) {
+						BMessenger ie;
+						message->FindMessenger("target", &ie);
+						float newWidth = map->Bounds().Width();
+						float newHeight = map->Bounds().Height();
+						BRect canvasWindowFrame;
+						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+							128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+						CanvasWindow* canvasWindow =
+							new CanvasWindow(canvasWindowFrame, title, map, &ie);
+						delete fCurrentScriptee;
+						fCurrentScriptee = new BMessenger(canvasWindow);
+						extern int SilentOperation;
+						canvasWindow->Minimize(SilentOperation >= 1);
+						canvasWindow->Show();
+						BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
+						ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
+						if (realmessage.IsSourceWaiting()) {
+							realmessage.SendReply(ok);
+						} else {
+							ie.SendMessage(ok);
+						}
+						delete ok;
+						float zoom;
+						if (realmessage.FindFloat("zoom", &zoom) == B_OK) {
+							BMessage* m = new BMessage('Mnnn');
+							m->AddFloat("zoom", zoom);
+							canvasWindow->PostMessage(m);
+							delete m;
+						}
+					} else {
+						fprintf(stderr, "Invalid BBitmap\n");
+						// Error
+					}
+				} else {
+					fprintf(stderr, "Message didn't contain a valid BBitmap\n");
+					// Error
+				}
+				break;
+			} else {
+				// Fall through to BBP_OPEN_BBITMAP.
+				// Explanation:  Becasso received a BBP_REPLACE_BBITMAP message itself,
+				// which doesn't make sense (which bitmap should be replaced?).
+				// Apart from simply erroring out, the most sensible thing to do would be
+				// opening the bitmap in a new window.
+			}
+		}
+		case BBP_OPEN_BBITMAP:
+		{
+			// printf ("BBP_OPEN_BBITMAP\n");
+			if (launching) {
+				launchMessage = new BMessage(*message);
+			} else {
+				const char* name;
+				if (message->FindString("name", &name) == B_OK) {
+					title.SetTo(name);
+				} else {
+					fNumberFormat.Format(windowNumber, newnum++);
+					title.SetToFormat("Untitled %s", windowNumber.String());
+				}
+				BMessage archive;
+				entry_ref ref;
+				if (message->FindMessage("BBitmap", &archive) == B_OK) {
+					BBitmap* map = new BBitmap(&archive);
+					if (map->IsValid()) {
+						BMessenger ie;
+						message->FindMessenger("target", &ie);
+						float newWidth = map->Bounds().Width();
+						float newHeight = map->Bounds().Height();
+						BRect canvasWindowFrame;
+						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+							128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
+						CanvasWindow* canvasWindow =
+							new CanvasWindow(canvasWindowFrame, title, map, &ie);
+						delete fCurrentScriptee;
+						fCurrentScriptee = new BMessenger(canvasWindow);
 						extern int SilentOperation;
 						canvasWindow->Minimize(SilentOperation >= 1);
 						canvasWindow->Show();
@@ -1520,828 +1441,889 @@ Becasso::MessageReceived(BMessage* message)
 							canvasWindow->PostMessage(m);
 							delete m;
 						}
-					} catch (...) {
-						printf("Caught in the act!\n");
-						break;
+					} else {
+						fprintf(stderr, "Invalid BBitmap\n");
+						// Error
+					}
+				} else if (message->FindRef("ref", &ref) == B_OK) {
+					BEntry entry;
+					if ((entry.SetTo(&ref, true) == B_NO_ERROR) && entry.IsFile()) {
+						bool AskForAlpha = true;
+						char buffer[1024];
+						BNode node = BNode(&ref);
+						ssize_t s;
+						if ((s = node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, buffer, 1022)) > 0) {
+							buffer[s] = 0;
+							if (!strcmp(buffer, "application/x-sum-becasso.palette")) {
+								BAlert* alert = new BAlert("",
+									lstring(6,
+										"Please drop Becasso Palette files on the appropriate "
+										"Color "
+										"button or on the associated Color Editor window."),
+									lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL,
+									B_WARNING_ALERT);
+								alert->Go();
+								break;
+							}
+						}
+						try {
+							BMessenger ie;
+							message->FindMessenger("target", &ie);
+							// message->PrintToStream();
+							if (message->HasBool("AskForAlpha"))
+								message->FindBool("AskForAlpha", &AskForAlpha);
+							CanvasWindow* canvasWindow;
+							BRect canvasWindowFrame;
+							canvasWindowFrame.Set(100, 180, 500, 500);
+							canvasWindow =
+								new CanvasWindow(canvasWindowFrame, ref, AskForAlpha, &ie);
+							delete fCurrentScriptee;
+							fCurrentScriptee = new BMessenger(canvasWindow);
+							BScreen screen;
+							canvasWindowFrame = canvasWindow->Frame() & screen.Frame();
+							canvasWindow->ResizeTo(
+								canvasWindowFrame.Width(), canvasWindowFrame.Height());
+							extern int SilentOperation;
+							canvasWindow->Minimize(SilentOperation >= 1);
+							canvasWindow->Show();
+							BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
+							ok->AddMessenger("target", BMessenger(canvasWindow, NULL));
+							if (message->IsSourceWaiting()) {
+								message->SendReply(ok);
+							} else {
+								ie.SendMessage(ok);
+							}
+							delete ok;
+							float zoom;
+							if (message->FindFloat("zoom", &zoom) == B_OK) {
+								BMessage* m = new BMessage('Mnnn');
+								m->AddFloat("zoom", zoom);
+								canvasWindow->PostMessage(m);
+								delete m;
+							}
+						} catch (...) {
+							printf("Caught in the act!\n");
+							break;
+						}
+					} else {
+						char name[B_FILE_NAME_LENGTH];
+						if (entry.GetName(name) == B_OK) {
+							printf("Couldn't find %s\n", name);
+						} else {
+							printf("Not a file?\n");
+						}
+						// Not a file?
 					}
 				} else {
-					char name[B_FILE_NAME_LENGTH];
-					if (entry.GetName(name) == B_OK) {
-						printf("Couldn't find %s\n", name);
+					fprintf(stderr, "Message didn't contain a valid BBitmap or ref\n");
+					// Error
+				}
+			}
+			break;
+		}
+		case 'capt':
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			addon->Open(NULL, NULL);
+			break;
+		}
+		case CAPTURE_READY:
+		{
+			printf("Capturing...\n");
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			if (message->FindInt32("index", &index) == B_OK) {
+				addon = (AddOn*)AddOns->ItemAt(index);
+				title = '0';
+				// printf ("Calling Bitmap...\n");
+				BString titleCopy = title;
+				char* mutableTitle = titleCopy.LockBuffer(titleCopy.Length() + 1);
+				strncpy(mutableTitle, titleCopy.String(), titleCopy.Length() + 1);
+				titleCopy.UnlockBuffer();
+				BBitmap* map = addon->Bitmap(mutableTitle);
+
+				// printf ("Got it!\n");
+				BString windowNumber;
+				if (map) {
+					if (map->IsValid()) {
+						if (!title[0]) {
+							fNumberFormat.Format(windowNumber, newnum++);
+							title.SetToFormat("Untitled %s", windowNumber.String());
+						}
+						BRect canvasWindowFrame;
+						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+							128 + newnum * 16 + map->Bounds().Width(),
+							128 + newnum * 16 + map->Bounds().Height());
+						CanvasWindow* canvasWindow =
+							new CanvasWindow(canvasWindowFrame, title, map);
+						delete fCurrentScriptee;
+						fCurrentScriptee = new BMessenger(canvasWindow);
+						extern int SilentOperation;
+						canvasWindow->Minimize(SilentOperation >= 1);
+						canvasWindow->Show();
 					} else {
-						printf("Not a file?\n");
+						fprintf(stderr, "Capture Error: Invalid BBitmap\n");
+						// Error
 					}
-					// Not a file?
+				} else	// map == NULL  => Canceled
+				{
 				}
 			} else {
-				fprintf(stderr, "Message didn't contain a valid BBitmap or ref\n");
-				// Error
+				fprintf(stderr,
+					"Error: Your capture add-on asked for a grab, but didn't identify itself.\n");
+				fprintf(stderr,
+					"       You should AddInt32(\"index\", &index) to the CAPTURE_READY "
+					"message.\n");
 			}
+			break;
 		}
-		break;
-	}
-	case 'capt': {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		addon->Open(NULL, NULL);
-		break;
-	}
-	case CAPTURE_READY: {
-		printf("Capturing...\n");
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		if (message->FindInt32("index", &index) == B_OK) {
-			addon = (AddOn*)AddOns->ItemAt(index);
-			title = '0';
-			// printf ("Calling Bitmap...\n");
-			BString titleCopy = title;
-			char* mutableTitle = titleCopy.LockBuffer(titleCopy.Length() + 1);
-			strncpy(mutableTitle, titleCopy.String(), titleCopy.Length() + 1);
-			titleCopy.UnlockBuffer();
-			BBitmap* map = addon->Bitmap(mutableTitle);
-
-			// printf ("Got it!\n");
-			BString windowNumber;
-			if (map) {
-				if (map->IsValid()) {
-					if (!title[0]) {
-						fNumberFormat.Format(windowNumber, newnum++);
-						title.SetToFormat("Untitled %s", windowNumber.String());
-					}
+		case 'PrSU':
+		{
+			PrintSetup();
+			break;
+		}
+		case 'prfs':
+		{
+			PrefsWindow* prefsWindow = new PrefsWindow();
+			prefsWindow->Show();
+			break;
+		}
+		case B_CREATE_PROPERTY:
+		{
+			// message->PrintToStream();
+			switch (fCurrentProperty) {
+				case PROP_CANVAS:
+				{
+					// message->PrintToStream();
+					fNumberFormat.Format(windowNumber, newnum++);
+					title.SetToFormat("Untitled %s", windowNumber.String());
 					BRect canvasWindowFrame;
-					canvasWindowFrame.Set(
-						128 + newnum * 16, 128 + newnum * 16,
-						128 + newnum * 16 + map->Bounds().Width(),
-						128 + newnum * 16 + map->Bounds().Height()
-					);
-					CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title, map);
+					canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
+						128 + newnum * 16 + 255, 128 + newnum * 16 + 255);
+
+					const char* namestring;
+					if (message->FindString("Name", &namestring) == B_OK ||
+						message->FindString("name", &namestring) == B_OK) {
+						title.SetTo(namestring);
+					}
+
+					BRect rect;
+					if (message->FindRect("Size", &rect) == B_OK ||
+						message->FindRect("size", &rect) == B_OK) {
+						canvasWindowFrame = rect;
+					}
+
+					// canvasWindowFrame.PrintToStream();
+					CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title);
 					delete fCurrentScriptee;
 					fCurrentScriptee = new BMessenger(canvasWindow);
 					extern int SilentOperation;
 					canvasWindow->Minimize(SilentOperation >= 1);
 					canvasWindow->Show();
-				} else {
-					fprintf(stderr, "Capture Error: Invalid BBitmap\n");
-					// Error
+					if (message->IsSourceWaiting()) {
+						BMessage error(B_REPLY);
+						error.AddInt32("error", B_NO_ERROR);
+						message->SendReply(&error);
+					}
+					break;
 				}
-			} else // map == NULL  => Canceled
-			{
-			}
-		} else {
-			fprintf(
-				stderr, "Error: Your capture add-on asked for a grab, but didn't identify itself.\n"
-			);
-			fprintf(
-				stderr,
-				"       You should AddInt32(\"index\", &index) to the CAPTURE_READY message.\n"
-			);
-		}
-		break;
-	}
-	case 'PrSU': {
-		PrintSetup();
-		break;
-	}
-	case 'prfs': {
-		PrefsWindow* prefsWindow = new PrefsWindow();
-		prefsWindow->Show();
-		break;
-	}
-	case B_CREATE_PROPERTY: {
-		// message->PrintToStream();
-		switch (fCurrentProperty) {
-		case PROP_CANVAS: {
-			// message->PrintToStream();
-			fNumberFormat.Format(windowNumber, newnum++);
-			title.SetToFormat("Untitled %s", windowNumber.String());
-			BRect canvasWindowFrame;
-			canvasWindowFrame.Set(
-				128 + newnum * 16, 128 + newnum * 16, 128 + newnum * 16 + 255,
-				128 + newnum * 16 + 255
-			);
-
-			const char* namestring;
-			if (message->FindString("Name", &namestring) == B_OK ||
-				message->FindString("name", &namestring) == B_OK) {
-				title.SetTo(namestring);
-			}
-
-			BRect rect;
-			if (message->FindRect("Size", &rect) == B_OK ||
-				message->FindRect("size", &rect) == B_OK) {
-				canvasWindowFrame = rect;
-			}
-
-			// canvasWindowFrame.PrintToStream();
-			CanvasWindow* canvasWindow = new CanvasWindow(canvasWindowFrame, title);
-			delete fCurrentScriptee;
-			fCurrentScriptee = new BMessenger(canvasWindow);
-			extern int SilentOperation;
-			canvasWindow->Minimize(SilentOperation >= 1);
-			canvasWindow->Show();
-			if (message->IsSourceWaiting()) {
-				BMessage error(B_REPLY);
-				error.AddInt32("error", B_NO_ERROR);
-				message->SendReply(&error);
+				default:
+					inherited::MessageReceived(message);
+					break;
 			}
 			break;
 		}
-		default:
-			inherited::MessageReceived(message);
-			break;
-		}
-		break;
-	}
-	case B_COUNT_PROPERTIES: {
-		switch (fCurrentProperty) {
-		case PROP_TOOL: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddInt32("result", NumTools);
-				message->SendReply(&reply);
-			} else
-				fprintf(stderr, "Number of Tools: %ld\n", NumTools);
-			break;
-		}
-		case PROP_MODE: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddInt32("result", NumModes);
-				message->SendReply(&reply);
-			} else
-				fprintf(stderr, "Number of Modes: %ld\n", NumModes);
-			break;
-		}
-		default:
-			inherited::MessageReceived(message);
-		}
-		fCurrentProperty = 0;
-		break;
-	}
-	case B_GET_SUPPORTED_SUITES: {
-		switch (fCurrentProperty) {
-		case PROP_TOOL: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				char str[256];
-				for (int i = 0; i < NumTools; i++) {
-					sprintf(str, "suite/x-sum-becasso-%s", ToolSpecifiers[i]);
-					reply.AddString("suites", str);
+		case B_COUNT_PROPERTIES:
+		{
+			switch (fCurrentProperty) {
+				case PROP_TOOL:
+				{
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddInt32("result", NumTools);
+						message->SendReply(&reply);
+					} else
+						fprintf(stderr, "Number of Tools: %ld\n", NumTools);
+					break;
 				}
-				message->SendReply(&reply);
-			} else {
-				fprintf(stderr, "Available Tools:\n");
-				for (int i = 0; i < NumTools; i++)
-					fprintf(stderr, "%s\n", ToolSpecifiers[i]);
-			}
-			break;
-		}
-		case PROP_MODE: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				char str[256];
-				for (int i = 0; i < NumModes; i++) {
-					sprintf(str, "suite/x-sum-becasso-%s", ModeSpecifiers[i]);
-					reply.AddString("suites", str);
+				case PROP_MODE:
+				{
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddInt32("result", NumModes);
+						message->SendReply(&reply);
+					} else
+						fprintf(stderr, "Number of Modes: %ld\n", NumModes);
+					break;
 				}
-				message->SendReply(&reply);
-			} else {
-				fprintf(stderr, "Available Modes:\n");
-				for (int i = 0; i < NumModes; i++)
-					fprintf(stderr, "%s\n", ModeSpecifiers[i]);
+				default:
+					inherited::MessageReceived(message);
 			}
+			fCurrentProperty = 0;
 			break;
 		}
-		default:
-			inherited::MessageReceived(message);
+		case B_GET_SUPPORTED_SUITES:
+		{
+			switch (fCurrentProperty) {
+				case PROP_TOOL:
+				{
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						char str[256];
+						for (int i = 0; i < NumTools; i++) {
+							sprintf(str, "suite/x-sum-becasso-%s", ToolSpecifiers[i]);
+							reply.AddString("suites", str);
+						}
+						message->SendReply(&reply);
+					} else {
+						fprintf(stderr, "Available Tools:\n");
+						for (int i = 0; i < NumTools; i++)
+							fprintf(stderr, "%s\n", ToolSpecifiers[i]);
+					}
+					break;
+				}
+				case PROP_MODE:
+				{
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						char str[256];
+						for (int i = 0; i < NumModes; i++) {
+							sprintf(str, "suite/x-sum-becasso-%s", ModeSpecifiers[i]);
+							reply.AddString("suites", str);
+						}
+						message->SendReply(&reply);
+					} else {
+						fprintf(stderr, "Available Modes:\n");
+						for (int i = 0; i < NumModes; i++)
+							fprintf(stderr, "%s\n", ModeSpecifiers[i]);
+					}
+					break;
+				}
+				default:
+					inherited::MessageReceived(message);
+			}
+			fCurrentProperty = 0;
+			break;
 		}
-		fCurrentProperty = 0;
-		break;
-	}
-	case B_SET_PROPERTY: {
-		switch (fCurrentProperty) {
-		case PROP_TOOL: {
-			const char* namespecifier;
-			int32 numberspecifier;
-			if (message->FindString("data", &namespecifier) == B_OK) {
-				int index;
-				for (index = 0; index < NumTools; index++) {
-					if (!strcasecmp(ToolSpecifiers[index], namespecifier)) {
-						extern PicMenuButton* tool;
-						tool->set(index);
+		case B_SET_PROPERTY:
+		{
+			switch (fCurrentProperty) {
+				case PROP_TOOL:
+				{
+					const char* namespecifier;
+					int32 numberspecifier;
+					if (message->FindString("data", &namespecifier) == B_OK) {
+						int index;
+						for (index = 0; index < NumTools; index++) {
+							if (!strcasecmp(ToolSpecifiers[index], namespecifier)) {
+								extern PicMenuButton* tool;
+								tool->set(index);
+								if (message->IsSourceWaiting()) {
+									BMessage error(B_REPLY);
+									error.AddInt32("error", B_NO_ERROR);
+									message->SendReply(&error);
+								}
+								break;
+							}
+						}
+						if (index == NumTools) {
+							char errstring[256];
+							sprintf(errstring,
+								"Invalid Tool Name: "
+								"%s"
+								"",
+								namespecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+						break;
+					} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
+						if (0 <= numberspecifier && numberspecifier < NumTools) {
+							extern PicMenuButton* tool;
+							tool->set(numberspecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+							break;
+						} else {
+							BString numberToolsData, numberSpecifierData, errorString;
+							fNumberFormat.Format(numberToolsData, NumTools - 1);
+							fNumberFormat.Format(numberSpecifierData, numberspecifier);
+							errorString.SetToFormat("Tool index out of range [0..%s]: %s",
+								numberToolsData.String(), numberSpecifierData.String());
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errorString.String());
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errorString.String());
+						}
+					} else {
+						char errstring[256];
+						sprintf(errstring, "Invalid Tool Type (either string or int32 please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
+				}
+				case PROP_MODE:
+				{
+					const char* namespecifier;
+					int32 numberspecifier;
+					if (message->FindString("data", &namespecifier) == B_OK) {
+						int index;
+						for (index = 0; index < NumModes; index++) {
+							if (!strcasecmp(ModeSpecifiers[index], namespecifier)) {
+								extern PicMenuButton* mode;
+								mode->set(index);
+								if (message->IsSourceWaiting()) {
+									BMessage error(B_REPLY);
+									error.AddInt32("error", B_NO_ERROR);
+									message->SendReply(&error);
+								}
+								break;
+							}
+						}
+						if (index == NumModes) {
+							char errstring[256];
+							sprintf(errstring,
+								"Invalid Mode Name: "
+								"%s"
+								"",
+								namespecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+						break;
+					} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
+						if (0 <= numberspecifier && numberspecifier < NumModes) {
+							extern PicMenuButton* mode;
+							mode->set(numberspecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+							break;
+						} else {
+							char errstring[256];
+							sprintf(errstring, "Mode Index Out of Range [0..%ld]: %ld",
+								NumTools - 1, numberspecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+					} else {
+						char errstring[256];
+						sprintf(errstring, "Invalid Mode Type (either string or int32 please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
+				}
+				case PROP_FGCOLOR:
+				{
+					// printf ("Setting FG Color\n");
+					const char* namespecifier;
+					rgb_color* rgbspecifier;
+					long dummy;
+					if (message->FindString("data", &namespecifier) == B_OK) {
+						rgb_color rgb;
+						int i;
+						for (i = 0; i < NumColors; i++) {
+							if (!strcasecmp(namespecifier, (const char*)&(RGBColors[i][3]))) {
+								rgb.red = RGBColors[i][0];
+								rgb.green = RGBColors[i][1];
+								rgb.blue = RGBColors[i][2];
+								break;
+							}
+						}
+						if (i == NumColors) {
+							char errstring[256];
+							sprintf(errstring,
+								"Unknown Named Color: "
+								"%s"
+								"",
+								namespecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+							break;
+						} else {
+							extern ColorMenuButton* hicolor;
+							hicolor->set(rgb);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+						}
+						break;
+					} else if (message->FindData("data", B_RGB_COLOR_TYPE,
+								   (const void**)&rgbspecifier, &dummy) == B_OK) {
+						extern ColorMenuButton* hicolor;
+						hicolor->set(*rgbspecifier);
 						if (message->IsSourceWaiting()) {
 							BMessage error(B_REPLY);
 							error.AddInt32("error", B_NO_ERROR);
 							message->SendReply(&error);
 						}
 						break;
+					} else {
+						char errstring[256];
+						sprintf(
+							errstring, "Invalid Color Type (either string or rgb_color please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
+				}
+				case PROP_BGCOLOR:
+				{
+					// printf ("Setting BG Color\n");
+					const char* namespecifier;
+					rgb_color* rgbspecifier;
+					long dummy;
+					if (message->FindString("data", &namespecifier) == B_OK) {
+						rgb_color rgb;
+						int i;
+						for (i = 0; i < NumColors; i++) {
+							if (!strcasecmp(namespecifier, (const char*)&(RGBColors[i][3]))) {
+								rgb.red = RGBColors[i][0];
+								rgb.green = RGBColors[i][1];
+								rgb.blue = RGBColors[i][2];
+								break;
+							}
+						}
+						if (i == NumColors) {
+							char errstring[256];
+							sprintf(errstring,
+								"Unknown Named Color: "
+								"%s"
+								"",
+								namespecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+							break;
+						} else {
+							extern ColorMenuButton* locolor;
+							locolor->set(rgb);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+						}
+						break;
+					} else if (message->FindData("data", B_RGB_COLOR_TYPE,
+								   (const void**)&rgbspecifier, &dummy) == B_OK) {
+						extern ColorMenuButton* locolor;
+						locolor->set(*rgbspecifier);
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_REPLY);
+							error.AddInt32("error", B_NO_ERROR);
+							message->SendReply(&error);
+						}
+						break;
+					} else {
+						char errstring[256];
+						sprintf(
+							errstring, "Invalid Color Type (either string or rgb_color please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
+				}
+				case PROP_EXPFMT:
+				{
+					// printf ("Setting Export Format...\n");
+					// message->PrintToStream();
+					int32 out_type;
+					const char* namedspecifier;
+					if (message->FindInt32("data", &out_type) == B_OK) {
+						// char *s = (char *) &def_out_type;
+						// fprintf (stderr, "Current Default Export Type: '%c%c%c%c'\n", s[0], s[1],
+						// s[2], s[3]);
+					} else if (message->FindString("data", &namedspecifier) == B_OK) {
+						const char* s = namedspecifier;
+						uint32 type;
+
+						// #if defined (__POWERPC__)
+						type = (s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3];
+						// #else
+						//	type = (s[3] << 24) | (s[2] << 16) | (s[1] << 8) | s[0];
+						// #endif
+
+						out_type = 0;
+						translator_id* translators;
+						int32 num_translators;
+
+						BTranslatorRoster::Default()->GetAllTranslators(
+							&translators, &num_translators);
+
+						for (int32 i = 0; i < num_translators; i++) {
+							const translation_format* fmts;
+							int32 num_fmts;
+
+							BTranslatorRoster::Default()->GetOutputFormats(
+								translators[i], &fmts, &num_fmts);
+
+							for (int32 j = 0; j < num_fmts; j++) {
+								if (!strcasecmp(fmts[j].MIME, s))
+								// Type was specified as MIME string
+								{
+									out_type = fmts[j].type;
+									def_out_translator = translators[i];
+								} else if (fmts[j].type == type)
+								// Type was specified as type code
+								{
+									out_type = type;
+									def_out_translator = translators[i];
+								}
+							}
+						}
+
+						if (!out_type) {
+							char errstring[256];
+							sprintf(errstring, "No Translator available for '%s'", s);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+							break;
+						} else {
+							def_out_type = out_type;
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+							break;
+						}
+					} else {
+						char errstring[256];
+						sprintf(errstring,
+							"Invalid Export Format Type (either string or int32 please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+						break;
 					}
 				}
-				if (index == NumTools) {
-					char errstring[256];
-					sprintf(
-						errstring,
-						"Invalid Tool Name: "
-						"%s"
-						"",
-						namespecifier
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
+				case PROP_SCRIPTEE:
+				{
+					const char* namespecifier;
+					int32 indexspecifier;
+					if (message->FindString("data", &namespecifier) == B_OK) {
+						int32 i;
+						for (i = 0; i < CountWindows(); i++) {
+							BWindow* win = WindowAt(i);
+							if (!strcmp(namespecifier, win->Title())) {
+								delete fCurrentScriptee;
+								fCurrentScriptee = new BMessenger(win);
+								if (message->IsSourceWaiting()) {
+									BMessage error(B_REPLY);
+									error.AddInt32("error", B_NO_ERROR);
+									message->SendReply(&error);
+								}
+								break;
+							}
+						}
+						if (i == CountWindows()) {
+							char errstring[256];
+							sprintf(errstring, "Invalid Scriptee: Couldn't find window named '%s'",
+								namespecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+						break;
+					} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
+						if ((indexspecifier >= 0) && (indexspecifier < CountWindows())) {
+							delete fCurrentScriptee;
+							fCurrentScriptee = new BMessenger(WindowAt(indexspecifier));
+
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+						} else {
+							char errstring[256];
+							sprintf(errstring, "Invalid Scriptee: Index %ld out of range [0..%ld]",
+								indexspecifier, CountWindows() - 1);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+						break;
+					} else {
+						char errstring[256];
+						sprintf(errstring,
+							"Invalid Scriptee Type (either named (string) or indexed (int32) "
+							"please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
 				}
-				break;
-			} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
-				if (0 <= numberspecifier && numberspecifier < NumTools) {
+				case PROP_TABLET:
+				{
+					BRect rect;
+					if (message->FindRect("data", &rect) == B_OK) {
+						extern Tablet* wacom;
+						if (wacom && wacom->IsValid()) {
+							wacom->SetRect(rect);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+						} else {
+							char errstring[256];
+							sprintf(errstring, "No tablet initialized (at the moment)");
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+					} else {
+						char errstring[256];
+						sprintf(errstring, "Invalid TabletArea type (BRect please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
+				}
+				default:
+					inherited::MessageReceived(message);
+			}
+			fCurrentProperty = 0;
+			break;
+		}
+		case B_GET_PROPERTY:
+		{
+			switch (fCurrentProperty) {
+				case PROP_TOOL:
+				{
 					extern PicMenuButton* tool;
-					tool->set(numberspecifier);
 					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddSpecifier("result", ToolSpecifiers[tool->selected()]);
+						message->SendReply(&reply);
+					} else
+						fprintf(stderr,
+							"Current Tool: "
+							"%s"
+							"\n",
+							ToolSpecifiers[tool->selected()]);
 					break;
-				} else {
-					BString numberToolsData, numberSpecifierData, errorString;
-					fNumberFormat.Format(numberToolsData, NumTools - 1);
-					fNumberFormat.Format(numberSpecifierData, numberspecifier);
-					errorString.SetToFormat(
-						"Tool index out of range [0..%s]: %s", numberToolsData.String(),
-						numberSpecifierData.String()
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errorString.String());
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errorString.String());
 				}
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Tool Type (either string or int32 please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		case PROP_MODE: {
-			const char* namespecifier;
-			int32 numberspecifier;
-			if (message->FindString("data", &namespecifier) == B_OK) {
-				int index;
-				for (index = 0; index < NumModes; index++) {
-					if (!strcasecmp(ModeSpecifiers[index], namespecifier)) {
-						extern PicMenuButton* mode;
-						mode->set(index);
-						if (message->IsSourceWaiting()) {
-							BMessage error(B_REPLY);
-							error.AddInt32("error", B_NO_ERROR);
-							message->SendReply(&error);
-						}
-						break;
-					}
-				}
-				if (index == NumModes) {
-					char errstring[256];
-					sprintf(
-						errstring,
-						"Invalid Mode Name: "
-						"%s"
-						"",
-						namespecifier
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-				break;
-			} else if (message->FindInt32("data", &numberspecifier) == B_OK) {
-				if (0 <= numberspecifier && numberspecifier < NumModes) {
+				case PROP_MODE:
+				{
 					extern PicMenuButton* mode;
-					mode->set(numberspecifier);
 					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
-					break;
-				} else {
-					char errstring[256];
-					sprintf(
-						errstring, "Mode Index Out of Range [0..%ld]: %ld", NumTools - 1,
-						numberspecifier
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddSpecifier("result", ModeSpecifiers[mode->selected()]);
+						message->SendReply(&reply);
 					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Mode Type (either string or int32 please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		case PROP_FGCOLOR: {
-			// printf ("Setting FG Color\n");
-			const char* namespecifier;
-			rgb_color* rgbspecifier;
-			long dummy;
-			if (message->FindString("data", &namespecifier) == B_OK) {
-				rgb_color rgb;
-				int i;
-				for (i = 0; i < NumColors; i++) {
-					if (!strcasecmp(namespecifier, (const char*)&(RGBColors[i][3]))) {
-						rgb.red = RGBColors[i][0];
-						rgb.green = RGBColors[i][1];
-						rgb.blue = RGBColors[i][2];
-						break;
-					}
-				}
-				if (i == NumColors) {
-					char errstring[256];
-					sprintf(
-						errstring,
-						"Unknown Named Color: "
-						"%s"
-						"",
-						namespecifier
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
+						fprintf(stderr,
+							"Current Mode: "
+							"%s"
+							"\n",
+							ModeSpecifiers[mode->selected()]);
 					break;
-				} else {
+				}
+				case PROP_FGCOLOR:
+				{
 					extern ColorMenuButton* hicolor;
-					hicolor->set(rgb);
+					rgb_color rgb = hicolor->color();
 					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
-				}
-				break;
-			} else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
-				extern ColorMenuButton* hicolor;
-				hicolor->set(*rgbspecifier);
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_REPLY);
-					error.AddInt32("error", B_NO_ERROR);
-					message->SendReply(&error);
-				}
-				break;
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Color Type (either string or rgb_color please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		case PROP_BGCOLOR: {
-			// printf ("Setting BG Color\n");
-			const char* namespecifier;
-			rgb_color* rgbspecifier;
-			long dummy;
-			if (message->FindString("data", &namespecifier) == B_OK) {
-				rgb_color rgb;
-				int i;
-				for (i = 0; i < NumColors; i++) {
-					if (!strcasecmp(namespecifier, (const char*)&(RGBColors[i][3]))) {
-						rgb.red = RGBColors[i][0];
-						rgb.green = RGBColors[i][1];
-						rgb.blue = RGBColors[i][2];
-						break;
-					}
-				}
-				if (i == NumColors) {
-					char errstring[256];
-					sprintf(
-						errstring,
-						"Unknown Named Color: "
-						"%s"
-						"",
-						namespecifier
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
+						message->SendReply(&reply);
 					} else
-						fprintf(stderr, "%s\n", errstring);
+						fprintf(stderr,
+							"Current Foreground Color: [Red: %3d Green: %3d Blue: %3d Alpha: "
+							"%3d]\n",
+							rgb.red, rgb.green, rgb.blue, rgb.alpha);
 					break;
-				} else {
+				}
+				case PROP_BGCOLOR:
+				{
 					extern ColorMenuButton* locolor;
-					locolor->set(rgb);
+					rgb_color rgb = locolor->color();
 					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
-				}
-				break;
-			} else if (message->FindData("data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy) == B_OK) {
-				extern ColorMenuButton* locolor;
-				locolor->set(*rgbspecifier);
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_REPLY);
-					error.AddInt32("error", B_NO_ERROR);
-					message->SendReply(&error);
-				}
-				break;
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Color Type (either string or rgb_color please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		case PROP_EXPFMT: {
-			// printf ("Setting Export Format...\n");
-			// message->PrintToStream();
-			int32 out_type;
-			const char* namedspecifier;
-			if (message->FindInt32("data", &out_type) == B_OK) {
-				// char *s = (char *) &def_out_type;
-				// fprintf (stderr, "Current Default Export Type: '%c%c%c%c'\n", s[0], s[1], s[2],
-				// s[3]);
-			} else if (message->FindString("data", &namedspecifier) == B_OK) {
-				const char* s = namedspecifier;
-				uint32 type;
-
-				// #if defined (__POWERPC__)
-				type = (s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3];
-				// #else
-				//	type = (s[3] << 24) | (s[2] << 16) | (s[1] << 8) | s[0];
-				// #endif
-
-				out_type = 0;
-				translator_id* translators;
-				int32 num_translators;
-
-				BTranslatorRoster::Default()->GetAllTranslators(&translators, &num_translators);
-
-				for (int32 i = 0; i < num_translators; i++) {
-					const translation_format* fmts;
-					int32 num_fmts;
-
-					BTranslatorRoster::Default()->GetOutputFormats(
-						translators[i], &fmts, &num_fmts
-					);
-
-					for (int32 j = 0; j < num_fmts; j++) {
-						if (!strcasecmp(fmts[j].MIME, s))
-						// Type was specified as MIME string
-						{
-							out_type = fmts[j].type;
-							def_out_translator = translators[i];
-						} else if (fmts[j].type == type)
-						// Type was specified as type code
-						{
-							out_type = type;
-							def_out_translator = translators[i];
-						}
-					}
-				}
-
-				if (!out_type) {
-					char errstring[256];
-					sprintf(errstring, "No Translator available for '%s'", s);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
+						message->SendReply(&reply);
 					} else
-						fprintf(stderr, "%s\n", errstring);
-					break;
-				} else {
-					def_out_type = out_type;
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
+						fprintf(stderr,
+							"Current Background Color: [Red: %3d Green: %3d Blue: %3d Alpha: "
+							"%3d]\n",
+							rgb.red, rgb.green, rgb.blue, rgb.alpha);
 					break;
 				}
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Export Format Type (either string or int32 please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-				break;
-			}
-		}
-		case PROP_SCRIPTEE: {
-			const char* namespecifier;
-			int32 indexspecifier;
-			if (message->FindString("data", &namespecifier) == B_OK) {
-				int32 i;
-				for (i = 0; i < CountWindows(); i++) {
-					BWindow* win = WindowAt(i);
-					if (!strcmp(namespecifier, win->Title())) {
-						delete fCurrentScriptee;
-						fCurrentScriptee = new BMessenger(win);
+				case PROP_TABLET:
+				{
+					extern Tablet* wacom;
+					if (wacom && wacom->IsValid()) {
+						BRect rect = wacom->GetRect();
 						if (message->IsSourceWaiting()) {
-							BMessage error(B_REPLY);
-							error.AddInt32("error", B_NO_ERROR);
+							BMessage reply(B_REPLY);
+							reply.AddInt32("error", B_NO_ERROR);
+							reply.AddRect("result", rect);
+							message->SendReply(&reply);
+						} else
+							fprintf(stderr,
+								"Current Tablet Area: [left: %5.0f top: %5.0f right: %5.0f bottom: "
+								"%5.0f]\n",
+								rect.left, rect.top, rect.right, rect.bottom);
+					} else {
+						char errstring[256];
+						sprintf(errstring, "No tablet initialized (at the moment)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
 							message->SendReply(&error);
-						}
-						break;
+						} else
+							fprintf(stderr, "%s\n", errstring);
 					}
 				}
-				if (i == CountWindows()) {
-					char errstring[256];
-					sprintf(
-						errstring, "Invalid Scriptee: Couldn't find window named '%s'",
-						namespecifier
-					);
+				case PROP_EXPFMT:
+				{
 					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-				break;
-			} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
-				if ((indexspecifier >= 0) && (indexspecifier < CountWindows())) {
-					delete fCurrentScriptee;
-					fCurrentScriptee = new BMessenger(WindowAt(indexspecifier));
-
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
-				} else {
-					char errstring[256];
-					sprintf(
-						errstring, "Invalid Scriptee: Index %ld out of range [0..%ld]",
-						indexspecifier, CountWindows() - 1
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-				break;
-			} else {
-				char errstring[256];
-				sprintf(
-					errstring,
-					"Invalid Scriptee Type (either named (string) or indexed (int32) please)"
-				);
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		case PROP_TABLET: {
-			BRect rect;
-			if (message->FindRect("data", &rect) == B_OK) {
-				extern Tablet* wacom;
-				if (wacom && wacom->IsValid()) {
-					wacom->SetRect(rect);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_REPLY);
-						error.AddInt32("error", B_NO_ERROR);
-						message->SendReply(&error);
-					}
-				} else {
-					char errstring[256];
-					sprintf(errstring, "No tablet initialized (at the moment)");
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid TabletArea type (BRect please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-			break;
-		}
-		default:
-			inherited::MessageReceived(message);
-		}
-		fCurrentProperty = 0;
-		break;
-	}
-	case B_GET_PROPERTY: {
-		switch (fCurrentProperty) {
-		case PROP_TOOL: {
-			extern PicMenuButton* tool;
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddSpecifier("result", ToolSpecifiers[tool->selected()]);
-				message->SendReply(&reply);
-			} else
-				fprintf(
-					stderr,
-					"Current Tool: "
-					"%s"
-					"\n",
-					ToolSpecifiers[tool->selected()]
-				);
-			break;
-		}
-		case PROP_MODE: {
-			extern PicMenuButton* mode;
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddSpecifier("result", ModeSpecifiers[mode->selected()]);
-				message->SendReply(&reply);
-			} else
-				fprintf(
-					stderr,
-					"Current Mode: "
-					"%s"
-					"\n",
-					ModeSpecifiers[mode->selected()]
-				);
-			break;
-		}
-		case PROP_FGCOLOR: {
-			extern ColorMenuButton* hicolor;
-			rgb_color rgb = hicolor->color();
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
-				message->SendReply(&reply);
-			} else
-				fprintf(
-					stderr,
-					"Current Foreground Color: [Red: %3d Green: %3d Blue: %3d Alpha: %3d]\n",
-					rgb.red, rgb.green, rgb.blue, rgb.alpha
-				);
-			break;
-		}
-		case PROP_BGCOLOR: {
-			extern ColorMenuButton* locolor;
-			rgb_color rgb = locolor->color();
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddData("result", B_RGB_COLOR_TYPE, &rgb, sizeof(rgb_color));
-				message->SendReply(&reply);
-			} else
-				fprintf(
-					stderr,
-					"Current Background Color: [Red: %3d Green: %3d Blue: %3d Alpha: %3d]\n",
-					rgb.red, rgb.green, rgb.blue, rgb.alpha
-				);
-			break;
-		}
-		case PROP_TABLET: {
-			extern Tablet* wacom;
-			if (wacom && wacom->IsValid()) {
-				BRect rect = wacom->GetRect();
-				if (message->IsSourceWaiting()) {
-					BMessage reply(B_REPLY);
-					reply.AddInt32("error", B_NO_ERROR);
-					reply.AddRect("result", rect);
-					message->SendReply(&reply);
-				} else
-					fprintf(
-						stderr,
-						"Current Tablet Area: [left: %5.0f top: %5.0f right: %5.0f bottom: "
-						"%5.0f]\n",
-						rect.left, rect.top, rect.right, rect.bottom
-					);
-			} else {
-				char errstring[256];
-				sprintf(errstring, "No tablet initialized (at the moment)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
-			}
-		}
-		case PROP_EXPFMT: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddData("result", B_INT32_TYPE, &def_out_type, sizeof(int32));
-				message->SendReply(&reply);
-			} else {
-				char* s = (char*)&def_out_type;
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddData("result", B_INT32_TYPE, &def_out_type, sizeof(int32));
+						message->SendReply(&reply);
+					} else {
+						char* s = (char*)&def_out_type;
 #if defined(__POWERPC__)
-				fprintf(
-					stderr, "Current Default Export Type: '%c%c%c%c'\n", s[0], s[1], s[2], s[3]
-				);
+						fprintf(stderr, "Current Default Export Type: '%c%c%c%c'\n", s[0], s[1],
+							s[2], s[3]);
 #else
-				fprintf(
-					stderr, "Current Default Export Type: '%c%c%c%c'\n", s[3], s[2], s[1], s[0]
-				);
+						fprintf(stderr, "Current Default Export Type: '%c%c%c%c'\n", s[3], s[2],
+							s[1], s[0]);
 #endif
+					}
+					break;
+				}
+				case PROP_SCRIPTEE:
+				{
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddData(
+							"result", B_MESSENGER_TYPE, &fCurrentScriptee, sizeof(BMessenger));
+						message->SendReply(&reply);
+					} else {
+						fprintf(stderr, "Scriptee %s.  I'd return a BMessenger * as reply.\n",
+							fCurrentScriptee ? "set" : "not set");
+					}
+					break;
+				}
+				default:
+					// message->PrintToStream();
+					inherited::MessageReceived(message);
 			}
-			break;
-		}
-		case PROP_SCRIPTEE: {
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddData("result", B_MESSENGER_TYPE, &fCurrentScriptee, sizeof(BMessenger));
-				message->SendReply(&reply);
-			} else {
-				fprintf(
-					stderr, "Scriptee %s.  I'd return a BMessenger * as reply.\n",
-					fCurrentScriptee ? "set" : "not set"
-				);
-			}
+			fCurrentProperty = 0;
 			break;
 		}
 		default:
+		{
 			// message->PrintToStream();
 			inherited::MessageReceived(message);
+			break;
 		}
-		fCurrentProperty = 0;
-		break;
-	}
-	default: {
-		// message->PrintToStream();
-		inherited::MessageReceived(message);
-		break;
-	}
 	}
 }
 
@@ -2382,29 +2364,29 @@ Becasso::setGrab(bool b, bool down)
 		SetCursor(down ? grab : hand);
 	} else if (!b && fCurrentCursor == CURSOR_OPEN_HAND) {
 		switch (fCurrentCursorSave) {
-		case CURSOR_HAND:
-			setHand();
-			break;
-		case CURSOR_CROSS:
-			setCross();
-			break;
-		case CURSOR_SELECT:
-			setSelect();
-			break;
-		case CURSOR_CCROSS:
-			setCCross();
-			break;
-		case CURSOR_MOVER:
-			setMover();
-			break;
-		case CURSOR_ROTATOR:
-			setRotator();
-			break;
-		case CURSOR_PICKER:
-			setCross(); //!
-			break;
-		default:
-			break;
+			case CURSOR_HAND:
+				setHand();
+				break;
+			case CURSOR_CROSS:
+				setCross();
+				break;
+			case CURSOR_SELECT:
+				setSelect();
+				break;
+			case CURSOR_CCROSS:
+				setCCross();
+				break;
+			case CURSOR_MOVER:
+				setMover();
+				break;
+			case CURSOR_ROTATOR:
+				setRotator();
+				break;
+			case CURSOR_PICKER:
+				setCross();	 //!
+				break;
+			default:
+				break;
 		}
 		fBusy = fBusySave;
 	}
@@ -2470,29 +2452,29 @@ Becasso::setPicker(bool b)
 		fCurrentCursor = CURSOR_PICKER;
 	} else if (!b && fCurrentCursor == CURSOR_PICKER) {
 		switch (fCurrentCursorSave) {
-		case CURSOR_HAND:
-			setHand();
-			break;
-		case CURSOR_CROSS:
-			setCross();
-			break;
-		case CURSOR_SELECT:
-			setSelect();
-			break;
-		case CURSOR_CCROSS:
-			setCCross();
-			break;
-		case CURSOR_MOVER:
-			setMover();
-			break;
-		case CURSOR_ROTATOR:
-			setRotator();
-			break;
-		case CURSOR_OPEN_HAND:
-			setGrab(false);
-			break;
-		default:
-			break;
+			case CURSOR_HAND:
+				setHand();
+				break;
+			case CURSOR_CROSS:
+				setCross();
+				break;
+			case CURSOR_SELECT:
+				setSelect();
+				break;
+			case CURSOR_CCROSS:
+				setCCross();
+				break;
+			case CURSOR_MOVER:
+				setMover();
+				break;
+			case CURSOR_ROTATOR:
+				setRotator();
+				break;
+			case CURSOR_OPEN_HAND:
+				setGrab(false);
+				break;
+			default:
+				break;
 		}
 		fBusy = fBusySave;
 	}
@@ -2515,7 +2497,7 @@ Becasso::setRotator()
 }
 
 void
-Becasso::FixCursor() // BeOS bug w.r.t. hot spot of cursors
+Becasso::FixCursor()  // BeOS bug w.r.t. hot spot of cursors
 {
 	BMessage fix('fixC');
 	mainWindow->PostMessage(&fix);

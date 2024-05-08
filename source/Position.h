@@ -5,8 +5,7 @@
 
 #define POSITION_QUEUE 256
 
-typedef struct
-{
+typedef struct {
 	BPoint fPoint;
 	BPoint fTilt;
 	uint32 fButtons;
@@ -14,7 +13,6 @@ typedef struct
 	bool fProximity;
 } Position;
 
-int32
-position_tracker(void* data);
+int32 position_tracker(void* data);
 
 #endif

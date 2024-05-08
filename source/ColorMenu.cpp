@@ -1,14 +1,14 @@
 #include "ColorMenu.h"
-#include "ColorItem.h"
-#include "Colors.h"
-#include "ColorMenuView.h"
-#include "BecassoAddOn.h" // for some defines
-#include <InterfaceDefs.h>
-#include <Screen.h>
 #include <Application.h>
-#include <Resources.h>
 #include <Bitmap.h>
+#include <InterfaceDefs.h>
+#include <Resources.h>
+#include <Screen.h>
 #include <stdio.h>
+#include "BecassoAddOn.h"  // for some defines
+#include "ColorItem.h"
+#include "ColorMenuView.h"
+#include "Colors.h"
 #include "Settings.h"
 
 ColorMenu::ColorMenu(const char* name, BView* _view, int h, int v, float s)
@@ -67,17 +67,15 @@ ColorMenu::FindMarked()
 	return (items[index]);
 }
 
-class colorTearInfo
-{
-  public:
+class colorTearInfo {
+public:
 	colorTearInfo(BRect r, ColorMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
 	BRect dragRect;
 	ColorMenu* parent;
 	BView* someView;
 };
 
-int32
-color_tear_drag(void* data);
+int32 color_tear_drag(void* data);
 
 int32
 color_tear_drag(void* data)
@@ -90,7 +88,7 @@ color_tear_drag(void* data)
 	BView* view = tearInfo->someView;
 	// It might seem a good idea to use `menu' as the view, but
 	// this gave errors: `Method requires owner but doesn't have one'.
-	delete tearInfo; // The caller doesn't do this (race condition otherwise)
+	delete tearInfo;  // The caller doesn't do this (race condition otherwise)
 
 	// printf ("Entering loop; view = %p\n", view);
 	while (buttons) {
@@ -124,7 +122,7 @@ ColorMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 	//	printf ("("); fflush (stdout);
 	GetMouse(&point, &buttons);
 	//	printf (")"); fflush (stdout);
-	if (transit == B_EXITED_VIEW && buttons) // Do the tear off thing!
+	if (transit == B_EXITED_VIEW && buttons)  // Do the tear off thing!
 	{
 #if defined(EASTER_EGG_SFX)
 		extern bool EasterEgg;
@@ -174,8 +172,8 @@ ColorMenu::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		// We can't use Hide() since that crashes.
 
 		colorTearInfo* tearInfo = new colorTearInfo(place, this, parent);
-		resume_thread(spawn_thread(color_tear_drag, "Menu Tear Thread", B_NORMAL_PRIORITY, tearInfo)
-		);
+		resume_thread(
+			spawn_thread(color_tear_drag, "Menu Tear Thread", B_NORMAL_PRIORITY, tearInfo));
 	}
 }
 

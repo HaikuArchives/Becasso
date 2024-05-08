@@ -1,6 +1,6 @@
 #include "LayerNameWindow.h"
-#include "Colors.h"
 #include <Button.h>
+#include "Colors.h"
 #include "Settings.h"
 
 LayerNameWindow::LayerNameWindow(const char* _name)
@@ -32,7 +32,10 @@ LayerNameWindow::LayerNameWindow(const char* _name)
 	fStatus = 0;
 }
 
-LayerNameWindow::~LayerNameWindow() { delete_sem(wait_sem); }
+LayerNameWindow::~LayerNameWindow()
+{
+	delete_sem(wait_sem);
+}
 
 int32
 LayerNameWindow::Go()
@@ -61,16 +64,16 @@ void
 LayerNameWindow::MessageReceived(BMessage* message)
 {
 	switch (message->what) {
-	case 'LNcn':
-		fStatus = 0;
-		Hide();
-		break;
-	case 'LNok':
-		fStatus = 1;
-		Hide();
-		break;
-	default:
-		inherited::MessageReceived(message);
-		break;
+		case 'LNcn':
+			fStatus = 0;
+			Hide();
+			break;
+		case 'LNok':
+			fStatus = 1;
+			Hide();
+			break;
+		default:
+			inherited::MessageReceived(message);
+			break;
 	}
 }

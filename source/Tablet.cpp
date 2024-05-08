@@ -1,6 +1,6 @@
 #include "Tablet.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <syslog.h>
 
 Tablet::Tablet(const char* port)
@@ -47,12 +47,12 @@ Tablet::Init()
 		if (num > 0) {
 			syslog(LOG_DEBUG, "Tablet model: %s\n", fModel);
 			if (!strcpy(fModel, "~#ET"))
-				fTabletType = ET_TABLET; // Graphire
+				fTabletType = ET_TABLET;  // Graphire
 			else
-				fTabletType = UD_TABLET; // ASSUMPTION!!!
+				fTabletType = UD_TABLET;  // ASSUMPTION!!!
 			// Should check for UD here - what does a PenPartner say? (KT?)
 			if (fTabletType == ET_TABLET) {
-				fPort->Write("ZF0\r", 4); // Filter off.
+				fPort->Write("ZF0\r", 4);  // Filter off.
 				fMaxPressure = 512;
 			}
 			fPort->Write("~C\r", 3);
@@ -77,10 +77,8 @@ Tablet::Point()
 {
 	//	syslog (LOG_DEBUG, "Returning (%f, %f)", fScaleX*(fPos.x - fRect.left)/(fRect.Width() + 1),
 	// fScaleY*(fPos.y - fRect.top)/(fRect.Height() + 1));
-	return (BPoint(
-		fScaleX * (fPos.x - fRect.left) / (fRect.Width() + 1),
-		fScaleY * (fPos.y - fRect.top) / (fRect.Height() + 1)
-	));
+	return (BPoint(fScaleX * (fPos.x - fRect.left) / (fRect.Width() + 1),
+		fScaleY * (fPos.y - fRect.top) / (fRect.Height() + 1)));
 }
 
 status_t
@@ -186,7 +184,7 @@ GetLine(BSerialPort* port, char* buff, const long buffLen)
 				*ptr = aChar;
 			ptr++;
 			totalread++;
-		} else // Nothing within timeout
+		} else	// Nothing within timeout
 		{
 			*ptr = 0;
 			syslog(LOG_DEBUG, "<null>\n");

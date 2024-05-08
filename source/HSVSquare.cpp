@@ -1,8 +1,8 @@
 #include "HSVSquare.h"
 #include <Screen.h>
-#include "Colors.h"
 #include <math.h>
 #include "BecassoAddOn.h"
+#include "Colors.h"
 
 HSVSquare::HSVSquare(BRect frame, ColorWindow* ed)
 	: BView(frame, "RGBSquare", B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW)
@@ -119,7 +119,7 @@ HSVSquare::MouseDown(BPoint point)
 
 	if (clicks > 1) {
 		uint32 buttons;
-		GetMouse(&point, &buttons); // flush the buffer
+		GetMouse(&point, &buttons);	 // flush the buffer
 		if (buttons & B_PRIMARY_MOUSE_BUTTON) {
 			BMessage set('CXSm');
 			Window()->PostMessage(&set);

@@ -1,13 +1,13 @@
 #include "Brush.h"
-#include "hsv.h" // For the clipchar()
+#include "hsv.h"  // For the clipchar()
 
 Brush::Brush(int h, int w, float s)
 {
 	fHeight = h;
 	fWidth = w;
 	fSpacing = s;
-	data = new unsigned char[(w + 1) * (h + 1)]; // Yes I know this is 1 off.
-	for (int i = 0; i < (w + 1) * (h + 1); i++)	 // So much to do, so little time :-)
+	data = new unsigned char[(w + 1) * (h + 1)];  // Yes I know this is 1 off.
+	for (int i = 0; i < (w + 1) * (h + 1); i++)	  // So much to do, so little time :-)
 		data[i] = 0;
 	bitmap = NULL;
 }
@@ -54,7 +54,7 @@ Brush::ToBitmap(rgb_color hi)
 	uchar* pdata = data - 1;
 	//	long bpr = bitmap->BytesPerRow();
 	cdata--;
-	int maxopacity = hi.alpha * 255 / 256; // Hack to fix black center pixel bug
+	int maxopacity = hi.alpha * 255 / 256;	// Hack to fix black center pixel bug
 	for (int j = 0; j < fHeight; j++)
 		for (int i = 0; i < fWidth; i++) {
 			//			pdata = (cdata + j*bpr + 4*i);

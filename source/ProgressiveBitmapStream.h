@@ -71,26 +71,23 @@
 #define PROGRESSIVE_BITMAP_STREAM_H
 
 
+#include <DataIO.h>
 #include <Point.h>
 #include <TranslatorFormats.h>
-#include <DataIO.h>
 
 
 class BBitmap;
 class BInvoker;
 class BarWindow;
 
-class ProgressiveBitmapStream : public BPositionIO
-{
-  public:
+class ProgressiveBitmapStream : public BPositionIO {
+public:
 	// Constructor for when used as source
 	ProgressiveBitmapStream(BBitmap* bitmap);
 
 	// Constructor for when used as destination
-	ProgressiveBitmapStream(
-		BInvoker* bitmap_created = 0, BInvoker* rect_updated = 0, bool dither = false,
-		bool keep_org = false
-	);
+	ProgressiveBitmapStream(BInvoker* bitmap_created = 0, BInvoker* rect_updated = 0,
+		bool dither = false, bool keep_org = false);
 
 	virtual ~ProgressiveBitmapStream();
 	ssize_t Write(const void* buffer, size_t size);
@@ -106,7 +103,7 @@ class ProgressiveBitmapStream : public BPositionIO
 	bool ErrorsForced() const;
 	void DisplayProgressBar(BPoint left_top, const char* window_title);
 
-  private:
+private:
 	bool fWriteOnly;
 	bool fDispose;
 	bool fDisposeOrg;
@@ -136,4 +133,4 @@ class ProgressiveBitmapStream : public BPositionIO
 };
 
 
-#endif // PROGRESSIVE_BITMAP_STREAM_H
+#endif	// PROGRESSIVE_BITMAP_STREAM_H

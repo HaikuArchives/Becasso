@@ -1,18 +1,17 @@
 #ifndef LAYERWINDOW_H
 #define LAYERWINDOW_H
 
+#include <MenuBar.h>
 #include <Message.h>
 #include <ScrollBar.h>
-#include <MenuBar.h>
 #include <Window.h>
-#include "LayerView.h"
 #include "CanvasView.h"
+#include "LayerView.h"
 
-class LayerWindow : public BWindow
-{
+class LayerWindow : public BWindow {
 	friend class CanvasView;
 
-  public:
+public:
 	LayerWindow(BRect frame, char* name, CanvasView* _MyView);
 	virtual ~LayerWindow();
 	virtual void MessageReceived(BMessage* msg);
@@ -20,7 +19,7 @@ class LayerWindow : public BWindow
 	virtual void WindowActivated(bool active);
 	void doChanges(int index = -1);
 
-  private:
+private:
 	typedef BWindow inherited;
 	LayerView* layerView;
 	BScrollBar *h, *v;

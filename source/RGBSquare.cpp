@@ -1,8 +1,8 @@
 #include "RGBSquare.h"
-#include "hsv.h"
 #include <Screen.h>
-#include "Colors.h"
 #include <stdio.h>
+#include "Colors.h"
+#include "hsv.h"
 
 RGBSquare::RGBSquare(BRect frame, int nc, ColorWindow* ed)
 	: BView(frame, "RGBSquare", B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW)
@@ -44,21 +44,21 @@ RGBSquare::DrawLines()
 	SetDrawingMode(B_OP_INVERT);
 	SetHighColor(Black);
 	switch (notcolor) {
-	case 0: // Red in the column
-		StrokeLine(BPoint(0, current.red), BPoint(31, current.red));
-		StrokeLine(BPoint(current.blue + 40, 0), BPoint(current.blue + 40, 255));
-		StrokeLine(BPoint(40, current.green), BPoint(295, current.green));
-		break;
-	case 1: // Green in the column
-		StrokeLine(BPoint(0, current.green), BPoint(31, current.green));
-		StrokeLine(BPoint(current.blue + 40, 0), BPoint(current.blue + 40, 255));
-		StrokeLine(BPoint(40, current.red), BPoint(295, current.red));
-		break;
-	default: // Blue in the column
-		StrokeLine(BPoint(0, current.blue), BPoint(31, current.blue));
-		StrokeLine(BPoint(current.green + 40, 0), BPoint(current.green + 40, 255));
-		StrokeLine(BPoint(40, current.red), BPoint(295, current.red));
-		break;
+		case 0:	 // Red in the column
+			StrokeLine(BPoint(0, current.red), BPoint(31, current.red));
+			StrokeLine(BPoint(current.blue + 40, 0), BPoint(current.blue + 40, 255));
+			StrokeLine(BPoint(40, current.green), BPoint(295, current.green));
+			break;
+		case 1:	 // Green in the column
+			StrokeLine(BPoint(0, current.green), BPoint(31, current.green));
+			StrokeLine(BPoint(current.blue + 40, 0), BPoint(current.blue + 40, 255));
+			StrokeLine(BPoint(40, current.red), BPoint(295, current.red));
+			break;
+		default:  // Blue in the column
+			StrokeLine(BPoint(0, current.blue), BPoint(31, current.blue));
+			StrokeLine(BPoint(current.green + 40, 0), BPoint(current.green + 40, 255));
+			StrokeLine(BPoint(40, current.red), BPoint(295, current.red));
+			break;
 	}
 }
 
@@ -135,15 +135,15 @@ RGBSquare::mouseDown(BPoint point, int ob)
 		if (prevy != point.y) {
 			rgb_color c = current;
 			switch (notcolor) {
-			case 0: // Red in the column
-				c.red = clipchar(point.y);
-				break;
-			case 1: // Green in the column
-				c.green = clipchar(point.y);
-				break;
-			default: // Blue in the column
-				c.blue = clipchar(point.y);
-				break;
+				case 0:	 // Red in the column
+					c.red = clipchar(point.y);
+					break;
+				case 1:	 // Green in the column
+					c.green = clipchar(point.y);
+					break;
+				default:  // Blue in the column
+					c.blue = clipchar(point.y);
+					break;
 			}
 			SetColor(c);
 			Window()->UpdateIfNeeded();
@@ -158,18 +158,18 @@ RGBSquare::mouseDown(BPoint point, int ob)
 	} else if (ob == 2) {
 		DrawLines();
 		switch (notcolor) {
-		case 0: // Red in the column
-			current.green = clipchar(point.y);
-			current.blue = clipchar(point.x - 40);
-			break;
-		case 1: // Green in the column
-			current.red = clipchar(point.y);
-			current.blue = clipchar(point.x - 40);
-			break;
-		default: // Blue in the column
-			current.red = clipchar(point.y);
-			current.green = clipchar(point.x - 40);
-			break;
+			case 0:	 // Red in the column
+				current.green = clipchar(point.y);
+				current.blue = clipchar(point.x - 40);
+				break;
+			case 1:	 // Green in the column
+				current.red = clipchar(point.y);
+				current.blue = clipchar(point.x - 40);
+				break;
+			default:  // Blue in the column
+				current.red = clipchar(point.y);
+				current.green = clipchar(point.x - 40);
+				break;
 		}
 		DrawLines();
 		Window()->UpdateIfNeeded();
@@ -232,7 +232,7 @@ RGBSquare::SetColor(rgb_color c)
 	if (true || first || ((notcolor == 0) && (c.red != current.red)) ||
 		((notcolor == 1) && (c.green != current.green)) ||
 		((notcolor == 2) && (c.blue != current.blue))) {
-		if (notcolor == 0) // Red in the column
+		if (notcolor == 0)	// Red in the column
 		{
 			uchar r = c.red;
 			for (int g = 0; g < 256; g++) {
@@ -247,7 +247,7 @@ RGBSquare::SetColor(rgb_color c)
 					col[g][x][2] = 0;
 				}
 			}
-		} else if (notcolor == 1) // Green in the column
+		} else if (notcolor == 1)  // Green in the column
 		{
 			uchar g = c.green;
 			for (int r = 0; r < 256; r++) {
@@ -262,7 +262,7 @@ RGBSquare::SetColor(rgb_color c)
 					col[r][x][2] = 0;
 				}
 			}
-		} else // Blue in the column
+		} else	// Blue in the column
 		{
 			uchar b = c.blue;
 			for (int r = 0; r < 256; r++) {

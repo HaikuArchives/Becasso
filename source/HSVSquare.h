@@ -1,15 +1,14 @@
 #ifndef HSVSQUARE_H
 #define HSVSQUARE_H
 
-#include <View.h>
 #include <Bitmap.h>
 #include <Rect.h>
+#include <View.h>
 #include "ColorWindow.h"
 #include "hsv.h"
 
-class HSVSquare : public BView
-{
-  public:
+class HSVSquare : public BView {
+public:
 	HSVSquare(BRect frame, ColorWindow* ed);
 	virtual ~HSVSquare();
 	virtual void Draw(BRect update);
@@ -22,7 +21,7 @@ class HSVSquare : public BView
 	rgb_color GetColor();
 	hsv_color GetColorHSV();
 
-  private:
+private:
 	typedef BView inherited;
 	void DrawLines();
 	BBitmap* colorsquare;
@@ -40,7 +39,6 @@ class HSVSquare : public BView
 	bool fFirst;
 };
 
-int32
-HSV_track_mouse(void* data);
+int32 HSV_track_mouse(void* data);
 
 #endif

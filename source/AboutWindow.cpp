@@ -14,9 +14,8 @@ AboutWindow::MessageReceived(BMessage* msg)
 {
 	//	printf ("Huh?!\n");
 	switch (msg->what) {
-
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

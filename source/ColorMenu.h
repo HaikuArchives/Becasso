@@ -1,23 +1,22 @@
 #ifndef COLORMENU_H
 #define COLORMENU_H
 
-#include <Rect.h>
 #include <Menu.h>
 #include <Point.h>
+#include <Rect.h>
 #include <View.h>
 #include "ColorItem.h"
-#include "sfx.h"
 #include "DragWindow.h"
+#include "sfx.h"
 
 #define MAX_COLORS 256
 
 class ColorMenuButton;
 
-class ColorMenu : public BMenu
-{
+class ColorMenu : public BMenu {
 	friend class ColorMenuButton;
 
-  public:
+public:
 	ColorMenu(const char* name, BView* _view, int h, int v, float s);
 	virtual ~ColorMenu();
 	virtual void AddItem(ColorItem* item, BRect frame);
@@ -34,10 +33,10 @@ class ColorMenu : public BMenu
 	void TearDone(BRect place, bool newwin);
 	void InvalidateWindow();
 
-  protected:
+protected:
 	virtual BPoint ScreenLocation();
 
-  private:
+private:
 	typedef BMenu inherited;
 	DragWindow* fWindow;
 	ColorMenuButton* parent;

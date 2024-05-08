@@ -1,22 +1,22 @@
 #include "BitmapStuff.h"
-#include "Brush.h"
-#include "hsv.h"
-#include <zlib.h>
-#include "ProgressiveBitmapStream.h"
-#include "BecassoAddOn.h"
-#include <stdio.h>
+#include <Alert.h>
+#include <Debug.h>
+#include <Entry.h>
+#include <Node.h>
 #include <Path.h>
+#include <Screen.h>
+#include <TranslationUtils.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <TranslationUtils.h>
-#include <Alert.h>
-#include <Entry.h>
-#include <Screen.h>
-#include "AttribDraw.h" // for MAX_LAYERS
-#include "SView.h"
+#include <zlib.h>
+#include "AttribDraw.h"	 // for MAX_LAYERS
+#include "BecassoAddOn.h"
+#include "Brush.h"
+#include "ProgressiveBitmapStream.h"
 #include "SBitmap.h"
-#include <Debug.h>
-#include <Node.h>
+#include "SView.h"
+#include "hsv.h"
 
 #if defined(DATATYPES)
 #include "Datatypes.h"
@@ -31,8 +31,7 @@
 // The "Merge" function should have been in here from day one; this is a copy of
 // the same method in CanvasView.
 
-void
-Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha);
+void Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha);
 
 void
 Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
@@ -57,170 +56,176 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 	uint32* dest = (uint32*)a->Bits() + (rt * w + rl) - 1;
 	int ga = b->getGlobalAlpha();
 	switch (b->getMode()) {
-	case 0:
-		for (ulong y = rt; y <= rb; y++) {
-			for (ulong x = rl; x <= rr; x++) {
+		case 0:
+			for (ulong y = rt; y <= rb; y++) {
+				for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src);
-				register uint32 destpixel = *(++dest);
-				register int sa = (srcpixel & 0xFF) * ga / 255;
-				register int da = 255 - sa;
-				if (da == 0) // Fully opaque pixel
-				{
-					*dest = srcpixel;
-				} else if (da == 255) // Fully transparent pixel
-				{
-				} else {
+					register uint32 srcpixel = *(++src);
+					register uint32 destpixel = *(++dest);
+					register int sa = (srcpixel & 0xFF) * ga / 255;
+					register int da = 255 - sa;
+					if (da == 0)  // Fully opaque pixel
+					{
+						*dest = srcpixel;
+					} else if (da == 255)  // Fully transparent pixel
+					{
+					} else {
 #if !defined(BLEND_USES_SHIFTS)
-					*dest =
-						((((destpixel & 0xFF000000) / 255 * da + (srcpixel & 0xFF000000) / 255 * sa)
-						 ) &
-						 0xFF000000) |
-						((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) / 255) &
-						 0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / 255) &
-						 0x0000FF00) | // (max_c (sa, destpixel & 0xFF));
-						(clipchar(sa + int(destpixel & 0xFF)));
+						*dest = ((((destpixel & 0xFF000000) / 255 * da +
+									 (srcpixel & 0xFF000000) / 255 * sa)) &
+									0xFF000000) |
+								((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
+									 255) &
+									0x00FF0000) |
+								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
+									 255) &
+									0x0000FF00) |  // (max_c (sa, destpixel & 0xFF));
+								(clipchar(sa + int(destpixel & 0xFF)));
 #else
-					*dest = (((((destpixel & 0xFF000000) >> 8) * da +
-							   ((srcpixel & 0xFF000000) >> 8) * sa)) &
-							 0xFF000000) |
+						*dest =
+							(((((destpixel & 0xFF000000) >> 8) * da +
+								 ((srcpixel & 0xFF000000) >> 8) * sa)) &
+								0xFF000000) |
 							((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8) &
-							 0x00FF0000) |
+								0x00FF0000) |
 							((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) >> 8) &
-							 0x0000FF00) |
+								0x0000FF00) |
 							(clipchar(sa + int(destpixel & 0xFF)));
 #endif
-				}
+					}
 #else
-				register uint32 srcpixel = *(++src);
-				register uint32 destpixel = *(++dest);
-				register int sa = (srcpixel >> 24) * ga / 255;
-				register int da = 255 - sa;
-				if (da == 0) // Fully opaque pixel
-				{
-					*dest = srcpixel;
-				} else if (da == 255) // Fully transparent pixel
-				{
-				} else {
+					register uint32 srcpixel = *(++src);
+					register uint32 destpixel = *(++dest);
+					register int sa = (srcpixel >> 24) * ga / 255;
+					register int da = 255 - sa;
+					if (da == 0)  // Fully opaque pixel
+					{
+						*dest = srcpixel;
+					} else if (da == 255)  // Fully transparent pixel
+					{
+					} else {
 #if !defined(BLEND_USES_SHIFTS)
-					*dest =
-						((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) / 255) &
-						 0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / 255) &
-						 0x0000FF00) |
-						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / 255) &
-						 0x000000FF) |
-						(clipchar(sa + int(destpixel >> 24)) << 24);
+						*dest = ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
+									 255) &
+									0x00FF0000) |
+								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
+									 255) &
+									0x0000FF00) |
+								((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) /
+									 255) &
+									0x000000FF) |
+								(clipchar(sa + int(destpixel >> 24)) << 24);
 #else
-					*dest = ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8) &
-							 0x00FF0000) |
+						*dest =
+							((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8) &
+								0x00FF0000) |
 							((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) >> 8) &
-							 0x0000FF00) |
+								0x0000FF00) |
 							((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) >> 8) &
-							 0x000000FF) |
+								0x000000FF) |
 							(clipchar(sa + int(destpixel >> 24)) << 24);
 #endif
-				}
+					}
 #endif
+				}
+				src += sdiff;
+				dest += ddiff;
 			}
-			src += sdiff;
-			dest += ddiff;
-		}
-		break;
-	case 1:
-		for (ulong y = rt; y <= rb; y++) {
-			for (ulong x = rl; x <= rr; x++) {
+			break;
+		case 1:
+			for (ulong y = rt; y <= rb; y++) {
+				for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src);
-				register uint32 destpixel = *(++dest);
-				register int sa = (srcpixel & 0xFF) * ga / 255;
-				register int da = destpixel & 0xFF;
-				register int tsa = 65025 - sa * 255;
-				register int tda = 65025 - da * 255;
-				if (sa == 0) // Fully transparent pixel
-				{
-				} else if (sa == 255) // Fully opaque pixel
-				{
-					*dest =
-						(((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025) << 24) &
-						 0xFF000000) |
-						(((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
-						   65025)
-						  << 16) &
-						 0x00FF0000) |
-						(((((srcpixel >> 8) & 0xFF) * (tda + da * ((destpixel >> 8) & 0xFF)) / 65025
-						  )
-						  << 8) &
-						 0x0000FF00) |
-						(clipchar(sa + int(destpixel & 0xFF)));
-				} else {
-					*dest = (((tsa + sa * ((srcpixel >> 24))) * (tda + da * ((destpixel >> 24))) /
-								  16581375
-							  << 24) &
-							 0xFF000000) |
-							(((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-								  (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-							  << 16) &
-							 0x00FF0000) |
-							(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-								  (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-							  << 8) &
-							 0x0000FF00) |
-							(clipchar(sa + int(destpixel & 0xFF)));
-				}
+					register uint32 srcpixel = *(++src);
+					register uint32 destpixel = *(++dest);
+					register int sa = (srcpixel & 0xFF) * ga / 255;
+					register int da = destpixel & 0xFF;
+					register int tsa = 65025 - sa * 255;
+					register int tda = 65025 - da * 255;
+					if (sa == 0)  // Fully transparent pixel
+					{
+					} else if (sa == 255)  // Fully opaque pixel
+					{
+						*dest = (((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025)
+									 << 24) &
+									0xFF000000) |
+								(((((srcpixel >> 16) & 0xFF) *
+									  (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
+									 << 16) &
+									0x00FF0000) |
+								(((((srcpixel >> 8) & 0xFF) *
+									  (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
+									 << 8) &
+									0x0000FF00) |
+								(clipchar(sa + int(destpixel & 0xFF)));
+					} else {
+						*dest = (((tsa + sa * ((srcpixel >> 24))) *
+										 (tda + da * ((destpixel >> 24))) / 16581375
+									 << 24) &
+									0xFF000000) |
+								(((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
+										 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+									 << 16) &
+									0x00FF0000) |
+								(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
+										 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+									 << 8) &
+									0x0000FF00) |
+								(clipchar(sa + int(destpixel & 0xFF)));
+					}
 #else
-				register uint32 srcpixel = *(++src);
-				register uint32 destpixel = *(++dest);
-				register int sa = (srcpixel >> 24) * ga / 255;
-				register int da = destpixel >> 24;
-				register int tsa = 65025 - sa * 255;
-				register int tda = 65025 - da * 255;
-				if (sa == 0) // Fully transparent pixel
-				{
-				} else if (sa == 255) // Fully opaque pixel
-				{
-					*dest = (((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
-							   65025)
-							  << 16) &
-							 0x00FF0000) |
+					register uint32 srcpixel = *(++src);
+					register uint32 destpixel = *(++dest);
+					register int sa = (srcpixel >> 24) * ga / 255;
+					register int da = destpixel >> 24;
+					register int tsa = 65025 - sa * 255;
+					register int tda = 65025 - da * 255;
+					if (sa == 0)  // Fully transparent pixel
+					{
+					} else if (sa == 255)  // Fully opaque pixel
+					{
+						*dest =
+							(((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
+								  65025)
+								 << 16) &
+								0x00FF0000) |
 							(((((srcpixel >> 8) & 0xFF) * (tda + da * ((destpixel >> 8) & 0xFF)) /
-							   65025)
-							  << 8) &
-							 0x0000FF00) |
+								  65025)
+								 << 8) &
+								0x0000FF00) |
 							(((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF)) / 65025)) &
-							 0x000000FF) |
+								0x000000FF) |
 							(clipchar(sa + int(destpixel >> 24)) << 24);
-				} else {
-					*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-								  (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-							  << 16) &
-							 0x00FF0000) |
-							(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-								  (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-							  << 8) &
-							 0x0000FF00) |
-							(((tsa + sa * ((srcpixel) & 0xFF)) * (tda + da * ((destpixel) & 0xFF)) /
-							  16581375) &
-							 0x000000FF) |
-							(clipchar(sa + int(destpixel >> 24)) << 24);
-				}
+					} else {
+						*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
+										 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+									 << 16) &
+									0x00FF0000) |
+								(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
+										 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+									 << 8) &
+									0x0000FF00) |
+								(((tsa + sa * ((srcpixel) & 0xFF)) *
+									 (tda + da * ((destpixel) & 0xFF)) / 16581375) &
+									0x000000FF) |
+								(clipchar(sa + int(destpixel >> 24)) << 24);
+					}
 #endif
+				}
+				src += sdiff;
+				dest += ddiff;
 			}
-			src += sdiff;
-			dest += ddiff;
-		}
-		break;
-	default:
-		fprintf(stderr, "Merge:  Unknown Drawing Mode\n");
-		break;
+			break;
+		default:
+			fprintf(stderr, "Merge:  Unknown Drawing Mode\n");
+			break;
 	}
 	//	end = clock();
 	//	printf ("Merge took %d ms\n", end - start);
 }
 
 void
-InsertGlobalAlpha(Layer* layer[], int numLayers) // Watermark all layers by inverting
+InsertGlobalAlpha(Layer* layer[], int numLayers)  // Watermark all layers by inverting
 {
 	SView* demoView = new SView(layer[0]->Bounds(), "demoview", B_FOLLOW_NONE, uint32(NULL));
 	const char demotext[] = "Becasso";
@@ -288,171 +293,174 @@ entry2bitmap(BEntry entry, bool silent)
 			float tvers = atof(Version);
 			float cvers = strtod(endp, &endp);
 			int numLayers = strtol(endp, &endp, 10);
-			/* int currentlayer = */ strtol(endp, &endp, 10); // not used
-			/* int dpi = */ strtol(endp, &endp, 10);		  // not used
-			int watermarked = strtol(endp, &endp, 10);		  // watermarked image?
+			/* int currentlayer = */ strtol(endp, &endp, 10);  // not used
+			/* int dpi = */ strtol(endp, &endp, 10);		   // not used
+			int watermarked = strtol(endp, &endp, 10);		   // watermarked image?
 			// printf ("#Layers = %d\n", numLayers);
 			/*int currentLayer = */ strtol(endp, &endp, 10);
 			BRect lFrame;
-			if (int(cvers) > int(tvers)) // Check major version
+			if (int(cvers) > int(tvers))  // Check major version
 			{
 				return NULL;
 			}
 			if (int(cvers) == int(tvers) &&
-				cvers - int(cvers) > tvers - int(tvers)) // Check release
+				cvers - int(cvers) > tvers - int(tvers))  // Check release
 			{
 				return NULL;
 			}
 			switch (int(cvers)) {
-			case 0:
-				for (int i = 0; i < numLayers; i++) {
-					fgets(line, 80, fp);
-					line[strlen(line) - 1] = 0;
-					endp = line;
-					lFrame.left = strtod(endp, &endp);
-					lFrame.top = strtod(endp, &endp);
-					lFrame.right = strtod(endp, &endp);
-					lFrame.bottom = strtod(endp, &endp);
-					//			int m = strtol (endp, &endp, 10);
-					bool h = strtol(endp, &endp, 10);
-					layer[i] = new Layer(lFrame, endp);
-					layer[i]->Hide(h);
-					layer[i]->setMode(0
-					); // Note: DM_BLEND has moved to 0, and <1.1 didn't have any other ops anyway.
-					fread(layer[i]->Bits(), layer[i]->BitsLength(), 1, fp);
-				}
-				break;
-			case 1: {
-				uchar* tmpzbuf = NULL;
-				z_streamp zstream = new z_stream;
-				zstream->zalloc = Z_NULL;
-				zstream->zfree = Z_NULL;
-				zstream->opaque = Z_NULL;
-				if (inflateInit(zstream) != Z_OK) {
-					fprintf(stderr, "Oops!  Problems with inflateInit()...\n");
-				}
-				for (int i = 0; i < numLayers; i++) {
-					fgets(line, 80, fp);
-					line[strlen(line) - 1] = 0;
-					// printf ("%s\n", line);
-					endp = line;
-					lFrame.left = strtod(endp, &endp);
-					lFrame.top = strtod(endp, &endp);
-					lFrame.right = strtod(endp, &endp);
-					lFrame.bottom = strtod(endp, &endp);
-					int m = strtol(endp, &endp, 10);
-					bool h = strtol(endp, &endp, 10);
-					uchar ga = strtol(endp, &endp, 10);
-					if (cvers > 1.1) {
-						/* int am = */ strtol(endp, &endp, 10);
-						// printf ("%salpha map\n", am ? "" : "no ");
+				case 0:
+					for (int i = 0; i < numLayers; i++) {
+						fgets(line, 80, fp);
+						line[strlen(line) - 1] = 0;
+						endp = line;
+						lFrame.left = strtod(endp, &endp);
+						lFrame.top = strtod(endp, &endp);
+						lFrame.right = strtod(endp, &endp);
+						lFrame.bottom = strtod(endp, &endp);
+						//			int m = strtol (endp, &endp, 10);
+						bool h = strtol(endp, &endp, 10);
+						layer[i] = new Layer(lFrame, endp);
+						layer[i]->Hide(h);
+						layer[i]->setMode(0);  // Note: DM_BLEND has moved to 0, and <1.1 didn't
+											   // have any other ops anyway.
+						fread(layer[i]->Bits(), layer[i]->BitsLength(), 1, fp);
 					}
-					layer[i] = new Layer(lFrame, endp);
-					layer[i]->Hide(h);
-					if (cvers == 1.0)
-						layer[i]->setMode(0); // Note: DM_BLEND has moved to 0, and <1.1 didn't have
-											  // any other ops anyway.
-					else
-						layer[i]->setMode(m);
-					layer[i]->setGlobalAlpha(ga);
-					layer[i]->setAlphaMap(NULL);
-				}
-				for (int i = 0; i < numLayers; i++) {
-					if (!tmpzbuf) {
-						tmpzbuf = new uchar[layer[i]->BitsLength()];
-						zstream->avail_in = 0;
+					break;
+				case 1:
+				{
+					uchar* tmpzbuf = NULL;
+					z_streamp zstream = new z_stream;
+					zstream->zalloc = Z_NULL;
+					zstream->zfree = Z_NULL;
+					zstream->opaque = Z_NULL;
+					if (inflateInit(zstream) != Z_OK) {
+						fprintf(stderr, "Oops!  Problems with inflateInit()...\n");
 					}
-					zstream->next_in = tmpzbuf;
-					zstream->avail_in +=
-						fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
-					zstream->next_out = (uchar*)layer[i]->Bits();
-					zstream->avail_out = layer[i]->BitsLength();
-					//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-					// zstream->avail_out);
-					if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
-						fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
+					for (int i = 0; i < numLayers; i++) {
+						fgets(line, 80, fp);
+						line[strlen(line) - 1] = 0;
+						// printf ("%s\n", line);
+						endp = line;
+						lFrame.left = strtod(endp, &endp);
+						lFrame.top = strtod(endp, &endp);
+						lFrame.right = strtod(endp, &endp);
+						lFrame.bottom = strtod(endp, &endp);
+						int m = strtol(endp, &endp, 10);
+						bool h = strtol(endp, &endp, 10);
+						uchar ga = strtol(endp, &endp, 10);
+						if (cvers > 1.1) {
+							/* int am = */ strtol(endp, &endp, 10);
+							// printf ("%salpha map\n", am ? "" : "no ");
+						}
+						layer[i] = new Layer(lFrame, endp);
+						layer[i]->Hide(h);
+						if (cvers == 1.0)
+							layer[i]->setMode(0);  // Note: DM_BLEND has moved to 0, and <1.1 didn't
+												   // have any other ops anyway.
+						else
+							layer[i]->setMode(m);
+						layer[i]->setGlobalAlpha(ga);
+						layer[i]->setAlphaMap(NULL);
 					}
-					memmove(tmpzbuf, zstream->next_in, zstream->avail_in);
-					inflateReset(zstream);
-				}
-				if (inflateEnd(zstream) != Z_OK) {
-					fprintf(stderr, "Oops!  Temporary zlib buffer couldn't be deallocated\n");
-				}
-				delete[] tmpzbuf;
-				delete zstream;
-				break;
+					for (int i = 0; i < numLayers; i++) {
+						if (!tmpzbuf) {
+							tmpzbuf = new uchar[layer[i]->BitsLength()];
+							zstream->avail_in = 0;
+						}
+						zstream->next_in = tmpzbuf;
+						zstream->avail_in +=
+							fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+						zstream->next_out = (uchar*)layer[i]->Bits();
+						zstream->avail_out = layer[i]->BitsLength();
+						//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
+						// zstream->avail_out);
+						if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
+							fprintf(
+								stderr, "Oops!  Layer couldn't be decompressed completely...\n");
+						}
+						memmove(tmpzbuf, zstream->next_in, zstream->avail_in);
+						inflateReset(zstream);
+					}
+					if (inflateEnd(zstream) != Z_OK) {
+						fprintf(stderr, "Oops!  Temporary zlib buffer couldn't be deallocated\n");
+					}
+					delete[] tmpzbuf;
+					delete zstream;
+					break;
 
-				if (watermarked)
-					InsertGlobalAlpha(layer, numLayers);
-			}
-			case 2: {
-				uchar* tmpzbuf = NULL;
-				z_streamp zstream = new z_stream;
-				zstream->zalloc = Z_NULL;
-				zstream->zfree = Z_NULL;
-				zstream->opaque = Z_NULL;
-				if (inflateInit(zstream) != Z_OK) {
-					fprintf(stderr, "Oops!  Problems with inflateInit()...\n");
+					if (watermarked)
+						InsertGlobalAlpha(layer, numLayers);
 				}
-				for (int i = 0; i < numLayers; i++) {
-					fgets(line, 80, fp);
-					line[strlen(line) - 1] = 0;
-					// printf ("%s\n", line);
-					endp = line;
-					lFrame.left = strtod(endp, &endp);
-					lFrame.top = strtod(endp, &endp);
-					lFrame.right = strtod(endp, &endp);
-					lFrame.bottom = strtod(endp, &endp);
-					int m = strtol(endp, &endp, 10);
-					bool h = strtol(endp, &endp, 10);
-					uchar ga = strtol(endp, &endp, 10);
-					if (cvers > 1.1) {
-						/* int am = */ strtol(endp, &endp, 10);
-						// printf ("%salpha map\n", am ? "" : "no ");
+				case 2:
+				{
+					uchar* tmpzbuf = NULL;
+					z_streamp zstream = new z_stream;
+					zstream->zalloc = Z_NULL;
+					zstream->zfree = Z_NULL;
+					zstream->opaque = Z_NULL;
+					if (inflateInit(zstream) != Z_OK) {
+						fprintf(stderr, "Oops!  Problems with inflateInit()...\n");
 					}
-					layer[i] = new Layer(lFrame, endp);
-					layer[i]->Hide(h);
-					if (cvers == 1.0)
-						layer[i]->setMode(0); // Note: DM_BLEND has moved to 0, and <1.1 didn't have
-											  // any other ops anyway.
-					else
-						layer[i]->setMode(m);
-					layer[i]->setGlobalAlpha(ga);
-					layer[i]->setAlphaMap(NULL);
-				}
-				for (int i = 0; i < numLayers; i++) {
-					if (!tmpzbuf) {
-						tmpzbuf = new uchar[layer[i]->BitsLength()];
-						zstream->avail_in = 0;
+					for (int i = 0; i < numLayers; i++) {
+						fgets(line, 80, fp);
+						line[strlen(line) - 1] = 0;
+						// printf ("%s\n", line);
+						endp = line;
+						lFrame.left = strtod(endp, &endp);
+						lFrame.top = strtod(endp, &endp);
+						lFrame.right = strtod(endp, &endp);
+						lFrame.bottom = strtod(endp, &endp);
+						int m = strtol(endp, &endp, 10);
+						bool h = strtol(endp, &endp, 10);
+						uchar ga = strtol(endp, &endp, 10);
+						if (cvers > 1.1) {
+							/* int am = */ strtol(endp, &endp, 10);
+							// printf ("%salpha map\n", am ? "" : "no ");
+						}
+						layer[i] = new Layer(lFrame, endp);
+						layer[i]->Hide(h);
+						if (cvers == 1.0)
+							layer[i]->setMode(0);  // Note: DM_BLEND has moved to 0, and <1.1 didn't
+												   // have any other ops anyway.
+						else
+							layer[i]->setMode(m);
+						layer[i]->setGlobalAlpha(ga);
+						layer[i]->setAlphaMap(NULL);
 					}
-					zstream->next_in = tmpzbuf;
-					zstream->avail_in +=
-						fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
-					zstream->next_out = (uchar*)layer[i]->Bits();
-					zstream->avail_out = layer[i]->BitsLength();
-					//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
-					// zstream->avail_out);
-					if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
-						fprintf(stderr, "Oops!  Layer couldn't be decompressed completely...\n");
+					for (int i = 0; i < numLayers; i++) {
+						if (!tmpzbuf) {
+							tmpzbuf = new uchar[layer[i]->BitsLength()];
+							zstream->avail_in = 0;
+						}
+						zstream->next_in = tmpzbuf;
+						zstream->avail_in +=
+							fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+						zstream->next_out = (uchar*)layer[i]->Bits();
+						zstream->avail_out = layer[i]->BitsLength();
+						//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
+						// zstream->avail_out);
+						if (inflate(zstream, Z_FINISH) != Z_STREAM_END) {
+							fprintf(
+								stderr, "Oops!  Layer couldn't be decompressed completely...\n");
+						}
+						memmove(tmpzbuf, zstream->next_in, zstream->avail_in);
+						inflateReset(zstream);
 					}
-					memmove(tmpzbuf, zstream->next_in, zstream->avail_in);
-					inflateReset(zstream);
-				}
-				if (inflateEnd(zstream) != Z_OK) {
-					fprintf(stderr, "Oops!  Temporary zlib buffer couldn't be deallocated\n");
-				}
-				delete[] tmpzbuf;
-				delete zstream;
-				break;
+					if (inflateEnd(zstream) != Z_OK) {
+						fprintf(stderr, "Oops!  Temporary zlib buffer couldn't be deallocated\n");
+					}
+					delete[] tmpzbuf;
+					delete zstream;
+					break;
 
-				if (watermarked)
-					InsertGlobalAlpha(layer, numLayers);
-			}
-			default: // This should never happen
-				fprintf(
-					stderr,
-					"Hmm, somehow a newer version file got through to the actual loading routine.\n"
-				);
+					if (watermarked)
+						InsertGlobalAlpha(layer, numLayers);
+				}
+				default:  // This should never happen
+					fprintf(stderr,
+						"Hmm, somehow a newer version file got through to the actual loading "
+						"routine.\n");
 			}
 			fclose(fp);
 			// OK, we've got the layers.  Now blend them into a BBitmap.
@@ -484,7 +492,7 @@ entry2bitmap(BEntry entry, bool silent)
 			uint32 check1 = 0x00FFFFFF;
 			uint32 check2 = 0x00FFFFFF;
 #endif
-			for (ulong y = rt; y <= rb; y++) // First layer: Background.
+			for (ulong y = rt; y <= rb; y++)  // First layer: Background.
 			{
 				for (ulong x = rl; x <= rr; x++) {
 					if (((x & 8) || (y & 8)) && !((x & 8) && (y & 8))) {
@@ -495,7 +503,7 @@ entry2bitmap(BEntry entry, bool silent)
 				}
 				dest += ddiff;
 			}
-			for (int i = 0; i < numLayers; i++) // Next the layers: Add.
+			for (int i = 0; i < numLayers; i++)	 // Next the layers: Add.
 			{
 				// printf ("Layer %i\n", i);
 				if (!layer[i]->IsHidden()) {
@@ -545,18 +553,14 @@ entry2bitmap(BEntry entry, bool silent)
 			char filetype[80];
 			filetype[node.ReadAttr("BEOS:TYPE", 0, 0, filetype, 80)] = 0;
 			if (!strncmp(filetype, "image/", 6)) {
-				sprintf(
-					errstring,
+				sprintf(errstring,
 					"The file '%s' is of type '%s'.\nThis does look like an image format to "
 					"me.\nMaybe you haven't installed the corresponding Translator?",
-					path.Path(), filetype
-				);
+					path.Path(), filetype);
 			} else {
-				sprintf(
-					errstring,
+				sprintf(errstring,
 					"The file '%s' is of type '%s'.\nI don't think this is an image at all.",
-					path.Path(), filetype
-				);
+					path.Path(), filetype);
 			}
 			alert = new BAlert("", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 			alert->Go();
@@ -634,7 +638,7 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 
 	dest_data += miny * dest_bpr + minx;
 
-	dest_data--; // Note: On PPC, pre-increment is faster.
+	dest_data--;  // Note: On PPC, pre-increment is faster.
 	src_data--;
 	for (int j = miny; j < maxy; j++) {
 		for (int i = minx; i < maxx; i++) {
@@ -642,44 +646,44 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 			register uint32 srcpixel = *(++src_data);
 			register uint32 destpixel = *(++dest_data);
 			register int sa = srcpixel & 0xFF;
-			register int da = 255 - sa; // destpixel & 0xFF;
-			register int ta = 255;		// sa + da;
-			if (sa == 255)				// Fully Opaque
+			register int da = 255 - sa;	 // destpixel & 0xFF;
+			register int ta = 255;		 // sa + da;
+			if (sa == 255)				 // Fully Opaque
 			{
 				*dest_data = srcpixel;
-			} else if (sa == 0) // Fully transparent
+			} else if (sa == 0)	 // Fully transparent
 			{
 			} else {
 				*dest_data =
 					((((((destpixel >> 24)) * da + ((srcpixel >> 24)) * sa) / ta) << 24) &
-					 0xFF000000) |
+						0xFF000000) |
 					((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
-					  << 16) &
-					 0x00FF0000) |
+						 << 16) &
+						0x00FF0000) |
 					((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
-					  << 8) &
-					 0x0000FF00) |
+						 << 8) &
+						0x0000FF00) |
 					clipchar(sa + int(destpixel & 0xFF));
 			}
 #else
 			register uint32 srcpixel = *(++src_data);
 			register uint32 destpixel = *(++dest_data);
 			register int sa = srcpixel >> 24;
-			register int da = 255 - sa; // destpixel >> 24;
-			register int ta = 255;		// sa + da;
-			if (sa == 255)				// Fully Opaque
+			register int da = 255 - sa;	 // destpixel >> 24;
+			register int ta = 255;		 // sa + da;
+			if (sa == 255)				 // Fully Opaque
 			{
 				*dest_data = srcpixel;
-			} else if (sa == 0) // Fully transparent
+			} else if (sa == 0)	 // Fully transparent
 			{
 			} else {
 				*dest_data =
 					((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
-					  << 16) &
-					 0x00FF0000) |
+						 << 16) &
+						0x00FF0000) |
 					((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
-					  << 8) &
-					 0x0000FF00) |
+						 << 8) &
+						0x0000FF00) |
 					((((((destpixel) & 0xFF) * da + ((srcpixel) & 0xFF) * sa) / ta)) & 0x000000FF) |
 					((clipchar(sa + int(destpixel >> 24))) << 24);
 			}
@@ -724,7 +728,7 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 
 	dest_data += miny * dest_bpr + minx;
 
-	dest_data--; // Note: On PPC, pre-increment is faster.
+	dest_data--;  // Note: On PPC, pre-increment is faster.
 	src_data--;
 	if (strength == 255) {
 		for (int j = miny; j < maxy; j++) {
@@ -735,10 +739,10 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register int sa = srcpixel & 0xFF;
 				register int da = /* destpixel & 0xFF; */ 255 - sa;
 				register int ta = /* sa + da;*/ 255;
-				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF)) // Fully opaque
+				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF))	// Fully opaque
 				{
 					*dest_data = srcpixel;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
@@ -749,14 +753,14 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
-						 ) &
-						 0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da + ((srcpixel & 0x00FF0000) / ta) * sa
-						 ) &
-						 0x00FF0000) |
+						((((destpixel & 0xFF000000) / ta) * da +
+							 ((srcpixel & 0xFF000000) / ta) * sa) &
+							0xFF000000) |
+						((((destpixel & 0x00FF0000) / ta) * da +
+							 ((srcpixel & 0x00FF0000) / ta) * sa) &
+							0x00FF0000) |
 						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta &
-						 0x0000FF00) |
+							0x0000FF00) |
 						clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
@@ -766,22 +770,22 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register int sa = srcpixel >> 24;
 				register int da = /*destpixel >> 24;*/ 255 - sa;
 				register int ta = /*sa + da; */ ta = 255;
-				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000)) // Fully opaque
+				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = srcpixel;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
-							((srcpixel & 0x00FF0000) >> 1) * sa) /
-						   ta)
-						  << 1) &
-						 0x00FF0000) |
+							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
+							  ta)
+							 << 1) &
+							0x00FF0000) |
 						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-						 0x0000FF00) |
+							0x0000FF00) |
 						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-						 0x000000FF) |
+							0x000000FF) |
 						(clipchar(sa + int(destpixel >> 24)) << 24);
 				}
 #endif
@@ -798,10 +802,10 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register int sa = (srcpixel & 0xFF) * strength / 255;
 				register int da = /* destpixel & 0xFF;*/ 255 - sa;
 				register int ta = /* sa + da;*/ 255;
-				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF)) // Fully opaque
+				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF))	// Fully opaque
 				{
 					*dest_data = srcpixel;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					//					*dest_data	= ((((((destpixel>>24)       )*da +
@@ -812,14 +816,14 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
 					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da + ((srcpixel & 0xFF000000) / ta) * sa
-						 ) &
-						 0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da + ((srcpixel & 0x00FF0000) / ta) * sa
-						 ) &
-						 0x00FF0000) |
+						((((destpixel & 0xFF000000) / ta) * da +
+							 ((srcpixel & 0xFF000000) / ta) * sa) &
+							0xFF000000) |
+						((((destpixel & 0x00FF0000) / ta) * da +
+							 ((srcpixel & 0x00FF0000) / ta) * sa) &
+							0x00FF0000) |
 						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta &
-						 0x0000FF00) |
+							0x0000FF00) |
 						clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
@@ -828,23 +832,23 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register uint32 destpixel = *(++dest_data);
 				register int sa = (srcpixel >> 24) * strength / 255;
 				register int da = /*destpixel >> 24;*/ 255 - sa;
-				register int ta = sa + da;								  // 255
-				if (sa == 255 || /* da == 0 */ !(destpixel & 0xFF000000)) // Fully opaque
+				register int ta = sa + da;								   // 255
+				if (sa == 255 || /* da == 0 */ !(destpixel & 0xFF000000))  // Fully opaque
 				{
 					*dest_data = srcpixel;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					*dest_data =
 						((((((destpixel & 0x00FF0000) >> 1) * da +
-							((srcpixel & 0x00FF0000) >> 1) * sa) /
-						   ta)
-						  << 1) &
-						 0x00FF0000) |
+							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
+							  ta)
+							 << 1) &
+							0x00FF0000) |
 						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-						 0x0000FF00) |
+							0x0000FF00) |
 						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-						 0x000000FF) |
+							0x000000FF) |
 						(clipchar(sa + int(destpixel >> 24)) << 24);
 				}
 #endif
@@ -852,7 +856,7 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 			src_data += src_bprdiff;
 			dest_data += dest_bprdiff;
 		}
-	} else // Very special case:  Only "erase" transparency.
+	} else	// Very special case:  Only "erase" transparency.
 	{
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
@@ -862,10 +866,10 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register int sa = (srcpixel & 0xFF) * (-strength) / 255;
 				register int da = (destpixel & 0xFF);
 				register int ta = 255;
-				if (sa == 255 || !(destpixel & 0xFF)) // Fully opaque
+				if (sa == 255 || !(destpixel & 0xFF))  // Fully opaque
 				{
 					*dest_data = destpixel & 0xFFFFFF00;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					*dest_data = (destpixel & 0xFFFFFF00) | clipchar(da - sa);
@@ -876,10 +880,10 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				register int sa = (srcpixel >> 24) * (-strength) / 255;
 				register int da = (destpixel >> 24);
 				//				register int ta = 255;
-				if (sa == 255 || !(destpixel & 0xFF000000)) // Fully opaque
+				if (sa == 255 || !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = destpixel & 0x00FFFFFF;
-				} else if (sa == 0) // Fully transparent
+				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
 					*dest_data = (destpixel & 0x00FFFFFF) | (clipchar(da - sa) << 24);
@@ -1164,7 +1168,7 @@ FastCopy(BBitmap* src, BBitmap* dest)
 	srcdata--;
 	for (long i = 0; i < dest->BitsLength() / 8; i++)
 		*(++destdata) = *(++srcdata);
-	if (dest->BitsLength() % 8) // Odd number of pixels...
+	if (dest->BitsLength() % 8)	 // Odd number of pixels...
 		*((long*)++destdata) = *((long*)++srcdata);
 }
 
@@ -1505,10 +1509,10 @@ gcd(int32 p, int32 q)
 	return q;
 }
 
-extern "C" void
-mmx_scale_32_h(bgra_pixel* s, bgra_pixel* d, int32 h, int32 sw, int32 dw, int32 dbpr);
-extern "C" void
-mmx_scale_32_v(bgra_pixel* s, bgra_pixel* d, int32 w, int32 sh, int32 dh, int32 dbpr);
+extern "C" void mmx_scale_32_h(
+	bgra_pixel* s, bgra_pixel* d, int32 h, int32 sw, int32 dw, int32 dbpr);
+extern "C" void mmx_scale_32_v(
+	bgra_pixel* s, bgra_pixel* d, int32 w, int32 sh, int32 dh, int32 dbpr);
 
 int
 Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
@@ -1548,22 +1552,20 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 	float f = float(mdx) / msx;
 	extern bool UseMMX;
 	extern int DebugLevel;
-	if (xscale < 1) // Shrink horizontally
+	if (xscale < 1)	 // Shrink horizontally
 	{
 		// printf ("Shrink horizontally:\n");
-		if (src) // Code for the Layer
+		if (src)  // Code for the Layer
 		{
 			if (DebugLevel)
 				printf("Scaling %d -> %d; gcd = %d\n", sw, dw, nbx);
 			time_t start = clock();
 			if (UseMMX &&
-				sw <= 1024) // otherwise, fixed point arithmetic in MMX code will overflow.
+				sw <= 1024)	 // otherwise, fixed point arithmetic in MMX code will overflow.
 			{
 #if defined(__INTEL__)
-				mmx_scale_32_h(
-					(bgra_pixel*)src->Bits(), (bgra_pixel*)stmp->Bits(), sh, sw, dw,
-					stmp->BytesPerRow()
-				);
+				mmx_scale_32_h((bgra_pixel*)src->Bits(), (bgra_pixel*)stmp->Bits(), sh, sw, dw,
+					stmp->BytesPerRow());
 #endif
 			} else {
 				// printf ("Layer...\n");
@@ -1624,7 +1626,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 			if (DebugLevel > 1)
 				printf("H Scale took %ld ms\n", end - start);
 		}
-		if (srcmap) // Code for Selection
+		if (srcmap)	 // Code for Selection
 		{
 			// printf ("Selection...\n");
 			grey_pixel* srcdata = (grey_pixel*)srcmap->Bits();
@@ -1661,20 +1663,18 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	} else if (xscale > 1) // Stretch horizontally
+	} else if (xscale > 1)	// Stretch horizontally
 	{
 		// printf ("Stretch horizontally\n");
-		if (src) // Code for Layer
+		if (src)  // Code for Layer
 		{
 			if (DebugLevel)
 				printf("Scaling %d -> %d; gcd = %d\n", sw, dw, nbx);
 			time_t start = clock();
 			if (UseMMX) {
 #if defined(__INTEL__)
-				mmx_scale_32_h(
-					(bgra_pixel*)src->Bits(), (bgra_pixel*)stmp->Bits(), sh, sw, dw,
-					stmp->BytesPerRow()
-				);
+				mmx_scale_32_h((bgra_pixel*)src->Bits(), (bgra_pixel*)stmp->Bits(), sh, sw, dw,
+					stmp->BytesPerRow());
 #endif
 			} else {
 				// printf ("Layer...\n");
@@ -1724,7 +1724,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 			if (DebugLevel > 1)
 				printf("H Scale took %ld ms\n", end - start);
 		}
-		if (srcmap) // Code for selection
+		if (srcmap)	 // Code for selection
 		{
 			// printf ("Selection\n");
 			grey_pixel* srcdata = (grey_pixel*)srcmap->Bits();
@@ -1758,7 +1758,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	} else // No scaling in x-dimension -> copy to temp bitmap.
+	} else	// No scaling in x-dimension -> copy to temp bitmap.
 	{
 		// printf ("copying\n");
 		if (src)
@@ -1768,20 +1768,18 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 	}
 	// printf ("yscale = %f\n", yscale);
 	f = float(mdy) / msy;
-	if (yscale < 1) // Shrink vertically
+	if (yscale < 1)	 // Shrink vertically
 	{
 		// printf ("Shrink vertically:\n");
-		if (src) // Code for Layer
+		if (src)  // Code for Layer
 		{
 			if (DebugLevel)
 				printf("Scaling %d -> %d; gcd = %d\n", sh, dh, nby);
 			time_t start = clock();
 			if (UseMMX && sh <= 1024) {
 #if defined(__INTEL__)
-				mmx_scale_32_v(
-					(bgra_pixel*)stmp->Bits(), (bgra_pixel*)dest->Bits(), dw, sh, dh,
-					dest->BytesPerRow()
-				);
+				mmx_scale_32_v((bgra_pixel*)stmp->Bits(), (bgra_pixel*)dest->Bits(), dw, sh, dh,
+					dest->BytesPerRow());
 #endif
 			} else {
 				// printf ("Layer...\n");
@@ -1846,7 +1844,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 			if (DebugLevel > 1)
 				printf("V Scale took %ld ms\n", end - start);
 		}
-		if (srcmap) // Code for Selection
+		if (srcmap)	 // Code for Selection
 		{
 			// printf ("Selection...\n");
 			grey_pixel* srcdata = (grey_pixel*)mtmp->Bits();
@@ -1888,20 +1886,18 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	} else if (yscale > 1) // Stretch vertically
+	} else if (yscale > 1)	// Stretch vertically
 	{
 		// printf ("Stretch vertically:\n");
-		if (src) // Code for Layer
+		if (src)  // Code for Layer
 		{
 			if (DebugLevel)
 				printf("Scaling %d -> %d; gcd = %d\n", sh, dh, nby);
 			time_t start = clock();
 			if (UseMMX) {
 #if defined(__INTEL__)
-				mmx_scale_32_v(
-					(bgra_pixel*)stmp->Bits(), (bgra_pixel*)dest->Bits(), dw, sh, dh,
-					dest->BytesPerRow()
-				);
+				mmx_scale_32_v((bgra_pixel*)stmp->Bits(), (bgra_pixel*)dest->Bits(), dw, sh, dh,
+					dest->BytesPerRow());
 #endif
 			} else {
 				// printf ("Layer...\n");
@@ -1956,7 +1952,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 			if (DebugLevel > 1)
 				printf("V Scale took %ld ms\n", end - start);
 		}
-		if (srcmap) // Code for Selection
+		if (srcmap)	 // Code for Selection
 		{
 			// printf ("Selection...\n");
 			grey_pixel* srcdata = (grey_pixel*)mtmp->Bits();
@@ -1994,7 +1990,7 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 				}
 			}
 		}
-	} else // No scaling in y-dimension -> Just copy the bitmap to dest.
+	} else	// No scaling in y-dimension -> Just copy the bitmap to dest.
 	{
 		// printf ("Copying...\n");
 		if (src)
@@ -2022,7 +2018,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 	float ox, oy;
 	ox = o.y * sr + o.x * (1 - cr);
 	oy = o.y * (1 - cr) - o.x * sr;
-	if (hiq && rad != 0) // do anti-aliasing
+	if (hiq && rad != 0)  // do anti-aliasing
 	{
 		for (int i = 0; i <= bh; i++) {
 			ix = ox - i * sr;
@@ -2039,14 +2035,14 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					a5 = *(sp + iiy * bpr + iix);
 
 				float A1 = 0, A2 = 0, A3 = 0, A4 = 0, A5 = 0, A6 = 0, A7 = 0, A8 = 0,
-					  A9 = 0; // Areas
+					  A9 = 0;  // Areas
 				float w, h;
 
 				w = ix - (fix + .5);
 				h = iy - (fiy + .5);
 				//				float r = sqrt (w*w + h*h);
 
-				if (w < 0 && h < 0) // TLC
+				if (w < 0 && h < 0)	 // TLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a1 = *(sp + (iiy - 1) * bpr + iix - 1);
@@ -2058,7 +2054,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A1 / 256) * ALPHA(a2);
 					A4 = (-w - A1 / 256) * ALPHA(a3);
 					A5 = ALPHA(a5) - A1 - A2 - A4;
-				} else if (w > 0 && h < 0) // TRC
+				} else if (w > 0 && h < 0)	// TRC
 				{
 					if (iix >= 0 && iix <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a2 = *(sp + (iiy - 1) * bpr + iix);
@@ -2070,7 +2066,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A3 / 256) * ALPHA(a2);
 					A6 = (w - A3 / 256) * ALPHA(a6);
 					A5 = ALPHA(a5) - A3 - A2 - A6;
-				} else if (w < 0 && h > 0) // BLC
+				} else if (w < 0 && h > 0)	// BLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy >= 0 && iiy <= bh)
 						a4 = *(sp + iiy * bpr + iix - 1);
@@ -2082,7 +2078,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A4 = (-w - A7 / 256) * ALPHA(a4);
 					A8 = (h - A7 / 256) * ALPHA(a8);
 					A5 = ALPHA(a5) - A7 - A4 - A8;
-				} else if (w > 0 && h > 0) // BRC
+				} else if (w > 0 && h > 0)	// BRC
 				{
 					if (iix + 1 >= 0 && iix + 1 <= bw && iiy >= 0 && iiy <= bh)
 						a6 = *(sp + iiy * bpr + iix + 1);
@@ -2094,7 +2090,7 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 					A6 = (w - A9 / 256) * ALPHA(a6);
 					A8 = (h - A9 / 256) * ALPHA(a8);
 					A5 = ALPHA(a5) - A9 - A6 - A8;
-				} else // do 9-aliasing
+				} else	// do 9-aliasing
 				{
 					A5 = ALPHA(a5);
 				}
@@ -2102,20 +2098,16 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 				uint8 red, green, blue, alpha;
 				red = clipchar(float(
 					(RED(a1) * A1 + RED(a2) * A2 + RED(a3) * A3 + RED(a4) * A4 + RED(a5) * A5 +
-					 RED(a6) * A6 + RED(a7) * A7 + RED(a8) * A8 + RED(a9) * A9) /
-					256
-				));
-				green = clipchar(float(
-					(GREEN(a1) * A1 + GREEN(a2) * A2 + GREEN(a3) * A3 + GREEN(a4) * A4 +
-					 GREEN(a5) * A5 + GREEN(a6) * A6 + GREEN(a7) * A7 + GREEN(a8) * A8 +
-					 GREEN(a9) * A9) /
-					256
-				));
+						RED(a6) * A6 + RED(a7) * A7 + RED(a8) * A8 + RED(a9) * A9) /
+					256));
+				green = clipchar(float((GREEN(a1) * A1 + GREEN(a2) * A2 + GREEN(a3) * A3 +
+										   GREEN(a4) * A4 + GREEN(a5) * A5 + GREEN(a6) * A6 +
+										   GREEN(a7) * A7 + GREEN(a8) * A8 + GREEN(a9) * A9) /
+									   256));
 				blue = clipchar(float(
 					(BLUE(a1) * A1 + BLUE(a2) * A2 + BLUE(a3) * A3 + BLUE(a4) * A4 + BLUE(a5) * A5 +
-					 BLUE(a6) * A6 + BLUE(a7) * A7 + BLUE(a8) * A8 + BLUE(a9) * A9) /
-					256
-				));
+						BLUE(a6) * A6 + BLUE(a7) * A7 + BLUE(a8) * A8 + BLUE(a9) * A9) /
+					256));
 				alpha = clipchar(float(A1 + A2 + A3 + A4 + A5 + A6 + A7 + A8 + A9));
 				*(++dl) = PIXEL(red, green, blue, alpha);
 				ix += cr;
@@ -2156,7 +2148,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 	float ox, oy;
 	ox = o.y * sr + o.x * (1 - cr);
 	oy = o.y * (1 - cr) - o.x * sr;
-	if (hiq && rad != 0) // do anti-aliasing
+	if (hiq && rad != 0)  // do anti-aliasing
 	{
 		for (int i = 0; i <= bh; i++) {
 			ix = ox - i * sr;
@@ -2173,14 +2165,14 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					a5 = *(sp + iiy * bpr + iix);
 
 				float A1 = 0, A2 = 0, A3 = 0, A4 = 0, A5 = 0, A6 = 0, A7 = 0, A8 = 0,
-					  A9 = 0; // Areas
+					  A9 = 0;  // Areas
 				float w, h;
 
 				w = ix - (fix + .5);
 				h = iy - (fiy + .5);
 				//				float r = sqrt (w*w + h*h);
 
-				if (w < 0 && h < 0) // TLC
+				if (w < 0 && h < 0)	 // TLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a1 = *(sp + (iiy - 1) * bpr + iix - 1);
@@ -2192,7 +2184,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A1 / 256) * a2;
 					A4 = (-w - A1 / 256) * a4;
 					A5 = a5 - A1 - A2 - A4;
-				} else if (w > 0 && h < 0) // TRC
+				} else if (w > 0 && h < 0)	// TRC
 				{
 					if (iix >= 0 && iix <= bw && iiy - 1 >= 0 && iiy - 1 <= bh)
 						a2 = *(sp + (iiy - 1) * bpr + iix);
@@ -2204,7 +2196,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A2 = (-h - A3 / 256) * a2;
 					A6 = (w - A3 / 256) * a6;
 					A5 = a5 - A3 - A2 - A6;
-				} else if (w < 0 && h > 0) // BLC
+				} else if (w < 0 && h > 0)	// BLC
 				{
 					if (iix - 1 >= 0 && iix - 1 <= bw && iiy >= 0 && iiy <= bh)
 						a4 = *(sp + iiy * bpr + iix - 1);
@@ -2216,7 +2208,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A4 = (-w - A7 / 256) * a4;
 					A8 = (h - A7 / 256) * a8;
 					A5 = a5 - A7 - A4 - A8;
-				} else if (w > 0 && h > 0) // BRC
+				} else if (w > 0 && h > 0)	// BRC
 				{
 					if (iix + 1 >= 0 && iix + 1 <= bw && iiy >= 0 && iiy <= bh)
 						a6 = *(sp + iiy * bpr + iix + 1);
@@ -2228,7 +2220,7 @@ Rotate(SBitmap* s, Selection* d, BPoint o, float rad, bool hiq)
 					A6 = (w - A9 / 256) * a6;
 					A8 = (h - A9 / 256) * a8;
 					A5 = a5 - A9 - A6 - A8;
-				} else // do 9-aliasing
+				} else	// do 9-aliasing
 				{
 					A5 = a5;
 				}

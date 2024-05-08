@@ -1,8 +1,8 @@
 #include "TabView.h"
-#include "Colors.h"
+#include <InterfaceDefs.h>
 #include <stdio.h>
 #include <string.h>
-#include <InterfaceDefs.h>
+#include "Colors.h"
 
 #define _HTABHEIGHT (TAB_HEIGHT / 2)
 
@@ -25,7 +25,7 @@ void
 TabView::Draw(BRect update)
 {
 	update = update;
-	if (current < -1) // No sheet selected yet
+	if (current < -1)  // No sheet selected yet
 		return;
 	float xpos = _HTABHEIGHT + 1;
 	for (int i = 0; i < index; i++) {
@@ -57,8 +57,7 @@ TabView::Draw(BRect update)
 		if (current == i - 1) {
 			SetHighColor(Grey30);
 			StrokeLine(
-				BPoint(xpos + 1, TAB_HEIGHT), BPoint(xpos + width + _HTABHEIGHT, TAB_HEIGHT)
-			);
+				BPoint(xpos + 1, TAB_HEIGHT), BPoint(xpos + width + _HTABHEIGHT, TAB_HEIGHT));
 		} else if (current == i + 1) {
 			SetHighColor(Grey30);
 			StrokeLine(BPoint(xpos - _HTABHEIGHT, TAB_HEIGHT), BPoint(xpos + width, TAB_HEIGHT));
@@ -83,34 +82,35 @@ TabView::KeyDown(const char* bytes, int32 numBytes)
 {
 	if (numBytes == 1) {
 		switch (*bytes) {
-		case B_SPACE:
-		case B_ENTER: {
-			// printf ("Enter\n");
-			RaiseView(focusedview);
-			inherited::KeyDown(bytes, numBytes);
-			break;
-		}
-		case B_LEFT_ARROW:
-			// printf ("Left\n");
-			focusedview--;
-			if (focusedview < 0)
-				focusedview = index - 1;
-			Invalidate();
-			break;
-		case B_RIGHT_ARROW:
-			// printf ("Right\n");
-			focusedview++;
-			if (focusedview >= index)
-				focusedview = 0;
-			Invalidate();
-			break;
-		case B_TAB:
-			// MakeFocus (false);
-			inherited::KeyDown(bytes, numBytes);
-			Invalidate();
-			break;
-		default:
-			inherited::KeyDown(bytes, numBytes);
+			case B_SPACE:
+			case B_ENTER:
+			{
+				// printf ("Enter\n");
+				RaiseView(focusedview);
+				inherited::KeyDown(bytes, numBytes);
+				break;
+			}
+			case B_LEFT_ARROW:
+				// printf ("Left\n");
+				focusedview--;
+				if (focusedview < 0)
+					focusedview = index - 1;
+				Invalidate();
+				break;
+			case B_RIGHT_ARROW:
+				// printf ("Right\n");
+				focusedview++;
+				if (focusedview >= index)
+					focusedview = 0;
+				Invalidate();
+				break;
+			case B_TAB:
+				// MakeFocus (false);
+				inherited::KeyDown(bytes, numBytes);
+				Invalidate();
+				break;
+			default:
+				inherited::KeyDown(bytes, numBytes);
 		}
 	} else
 		inherited::KeyDown(bytes, numBytes);

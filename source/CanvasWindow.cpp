@@ -1,31 +1,31 @@
-#include <List.h>
-#include <SupportDefs.h>
 #include "CanvasWindow.h"
-#include "AddOn.h"
-#include "BBP.h"
-#include "ColorMenuButton.h"
-#include "BitmapStuff.h"
-#include "Properties.h"
-#include "debug.h"
-#include <string.h>
 #include <Application.h>
-#include <Screen.h>
 #include <Beep.h>
 #include <FindDirectory.h>
-#include <TranslatorRoster.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <List.h>
 #include <Mime.h>
 #include <PropertyInfo.h>
-#include "Settings.h"
-#include "ResizeWindow.h"
-#include "MagWindow.h"
-#include "ProgressiveBitmapStream.h"
-#include "OutputFormatWindow.h"
-#include "XpalWindow.h"
+#include <Screen.h>
+#include <SupportDefs.h>
+#include <TranslatorRoster.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#include "AddOn.h"
+#include "BBP.h"
 #include "BGView.h"
-#include "PosView.h"
+#include "BitmapStuff.h"
+#include "ColorMenuButton.h"
 #include "LayerWindow.h"
+#include "MagWindow.h"
+#include "OutputFormatWindow.h"
+#include "PosView.h"
+#include "ProgressiveBitmapStream.h"
+#include "Properties.h"
+#include "ResizeWindow.h"
+#include "Settings.h"
+#include "XpalWindow.h"
+#include "debug.h"
 
 extern bool DataTypes;
 
@@ -33,48 +33,41 @@ extern bool DataTypes;
 #pragma optimization_level 1
 #endif
 
-#define GET_AND_SET                                                                                \
-	{                                                                                              \
-		B_GET_PROPERTY, B_SET_PROPERTY, 0                                                          \
+#define GET_AND_SET                       \
+	{                                     \
+		B_GET_PROPERTY, B_SET_PROPERTY, 0 \
 	}
-#define GET                                                                                        \
-	{                                                                                              \
-		B_GET_PROPERTY, 0                                                                          \
+#define GET               \
+	{                     \
+		B_GET_PROPERTY, 0 \
 	}
-#define SET                                                                                        \
-	{                                                                                              \
-		B_SET_PROPERTY, 0                                                                          \
+#define SET               \
+	{                     \
+		B_SET_PROPERTY, 0 \
 	}
-#define DIRECT_AND_INDEX                                                                           \
-	{                                                                                              \
-		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0                                                   \
+#define DIRECT_AND_INDEX                         \
+	{                                            \
+		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 \
 	}
-#define DIRECT                                                                                     \
-	{                                                                                              \
-		B_DIRECT_SPECIFIER, 0                                                                      \
+#define DIRECT                \
+	{                         \
+		B_DIRECT_SPECIFIER, 0 \
 	}
 
-static property_info prop_list[] = {
-	{"Name", GET, DIRECT, "Get Canvas name"},
+static property_info prop_list[] = {{"Name", GET, DIRECT, "Get Canvas name"},
 	{"Layer", {B_CREATE_PROPERTY, 0}, DIRECT, "Name (string)"},
 	{"Layer", GET, DIRECT_AND_INDEX, ""},
-	{"ActiveLayer", GET_AND_SET, DIRECT_AND_INDEX, "Get and set currently active layer"},
-	0
-};
+	{"ActiveLayer", GET_AND_SET, DIRECT_AND_INDEX, "Get and set currently active layer"}, 0};
 
 static value_info value_list[] = {
 	{"Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)"},
-	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"},
-	0
-};
+	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"}, 0};
 
 float zoomLevels[] = {0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0};
 char aspectLevels[][7] = {"(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)"};
 
-CanvasWindow::CanvasWindow(
-	BRect frame, const char* name, BBitmap* map, BMessenger* target, bool AskForAlpha,
-	rgb_color color
-)
+CanvasWindow::CanvasWindow(BRect frame, const char* name, BBitmap* map, BMessenger* target,
+	bool AskForAlpha, rgb_color color)
 	: BWindow(frame, name, B_DOCUMENT_WINDOW, B_PULSE_NEEDED)
 {
 	BEntry entry = BEntry(name);
@@ -134,41 +127,31 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 			float tvers = atof(Version);
 			float cvers = strtod(endp, &endp);
 			*endp = 0;
-			if (int(cvers) > int(tvers)) // Check major version
+			if (int(cvers) > int(tvers))  // Check major version
 			{
 				char string[B_FILE_NAME_LENGTH + 128];
-				sprintf(
-					string,
-					lstring(
-						130, "‘%s’ is an image from a newer Becasso version (%s).\nYou can't load "
-							 "these files with this Becasso version."
-					),
-					fName, line
-				);
-				BAlert* alert = new BAlert(
-					"", string, lstring(131, "Cancel"), NULL, NULL, B_WIDTH_AS_USUAL,
-					B_WARNING_ALERT
-				);
+				sprintf(string,
+					lstring(130,
+						"‘%s’ is an image from a newer Becasso version (%s).\nYou can't load "
+						"these files with this Becasso version."),
+					fName, line);
+				BAlert* alert = new BAlert("", string, lstring(131, "Cancel"), NULL, NULL,
+					B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				alert->Go();
 				fclose(fp);
 				throw(1);
 			}
 			if (int(cvers) == int(tvers) &&
-				cvers - int(cvers) > tvers - int(tvers)) // Check release
+				cvers - int(cvers) > tvers - int(tvers))  // Check release
 			{
 				char string[B_FILE_NAME_LENGTH + 128];
-				sprintf(
-					string,
-					lstring(
-						132, "‘%s’ is an image from a newer release of Becasso (%s).\nTry to load "
-							 "anyway?"
-					),
-					fName, line
-				);
-				BAlert* alert = new BAlert(
-					"", string, lstring(131, "Cancel"), lstring(133, "Proceed"), NULL,
-					B_WIDTH_AS_USUAL, B_WARNING_ALERT
-				);
+				sprintf(string,
+					lstring(132,
+						"‘%s’ is an image from a newer release of Becasso (%s).\nTry to load "
+						"anyway?"),
+					fName, line);
+				BAlert* alert = new BAlert("", string, lstring(131, "Cancel"),
+					lstring(133, "Proceed"), NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				ulong res = alert->Go();
 				if (res == 0) {
 					fclose(fp);
@@ -218,13 +201,12 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 		if (mimeStr)
 			err = BTranslatorRoster::Default()->Identify(&inStream, NULL, &info, 0, mimeStr);
 
-		if (err) // try without a hint
+		if (err)  // try without a hint
 			err = BTranslatorRoster::Default()->Identify(&inStream, NULL, &info);
 
 		if (!err) {
 			err = BTranslatorRoster::Default()->Translate(
-				&inStream, &info, NULL, bms, B_TRANSLATOR_BITMAP
-			);
+				&inStream, &info, NULL, bms, B_TRANSLATOR_BITMAP);
 			if (!err) {
 				map = bms->Bitmap();
 				bms->SetDispose(false);
@@ -235,36 +217,26 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 		if (err || !map) {
 			char errstring[B_FILE_NAME_LENGTH + 64];
 			sprintf(
-				errstring, lstring(134, "Translation Kit error:\nCouldn't translate `%s'"), fName
-			);
-			BAlert* alert = new BAlert(
-				"", errstring, lstring(135, "Help"), lstring(136, "OK"), NULL, B_WIDTH_AS_USUAL,
-				B_WARNING_ALERT
-			);
+				errstring, lstring(134, "Translation Kit error:\nCouldn't translate `%s'"), fName);
+			BAlert* alert = new BAlert("", errstring, lstring(135, "Help"), lstring(136, "OK"),
+				NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 			uint32 button = alert->Go();
 			if (button == 0) {
 				BNode node(&entry);
 				char filetype[80];
 				filetype[node.ReadAttr("BEOS:TYPE", 0, 0, filetype, 80)] = 0;
 				if (!strncmp(filetype, "image/", 6)) {
-					sprintf(
-						errstring,
-						lstring(
-							137,
+					sprintf(errstring,
+						lstring(137,
 							"The file '%s' is of type '%s'.\nThis does look like an image format "
-							"to me.\nMaybe you haven't installed the corresponding Translator?"
-						),
-						fName, filetype
-					);
+							"to me.\nMaybe you haven't installed the corresponding Translator?"),
+						fName, filetype);
 				} else {
-					sprintf(
-						errstring,
-						lstring(
-							138,
-							"The file '%s' is of type '%s'.\nI don't think this is an image at all."
-						),
-						fName, filetype
-					);
+					sprintf(errstring,
+						lstring(138,
+							"The file '%s' is of type '%s'.\nI don't think this is an image at "
+							"all."),
+						fName, filetype);
 				}
 				alert = new BAlert("", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				alert->Go();
@@ -283,8 +255,7 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 
 void
 CanvasWindow::restOfCtor(
-	BRect canvasFrame, BBitmap* map, FILE* fp, bool AskForAlpha, rgb_color color
-)
+	BRect canvasFrame, BBitmap* map, FILE* fp, bool AskForAlpha, rgb_color color)
 {
 	SetPulseRate(50000);
 	magWindow = NULL;
@@ -301,15 +272,14 @@ CanvasWindow::restOfCtor(
 	//	fileMenu->AddItem (new BMenuItem (lstring (12, "Open File…"), new BMessage ('open'), 'O'));
 	BMenuItem* recent = make_recent_menu();
 	recent->SetTarget(be_app);
-	fileMenu->AddItem(recent); // new BMenu (lstring (13, "Open Recent"));
+	fileMenu->AddItem(recent);	// new BMenu (lstring (13, "Open Recent"));
 	fileMenu->AddItem(captureMenu);
 	fileMenu->AddSeparatorItem();
 	fileMenu->AddItem(new BMenuItem(lstring(50, "Save"), new BMessage('save'), 'S'));
-	fileMenu->AddItem(new BMenuItem(lstring(51, "Save As…"), new BMessage('savs'), 'S', B_SHIFT_KEY)
-	);
 	fileMenu->AddItem(
-		new BMenuItem(lstring(52, "Export…"), new BMessage('Expt'), 'S', B_CONTROL_KEY)
-	);
+		new BMenuItem(lstring(51, "Save As…"), new BMessage('savs'), 'S', B_SHIFT_KEY));
+	fileMenu->AddItem(
+		new BMenuItem(lstring(52, "Export…"), new BMessage('Expt'), 'S', B_CONTROL_KEY));
 	extern bool ExportCstruct;
 	if (ExportCstruct)
 		fileMenu->AddItem(new BMenuItem("Export as C struct", new BMessage('ExpC')));
@@ -340,11 +310,9 @@ CanvasWindow::restOfCtor(
 	editMenu->AddItem(new BMenuItem(lstring(64, "Copy"), new BMessage(B_COPY), 'C'));
 	editMenu->AddItem(new BMenuItem(lstring(65, "Paste"), new BMessage(B_PASTE), 'V'));
 	editMenu->AddItem(
-		new BMenuItem(lstring(403, "Paste to New Layer"), new BMessage('psNL'), 'V', B_SHIFT_KEY)
-	);
-	editMenu->AddItem(
-		new BMenuItem(lstring(404, "Paste to New Canvas"), new BMessage('psNC'), 'V', B_CONTROL_KEY)
-	);
+		new BMenuItem(lstring(403, "Paste to New Layer"), new BMessage('psNL'), 'V', B_SHIFT_KEY));
+	editMenu->AddItem(new BMenuItem(
+		lstring(404, "Paste to New Canvas"), new BMessage('psNC'), 'V', B_CONTROL_KEY));
 	editMenu->AddItem(new BMenuItem(lstring(66, "Select All"), new BMessage(B_SELECT_ALL), 'A'));
 	editMenu->AddItem(new BMenuItem(lstring(67, "Deselect All"), new BMessage('sund'), 'D'));
 	editMenu->AddItem(new BMenuItem(lstring(68, "Invert Selection"), new BMessage('sinv')));
@@ -420,30 +388,34 @@ CanvasWindow::restOfCtor(
 		BMessage* m = new BMessage('adon');
 		m->AddInt32("index", i);
 		switch (addon->Type()) {
-		case BECASSO_FILTER: {
-			filters->AddItem(new BMenuItem(addon->Name(), m));
-			break;
-		}
-		case BECASSO_TRANSFORMER: {
-			transformers->AddItem(new BMenuItem(addon->Name(), m));
-			break;
-		}
-		case BECASSO_GENERATOR: {
-			generators->AddItem(new BMenuItem(addon->Name(), m));
-			break;
-		}
-		case BECASSO_CAPTURE: {
-			delete m;
-			BMessage* ms = new BMessage('capt');
-			ms->AddInt32("index", i);
-			//			BMenuItem *it = new BMenuItem (addon->Name(), ms);
-			captureMenu->AddItem(new BMenuItem(addon->Name(), ms));
-			captureMenu->SetEnabled(true);
-			break;
-		}
-		default:
-			fprintf(stderr, "Unknown Add-On type! (%li: %i)\n", i, addon->Type());
-			break;
+			case BECASSO_FILTER:
+			{
+				filters->AddItem(new BMenuItem(addon->Name(), m));
+				break;
+			}
+			case BECASSO_TRANSFORMER:
+			{
+				transformers->AddItem(new BMenuItem(addon->Name(), m));
+				break;
+			}
+			case BECASSO_GENERATOR:
+			{
+				generators->AddItem(new BMenuItem(addon->Name(), m));
+				break;
+			}
+			case BECASSO_CAPTURE:
+			{
+				delete m;
+				BMessage* ms = new BMessage('capt');
+				ms->AddInt32("index", i);
+				//			BMenuItem *it = new BMenuItem (addon->Name(), ms);
+				captureMenu->AddItem(new BMenuItem(addon->Name(), ms));
+				captureMenu->SetEnabled(true);
+				break;
+			}
+			default:
+				fprintf(stderr, "Unknown Add-On type! (%li: %i)\n", i, addon->Type());
+				break;
 		}
 	}
 	editMenu->AddItem(filters);
@@ -505,10 +477,9 @@ CanvasWindow::restOfCtor(
 	if (map)
 		canvasFrame = map->Bounds();
 	//	canvasFrame.PrintToStream();
-	frame.Set(
-		0, 0, max_c(canvasFrame.Width() + B_V_SCROLL_BAR_WIDTH, MIN_WIDTH),
-		max_c(canvasFrame.Height() + B_H_SCROLL_BAR_HEIGHT + menubarFrame.Height() + 1, MIN_HEIGHT)
-	);
+	frame.Set(0, 0, max_c(canvasFrame.Width() + B_V_SCROLL_BAR_WIDTH, MIN_WIDTH),
+		max_c(
+			canvasFrame.Height() + B_H_SCROLL_BAR_HEIGHT + menubarFrame.Height() + 1, MIN_HEIGHT));
 	//	frame.PrintToStream();
 	{
 		BScreen screen;
@@ -516,10 +487,9 @@ CanvasWindow::restOfCtor(
 	}
 	SetSizeLimits(MIN_WIDTH, 9999, MIN_HEIGHT, 9999);
 	ResizeTo(frame.Width(), frame.Height());
-	BRect bgFrame = BRect(
-		0, 0, max_c(MIN_WIDTH - B_V_SCROLL_BAR_WIDTH, canvasFrame.Width()),
-		max_c(MIN_HEIGHT - B_H_SCROLL_BAR_HEIGHT - menubarFrame.Height() - 1, canvasFrame.Height())
-	);
+	BRect bgFrame = BRect(0, 0, max_c(MIN_WIDTH - B_V_SCROLL_BAR_WIDTH, canvasFrame.Width()),
+		max_c(
+			MIN_HEIGHT - B_H_SCROLL_BAR_HEIGHT - menubarFrame.Height() - 1, canvasFrame.Height()));
 	bgFrame.OffsetTo(menubarFrame.left, menubarFrame.bottom + 1);
 	//	bgFrame.PrintToStream();
 	frame.OffsetTo(menubarFrame.left, menubarFrame.bottom + 1);
@@ -533,32 +503,27 @@ CanvasWindow::restOfCtor(
 	else
 		canvas = new CanvasView(canvasFrame, "Canvas", map, color);
 	//////////////////
-	if (map && AskForAlpha) // AskForAlpha check added here as optimization
+	if (map && AskForAlpha)	 // AskForAlpha check added here as optimization
 	{
 		////////////////////////////////////////
 		float avg = AverageAlpha(map);
 		if (avg < 128) {
 			if (AskForAlpha) {
 				char alert[2048];
-				sprintf(
-					alert,
-					lstring(
-						139, "%s the image `%s' uses alpha as transparency instead of opacity.\n%s "
-							 "inverting the alpha channel."
-					),
+				sprintf(alert,
+					lstring(139,
+						"%s the image `%s' uses alpha as transparency instead of opacity.\n%s "
+						"inverting the alpha channel."),
 					(avg < 10) ? lstring(140, "I'm pretty sure") : lstring(141, "I suspect"), fName,
 					(avg < 10)
 						? lstring(142, "If you're seeing only a checkered pattern,\nI suggest ")
-						: lstring(
-							  143, "Either that, or this image has an awful lot of transparent "
-								   "pixels.  If it looks strange, try "
-						  )
-				);
+						: lstring(143,
+							  "Either that, or this image has an awful lot of transparent "
+							  "pixels.  If it looks strange, try "));
 				BAlert* alphalert = new BAlert(
-					"alphalert", alert, lstring(144, "Keep As-Is"), lstring(145, "Invert")
-				);
+					"alphalert", alert, lstring(144, "Keep As-Is"), lstring(145, "Invert"));
 				/* int32 button_index = */ alphalert->Go(new BInvoker(new BMessage('aliv'), this));
-			} else // Changed in 1.5: Don't invert without asking.
+			} else	// Changed in 1.5: Don't invert without asking.
 			{
 				//				verbose (1, "Inverting alpha channel\n");
 				//				BMessage invert ('aliv');
@@ -572,15 +537,11 @@ CanvasWindow::restOfCtor(
 	}
 	posFrame.Set(-1, frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1, POSWIDTH - 1, frame.Height() + 1);
 	posview = new PosView(posFrame, "PosView", canvas);
-	hFrame.Set(
-		POSWIDTH, frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1,
-		frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, frame.Height() + 1
-	);
+	hFrame.Set(POSWIDTH, frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1,
+		frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, frame.Height() + 1);
 	h = new BScrollBar(hFrame, "sbH", bg, 0, canvasFrame.Width(), B_HORIZONTAL);
-	vFrame.Set(
-		frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, menubarFrame.Height(), frame.Width() + 1,
-		frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1
-	);
+	vFrame.Set(frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, menubarFrame.Height(), frame.Width() + 1,
+		frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1);
 	v = new BScrollBar(vFrame, "sbV", bg, 0, canvasFrame.Height(), B_VERTICAL);
 	AddChild(h);
 	AddChild(v);
@@ -600,7 +561,7 @@ CanvasWindow::restOfCtor(
 	fScale = 1;
 	setLayerMenu();
 	fCurrentProperty = 0;
-	ieTarget = NULL; // BeDC hack for interaction with ImageElements
+	ieTarget = NULL;  // BeDC hack for interaction with ImageElements
 	extractWindow = NULL;
 
 	// Notify the main app so it can add us to its canvases list.
@@ -608,7 +569,7 @@ CanvasWindow::restOfCtor(
 	notify.AddPointer("looper", Looper());
 	notify.AddString("name", fName);
 	be_app->PostMessage(&notify);
-	strcpy(fCanvasName, fName); // fName can change due to "save as" and exporting.
+	strcpy(fCanvasName, fName);	 // fName can change due to "save as" and exporting.
 
 	//	printf ("CanvasWindow::ctor done\n");
 }
@@ -850,34 +811,32 @@ CanvasWindow::QuitRequested()
 
 	if (savePanel->IsShowing()) {
 		while (savePanel->IsShowing())
-			snooze(500000); // YUCK!!!
+			snooze(500000);	 // YUCK!!!
 		return (!(canvas->changed));
 	}
 
 	char question[MAX_ALERTSIZE];
 	sprintf(question, lstring(146, "Save changes to ‘%s’?"), fName);
 
-	BAlert* alert = new BAlert(
-		"", question, lstring(131, "Cancel"), lstring(147, "Abandon"), lstring(148, "Save"),
-		B_WIDTH_FROM_WIDEST, B_INFO_ALERT
-	);
+	BAlert* alert = new BAlert("", question, lstring(131, "Cancel"), lstring(147, "Abandon"),
+		lstring(148, "Save"), B_WIDTH_FROM_WIDEST, B_INFO_ALERT);
 	alert->SetShortcut(0, B_ESCAPE);
 	int32 result = alert->Go();
 	switch (result) {
-	case 2: // Save
-		if (myTarget && !fromRef) {
-			myTarget->SendMessage(sendbitmapreply());
+		case 2:	 // Save
+			if (myTarget && !fromRef) {
+				myTarget->SendMessage(sendbitmapreply());
+				return (true);
+			} else {
+				savePanel->Show();
+				while (savePanel->IsShowing())
+					snooze(500000);	 // YUCK!!!
+				return (!(canvas->changed));
+			}
+		case 1:	 // Abandon
 			return (true);
-		} else {
-			savePanel->Show();
-			while (savePanel->IsShowing())
-				snooze(500000); // YUCK!!!
-			return (!(canvas->changed));
-		}
-	case 1: // Abandon
-		return (true);
-	default: // Cancel
-		return (false);
+		default:  // Cancel
+			return (false);
 	}
 }
 
@@ -892,8 +851,7 @@ CanvasWindow::GetSupportedSuites(BMessage* message)
 
 BHandler*
 CanvasWindow::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	//	printf ("CanvasWindow::ResolveSpecifier!!  message:\n");
 	//	message->PrintToStream();
@@ -954,7 +912,7 @@ CanvasWindow::ResolveSpecifier(
 		if (message->what == B_CREATE_PROPERTY) {
 			fCurrentProperty = PROP_LAYER;
 			return this;
-		} else // We get here if "Layer" was a specifier.
+		} else	// We get here if "Layer" was a specifier.
 		{
 			// Don't PopSpecifier()... The canvas still needs to find out which layer...
 			return canvas;
@@ -971,1227 +929,1256 @@ void
 CanvasWindow::MessageReceived(BMessage* message)
 {
 	switch (message->what) {
-	case B_CREATE_PROPERTY: {
-		// message->PrintToStream();
-		switch (fCurrentProperty) {
-		case PROP_LAYER: {
-			char title[MAXLAYERNAME];
-			const char* namestring;
-			if (message->FindString("Name", &namestring) == B_OK ||
-				message->FindString("name", &namestring) == B_OK)
-				strcpy(title, namestring);
-			else
-				strcpy(title, lstring(149, "Untitled"));
+		case B_CREATE_PROPERTY:
+		{
+			// message->PrintToStream();
+			switch (fCurrentProperty) {
+				case PROP_LAYER:
+				{
+					char title[MAXLAYERNAME];
+					const char* namestring;
+					if (message->FindString("Name", &namestring) == B_OK ||
+						message->FindString("name", &namestring) == B_OK)
+						strcpy(title, namestring);
+					else
+						strcpy(title, lstring(149, "Untitled"));
 
-			canvas->addLayer(title);
-			setLayerMenu();
-			if (message->IsSourceWaiting()) {
-				BMessage error(B_REPLY);
-				error.AddInt32("error", B_NO_ERROR);
-				message->SendReply(&error);
-			}
-			break;
-		}
-		default:
-			inherited::MessageReceived(message);
-			break;
-		}
-		fCurrentProperty = 0;
-		break;
-	}
-	case B_DELETE_PROPERTY: {
-		fCurrentProperty = 0;
-		inherited::MessageReceived(message);
-		break;
-	}
-	case B_GET_PROPERTY: {
-		switch (fCurrentProperty) {
-		case PROP_NAME:
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddString("result", fCanvasName);
-				message->SendReply(&reply);
-			} else
-				fprintf(stderr, "Canvas Name: \"%s\"\n", fCanvasName);
-			break;
-		case PROP_ACTIVELAYER:
-			if (message->IsSourceWaiting()) {
-				BMessage reply(B_REPLY);
-				reply.AddInt32("error", B_NO_ERROR);
-				reply.AddSpecifier("Layer", canvas->currentLayer()->getName());
-				message->SendReply(&reply);
-			} else
-				fprintf(
-					stderr, "Current Layer: %d: \"%s\"\n", canvas->currentLayerIndex(),
-					canvas->currentLayer()->getName()
-				);
-			break;
-		default:
-			break;
-		}
-		fCurrentProperty = 0;
-		inherited::MessageReceived(message);
-		break;
-	}
-	case B_SET_PROPERTY: {
-		switch (fCurrentProperty) {
-		case PROP_ACTIVELAYER: {
-			const char* namedspecifier;
-			int32 indexspecifier;
-			if (message->FindString("data", &namedspecifier) == B_OK) {
-				int32 index;
-				int32 numlayers = canvas->numLayers();
-				for (index = 0; index < numlayers; index++) {
-					Layer* l = canvas->getLayer(index);
-					if (!strcmp(namedspecifier, l->getName())) {
-						canvas->makeCurrentLayer(index);
-						setLayerMenu();
-						if (message->IsSourceWaiting()) {
-							BMessage error(B_REPLY);
-							error.AddInt32("error", B_NO_ERROR);
-							message->SendReply(&error);
-						}
-						break;
-					}
-				}
-				if (index == numlayers) {
-					char errstring[256];
-					sprintf(errstring, "Unknown Layer \"%s\"", namedspecifier);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errstring);
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errstring);
-				}
-			} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
-				if (indexspecifier >= 0 && indexspecifier < canvas->numLayers()) {
-					canvas->makeCurrentLayer(indexspecifier);
+					canvas->addLayer(title);
 					setLayerMenu();
 					if (message->IsSourceWaiting()) {
 						BMessage error(B_REPLY);
 						error.AddInt32("error", B_NO_ERROR);
 						message->SendReply(&error);
 					}
-				} else {
-					BString indexSpecifierData, numberOfLayersData, errorString;
-					fNumberFormat.Format(numberOfLayersData, canvas->numLayers() - 1);
-					fNumberFormat.Format(indexSpecifierData, indexspecifier);
-					errorString.SetToFormat(
-						"Layer index out of range [0..%s]: %s", numberOfLayersData.String(),
-						indexSpecifierData.String()
-					);
-					if (message->IsSourceWaiting()) {
-						BMessage error(B_ERROR);
-						error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-						error.AddString("message", errorString.String());
-						message->SendReply(&error);
-					} else
-						fprintf(stderr, "%s\n", errorString.String());
+					break;
 				}
-			} else {
-				char errstring[256];
-				sprintf(errstring, "Invalid Layer Type (either string or int32 please)");
-				if (message->IsSourceWaiting()) {
-					BMessage error(B_ERROR);
-					error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
-					error.AddString("message", errstring);
-					message->SendReply(&error);
-				} else
-					fprintf(stderr, "%s\n", errstring);
+				default:
+					inherited::MessageReceived(message);
+					break;
 			}
+			fCurrentProperty = 0;
 			break;
 		}
-		case PROP_GLOBALALPHA: {
-			printf("PROP_GLOBALALPHA\n");
-			break;
-		}
-		default:
-			break;
-		}
-		fCurrentProperty = 0;
-		inherited::MessageReceived(message);
-		break;
-	}
-	case 'aliv': {
-		int32 button;
-		message->FindInt32("which", &button);
-		if (button == 1)
-			canvas->invertAlpha();
-		break;
-	}
-	case BBP_REQUEST_BBITMAP:
-		// printf ("CanvasWindow got BBP_REQUEST_BBITMAP\n");
-		if (myTarget || message->HasString("hack")) // BeDC hack :-)
+		case B_DELETE_PROPERTY:
 		{
-			if (message->IsSourceWaiting()) // Sync
-			{
-				// printf ("Source is waiting\n");
-				message->SendReply(sendbitmapreply());
-			} else // Async
-			{
-				// printf ("Async\n");
-				myTarget->SendMessage(sendbitmapreply());
+			fCurrentProperty = 0;
+			inherited::MessageReceived(message);
+			break;
+		}
+		case B_GET_PROPERTY:
+		{
+			switch (fCurrentProperty) {
+				case PROP_NAME:
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddString("result", fCanvasName);
+						message->SendReply(&reply);
+					} else
+						fprintf(stderr, "Canvas Name: \"%s\"\n", fCanvasName);
+					break;
+				case PROP_ACTIVELAYER:
+					if (message->IsSourceWaiting()) {
+						BMessage reply(B_REPLY);
+						reply.AddInt32("error", B_NO_ERROR);
+						reply.AddSpecifier("Layer", canvas->currentLayer()->getName());
+						message->SendReply(&reply);
+					} else
+						fprintf(stderr, "Current Layer: %d: \"%s\"\n", canvas->currentLayerIndex(),
+							canvas->currentLayer()->getName());
+					break;
+				default:
+					break;
 			}
-		} else
-			beep();
-		break;
-	case BBP_REPLACE_BBITMAP: {
-		//			printf ("Got Replace message\n");
-		//			char title[MAXTITLE];
-		//			char *name;
-		//			if (message->FindString ("name", &name) == B_OK)
-		//				strcpy (title, name);
-		//			else
-		//				sprintf (title, "Untitled %i", newnum++);
-		BMessage archive;
-		if (message->FindMessage("BBitmap", &archive) == B_OK) {
-			BBitmap* map = new BBitmap(&archive);
-			if (map->IsValid()) {
-				BMessenger ie;
-				message->FindMessenger("target", &ie);
-				// float newWidth = map->Bounds().Width();
-				// float newHeight = map->Bounds().Height();
-				canvas->ReplaceCurrentLayer(map);
-				//					BRect canvasWindowFrame;
-				//					canvasWindowFrame.Set (128 + newnum*16, 128 + newnum*16,
-				//						128 + newnum*16 + newWidth - 1, 128 + newnum*16 + newHeight
-				//- 1); 					CanvasWindow *canvasWindow = new CanvasWindow
-				//(canvasWindowFrame, title, map, &ie); 					canvasWindow->Show();
-				BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
-				ok->AddMessenger("target", BMessenger(this, NULL));
-				if (message->IsSourceWaiting()) {
-					message->SendReply(ok);
-				} else {
-					ie.SendMessage(ok);
+			fCurrentProperty = 0;
+			inherited::MessageReceived(message);
+			break;
+		}
+		case B_SET_PROPERTY:
+		{
+			switch (fCurrentProperty) {
+				case PROP_ACTIVELAYER:
+				{
+					const char* namedspecifier;
+					int32 indexspecifier;
+					if (message->FindString("data", &namedspecifier) == B_OK) {
+						int32 index;
+						int32 numlayers = canvas->numLayers();
+						for (index = 0; index < numlayers; index++) {
+							Layer* l = canvas->getLayer(index);
+							if (!strcmp(namedspecifier, l->getName())) {
+								canvas->makeCurrentLayer(index);
+								setLayerMenu();
+								if (message->IsSourceWaiting()) {
+									BMessage error(B_REPLY);
+									error.AddInt32("error", B_NO_ERROR);
+									message->SendReply(&error);
+								}
+								break;
+							}
+						}
+						if (index == numlayers) {
+							char errstring[256];
+							sprintf(errstring, "Unknown Layer \"%s\"", namedspecifier);
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errstring);
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errstring);
+						}
+					} else if (message->FindInt32("data", &indexspecifier) == B_OK) {
+						if (indexspecifier >= 0 && indexspecifier < canvas->numLayers()) {
+							canvas->makeCurrentLayer(indexspecifier);
+							setLayerMenu();
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_REPLY);
+								error.AddInt32("error", B_NO_ERROR);
+								message->SendReply(&error);
+							}
+						} else {
+							BString indexSpecifierData, numberOfLayersData, errorString;
+							fNumberFormat.Format(numberOfLayersData, canvas->numLayers() - 1);
+							fNumberFormat.Format(indexSpecifierData, indexspecifier);
+							errorString.SetToFormat("Layer index out of range [0..%s]: %s",
+								numberOfLayersData.String(), indexSpecifierData.String());
+							if (message->IsSourceWaiting()) {
+								BMessage error(B_ERROR);
+								error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+								error.AddString("message", errorString.String());
+								message->SendReply(&error);
+							} else
+								fprintf(stderr, "%s\n", errorString.String());
+						}
+					} else {
+						char errstring[256];
+						sprintf(errstring, "Invalid Layer Type (either string or int32 please)");
+						if (message->IsSourceWaiting()) {
+							BMessage error(B_ERROR);
+							error.AddInt32("error", B_BAD_SCRIPT_SYNTAX);
+							error.AddString("message", errstring);
+							message->SendReply(&error);
+						} else
+							fprintf(stderr, "%s\n", errstring);
+					}
+					break;
 				}
-				delete ok;
-				float zoom;
-				if (message->FindFloat("zoom", &zoom) == B_OK) {
-					BMessage* m = new BMessage('Mnnn');
-					m->AddFloat("zoom", zoom);
-					PostMessage(m);
-					delete m;
+				case PROP_GLOBALALPHA:
+				{
+					printf("PROP_GLOBALALPHA\n");
+					break;
+				}
+				default:
+					break;
+			}
+			fCurrentProperty = 0;
+			inherited::MessageReceived(message);
+			break;
+		}
+		case 'aliv':
+		{
+			int32 button;
+			message->FindInt32("which", &button);
+			if (button == 1)
+				canvas->invertAlpha();
+			break;
+		}
+		case BBP_REQUEST_BBITMAP:
+			// printf ("CanvasWindow got BBP_REQUEST_BBITMAP\n");
+			if (myTarget || message->HasString("hack"))	 // BeDC hack :-)
+			{
+				if (message->IsSourceWaiting())	 // Sync
+				{
+					// printf ("Source is waiting\n");
+					message->SendReply(sendbitmapreply());
+				} else	// Async
+				{
+					// printf ("Async\n");
+					myTarget->SendMessage(sendbitmapreply());
+				}
+			} else
+				beep();
+			break;
+		case BBP_REPLACE_BBITMAP:
+		{
+			//			printf ("Got Replace message\n");
+			//			char title[MAXTITLE];
+			//			char *name;
+			//			if (message->FindString ("name", &name) == B_OK)
+			//				strcpy (title, name);
+			//			else
+			//				sprintf (title, "Untitled %i", newnum++);
+			BMessage archive;
+			if (message->FindMessage("BBitmap", &archive) == B_OK) {
+				BBitmap* map = new BBitmap(&archive);
+				if (map->IsValid()) {
+					BMessenger ie;
+					message->FindMessenger("target", &ie);
+					// float newWidth = map->Bounds().Width();
+					// float newHeight = map->Bounds().Height();
+					canvas->ReplaceCurrentLayer(map);
+					//					BRect canvasWindowFrame;
+					//					canvasWindowFrame.Set (128 + newnum*16, 128 + newnum*16,
+					//						128 + newnum*16 + newWidth - 1, 128 + newnum*16 +
+					//newHeight
+					//- 1); 					CanvasWindow *canvasWindow = new CanvasWindow
+					//(canvasWindowFrame, title, map, &ie); canvasWindow->Show();
+					BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
+					ok->AddMessenger("target", BMessenger(this, NULL));
+					if (message->IsSourceWaiting()) {
+						message->SendReply(ok);
+					} else {
+						ie.SendMessage(ok);
+					}
+					delete ok;
+					float zoom;
+					if (message->FindFloat("zoom", &zoom) == B_OK) {
+						BMessage* m = new BMessage('Mnnn');
+						m->AddFloat("zoom", zoom);
+						PostMessage(m);
+						delete m;
+					}
+				} else {
+					fprintf(stderr, "Invalid BBitmap\n");
+					// Error
 				}
 			} else {
-				fprintf(stderr, "Invalid BBitmap\n");
+				fprintf(stderr, "Message didn't contain a valid BBitmap\n");
 				// Error
 			}
-		} else {
-			fprintf(stderr, "Message didn't contain a valid BBitmap\n");
-			// Error
-		}
 
-		//			BMessage *copymsg = new BMessage (BBP_REPLACE_BBITMAP);
-		//			copymsg->AddMessage ("message", message);
-		//			copymsg->AddMessenger ("target", *myTarget);
-		//			myTarget = NULL;
-		//			canvas->changed = false;
-		//			be_app->PostMessage (copymsg);
-		//			printf ("Sent it to the main app.\n");
-		//			Close();
-		break;
-	}
-	case 'IErq': // BeDC hack to interact with ImageElements
-	{
-		printf("CanvasWindow received IErq message\n");
-		BMessage original;
-		message->FindMessage("original", &original);
-		//			original.FindMessenger ("target", ieTarget);
-		//			ieTarget->SendMessage (sendbitmapreply());
-		printf("Sending Reply...\n");
-		original.SendReply(sendbitmapreply());
-		printf("Got through\n");
-		break;
-	}
-	case 'save': {
-		int32 button = 1;
-		if (myTarget && !fromRef)
-			myTarget->SendMessage(sendbitmapreply());
-		else if (!strncmp(fName, lstring(149, "Untitled"), strlen(lstring(149, "Untitled"))))
-			savePanel->Show();
-		else {
-			if (myTarget && fromRef) {
-				canvas->Save(BEntry(&myRef));
-
-				BMessage* ie = new BMessage(BBP_SEND_BBITMAP);
-				BMessage ieb;
-				ie->AddMessenger("target", this);
-				ie->AddRef("ref", &myRef);
-				myTarget->SendMessage(ie);
-			} else {
-				BEntry entry(&myRef);
-
-				if (entry.Exists()) //// *** NOT TRANSLATED - COPIED FROM OS!!
-				{
-					char exists[2048];
-					BPath path(&entry);
-					sprintf(
-						exists,
-						"The file \"%s\" already exists in the specified folder. Do you want to "
-						"replace it?",
-						path.Leaf()
-					);
-					button = (new BAlert(
-								  "", exists, "Cancel", "Replace", NULL, B_WIDTH_AS_USUAL,
-								  B_WARNING_ALERT
-							  ))
-								 ->Go();
-				}
-
-				if (button)
-					canvas->Save(entry);
-			}
-		}
-		if (button)
+			//			BMessage *copymsg = new BMessage (BBP_REPLACE_BBITMAP);
+			//			copymsg->AddMessage ("message", message);
+			//			copymsg->AddMessenger ("target", *myTarget);
+			//			myTarget = NULL;
+			//			canvas->changed = false;
+			//			be_app->PostMessage (copymsg);
+			//			printf ("Sent it to the main app.\n");
+			//			Close();
 			break;
-		// else - fall through to "save as" below
-		// **************************************
-	}
-	case 'savs':
-		savePanel->Show();
-		break;
-	case 'ExpC': {
-		char name[1024];
-		sprintf(name, "%s.c", fName);
-		canvas->ExportCstruct(name);
-		break;
-	}
-	case 'Expt':
-		delete bitmapStream;
-		bitmapStream = new ProgressiveBitmapStream(canvas->canvas(true));
-		bitmapStream->SetDispose(true);
-		//			if (outputFormatWindow)
-		//			{
-		//				printf ("Er was al een OutputFormatWindow\n");
-		//				outputFormatWindow->Lock();
-		//				outputFormatWindow->Quit();
-		//			}
-		//			delete outputFormatWindow;
-		outputFormatWindow = new OutputFormatWindow(bitmapStream, of_selected);
-		break;
-	case 'oFsl': {
-		message->FindInt32("type", (int32*)&out_type);
-		message->FindInt32("translator", reinterpret_cast<int32*>(&out_translator));
-		extern translator_id def_out_translator;
-		def_out_translator = out_translator;
-		savePanel->Window()->Lock();
-		BView* background = savePanel->Window()->ChildAt(0);
-		BTextControl* tv = dynamic_cast<BTextControl*>(background->FindView("text view"));
-		if (tv) {
-			char suggestion[B_FILE_NAME_LENGTH];
-			strcpy(suggestion, fName);
-			if (out_type != 'SBec') // Becasso files don't need an extension.
-			// (however, we shouldn't be _exporting_ to Becasso via the TK at all...)
-			{
-				int il = strlen(suggestion);
-				while (il > 0 && suggestion[il] != '.'
-				) // Yes >0; .dotfiles shouldn't have their entire name cut off...
-					il--;
+		}
+		case 'IErq':  // BeDC hack to interact with ImageElements
+		{
+			printf("CanvasWindow received IErq message\n");
+			BMessage original;
+			message->FindMessage("original", &original);
+			//			original.FindMessenger ("target", ieTarget);
+			//			ieTarget->SendMessage (sendbitmapreply());
+			printf("Sending Reply...\n");
+			original.SendReply(sendbitmapreply());
+			printf("Got through\n");
+			break;
+		}
+		case 'save':
+		{
+			int32 button = 1;
+			if (myTarget && !fromRef)
+				myTarget->SendMessage(sendbitmapreply());
+			else if (!strncmp(fName, lstring(149, "Untitled"), strlen(lstring(149, "Untitled"))))
+				savePanel->Show();
+			else {
+				if (myTarget && fromRef) {
+					canvas->Save(BEntry(&myRef));
 
-				if (!il) {
-					il = strlen(suggestion);
-					suggestion[il] = '.';
+					BMessage* ie = new BMessage(BBP_SEND_BBITMAP);
+					BMessage ieb;
+					ie->AddMessenger("target", this);
+					ie->AddRef("ref", &myRef);
+					myTarget->SendMessage(ie);
+				} else {
+					BEntry entry(&myRef);
+
+					if (entry.Exists())	 //// *** NOT TRANSLATED - COPIED FROM OS!!
+					{
+						char exists[2048];
+						BPath path(&entry);
+						sprintf(exists,
+							"The file \"%s\" already exists in the specified folder. Do you want "
+							"to "
+							"replace it?",
+							path.Leaf());
+						button = (new BAlert("", exists, "Cancel", "Replace", NULL,
+									  B_WIDTH_AS_USUAL, B_WARNING_ALERT))
+									 ->Go();
+					}
+
+					if (button)
+						canvas->Save(entry);
 				}
-				suggestion[il + 1] = 0; // Cut off the existing extension
-				const translation_format* format_list = 0;
-				int32 format_count = 0;
+			}
+			if (button)
+				break;
+			// else - fall through to "save as" below
+			// **************************************
+		}
+		case 'savs':
+			savePanel->Show();
+			break;
+		case 'ExpC':
+		{
+			char name[1024];
+			sprintf(name, "%s.c", fName);
+			canvas->ExportCstruct(name);
+			break;
+		}
+		case 'Expt':
+			delete bitmapStream;
+			bitmapStream = new ProgressiveBitmapStream(canvas->canvas(true));
+			bitmapStream->SetDispose(true);
+			//			if (outputFormatWindow)
+			//			{
+			//				printf ("Er was al een OutputFormatWindow\n");
+			//				outputFormatWindow->Lock();
+			//				outputFormatWindow->Quit();
+			//			}
+			//			delete outputFormatWindow;
+			outputFormatWindow = new OutputFormatWindow(bitmapStream, of_selected);
+			break;
+		case 'oFsl':
+		{
+			message->FindInt32("type", (int32*)&out_type);
+			message->FindInt32("translator", reinterpret_cast<int32*>(&out_translator));
+			extern translator_id def_out_translator;
+			def_out_translator = out_translator;
+			savePanel->Window()->Lock();
+			BView* background = savePanel->Window()->ChildAt(0);
+			BTextControl* tv = dynamic_cast<BTextControl*>(background->FindView("text view"));
+			if (tv) {
+				char suggestion[B_FILE_NAME_LENGTH];
+				strcpy(suggestion, fName);
+				if (out_type != 'SBec')	 // Becasso files don't need an extension.
+				// (however, we shouldn't be _exporting_ to Becasso via the TK at all...)
+				{
+					int il = strlen(suggestion);
+					while (
+						il > 0 &&
+						suggestion[il] !=
+							'.')  // Yes >0; .dotfiles shouldn't have their entire name cut off...
+						il--;
 
-				if (BTranslatorRoster::Default()->GetOutputFormats(
-						out_translator, &format_list, &format_count
-					) == B_NO_ERROR) {
-					// printf ("%ld formats found\n", format_count);
-					for (int i = 0; i < format_count; ++i) {
-						// printf ("Trying format %d...\n", i);
-						if (format_list[i].type == out_type) {
-							// printf ("Match\n");
-							BMimeType mime(format_list[i].MIME);
-							BMessage extensions;
-							extern bool PatronizeMIME;
-							char* ext;
-							if (mime.GetFileExtensions(&extensions) == B_OK &&
-								extensions.FindString("extensions", 0, (const char**)&ext) == B_OK)
-							// Only look for the first one (if there are more)
-							{
-								// extensions.PrintToStream();
-								// strcat (suggestion, ext);
-							} else if (PatronizeMIME) {
-								// extensions.PrintToStream();
-								char alertstring[1024];
-								sprintf(
-									alertstring,
-									lstring(
-										150,
-										"Excuse me for interrupting.  I was trying to suggest an "
-										"appropriate extension for this file, "
-										"yet couldn't find any in your MIME database for '%s'.\n"
-										"You can add these extensions yourself with the FileTypes "
-										"preferences application, "
-										"or I would be happy to fill in my suggestions.  You can "
-										"also simply forget about the "
-										"outdated concept of extensions alltogether, although many "
-										"other operating systems "
-										"still rely on them for file identification."
-									),
-									format_list[i].MIME
-								);
-								BAlert* alert = new BAlert(
-									lstring(151, "File Type"), alertstring,
-									lstring(152, "Update MIME"), lstring(153, "Don't Patronize Me"),
-									NULL, B_WIDTH_FROM_WIDEST
-								);
-								uint32 button = alert->Go();
-								if (button == 1) {
-									PatronizeMIME = false;
-								} else // Update the MIME database
+					if (!il) {
+						il = strlen(suggestion);
+						suggestion[il] = '.';
+					}
+					suggestion[il + 1] = 0;	 // Cut off the existing extension
+					const translation_format* format_list = 0;
+					int32 format_count = 0;
+
+					if (BTranslatorRoster::Default()->GetOutputFormats(
+							out_translator, &format_list, &format_count) == B_NO_ERROR) {
+						// printf ("%ld formats found\n", format_count);
+						for (int i = 0; i < format_count; ++i) {
+							// printf ("Trying format %d...\n", i);
+							if (format_list[i].type == out_type) {
+								// printf ("Match\n");
+								BMimeType mime(format_list[i].MIME);
+								BMessage extensions;
+								extern bool PatronizeMIME;
+								char* ext;
+								if (mime.GetFileExtensions(&extensions) == B_OK &&
+									extensions.FindString("extensions", 0, (const char**)&ext) ==
+										B_OK)
+								// Only look for the first one (if there are more)
 								{
-									sprintf(
-										alertstring,
-										lstring(
-											154, "I have a list of common image file types and "
-												 "their extension but you might have "
-												 "some exotic types I don't know about.  In that "
-												 "case, I will try to make an educated "
-												 "guess, and if I can't think of anything, I'll "
-												 "simply skip that type.  I will also "
-												 "stay away from file types that do have any "
-												 "extensions set.\n"
-												 "You can always manually change my suggestions "
-												 "using the FileTypes preferences application."
-										)
-									);
-									alert = new BAlert(
-										lstring(152, "Update MIME"), alertstring,
-										lstring(131, "Cancel"), lstring(133, "Proceed")
-									);
-									button = alert->Go();
+									// extensions.PrintToStream();
+									// strcat (suggestion, ext);
+								} else if (PatronizeMIME) {
+									// extensions.PrintToStream();
+									char alertstring[1024];
+									sprintf(alertstring,
+										lstring(150,
+											"Excuse me for interrupting.  I was trying to suggest "
+											"an "
+											"appropriate extension for this file, "
+											"yet couldn't find any in your MIME database for "
+											"'%s'.\n"
+											"You can add these extensions yourself with the "
+											"FileTypes "
+											"preferences application, "
+											"or I would be happy to fill in my suggestions.  You "
+											"can "
+											"also simply forget about the "
+											"outdated concept of extensions alltogether, although "
+											"many "
+											"other operating systems "
+											"still rely on them for file identification."),
+										format_list[i].MIME);
+									BAlert* alert = new BAlert(lstring(151, "File Type"),
+										alertstring, lstring(152, "Update MIME"),
+										lstring(153, "Don't Patronize Me"), NULL,
+										B_WIDTH_FROM_WIDEST);
+									uint32 button = alert->Go();
 									if (button == 1) {
-										// Do it...
-										BMessage types;
-										BMessage pmtext;
-										char* type;
-										int32 t = 0;
+										PatronizeMIME = false;
+									} else	// Update the MIME database
+									{
+										sprintf(alertstring,
+											lstring(154,
+												"I have a list of common image file types and "
+												"their extension but you might have "
+												"some exotic types I don't know about.  In that "
+												"case, I will try to make an educated "
+												"guess, and if I can't think of anything, I'll "
+												"simply skip that type.  I will also "
+												"stay away from file types that do have any "
+												"extensions set.\n"
+												"You can always manually change my suggestions "
+												"using the FileTypes preferences application."));
+										alert = new BAlert(lstring(152, "Update MIME"), alertstring,
+											lstring(131, "Cancel"), lstring(133, "Proceed"));
+										button = alert->Go();
+										if (button == 1) {
+											// Do it...
+											BMessage types;
+											BMessage pmtext;
+											char* type;
+											int32 t = 0;
 
-										// First, look for application/postscript as a special case
-										BMimeType psmt("application/postscript");
-										if (psmt.GetFileExtensions(&pmtext) != B_OK ||
-											!pmtext.HasString("extensions")) {
-											pmtext.AddString("extensions", "eps");
-											pmtext.AddString("extensions", "ps");
-											psmt.SetFileExtensions(&pmtext);
-										}
+											// First, look for application/postscript as a special
+											// case
+											BMimeType psmt("application/postscript");
+											if (psmt.GetFileExtensions(&pmtext) != B_OK ||
+												!pmtext.HasString("extensions")) {
+												pmtext.AddString("extensions", "eps");
+												pmtext.AddString("extensions", "ps");
+												psmt.SetFileExtensions(&pmtext);
+											}
 
-										BMimeType::GetInstalledTypes("image", &types);
-										t = 0;
-										while (types.FindString(
-												   "types", t++, (const char**)&type
-											   ) == B_OK) {
-											// printf ("Working on %s\n", type);
-											BMessage mtext;
-											BMimeType mt(type);
-											if (mt.InitCheck() != B_OK)
-												printf("ALARM!\n");
-											bool foundsomething = false;
-											if (mt.GetFileExtensions(&mtext) != B_OK ||
-												!mtext.HasString("extensions")) {
-												char* ext = type + 6; // skip "image/"
-												if (strlen(ext) == 3) // Easy!
-												{
-													// printf ("Easy: %s\n", ext);
-													mtext.AddString("extensions", ext);
-													foundsomething = true;
-												} else if ((ext[0] == 'x') && (ext[1] == '-') && (strlen(ext + 2) == 3)) // x-foo?
-												{
-													// printf ("Easy: x-%s\n", ext + 2);
-													mtext.AddString("extensions", ext + 2);
-													foundsomething = true;
-												} else {
-													char sd[B_MIME_TYPE_LENGTH];
-													if (mt.GetShortDescription(sd) == B_OK) {
-														// Maybe we can find a hint in the short
-														// description (often something like "PPM
-														// Image")
-														int spacep;
-														for (spacep = 0; spacep < strlen(sd);
-															 spacep++) {
-															if (sd[spacep] == ' ')
-																break;
+											BMimeType::GetInstalledTypes("image", &types);
+											t = 0;
+											while (types.FindString(
+													   "types", t++, (const char**)&type) == B_OK) {
+												// printf ("Working on %s\n", type);
+												BMessage mtext;
+												BMimeType mt(type);
+												if (mt.InitCheck() != B_OK)
+													printf("ALARM!\n");
+												bool foundsomething = false;
+												if (mt.GetFileExtensions(&mtext) != B_OK ||
+													!mtext.HasString("extensions")) {
+													char* ext = type + 6;  // skip "image/"
+													if (strlen(ext) == 3)  // Easy!
+													{
+														// printf ("Easy: %s\n", ext);
+														mtext.AddString("extensions", ext);
+														foundsomething = true;
+													} else if ((ext[0] == 'x') && (ext[1] == '-') &&
+															   (strlen(ext + 2) == 3))	// x-foo?
+													{
+														// printf ("Easy: x-%s\n", ext + 2);
+														mtext.AddString("extensions", ext + 2);
+														foundsomething = true;
+													} else {
+														char sd[B_MIME_TYPE_LENGTH];
+														if (mt.GetShortDescription(sd) == B_OK) {
+															// Maybe we can find a hint in the short
+															// description (often something like
+															// "PPM Image")
+															int spacep;
+															for (spacep = 0; spacep < strlen(sd);
+																 spacep++) {
+																if (sd[spacep] == ' ')
+																	break;
+															}
+															if (spacep == 3)  // We're lucky!
+															{
+																sd[3] = 0;
+																for (spacep = 0; spacep < 3;
+																	 spacep++)
+																	sd[spacep] =
+																		tolower(sd[spacep]);
+																// printf ("From desc: %s\n", sd);
+																mtext.AddString("extensions", sd);
+																foundsomething = true;
+															}
 														}
-														if (spacep == 3) // We're lucky!
-														{
-															sd[3] = 0;
-															for (spacep = 0; spacep < 3; spacep++)
-																sd[spacep] = tolower(sd[spacep]);
-															// printf ("From desc: %s\n", sd);
-															mtext.AddString("extensions", sd);
+													}
+													if (!foundsomething)  // Well, the last resort.
+													{
+														if (!strcmp(ext, "jpeg")) {
+															mtext.AddString("extensions", "jpg");
+															mtext.AddString("extensions", "jpeg");
+															foundsomething = true;
+														} else if (!strcmp(ext, "targa") ||
+																   !strcmp(ext, "x-targa")) {
+															mtext.AddString("extensions", "tga");
+															foundsomething = true;
+														} else if (!strcmp(ext, "tiff")) {
+															mtext.AddString("extensions", "tif");
+															mtext.AddString("extensions", "tiff");
 															foundsomething = true;
 														}
+														// Add more File Types here when we learn
+														// about them...
 													}
-												}
-												if (!foundsomething) // Well, the last resort.
-												{
-													if (!strcmp(ext, "jpeg")) {
-														mtext.AddString("extensions", "jpg");
-														mtext.AddString("extensions", "jpeg");
-														foundsomething = true;
-													} else if (!strcmp(ext, "targa") || !strcmp(ext, "x-targa")) {
-														mtext.AddString("extensions", "tga");
-														foundsomething = true;
-													} else if (!strcmp(ext, "tiff")) {
-														mtext.AddString("extensions", "tif");
-														mtext.AddString("extensions", "tiff");
-														foundsomething = true;
+													if (foundsomething) {
+														// char desc[256];
+														// mt.GetShortDescription (desc);
+														// printf ("Setting extensions for %s to\n",
+														// desc); mtext.PrintToStream();
+														mt.SetFileExtensions(&mtext);
 													}
-													// Add more File Types here when we learn about
-													// them...
+												} else {
+													// else: There already are extensions set.
+													// printf ("Already set\n");
+													// mtext.PrintToStream();
 												}
-												if (foundsomething) {
-													// char desc[256];
-													// mt.GetShortDescription (desc);
-													// printf ("Setting extensions for %s to\n",
-													// desc); mtext.PrintToStream();
-													mt.SetFileExtensions(&mtext);
-												}
-											} else {
-												// else: There already are extensions set.
-												// printf ("Already set\n");
-												// mtext.PrintToStream();
 											}
 										}
 									}
 								}
-							}
-							PatronizeMIME = false;
-							// Try again now...
-							if (mime.GetFileExtensions(&extensions) == B_OK) {
-								// printf ("Second try...\n");
-								// extensions.PrintToStream();
-								char* ext;
-								if (extensions.FindString("extensions", 0, (const char**)&ext) ==
-									B_OK)
-								// Only look for the first one (if there are more)
-								{
-									// printf ("Adding extension %s\n", ext);
-									strcat(suggestion, ext);
-								}
-							} else
-								suggestion[il] = 0;
+								PatronizeMIME = false;
+								// Try again now...
+								if (mime.GetFileExtensions(&extensions) == B_OK) {
+									// printf ("Second try...\n");
+									// extensions.PrintToStream();
+									char* ext;
+									if (extensions.FindString(
+											"extensions", 0, (const char**)&ext) == B_OK)
+									// Only look for the first one (if there are more)
+									{
+										// printf ("Adding extension %s\n", ext);
+										strcat(suggestion, ext);
+									}
+								} else
+									suggestion[il] = 0;
 
-							break; // I.e. don't look for further out_types.
+								break;	// I.e. don't look for further out_types.
+							}
 						}
 					}
 				}
-			}
-			tv->SetText(suggestion);
-		} else
-			printf("Hmmm, no 'text view'\n");
-
-		savePanel->Window()->Unlock();
-		savePanel->Show();
-		// savePanel->Show();	// Don't ask.
-		outputFormatWindow = NULL;
-		break;
-	}
-	case 'expt': {
-		delete bitmapStream;
-		bitmapStream = new ProgressiveBitmapStream(canvas->canvas(true));
-		bitmapStream->SetDispose(true);
-		extern int32 def_out_type;
-		extern translator_id def_out_translator;
-		out_translator = def_out_translator;
-		out_type = def_out_type;
-		// message->PrintToStream();
-		if (message->HasString("filename"))
-		// Courtesy to the end user, the 'expt' message can contain a normal path string.
-		// We'll then split it up in a "directory" ref and a file name (leaf).
-		{
-			const char* pathname;
-			message->FindString("filename", &pathname);
-			BPath path;
-			path.SetTo(pathname);
-			if (pathname[0] == '/') // Filename is an absolute path
-			{
-				BPath dir;
-				path.GetParent(&dir);
-				entry_ref lref;
-				get_ref_for_path(dir.Path(), &lref);
-				message->AddRef("directory", &lref);
-				message->AddString("name", path.Leaf());
+				tv->SetText(suggestion);
 			} else
-				message->AddString("name", pathname);
+				printf("Hmmm, no 'text view'\n");
+
+			savePanel->Window()->Unlock();
+			savePanel->Show();
+			// savePanel->Show();	// Don't ask.
+			outputFormatWindow = NULL;
+			break;
 		}
-		if (!message->HasRef("directory"))
-		// We didn't get a directory; point it to $HOME.
+		case 'expt':
 		{
-			entry_ref lref;
-			BPath home;
-			find_directory(B_USER_DIRECTORY, &home);
-			get_ref_for_path(home.Path(), &lref);
-			message->AddRef("directory", &lref);
-			// printf ("Path set to %s\n", home.Path());
-		}
-		// If we didn't get a file name, no sweat.  The following case block will
-		// default it to the canvas name.
-
-		scripted = true;
-	} // Fall through to B_SAVE_REQUESTED
-	case B_SAVE_REQUESTED: {
-		// savePanel->Hide();
-
-		// synchronize all other save panels...
-		// Make this a preference!
-		extern entry_ref gSaveRef;
-		savePanel->GetPanelDirectory(&gSaveRef);
-
-		entry_ref lref;
-		message->FindRef("directory", &lref);
-		BEntry entry = BEntry(&lref);
-		BString fName;
-		BString percentData;
-		BString title;
-		BDirectory dir = BDirectory(&lref);
-		if (message->FindString("name")) { // The Save Panel sends the name separately
-			fName.SetTo(message->FindString("name"));
-			if (!out_type) {
-				fNumberFormat.FormatPercent(percentData, (double)fScale);
-				title.SetToFormat("%s (%s)", fName, percentData.String());
-				SetTitle(title.String());
-			}
-		}
-		entry.SetTo(&dir, fName, false);
-		if (out_type) // i.o.w. exporting
-		{
-			extern int SilentOperation;
-			if (SilentOperation < 3)
-				bitmapStream->DisplayProgressBar(BPoint(200, 200), lstring(155, "Writing Image…"));
-			BFile outStream;
-			if (outStream.SetTo(&entry, B_READ_WRITE | B_CREATE_FILE | B_ERASE_FILE))
-				printf("Error opening %s!\n", fName);
+			delete bitmapStream;
+			bitmapStream = new ProgressiveBitmapStream(canvas->canvas(true));
 			bitmapStream->SetDispose(true);
-#if defined(DATATYPES)
-			if (DATATranslate(*bitmapStream, &out_info, NULL, outStream, out_type)) {
-				char errstring[B_FILE_NAME_LENGTH + 64];
-				sprintf(errstring, "Datatype error:\nCouldn't translate `%s'", fName);
-				BAlert* alert =
-					new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
-				alert->Go();
+			extern int32 def_out_type;
+			extern translator_id def_out_translator;
+			out_translator = def_out_translator;
+			out_type = def_out_type;
+			// message->PrintToStream();
+			if (message->HasString("filename"))
+			// Courtesy to the end user, the 'expt' message can contain a normal path string.
+			// We'll then split it up in a "directory" ref and a file name (leaf).
+			{
+				const char* pathname;
+				message->FindString("filename", &pathname);
+				BPath path;
+				path.SetTo(pathname);
+				if (pathname[0] == '/')	 // Filename is an absolute path
+				{
+					BPath dir;
+					path.GetParent(&dir);
+					entry_ref lref;
+					get_ref_for_path(dir.Path(), &lref);
+					message->AddRef("directory", &lref);
+					message->AddString("name", path.Leaf());
+				} else
+					message->AddString("name", pathname);
 			}
-#else
-			BTranslatorRoster* roster = BTranslatorRoster::Default();
-			if (roster->Translate(bitmapStream, NULL, NULL, &outStream, out_type)) {
-				char errstring[B_FILE_NAME_LENGTH + 64];
-				sprintf(
-					errstring, lstring(134, "Translation Kit error:\nCouldn't translate `%s'"),
-					fName
-				);
-				BAlert* alert = new BAlert(
-					"", errstring, "Help", "OK", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT
-				);
-				uint32 button = alert->Go();
-				if (button == 0) {
-					alert = new BAlert(
-						"",
-						lstring(
-							156, "This is a rare error.  Something went wrong inside the "
-								 "Translator.\nIt could range from shared library conflicts to "
-								 "running out of hard disk space."
-						),
-						lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT
-					);
+			if (!message->HasRef("directory"))
+			// We didn't get a directory; point it to $HOME.
+			{
+				entry_ref lref;
+				BPath home;
+				find_directory(B_USER_DIRECTORY, &home);
+				get_ref_for_path(home.Path(), &lref);
+				message->AddRef("directory", &lref);
+				// printf ("Path set to %s\n", home.Path());
+			}
+			// If we didn't get a file name, no sweat.  The following case block will
+			// default it to the canvas name.
+
+			scripted = true;
+		}  // Fall through to B_SAVE_REQUESTED
+		case B_SAVE_REQUESTED:
+		{
+			// savePanel->Hide();
+
+			// synchronize all other save panels...
+			// Make this a preference!
+			extern entry_ref gSaveRef;
+			savePanel->GetPanelDirectory(&gSaveRef);
+
+			entry_ref lref;
+			message->FindRef("directory", &lref);
+			BEntry entry = BEntry(&lref);
+			BString fName;
+			BString percentData;
+			BString title;
+			BDirectory dir = BDirectory(&lref);
+			if (message->FindString("name")) {	// The Save Panel sends the name separately
+				fName.SetTo(message->FindString("name"));
+				if (!out_type) {
+					fNumberFormat.FormatPercent(percentData, (double)fScale);
+					title.SetToFormat("%s (%s)", fName, percentData.String());
+					SetTitle(title.String());
+				}
+			}
+			entry.SetTo(&dir, fName, false);
+			if (out_type)  // i.o.w. exporting
+			{
+				extern int SilentOperation;
+				if (SilentOperation < 3)
+					bitmapStream->DisplayProgressBar(
+						BPoint(200, 200), lstring(155, "Writing Image…"));
+				BFile outStream;
+				if (outStream.SetTo(&entry, B_READ_WRITE | B_CREATE_FILE | B_ERASE_FILE))
+					printf("Error opening %s!\n", fName);
+				bitmapStream->SetDispose(true);
+#if defined(DATATYPES)
+				if (DATATranslate(*bitmapStream, &out_info, NULL, outStream, out_type)) {
+					char errstring[B_FILE_NAME_LENGTH + 64];
+					sprintf(errstring, "Datatype error:\nCouldn't translate `%s'", fName);
+					BAlert* alert =
+						new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					alert->Go();
 				}
-			}
-#endif
-			BPath path;
-			entry.GetPath(&path);
-			const translation_format* format_list = 0;
-			int32 format_count = 0;
-			if (BTranslatorRoster::Default()->GetOutputFormats(
-					out_translator, &format_list, &format_count
-				) == B_NO_ERROR) {
-				for (int i = 0; i < format_count; ++i) {
-					if (format_list[i].type == out_type) {
-						outStream.RemoveAttr("BEOS:TYPE");
-						char mime[B_FILE_NAME_LENGTH];
-						strcpy(mime, format_list[i].MIME);
-						mime[strlen(mime)] = 0;
-						mime[strlen(mime) + 1] = 0;
-						outStream.WriteAttr(
-							"BEOS:TYPE", B_MIME_STRING_TYPE, 0L, mime, strlen(mime) + 1
-						);
-						break;
+#else
+				BTranslatorRoster* roster = BTranslatorRoster::Default();
+				if (roster->Translate(bitmapStream, NULL, NULL, &outStream, out_type)) {
+					char errstring[B_FILE_NAME_LENGTH + 64];
+					sprintf(errstring,
+						lstring(134, "Translation Kit error:\nCouldn't translate `%s'"), fName);
+					BAlert* alert = new BAlert(
+						"", errstring, "Help", "OK", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					uint32 button = alert->Go();
+					if (button == 0) {
+						alert = new BAlert("",
+							lstring(156,
+								"This is a rare error.  Something went wrong inside the "
+								"Translator.\nIt could range from shared library conflicts to "
+								"running out of hard disk space."),
+							lstring(136, "OK"), NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+						alert->Go();
 					}
 				}
-			}
-			extern int DebugLevel;
-			if (DebugLevel > 1)
-				printf("Wrote: %s\n", path.Path());
+#endif
+				BPath path;
+				entry.GetPath(&path);
+				const translation_format* format_list = 0;
+				int32 format_count = 0;
+				if (BTranslatorRoster::Default()->GetOutputFormats(
+						out_translator, &format_list, &format_count) == B_NO_ERROR) {
+					for (int i = 0; i < format_count; ++i) {
+						if (format_list[i].type == out_type) {
+							outStream.RemoveAttr("BEOS:TYPE");
+							char mime[B_FILE_NAME_LENGTH];
+							strcpy(mime, format_list[i].MIME);
+							mime[strlen(mime)] = 0;
+							mime[strlen(mime) + 1] = 0;
+							outStream.WriteAttr(
+								"BEOS:TYPE", B_MIME_STRING_TYPE, 0L, mime, strlen(mime) + 1);
+							break;
+						}
+					}
+				}
+				extern int DebugLevel;
+				if (DebugLevel > 1)
+					printf("Wrote: %s\n", path.Path());
 
-			delete bitmapStream;
-			bitmapStream = NULL;
-			outputFormatWindow = NULL;
-			out_type = 0;
-		} else {
-			canvas->Save(entry);
+				delete bitmapStream;
+				bitmapStream = NULL;
+				outputFormatWindow = NULL;
+				out_type = 0;
+			} else {
+				canvas->Save(entry);
+			}
+			canvas->changed = false;
+			if (scripted) {
+				if (message->IsSourceWaiting()) {
+					BMessage error(B_REPLY);
+					error.AddInt32("error", B_NO_ERROR);
+					message->SendReply(&error);
+				}
+			}
+			scripted = false;
+			entry_ref ref;
+			entry.GetRef(&ref);
+			add_to_recent(ref);
+			if (myTarget && fromRef) {
+				BMessage* ie = new BMessage(BBP_SEND_BBITMAP);
+				BMessage ieb;
+				ie->AddMessenger("target", this);
+				ie->AddRef("ref", &ref);
+				myTarget->SendMessage(ie);
+			}
+			break;
 		}
-		canvas->changed = false;
-		if (scripted) {
+		case 'tTed':
+			canvas->tTextD();
+			break;
+		case 'M_S':
+			float scale;
+			int32 index;
+			if (message->FindFloat("scale", &scale) == B_OK &&
+				message->FindInt32("index", &index) == B_OK) {
+				canvas->setScale(scale);
+			}
+			break;
+		case 'Mnnn':
+		{
+			float s;
+			if (message->FindFloat("zoom", &s))
+				canvas->setScale(s);
+			break;
+		}
+		case 'Min':
+			canvas->ZoomIn();
+			break;
+		case 'Mout':
+			canvas->ZoomOut();
+			break;
+		case 'mwin':
+		{
+			canvas->SetupUndo(M_DRAW);
+			if (!magWindow) {
+				BRect frame = Frame();
+				frame.OffsetBy(16, 16);
+				magWindow = new MagWindow(frame, FileName(), canvas);
+				magWindow->Show();
+			} else
+				magWindow->Activate();
+			break;
+		}
+		case 'magQ':
+			if (magWindow->Lock()) {
+				magWindow->Quit();
+				magWindow = NULL;
+			}
+			break;
+		case 'cmus':
+			canvas->CenterMouse();
+			break;
+		case 'clrX':  // color changed
+			canvas->InvalidateAddons();
+			break;
+		case 'xpal':
+		{
+			if (extractWindow) {
+				extractWindow->Activate();
+			} else {
+				extractWindow = new XpalWindow(BRect(100, 100, 300, 180),
+					lstring(157, "Extract Palette"), new BMessenger(this));
+				extractWindow->Show();
+				// extractWindow->Quit();
+				// extractWindow = NULL;
+			}
+			break;
+		}
+		case 'xclF':
+		{
+			int32 num = 256;
+			message->FindInt32("num_cols", &num);
+			bool clobber = false;
+			message->FindBool("clobber", &clobber);
+			extern ColorMenuButton* hicolor;
+			hicolor->extractPalette(canvas->currentLayer(), num, clobber);
+			if (extractWindow) {
+				extractWindow->Lock();
+				extractWindow->Quit();
+				extractWindow = NULL;
+			}
+			break;
+		}
+		case 'xclB':
+		{
+			int32 num = 256;
+			message->FindInt32("num_cols", &num);
+			bool clobber = false;
+			message->FindBool("clobber", &clobber);
+			extern ColorMenuButton* locolor;
+			locolor->extractPalette(canvas->currentLayer(), num, clobber);
+			if (extractWindow) {
+				extractWindow->Lock();
+				extractWindow->Quit();
+				extractWindow = NULL;
+			}
+			break;
+		}
+		case 'rstf':  // MYSTERY!!!
+		{
+			Lock();
+			BRect cf = canvas->Frame();
+			BRect mf = menubar->Frame();
+			//			printf ("MIN_WIDTH = %f, MAX_HEIGHT = %f\n", MIN_WIDTH, MIN_HEIGHT);
+			//			printf ("canvas->Frame().Width() = %f, Height() = %f\n", cf.Width(),
+			// cf.Height()); 			printf ("menubar->Frame().Height() = %f\n", mf.Height());
+			// printf ("w = %f, h = %f\n", max_c (MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH),
+			// max_c
+			//(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height()));
+			ResizeTo(max_c(MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH),
+				max_c(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height() + 1));
+			canvas->Invalidate();
+			Unlock();
+			break;
+		}
+		case 'rszT':  // Resize To
+		{
+			char title[1024];
+			sprintf(title, "%s %s", lstring(402, "Resize"), FileName());
+			ResizeWindow* rw = new ResizeWindow(
+				this, title, canvas->Frame().Height() + 1, canvas->Frame().Width() + 1);
+			rw->Show();
+			break;
+		}
+		case 'rszt':
+		{
+			int32 w = canvas->Frame().IntegerWidth() + 1;
+			int32 h = canvas->Frame().IntegerHeight() + 1;
+			message->FindInt32("width", &w);
+			message->FindInt32("height", &h);
+			canvas->resizeTo(w, h);
+			break;
+		}
+		case 'flpH':  // Flip Horizontal
+		{
+			int32 index = -1;
+			message->FindInt32("layer", &index);
+			canvas->flipLayer(0, index);
+			break;
+		}
+		case 'flpV':  // Flip Vertical
+		{
+			int32 index = -1;
+			message->FindInt32("layer", &index);
+			canvas->flipLayer(1, index);
+			break;
+		}
+		case 'layr':
+			if (layerOpen) {
+				//				layerWindow->Lock();
+				layerWindow->Activate();
+				//				windowMenu->FindItem('layr')->SetMarked (false);
+				//				layerOpen = false;
+			} else {
+				char title[B_FILE_NAME_LENGTH + 10];
+				sprintf(title, lstring(160, "Layers in %s"), fName);
+				BRect layerFrame = BRect(100, 100, 310, 294);
+				layerWindow = new LayerWindow(layerFrame, title, canvas);
+				layerWindow->Show();
+				windowMenu->FindItem('layr')->SetMarked(true);
+				layerOpen = true;
+			}
+			break;
+		case 'layQ':
+			windowMenu->FindItem('layr')->SetMarked(false);
+			layerOpen = false;
+			break;
+		case 'delL':
+			// printf ("CanvasWindow::MessageReceived ('delL');\n");
+			canvas->removeLayer(canvas->currentLayerIndex());
+			//			setLayerMenu();
+			break;
+		case 'newL':
+			if (LockWithTimeout(100000) == B_OK) {
+				canvas->addLayer(lstring(161, "Untitled Layer"));
+				Unlock();
+				//				setLayerMenu();
+			} else
+				printf("Hey, couldn't lock!!\n");
+			break;
+		case 'insL':
+			canvas->insertLayer(canvas->currentLayerIndex(), lstring(161, "Untitled Layer"));
+			//			setLayerMenu();
+			break;
+		case 'trsL':
+			canvas->translateLayer(canvas->currentLayerIndex());
+			break;
+		case 'rotL':
+			canvas->rotateLayer(canvas->currentLayerIndex());
+			break;
+		case 'mrgL':
+			canvas->mergeLayers(canvas->currentLayerIndex() - 1, canvas->currentLayerIndex());
+			//			setLayerMenu();
+			break;
+		case 'lNch':
+		{
+			int32 index;
+			message->FindInt32("index", &index);
+			BMessage* msg = new BMessage('lNch');
+			msg->AddInt32("index", index);
+			canvas->MessageReceived(msg);
+			delete msg;
+			setLayerMenu();
+			break;
+		}
+		case 'dupL':
+			//			canvas->WriteAsHex ("logo.dat");
+			canvas->duplicateLayer(canvas->currentLayerIndex());
+			//			setLayerMenu();
+			break;
+		case 'movL':
+		{
+			int32 a, b;
+			message->FindInt32("from", &a);
+			message->FindInt32("to", &b);
+			canvas->moveLayers(a, b);
+			//			setLayerMenu();
+			break;
+		}
+		case 'lChg':
+			if (isLayerOpen())
+				layerWindow->PostMessage(message);
+			canvas->changed = true;
+			setLayerMenu();
+			break;
+		case 'lSel':
+		{
+			int32 ind;
+			message->FindInt32("index", &ind);
+			canvas->makeCurrentLayer(ind);
+			//			setLayerMenu();
+			break;
+		}
+		case 'Loup':
+		{
+			int current = canvas->currentLayerIndex();
+			if (current < canvas->numLayers() - 1) {
+				canvas->makeCurrentLayer(current + 1);
+				//				setLayerMenu();
+			}
+			break;
+		}
+		case 'Lodn':
+		{
+			int current = canvas->currentLayerIndex();
+			if (current > 0) {
+				canvas->makeCurrentLayer(current - 1);
+				//				setLayerMenu();
+			}
+			break;
+		}
+		case 'DMch':
+		{
+			int32 index, newmode;
+			message->FindInt32("index", &index);
+			message->FindInt32("newmode", &newmode);
+			canvas->setChannelOperation(index, newmode);
+			break;
+		}
+		case 'Liga':
+		{
+			int32 index, ga;
+			message->FindInt32("index", &index);
+			message->FindInt32("alpha", &ga);
+			canvas->setGlobalAlpha(index, ga);
+			break;
+		}
+		case B_UNDO:
+			canvas->Undo(true, true);
+			break;
+		case 'redo':
+			canvas->Redo(true);
+			break;
+		case B_CUT:
+			canvas->Cut();
+			break;
+		case B_COPY:
+			canvas->Copy();
+			break;
+		case B_PASTE:
+			if (message->WasDropped()) {
+				rgb_color* dropped;
+				BPoint droppoint = message->DropPoint();
+				canvas->SetScale(canvas->getScale());  // ?
+				droppoint = canvas->ConvertFromScreen(droppoint);
+				canvas->SetScale(1);
+				long dummy;
+				if (message->FindData(
+						"RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) == B_OK)
+					canvas->Fill(M_DRAW, droppoint, dropped);
+			} else
+				canvas->Paste(false);
+			break;
+		case 'psNL':  // copy to new layer
+			canvas->CopyToNewLayer();
+			break;
+		case 'psNC':  // copy to new canvas
+		{
+			//			canvas->Copy();
+			BRect canvasWindowFrame;
+			extern BBitmap* clip;
+			if (clip) {
+				char title[256];
+				strcpy(title, fName);
+				strcat(title, lstring(405, " (detail)"));
+				canvasWindowFrame = clip->Bounds();
+				BBitmap* newClip = new BBitmap(clip);
+				canvasWindowFrame.OffsetTo(Frame().left + 16, Frame().top + 16);
+				CanvasWindow* canvasWindow =
+					new CanvasWindow(canvasWindowFrame, title, newClip, NULL, false);
+				canvasWindow->Show();  // will register itself with the app
+			}
+			break;
+		}
+		case B_SELECT_ALL:
+			canvas->SelectAll(true);
+			break;
+		case 'sund':
+			canvas->UndoSelection(true);
+			break;
+		case 'sinv':
+			canvas->InvertSelection(true);
+			break;
+		case 'ctsA':
+		case 'ctsR':
+		case 'ctsG':
+		case 'ctsB':
+		case 'ctsC':
+		case 'ctsM':
+		case 'ctsY':
+		case 'ctsK':
+		case 'ctsH':
+		case 'ctsS':
+		case 'ctsV':
+			canvas->ChannelToSelection(message->what, true);
+			break;
+		case 'stcA':
+		case 'stcR':
+		case 'stcG':
+		case 'stcB':
+		case 'stcC':
+		case 'stcM':
+		case 'stcY':
+		case 'stcK':
+		case 'stcH':
+		case 'stcS':
+		case 'stcV':
+			canvas->SelectionToChannel(message->what);
+			break;
+		case 'ktsA':
+		{
+			rgb_color c = canvas->GuessBackgroundColor();
+			if (c.alpha == 0) {
+				canvas->ChannelToSelection('ctsA', true);
+				canvas->InvertSelection(true);
+			} else
+				canvas->SelectByColor(c, true);
+			break;
+		}
+		case 'ktsF':
+		{
+			extern ColorMenuButton* hicolor;
+			canvas->SelectByColor(hicolor->color(), true);
+			break;
+		}
+		case 'ktsB':
+		{
+			extern ColorMenuButton* locolor;
+			canvas->SelectByColor(locolor->color(), true);
+			break;
+		}
+		case 'stkF':
+		{
+			extern ColorMenuButton* hicolor;
+			canvas->ColorizeSelection(hicolor->color());
+			break;
+		}
+		case 'stkB':
+		{
+			extern ColorMenuButton* locolor;
+			canvas->ColorizeSelection(locolor->color());
+			break;
+		}
+		case 'SPst':
+		{
+			bool v;
+			message->FindBool("status", &v);
+			editMenu->FindItem(B_PASTE)->SetEnabled(v);
+			editMenu->FindItem('psNL')->SetEnabled(v);
+			editMenu->FindItem('psNC')->SetEnabled(v);
+			break;
+		}
+		case 'cbHd':
+		{
+			int32 ind;
+			message->FindInt32("index", &ind);
+			Layer* il = canvas->getLayer(ind);
+			il->Hide(!(il->IsHidden()));
+			canvas->Invalidate();
+			UpdateIfNeeded();
+			break;
+		}
+		case 'Crsd':
+		{
+			float width, height, scale;
+			message->FindFloat("width", &width);
+			message->FindFloat("height", &height);
+			message->FindFloat("scale", &scale);
+			CanvasResized(width, height);
+			CanvasScaled(scale);
+			break;
+		}
+		case 'PrPP':
+			canvas->Print();
+			break;
+		case 'cwin':
+			canvas->CropToWindow();
+			break;
+		case 'Crop':
+		{
+			BRect cropRect;
+			// 			message->PrintToStream();
+			status_t err = B_NO_ERROR;
+			if (message->FindRect("data", &cropRect) == B_OK) {
+				err = canvas->Crop(cropRect);
+			} else
+				err = -4;
 			if (message->IsSourceWaiting()) {
 				BMessage error(B_REPLY);
-				error.AddInt32("error", B_NO_ERROR);
+				switch (err) {
+					case -1:
+						error.AddString("message", "Crop Rect == Canvas Rect");
+						err = 0;  // not really a problem
+						break;
+					case -2:
+						error.AddString("message", "Crop Rect > Canvas Rect");
+						break;
+					case -3:
+						error.AddString("message", "Crop Rect outside Canvas Rect");
+						break;
+					case -4:
+						error.AddString("message", "No Crop Rect found in message");
+						break;
+				}
+				error.AddInt32("error", err);
 				message->SendReply(&error);
 			}
+			break;
 		}
-		scripted = false;
-		entry_ref ref;
-		entry.GetRef(&ref);
-		add_to_recent(ref);
-		if (myTarget && fromRef) {
-			BMessage* ie = new BMessage(BBP_SEND_BBITMAP);
-			BMessage ieb;
-			ie->AddMessenger("target", this);
-			ie->AddRef("ref", &ref);
-			myTarget->SendMessage(ie);
+		case 'csel':
+			canvas->CropToSelection();
+			break;
+		case 'caut':
+			canvas->AutoCrop();
+			break;
+		case 'pwlt':
+		case 'pwrt':
+		case 'pwlb':
+		case 'pwrb':
+		case 'pwct':
+			canvas->Pad(message->what);
+			break;
+		case 'rwkr':
+		case 'rwar':
+			canvas->ResizeToWindow(message->what);
+			break;
+		case 'r90':
+		case 'r180':
+		case 'r270':
+			canvas->RotateCanvas(message->what);
+			break;
+		case 'adon':
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			//			printf ("%i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			canvas->OpenAddon(addon, fName);
+			break;
 		}
-		break;
-	}
-	case 'tTed':
-		canvas->tTextD();
-		break;
-	case 'M_S':
-		float scale;
-		int32 index;
-		if (message->FindFloat("scale", &scale) == B_OK &&
-			message->FindInt32("index", &index) == B_OK) {
-			canvas->setScale(scale);
-		}
-		break;
-	case 'Mnnn': {
-		float s;
-		if (message->FindFloat("zoom", &s))
-			canvas->setScale(s);
-		break;
-	}
-	case 'Min':
-		canvas->ZoomIn();
-		break;
-	case 'Mout':
-		canvas->ZoomOut();
-		break;
-	case 'mwin': {
-		canvas->SetupUndo(M_DRAW);
-		if (!magWindow) {
-			BRect frame = Frame();
-			frame.OffsetBy(16, 16);
-			magWindow = new MagWindow(frame, FileName(), canvas);
-			magWindow->Show();
-		} else
-			magWindow->Activate();
-		break;
-	}
-	case 'magQ':
-		if (magWindow->Lock()) {
-			magWindow->Quit();
-			magWindow = NULL;
-		}
-		break;
-	case 'cmus':
-		canvas->CenterMouse();
-		break;
-	case 'clrX': // color changed
-		canvas->InvalidateAddons();
-		break;
-	case 'xpal': {
-		if (extractWindow) {
-			extractWindow->Activate();
-		} else {
-			extractWindow = new XpalWindow(
-				BRect(100, 100, 300, 180), lstring(157, "Extract Palette"), new BMessenger(this)
-			);
-			extractWindow->Show();
-			// extractWindow->Quit();
-			// extractWindow = NULL;
-		}
-		break;
-	}
-	case 'xclF': {
-		int32 num = 256;
-		message->FindInt32("num_cols", &num);
-		bool clobber = false;
-		message->FindBool("clobber", &clobber);
-		extern ColorMenuButton* hicolor;
-		hicolor->extractPalette(canvas->currentLayer(), num, clobber);
-		if (extractWindow) {
-			extractWindow->Lock();
-			extractWindow->Quit();
-			extractWindow = NULL;
-		}
-		break;
-	}
-	case 'xclB': {
-		int32 num = 256;
-		message->FindInt32("num_cols", &num);
-		bool clobber = false;
-		message->FindBool("clobber", &clobber);
-		extern ColorMenuButton* locolor;
-		locolor->extractPalette(canvas->currentLayer(), num, clobber);
-		if (extractWindow) {
-			extractWindow->Lock();
-			extractWindow->Quit();
-			extractWindow = NULL;
-		}
-		break;
-	}
-	case 'rstf': // MYSTERY!!!
-	{
-		Lock();
-		BRect cf = canvas->Frame();
-		BRect mf = menubar->Frame();
-		//			printf ("MIN_WIDTH = %f, MAX_HEIGHT = %f\n", MIN_WIDTH, MIN_HEIGHT);
-		//			printf ("canvas->Frame().Width() = %f, Height() = %f\n", cf.Width(),
-		// cf.Height()); 			printf ("menubar->Frame().Height() = %f\n", mf.Height());
-		// printf ("w = %f, h = %f\n", max_c (MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH), max_c
-		//(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height()));
-		ResizeTo(
-			max_c(MIN_WIDTH, cf.Width() + B_V_SCROLL_BAR_WIDTH),
-			max_c(MIN_HEIGHT, cf.Height() + B_H_SCROLL_BAR_HEIGHT + mf.Height() + 1)
-		);
-		canvas->Invalidate();
-		Unlock();
-		break;
-	}
-	case 'rszT': // Resize To
-	{
-		char title[1024];
-		sprintf(title, "%s %s", lstring(402, "Resize"), FileName());
-		ResizeWindow* rw = new ResizeWindow(
-			this, title, canvas->Frame().Height() + 1, canvas->Frame().Width() + 1
-		);
-		rw->Show();
-		break;
-	}
-	case 'rszt': {
-		int32 w = canvas->Frame().IntegerWidth() + 1;
-		int32 h = canvas->Frame().IntegerHeight() + 1;
-		message->FindInt32("width", &w);
-		message->FindInt32("height", &h);
-		canvas->resizeTo(w, h);
-		break;
-	}
-	case 'flpH': // Flip Horizontal
-	{
-		int32 index = -1;
-		message->FindInt32("layer", &index);
-		canvas->flipLayer(0, index);
-		break;
-	}
-	case 'flpV': // Flip Vertical
-	{
-		int32 index = -1;
-		message->FindInt32("layer", &index);
-		canvas->flipLayer(1, index);
-		break;
-	}
-	case 'layr':
-		if (layerOpen) {
-			//				layerWindow->Lock();
-			layerWindow->Activate();
-			//				windowMenu->FindItem('layr')->SetMarked (false);
-			//				layerOpen = false;
-		} else {
-			char title[B_FILE_NAME_LENGTH + 10];
-			sprintf(title, lstring(160, "Layers in %s"), fName);
-			BRect layerFrame = BRect(100, 100, 310, 294);
-			layerWindow = new LayerWindow(layerFrame, title, canvas);
-			layerWindow->Show();
-			windowMenu->FindItem('layr')->SetMarked(true);
-			layerOpen = true;
-		}
-		break;
-	case 'layQ':
-		windowMenu->FindItem('layr')->SetMarked(false);
-		layerOpen = false;
-		break;
-	case 'delL':
-		// printf ("CanvasWindow::MessageReceived ('delL');\n");
-		canvas->removeLayer(canvas->currentLayerIndex());
-		//			setLayerMenu();
-		break;
-	case 'newL':
-		if (LockWithTimeout(100000) == B_OK) {
-			canvas->addLayer(lstring(161, "Untitled Layer"));
-			Unlock();
-			//				setLayerMenu();
-		} else
-			printf("Hey, couldn't lock!!\n");
-		break;
-	case 'insL':
-		canvas->insertLayer(canvas->currentLayerIndex(), lstring(161, "Untitled Layer"));
-		//			setLayerMenu();
-		break;
-	case 'trsL':
-		canvas->translateLayer(canvas->currentLayerIndex());
-		break;
-	case 'rotL':
-		canvas->rotateLayer(canvas->currentLayerIndex());
-		break;
-	case 'mrgL':
-		canvas->mergeLayers(canvas->currentLayerIndex() - 1, canvas->currentLayerIndex());
-		//			setLayerMenu();
-		break;
-	case 'lNch': {
-		int32 index;
-		message->FindInt32("index", &index);
-		BMessage* msg = new BMessage('lNch');
-		msg->AddInt32("index", index);
-		canvas->MessageReceived(msg);
-		delete msg;
-		setLayerMenu();
-		break;
-	}
-	case 'dupL':
-		//			canvas->WriteAsHex ("logo.dat");
-		canvas->duplicateLayer(canvas->currentLayerIndex());
-		//			setLayerMenu();
-		break;
-	case 'movL': {
-		int32 a, b;
-		message->FindInt32("from", &a);
-		message->FindInt32("to", &b);
-		canvas->moveLayers(a, b);
-		//			setLayerMenu();
-		break;
-	}
-	case 'lChg':
-		if (isLayerOpen())
-			layerWindow->PostMessage(message);
-		canvas->changed = true;
-		setLayerMenu();
-		break;
-	case 'lSel': {
-		int32 ind;
-		message->FindInt32("index", &ind);
-		canvas->makeCurrentLayer(ind);
-		//			setLayerMenu();
-		break;
-	}
-	case 'Loup': {
-		int current = canvas->currentLayerIndex();
-		if (current < canvas->numLayers() - 1) {
-			canvas->makeCurrentLayer(current + 1);
-			//				setLayerMenu();
-		}
-		break;
-	}
-	case 'Lodn': {
-		int current = canvas->currentLayerIndex();
-		if (current > 0) {
-			canvas->makeCurrentLayer(current - 1);
-			//				setLayerMenu();
-		}
-		break;
-	}
-	case 'DMch': {
-		int32 index, newmode;
-		message->FindInt32("index", &index);
-		message->FindInt32("newmode", &newmode);
-		canvas->setChannelOperation(index, newmode);
-		break;
-	}
-	case 'Liga': {
-		int32 index, ga;
-		message->FindInt32("index", &index);
-		message->FindInt32("alpha", &ga);
-		canvas->setGlobalAlpha(index, ga);
-		break;
-	}
-	case B_UNDO:
-		canvas->Undo(true, true);
-		break;
-	case 'redo':
-		canvas->Redo(true);
-		break;
-	case B_CUT:
-		canvas->Cut();
-		break;
-	case B_COPY:
-		canvas->Copy();
-		break;
-	case B_PASTE:
-		if (message->WasDropped()) {
-			rgb_color* dropped;
-			BPoint droppoint = message->DropPoint();
-			canvas->SetScale(canvas->getScale()); // ?
-			droppoint = canvas->ConvertFromScreen(droppoint);
-			canvas->SetScale(1);
-			long dummy;
-			if (message->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) ==
-				B_OK)
-				canvas->Fill(M_DRAW, droppoint, dropped);
-		} else
-			canvas->Paste(false);
-		break;
-	case 'psNL': // copy to new layer
-		canvas->CopyToNewLayer();
-		break;
-	case 'psNC': // copy to new canvas
-	{
-		//			canvas->Copy();
-		BRect canvasWindowFrame;
-		extern BBitmap* clip;
-		if (clip) {
-			char title[256];
-			strcpy(title, fName);
-			strcat(title, lstring(405, " (detail)"));
-			canvasWindowFrame = clip->Bounds();
-			BBitmap* newClip = new BBitmap(clip);
-			canvasWindowFrame.OffsetTo(Frame().left + 16, Frame().top + 16);
-			CanvasWindow* canvasWindow =
-				new CanvasWindow(canvasWindowFrame, title, newClip, NULL, false);
-			canvasWindow->Show(); // will register itself with the app
-		}
-		break;
-	}
-	case B_SELECT_ALL:
-		canvas->SelectAll(true);
-		break;
-	case 'sund':
-		canvas->UndoSelection(true);
-		break;
-	case 'sinv':
-		canvas->InvertSelection(true);
-		break;
-	case 'ctsA':
-	case 'ctsR':
-	case 'ctsG':
-	case 'ctsB':
-	case 'ctsC':
-	case 'ctsM':
-	case 'ctsY':
-	case 'ctsK':
-	case 'ctsH':
-	case 'ctsS':
-	case 'ctsV':
-		canvas->ChannelToSelection(message->what, true);
-		break;
-	case 'stcA':
-	case 'stcR':
-	case 'stcG':
-	case 'stcB':
-	case 'stcC':
-	case 'stcM':
-	case 'stcY':
-	case 'stcK':
-	case 'stcH':
-	case 'stcS':
-	case 'stcV':
-		canvas->SelectionToChannel(message->what);
-		break;
-	case 'ktsA': {
-		rgb_color c = canvas->GuessBackgroundColor();
-		if (c.alpha == 0) {
-			canvas->ChannelToSelection('ctsA', true);
-			canvas->InvertSelection(true);
-		} else
-			canvas->SelectByColor(c, true);
-		break;
-	}
-	case 'ktsF': {
-		extern ColorMenuButton* hicolor;
-		canvas->SelectByColor(hicolor->color(), true);
-		break;
-	}
-	case 'ktsB': {
-		extern ColorMenuButton* locolor;
-		canvas->SelectByColor(locolor->color(), true);
-		break;
-	}
-	case 'stkF': {
-		extern ColorMenuButton* hicolor;
-		canvas->ColorizeSelection(hicolor->color());
-		break;
-	}
-	case 'stkB': {
-		extern ColorMenuButton* locolor;
-		canvas->ColorizeSelection(locolor->color());
-		break;
-	}
-	case 'SPst': {
-		bool v;
-		message->FindBool("status", &v);
-		editMenu->FindItem(B_PASTE)->SetEnabled(v);
-		editMenu->FindItem('psNL')->SetEnabled(v);
-		editMenu->FindItem('psNC')->SetEnabled(v);
-		break;
-	}
-	case 'cbHd': {
-		int32 ind;
-		message->FindInt32("index", &ind);
-		Layer* il = canvas->getLayer(ind);
-		il->Hide(!(il->IsHidden()));
-		canvas->Invalidate();
-		UpdateIfNeeded();
-		break;
-	}
-	case 'Crsd': {
-		float width, height, scale;
-		message->FindFloat("width", &width);
-		message->FindFloat("height", &height);
-		message->FindFloat("scale", &scale);
-		CanvasResized(width, height);
-		CanvasScaled(scale);
-		break;
-	}
-	case 'PrPP':
-		canvas->Print();
-		break;
-	case 'cwin':
-		canvas->CropToWindow();
-		break;
-	case 'Crop': {
-		BRect cropRect;
-		// 			message->PrintToStream();
-		status_t err = B_NO_ERROR;
-		if (message->FindRect("data", &cropRect) == B_OK) {
-			err = canvas->Crop(cropRect);
-		} else
-			err = -4;
-		if (message->IsSourceWaiting()) {
-			BMessage error(B_REPLY);
-			switch (err) {
-			case -1:
-				error.AddString("message", "Crop Rect == Canvas Rect");
-				err = 0; // not really a problem
-				break;
-			case -2:
-				error.AddString("message", "Crop Rect > Canvas Rect");
-				break;
-			case -3:
-				error.AddString("message", "Crop Rect outside Canvas Rect");
-				break;
-			case -4:
-				error.AddString("message", "No Crop Rect found in message");
-				break;
+		case 'adcl':
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			//			printf ("Saying goodbye to AddOn %i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			canvas->CloseAddon(addon);
+			if (message->IsSourceWaiting()) {
+				//				printf ("Sending Reply...\n");
+				message->SendReply(new BMessage('cack'));
 			}
-			error.AddInt32("error", err);
-			message->SendReply(&error);
+			break;
 		}
-		break;
-	}
-	case 'csel':
-		canvas->CropToSelection();
-		break;
-	case 'caut':
-		canvas->AutoCrop();
-		break;
-	case 'pwlt':
-	case 'pwrt':
-	case 'pwlb':
-	case 'pwrb':
-	case 'pwct':
-		canvas->Pad(message->what);
-		break;
-	case 'rwkr':
-	case 'rwar':
-		canvas->ResizeToWindow(message->what);
-		break;
-	case 'r90':
-	case 'r180':
-	case 'r270':
-		canvas->RotateCanvas(message->what);
-		break;
-	case 'adon': {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		//			printf ("%i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		canvas->OpenAddon(addon, fName);
-		break;
-	}
-	case 'adcl': {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		//			printf ("Saying goodbye to AddOn %i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		canvas->CloseAddon(addon);
-		if (message->IsSourceWaiting()) {
-			//				printf ("Sending Reply...\n");
-			message->SendReply(new BMessage('cack'));
+		case 'capt':
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			addon->Open(NULL, NULL);
+			break;
 		}
-		break;
-	}
-	case 'capt': {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		addon->Open(NULL, NULL);
-		break;
-	}
-	case ADDON_PREVIEW: {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index, type;
-		message->FindInt32("index", &index);
-		message->FindInt32("type", &type);
-		//			printf ("%i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		switch (type) {
-		case BECASSO_FILTER:
-			canvas->Filter(addon, true);
+		case ADDON_PREVIEW:
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index, type;
+			message->FindInt32("index", &index);
+			message->FindInt32("type", &type);
+			//			printf ("%i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			switch (type) {
+				case BECASSO_FILTER:
+					canvas->Filter(addon, true);
+					break;
+				case BECASSO_TRANSFORMER:
+					canvas->Transform(addon, true);
+					break;
+				case BECASSO_GENERATOR:
+					canvas->Generate(addon, true);
+					break;
+				default:
+					fprintf(
+						stderr, "Unknown addon requested preview: %li, type: %li\n", index, type);
+			}
 			break;
-		case BECASSO_TRANSFORMER:
-			canvas->Transform(addon, true);
+		}
+		case ADDON_FILTER:
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			//			printf ("%i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			canvas->Filter(addon);
 			break;
-		case BECASSO_GENERATOR:
-			canvas->Generate(addon, true);
+		}
+		case ADDON_TRANSFORMER:
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			//			printf ("%i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			canvas->Transform(addon);
 			break;
+		}
+		case ADDON_GENERATOR:
+		{
+			extern BList* AddOns;
+			AddOn* addon;
+			int32 index;
+			message->FindInt32("index", &index);
+			//			printf ("%i\n", index);
+			addon = (AddOn*)AddOns->ItemAt(index);
+			canvas->Generate(addon);
+			break;
+		}
 		default:
-			fprintf(stderr, "Unknown addon requested preview: %li, type: %li\n", index, type);
-		}
-		break;
-	}
-	case ADDON_FILTER: {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		//			printf ("%i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		canvas->Filter(addon);
-		break;
-	}
-	case ADDON_TRANSFORMER: {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		//			printf ("%i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		canvas->Transform(addon);
-		break;
-	}
-	case ADDON_GENERATOR: {
-		extern BList* AddOns;
-		AddOn* addon;
-		int32 index;
-		message->FindInt32("index", &index);
-		//			printf ("%i\n", index);
-		addon = (AddOn*)AddOns->ItemAt(index);
-		canvas->Generate(addon);
-		break;
-	}
-	default:
-		// printf ("CanvasWindow::MessageReceived:\n");
-		// message->PrintToStream();
-		inherited::MessageReceived(message);
-		break;
+			// printf ("CanvasWindow::MessageReceived:\n");
+			// message->PrintToStream();
+			inherited::MessageReceived(message);
+			break;
 	}
 }
 

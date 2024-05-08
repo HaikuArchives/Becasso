@@ -1,7 +1,7 @@
 #include "PatternMenuView.h"
-#include "PatternMenuButton.h"
-#include "PatternMenu.h"
 #include "ColorMenuButton.h"
+#include "PatternMenu.h"
+#include "PatternMenuButton.h"
 
 // #include "PatternWindow.h"
 

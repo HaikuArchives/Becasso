@@ -1,28 +1,28 @@
 #ifndef CANVASVIEW_H
 #define CANVASVIEW_H
 
-#include <View.h>
-#include <Rect.h>
-#include <ScrollBar.h>
 #include <Bitmap.h>
 #include <Message.h>
+#include <Rect.h>
+#include <ScrollBar.h>
+#include <View.h>
 #if defined(DATATYPES)
 #include <Datatypes.h>
 #endif
+#include <Message.h>
+#include <NumberFormat.h>
 #include <Point.h>
 #include <Polygon.h>
 #include <TextControl.h>
-#include <Message.h>
 #include <stdio.h>
-#include "AttribDraw.h"
-#include "PointStack.h"
-#include "SView.h"
 #include "AddOn.h"
-#include "undo_entry.h"
-#include "Position.h"
-#include "Settings.h"
+#include "AttribDraw.h"
 #include "Colors.h"
-#include <NumberFormat.h>
+#include "PointStack.h"
+#include "Position.h"
+#include "SView.h"
+#include "Settings.h"
+#include "undo_entry.h"
 
 #define STRETCH_TO_FIT 0
 
@@ -31,8 +31,7 @@ class Layer;
 class Selection;
 class BGView;
 
-typedef struct
-{
+typedef struct {
 	float cx, cy;
 	float Spacing;
 	int pstrength;
@@ -41,8 +40,7 @@ typedef struct
 	BPoint pos;
 } brush_cache;
 
-typedef struct
-{
+typedef struct {
 	float cx, cy;
 	float Spacing;
 	int pstrength;
@@ -52,8 +50,7 @@ typedef struct
 	BPoint prevctr;
 } clone_cache;
 
-typedef struct
-{
+typedef struct {
 	const color_map* cmap;
 	rgb_color hi, lo, hit, lot;
 	bool lighten;
@@ -65,9 +62,8 @@ typedef struct
 	Position position;
 } spraycan_cache;
 
-class CanvasView : public SView
-{
-  public:
+class CanvasView : public SView {
+public:
 	CanvasView(const BRect frame, const char* name, BBitmap* map = NULL, rgb_color color = White);
 	CanvasView(const BRect frame, const char* name, FILE* fp);
 	void RestOfCtor();
@@ -86,8 +82,7 @@ class CanvasView : public SView
 	virtual void AttachedToWindow();
 	virtual void ScreenChanged(BRect rect, color_space mode);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual void MessageReceived(BMessage* msg);
 	void SetupUndo(int32 mode);
 	void Undo(bool advance = true, bool menu = false);
@@ -123,11 +118,11 @@ class CanvasView : public SView
 
 	Selection* getSelection() { return selection; };
 
-	void
-	ConstructCanvas(BBitmap* cvCanvas, BRect rect, bool doselect = true, bool do_export = false);
+	void ConstructCanvas(
+		BBitmap* cvCanvas, BRect rect, bool doselect = true, bool do_export = false);
 	void Print();
-	void
-	Merge(BBitmap* a, Layer* b, BRect update, bool doselect = false, bool preserve_alpha = true);
+	void Merge(
+		BBitmap* a, Layer* b, BRect update, bool doselect = false, bool preserve_alpha = true);
 
 	Layer* currentLayer() { return layer[fCurrentLayer]; };
 
@@ -200,7 +195,7 @@ class CanvasView : public SView
 	void ExportCstruct(const char* fname);
 
 	////////
-  private:
+private:
 	typedef SView inherited;
 	void FastAddWithAlpha(long x, long y, int strength = 255);
 	void FastBlendWithAlpha(long x, long y, int strength = 255);
@@ -311,7 +306,7 @@ class CanvasView : public SView
 	BPoint fPoint;
 	float fScale;
 	bool leftfirst;
-	bool windowLock; // I don't believe this either!
+	bool windowLock;  // I don't believe this either!
 	bool newWin;
 	BRect fPreviewRect;
 	BRect fPrevpreviewRect;

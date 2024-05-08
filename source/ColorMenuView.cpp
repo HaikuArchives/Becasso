@@ -1,6 +1,6 @@
 #include "ColorMenuView.h"
-#include "ColorMenuButton.h"
 #include "ColorMenu.h"
+#include "ColorMenuButton.h"
 #include "ColorWindow.h"
 
 ColorMenuView::ColorMenuView(BRect frame, const char* name, ColorMenuButton* cmb)

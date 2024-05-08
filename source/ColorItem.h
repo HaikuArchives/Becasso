@@ -3,9 +3,8 @@
 
 #include <MenuItem.h>
 
-class ColorItem : public BMenuItem
-{
-  public:
+class ColorItem : public BMenuItem {
+public:
 	ColorItem(const rgb_color _color);
 	virtual ~ColorItem();
 	rgb_color getColor();
@@ -13,10 +12,10 @@ class ColorItem : public BMenuItem
 
 	virtual void Draw();
 
-  protected:
+protected:
 	virtual void GetContentSize(float* width, float* height);
 
-  private:
+private:
 	typedef BMenuItem inherited;
 	rgb_color color;
 };

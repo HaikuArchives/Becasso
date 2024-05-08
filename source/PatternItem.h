@@ -3,9 +3,8 @@
 
 #include <MenuItem.h>
 
-class PatternItem : public BMenuItem
-{
-  public:
+class PatternItem : public BMenuItem {
+public:
 	PatternItem(const pattern _p);
 	virtual ~PatternItem();
 	pattern getPattern();
@@ -13,10 +12,10 @@ class PatternItem : public BMenuItem
 
 	virtual void Draw();
 
-  protected:
+protected:
 	virtual void GetContentSize(float* width, float* height);
 
-  private:
+private:
 	typedef BMenuItem inherited;
 	pattern pat;
 };

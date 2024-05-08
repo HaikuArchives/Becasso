@@ -1,9 +1,9 @@
 #ifndef RESIZEWINDOW_H
 #define RESIZEWINDOW_H
 
-#include <Window.h>
-#include <TextControl.h>
 #include <NumberFormat.h>
+#include <TextControl.h>
+#include <Window.h>
 #include <stdlib.h>
 #include "CanvasWindow.h"
 
@@ -11,9 +11,8 @@
 #define UNIT_INCH 1
 #define UNIT_CM 2
 
-class ResizeWindow : public BWindow
-{
-  public:
+class ResizeWindow : public BWindow {
+public:
 	ResizeWindow(CanvasWindow* target, const char* title, int32 h, int32 w);
 	virtual ~ResizeWindow();
 
@@ -23,7 +22,7 @@ class ResizeWindow : public BWindow
 
 	int32 h() { return fV; };
 
-  private:
+private:
 	void recalc();
 	void readvalues();
 

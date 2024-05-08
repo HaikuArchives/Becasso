@@ -1,24 +1,23 @@
 #ifndef PICMENU_H
 #define PICMENU_H
 
-#include <Rect.h>
-#include <Picture.h>
 #include <Menu.h>
+#include <Picture.h>
 #include <Point.h>
+#include <Rect.h>
+#include "DragWindow.h"
 #include "PicItem.h"
 #include "sfx.h"
-#include "DragWindow.h"
 
 #define MAX_ITEMS 64
 #define MENU_WIN_TITLE "     "
 
 class PicMenuButton;
 
-class PicMenu : public BMenu
-{
+class PicMenu : public BMenu {
 	friend class PicMenuButton;
 
-  public:
+public:
 	PicMenu(const char* name, BView* _view, int h, int v, float s);
 	virtual ~PicMenu();
 	// virtual void	 AddItem (PicItem *item);
@@ -38,10 +37,10 @@ class PicMenu : public BMenu
 	void TearDone(BRect place, bool newwin);
 	void InvalidateWindow();
 
-  protected:
+protected:
 	virtual BPoint ScreenLocation();
 
-  private:
+private:
 	typedef BMenu inherited;
 	DragWindow* fWindow;
 	PicItem* items[MAX_ITEMS];

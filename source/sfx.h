@@ -1,15 +1,13 @@
 #ifndef _SFX_H
 #define _SFX_H
 
-#include <SoundPlayer.h>
 #include <Sound.h>
+#include <SoundPlayer.h>
 
-void
-BufferProc(void* theCookie, void* buffer, size_t size, const media_raw_audio_format& format);
+void BufferProc(void* theCookie, void* buffer, size_t size, const media_raw_audio_format& format);
 
-class SoundEffect8_11
-{
-  public:
+class SoundEffect8_11 {
+public:
 	SoundEffect8_11(void* data, size_t size);
 	~SoundEffect8_11();
 
@@ -19,7 +17,7 @@ class SoundEffect8_11
 
 	int size() { return fSize; };
 
-  private:
+private:
 	BSound* mySound;
 	float* myData;
 	int fSize;
@@ -27,24 +25,22 @@ class SoundEffect8_11
 
 class EffectsPlayer;
 
-typedef struct cookie_record
-{
+typedef struct cookie_record {
 	int32 pos;
 	int32 size;
 	float* buf;
 	EffectsPlayer* parent;
 } cookie_record;
 
-class EffectsPlayer
-{
-  public:
+class EffectsPlayer {
+public:
 	EffectsPlayer(SoundEffect8_11* effect);
 	virtual ~EffectsPlayer();
 	void StartEffect();
 
 	BSoundPlayer* player() { return myPlayer; };
 
-  private:
+private:
 	BSoundPlayer* myPlayer;
 	BSound* myEffect;
 	cookie_record* cookie;

@@ -1,16 +1,15 @@
 #ifndef PICMENUBUTTON_H
 #define PICMENUBUTTON_H
 
-#include <Rect.h>
 #include <Picture.h>
 #include <PictureButton.h>
+#include <Rect.h>
+#include "HelpView.h"
 #include "PicItem.h"
 #include "PicMenu.h"
-#include "HelpView.h"
 
-class PicMenuButton : public BPictureButton
-{
-  public:
+class PicMenuButton : public BPictureButton {
+public:
 	PicMenuButton(BRect frame, const char* name, BPicture* p);
 	virtual ~PicMenuButton();
 	virtual void AddItem(PicMenu* _menu);
@@ -26,7 +25,7 @@ class PicMenuButton : public BPictureButton
 	BLocker* lock;
 	bool MenuWinOnScreen;
 
-  private:
+private:
 	typedef BPictureButton inherited;
 	PicMenu* menu;
 	int32 index;

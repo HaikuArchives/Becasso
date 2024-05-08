@@ -5,14 +5,13 @@
 
 #include <Bitmap.h>
 #include <Rect.h>
-#include "Build.h"
 #include "AddOnSupport.h"
+#include "Build.h"
 
 #define MAXLAYERNAME 128
 
-class IMPEXP Layer : public BBitmap
-{
-  public:
+class IMPEXP Layer : public BBitmap {
+public:
 	Layer(BRect bounds, const char* name);
 	Layer(const Layer& layer);
 	virtual ~Layer();
@@ -41,7 +40,7 @@ class IMPEXP Layer : public BBitmap
 
 	void ClearTo(bgra_pixel p);
 
-  private:
+private:
 	typedef BBitmap inherited;
 	BBitmap* fAlphaMap;
 	uchar fGlobalAlpha;

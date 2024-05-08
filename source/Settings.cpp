@@ -1,14 +1,14 @@
 #include "Settings.h"
-#include <Path.h>
+#include <Application.h>
 #include <Directory.h>
-#include <SymLink.h>
 #include <FindDirectory.h>
-#include <RecentItems.h>
 #include <MenuItem.h>
 #include <Message.h>
-#include <stdio.h>
+#include <Path.h>
+#include <RecentItems.h>
+#include <SymLink.h>
 #include <ctype.h>
-#include <Application.h>
+#include <stdio.h>
 
 BLocker g_settings_lock("Becasso Settings Lock");
 becasso_settings g_settings;
@@ -33,8 +33,7 @@ set_window_origin(uint32 index, BPoint origin)
 	g_settings_lock.Unlock();
 }
 
-typedef struct
-{
+typedef struct {
 	entry_ref ref;
 	time_t mtime;
 } refandtime;
@@ -48,12 +47,9 @@ make_recent_menu()
 	int32 max_entries = g_settings.recents;
 	g_settings_lock.Unlock();
 	const char* typelist[2] = {"image", "application/postscript"};
-	BMenuItem* recent = new BMenuItem(
-		BRecentFilesList::NewFileListMenu(
-			lstring(12, "Open…"), NULL, NULL, be_app, max_entries, false, typelist, 2, NULL
-		),
-		new BMessage('open')
-	);
+	BMenuItem* recent = new BMenuItem(BRecentFilesList::NewFileListMenu(lstring(12, "Open…"), NULL,
+										  NULL, be_app, max_entries, false, typelist, 2, NULL),
+		new BMessage('open'));
 	recent->SetShortcut('O', B_COMMAND_KEY);
 	return recent;
 }
@@ -83,13 +79,13 @@ make_recent_menu(BMenu* menu)
 
 			BNode node(&entry);
 			time_t mtime;
-			node.GetModificationTime(&mtime); // modification time _of the link_
+			node.GetModificationTime(&mtime);  // modification time _of the link_
 			entryList[num_entries++].mtime = mtime;
 		}
 
 		if (!num_entries) {
 			menu->AddItem(new BMenuItem("<no entries>", NULL));
-		} else // we have a list of entry_refs now.
+		} else	// we have a list of entry_refs now.
 		{
 			// printf ("%ld entries found\n", num_entries);
 			// Since the #items in the list will be small, do a stupid sort
@@ -203,7 +199,7 @@ PrefsLoader::PrefsLoader()
 				ptr = line;
 				while (isspace(*ptr))
 					ptr++;
-				if (*ptr == '#' || !*ptr) // Comment line
+				if (*ptr == '#' || !*ptr)  // Comment line
 					continue;
 				if (sscanf(ptr, "%31[a-zA-Z_0-9] =", name) != 1) {
 					fprintf(stderr, "Strange Becasso settings line: %s\n", name);
@@ -217,13 +213,10 @@ PrefsLoader::PrefsLoader()
 							while (*ptr != ':')
 								ptr++;
 							ptr++;
-							if (sscanf(
-									ptr, "%f,%f", &g_settings.origin[index].x,
-									&g_settings.origin[index].y
-								) != 2)
+							if (sscanf(ptr, "%f,%f", &g_settings.origin[index].x,
+									&g_settings.origin[index].y) != 2)
 								fprintf(
-									stderr, "Illegal window origin in Becasso settings: %s\n", ptr
-								);
+									stderr, "Illegal window origin in Becasso settings: %s\n", ptr);
 						} else
 							fprintf(stderr, "Illegal window index in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "language")) {
@@ -240,8 +233,7 @@ PrefsLoader::PrefsLoader()
 						ptr++;
 						if (sscanf(ptr, "%ld", &g_settings.recents) != 1)
 							fprintf(
-								stderr, "Illegal # of Recent items in Becasso settings: %s\n", ptr
-							);
+								stderr, "Illegal # of Recent items in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "max_undo")) {
 						while (*ptr != '=')
 							ptr++;
@@ -266,8 +258,7 @@ PrefsLoader::PrefsLoader()
 						ptr++;
 						if (sscanf(ptr, "%ld", &g_settings.selection_type) != 1)
 							fprintf(
-								stderr, "Illegal selection_render in Becasso settings: %s\n", ptr
-							);
+								stderr, "Illegal selection_render in Becasso settings: %s\n", ptr);
 					} else {
 						fprintf(stderr, "Unknown Becasso setting: %s\n", name);
 					}
@@ -289,7 +280,7 @@ PrefsLoader::~PrefsLoader()
 		// Make sure ~/config/settings/Becasso exists
 		if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) == B_OK) {
 			BDirectory dir(path.Path());
-			dir.CreateDirectory("Becasso", &dir); // this won't clobber anyway
+			dir.CreateDirectory("Becasso", &dir);  // this won't clobber anyway
 		}
 		Save();
 	}
@@ -342,7 +333,7 @@ init_strings(const char* file)
 		int32 i = 0;
 		char c = fgetc(fp);
 		if (c == '#') {
-			fgets(buffer, 4095, fp); // comment line
+			fgets(buffer, 4095, fp);  // comment line
 			// printf ("%s", buffer);
 			continue;
 		} else
@@ -356,13 +347,13 @@ init_strings(const char* file)
 				else if (c == '\\') {
 					c = fgetc(fp);
 					switch (c) {
-					case 'n':
-						c = '\n';
-						break;
-					case '\\':
-						break;
-					default:
-						fprintf(stderr, "\\%c unknown in strings\n", c);
+						case 'n':
+							c = '\n';
+							break;
+						case '\\':
+							break;
+						default:
+							fprintf(stderr, "\\%c unknown in strings\n", c);
 					}
 				}
 				buffer[i++] = c;

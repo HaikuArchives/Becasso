@@ -1,9 +1,9 @@
 #include "MagWindow.h"
-#include "MagView.h"
-#include "Settings.h"
 #include <MenuItem.h>
 #include <Message.h>
 #include <PopUpMenu.h>
+#include "MagView.h"
+#include "Settings.h"
 
 MagWindow::MagWindow(BRect frame, const char* name, CanvasView* _myView)
 	: BWindow(frame, name, B_DOCUMENT_WINDOW, 0, 0)
@@ -32,20 +32,14 @@ MagWindow::MagWindow(BRect frame, const char* name, CanvasView* _myView)
 	menubar->ResizeToPreferred();
 	menubarFrame = menubar->Frame();
 	menubarheight = menubarFrame.Height();
-	viewFrame.Set(
-		0, menubarheight + 1, frame.Width() - B_V_SCROLL_BAR_WIDTH,
-		frame.Height() - B_H_SCROLL_BAR_HEIGHT
-	);
+	viewFrame.Set(0, menubarheight + 1, frame.Width() - B_V_SCROLL_BAR_WIDTH,
+		frame.Height() - B_H_SCROLL_BAR_HEIGHT);
 	magView = new MagView(viewFrame, "Magnify View", _myView);
-	hFrame.Set(
-		0, frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1, frame.Width() - B_V_SCROLL_BAR_WIDTH + 1,
-		frame.Height() + 1
-	);
+	hFrame.Set(0, frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1,
+		frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, frame.Height() + 1);
 	h = new BScrollBar(hFrame, NULL, magView, 0, 0, B_HORIZONTAL);
-	vFrame.Set(
-		frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, menubarFrame.Height(), frame.Width() + 1,
-		frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1
-	);
+	vFrame.Set(frame.Width() - B_V_SCROLL_BAR_WIDTH + 1, menubarFrame.Height(), frame.Width() + 1,
+		frame.Height() - B_H_SCROLL_BAR_HEIGHT + 1);
 	v = new BScrollBar(vFrame, NULL, magView, 0, 0, B_VERTICAL);
 	AddChild(h);
 	AddChild(v);
@@ -80,42 +74,42 @@ void
 MagWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case 'zm2':
-		magView->setzoom(2);
-		break;
-	case 'zm4':
-		magView->setzoom(4);
-		break;
-	case 'zm8':
-		magView->setzoom(8);
-		break;
-	case 'zm16':
-		magView->setzoom(16);
-		break;
-	case 'grd0':
-		magView->setgrid(0);
-		break;
-	case 'grdB':
-		magView->setgrid(1);
-		break;
-	case 'grdW':
-		magView->setgrid(2);
-		break;
-	case 'draw':
-		magView->Invalidate();
-		break;
-	case 'magO':
-		Show();
-		break;
-	case B_UNDO:
-		magView->Undo();
-		break;
-	case 'redo':
-		magView->Redo();
-		break;
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		case 'zm2':
+			magView->setzoom(2);
+			break;
+		case 'zm4':
+			magView->setzoom(4);
+			break;
+		case 'zm8':
+			magView->setzoom(8);
+			break;
+		case 'zm16':
+			magView->setzoom(16);
+			break;
+		case 'grd0':
+			magView->setgrid(0);
+			break;
+		case 'grdB':
+			magView->setgrid(1);
+			break;
+		case 'grdW':
+			magView->setgrid(2);
+			break;
+		case 'draw':
+			magView->Invalidate();
+			break;
+		case 'magO':
+			Show();
+			break;
+		case B_UNDO:
+			magView->Undo();
+			break;
+		case 'redo':
+			magView->Redo();
+			break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }
 

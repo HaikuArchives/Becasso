@@ -7,19 +7,17 @@
 
 #include "dsc.h"
 
+#include <device/SerialPort.h>
 #include <termios.h>
 #include <unistd.h>
-#include <device/SerialPort.h>
 
-class BeDSC
-{
-
-  private:
+class BeDSC {
+private:
 	dsc_t* dsc;
 	dsc_error open_error;
 
 
-  public:
+public:
 	BeDSC()
 	{
 		dsc = 0;
@@ -31,26 +29,26 @@ class BeDSC
 		speed_t termios_speed;
 
 		switch (speed) {
-		case B_9600_BPS:
-			termios_speed = B9600;
-			break;
+			case B_9600_BPS:
+				termios_speed = B9600;
+				break;
 
-		case B_19200_BPS:
-			termios_speed = B19200;
-			break;
+			case B_19200_BPS:
+				termios_speed = B19200;
+				break;
 
-		case B_38400_BPS:
-			termios_speed = B38400;
-			break;
+			case B_38400_BPS:
+				termios_speed = B38400;
+				break;
 
-		case B_57600_BPS:
-			termios_speed = B57600;
-			break;
+			case B_57600_BPS:
+				termios_speed = B57600;
+				break;
 
-		default:
-			open_error.lerror = EDSCBPSRNG;
-			/* bps out of range */
-			return B_ERROR;
+			default:
+				open_error.lerror = EDSCBPSRNG;
+				/* bps out of range */
+				return B_ERROR;
 		}
 
 		dsc = dsc_open(pathname, termios_speed, &open_error);

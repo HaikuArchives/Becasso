@@ -1,44 +1,44 @@
+#include <Clipboard.h>
 #include <Screen.h>
 #include <TextControl.h>
-#include <Clipboard.h>
-#include "CanvasView.h"
-#include "CanvasWindow.h"
-#include "Becasso.h"
-#include "PicMenuButton.h"
-#include "ColorMenuButton.h"
-#include "PatternMenuButton.h"
-#include "AttribDraw.h"
-#include "AttribSelect.h"
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include "AttribBrush.h"
+#include "AttribCircle.h"
 #include "AttribClone.h"
+#include "AttribDraw.h"
+#include "AttribEllipse.h"
 #include "AttribEraser.h"
 #include "AttribFill.h"
-#include "AttribText.h"
-#include "AttribSpraycan.h"
 #include "AttribFreehand.h"
 #include "AttribLines.h"
 #include "AttribPolyblob.h"
 #include "AttribPolygon.h"
 #include "AttribRect.h"
 #include "AttribRoundRect.h"
-#include "AttribCircle.h"
-#include "AttribEllipse.h"
+#include "AttribSelect.h"
+#include "AttribSpraycan.h"
+#include "AttribText.h"
+#include "Becasso.h"
+#include "BecassoAddOn.h"
+#include "BitmapStuff.h"
+#include "Brush.h"
+#include "CanvasView.h"
+#include "CanvasWindow.h"
+#include "ColorMenuButton.h"
 #include "Modes.h"
+#include "PatternMenuButton.h"
+#include "PicMenuButton.h"
+#include "PosView.h"
+#include "Position.h"
+#include "Tablet.h"
 #include "Tools.h"
 #include "hsv.h"
-#include "Brush.h"
-#include "BitmapStuff.h"
-#include "Tablet.h"
-#include "Position.h"
-#include "BecassoAddOn.h"
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
-#include "PosView.h"
 
 // #define USE_THREAD_FOR_POSITION
 #define FIX_STROKELINE_BUG
-#define USE_MOUSEMOVED // instead of polling - works since 4.5
+#define USE_MOUSEMOVED	// instead of polling - works since 4.5
 
 void
 CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
@@ -98,10 +98,8 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 	SetHighColor(Black);
 	if (abs(strength) > fTreshold) {
 		if (mode == M_SELECT) {
-			AddToSelection(
-				b, selection, int(point.x - cx), int(point.y - cy),
-				buttons & B_SECONDARY_MOUSE_BUTTON ? -strength : strength
-			);
+			AddToSelection(b, selection, int(point.x - cx), int(point.y - cy),
+				buttons & B_SECONDARY_MOUSE_BUTTON ? -strength : strength);
 		} else if (dm == B_OP_COPY || dm == B_OP_OVER) {
 			FastAddWithAlpha(point.x - cx, point.y - cy, strength);
 		} else {
@@ -134,15 +132,12 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 			for (float i = 1; i < num; i++) {
 				nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 				if (mode == M_SELECT) {
-					AddToSelection(
-						b, selection, int(nextPos.x - cx), int(nextPos.y - cy),
-						int(pstrength + i * facs)
-					);
-				} else // if (dm == B_OP_COPY || dm == B_OP_OVER)
+					AddToSelection(b, selection, int(nextPos.x - cx), int(nextPos.y - cy),
+						int(pstrength + i * facs));
+				} else	// if (dm == B_OP_COPY || dm == B_OP_OVER)
 				{
 					FastAddWithAlpha(
-						int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
-					);
+						int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs));
 				}
 				//				else
 				//				{
@@ -213,16 +208,13 @@ CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 		for (float i = 1; i < num; i++) {
 			nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 			if (mode == M_SELECT) {
-				AddToSelection(
-					b, selection, int(nextPos.x - cx), int(nextPos.y - cy),
+				AddToSelection(b, selection, int(nextPos.x - cx), int(nextPos.y - cy),
 					buttons & B_SECONDARY_MOUSE_BUTTON ? -int(pstrength + i * facs)
-													   : int(pstrength + i * facs)
-				);
-			} else // if (dm == B_OP_COPY || dm == B_OP_OVER)
+													   : int(pstrength + i * facs));
+			} else	// if (dm == B_OP_COPY || dm == B_OP_OVER)
 			{
 				FastAddWithAlpha(
-					int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
-				);
+					int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs));
 			}
 			//			else
 			//			{
@@ -304,7 +296,7 @@ CanvasView::tClone(int32 mode, BPoint point, uint32 buttons)
 		fCC.pstrength = strength;
 
 		if (abs(strength) > fTreshold) {
-			int32 h = b->Height(); // note: brush width/height is num pixels!
+			int32 h = b->Height();	// note: brush width/height is num pixels!
 			int32 w = b->Width();
 			uint8* bd = b->Data();
 			int32 ch = currentLayer()->Bounds().IntegerHeight();
@@ -329,7 +321,7 @@ CanvasView::tClone(int32 mode, BPoint point, uint32 buttons)
 						cbits[y * cbprl + x] =
 							(y + off_y <= ch && x + off_x <= cw && y + off_y >= 0 && x + off_x >= 0)
 								? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK) |
-								   bd[y * w + x] << ALPHA_BPOS)
+									  bd[y * w + x] << ALPHA_BPOS)
 								: 0;
 						//								(0xFF00FF00 & COLOR_MASK | bd[y*w + x] <<
 						// ALPHA_BPOS) : 0;
@@ -401,7 +393,7 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 		if (distance > Spacing) {
 			clock_t start, end;
 			start = clock();
-			int32 h = b->Height(); // note: brush width/height is num pixels!
+			int32 h = b->Height();	// note: brush width/height is num pixels!
 			int32 w = b->Width();
 			uint8* bd = b->Data();
 			int32 ch = currentLayer()->Bounds().IntegerHeight();
@@ -430,9 +422,9 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 						for (int x = 0; x < w; x++) {
 							cbits[y * cbprl + x] =
 								(y + off_y <= ch && x + off_x <= cw && y + off_y >= 0 &&
-								 x + off_x >= 0)
+									x + off_x >= 0)
 									? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK) |
-									   bd[y * w + x] << ALPHA_BPOS)
+										  bd[y * w + x] << ALPHA_BPOS)
 									: 0;
 							//								(0xFF00FF00 & COLOR_MASK | bd[y*w + x]
 							//<< ALPHA_BPOS) : 0;
@@ -441,8 +433,7 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 
 					// next, add the copy back to the cursor position
 					FastAddWithAlpha(
-						nextPos.x - w / 2, nextPos.y - h / 2, int(pstrength + i * facs)
-					);
+						nextPos.x - w / 2, nextPos.y - h / 2, int(pstrength + i * facs));
 				}
 			}
 			pos = nextPos;
@@ -455,8 +446,7 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 			SetLowColor(White);
 			SetHighColor(Black);
 			Invalidate(
-				BRect(fCC.prevctr.x - 3, fCC.prevctr.y - 3, fCC.prevctr.x + 3, fCC.prevctr.y + 3)
-			);
+				BRect(fCC.prevctr.x - 3, fCC.prevctr.y - 3, fCC.prevctr.x + 3, fCC.prevctr.y + 3));
 			StrokeLine(BPoint(ctr.x - 1, ctr.y - 3), BPoint(ctr.x - 1, ctr.y + 3), B_SOLID_LOW);
 			StrokeLine(BPoint(ctr.x + 1, ctr.y - 3), BPoint(ctr.x + 1, ctr.y + 3), B_SOLID_LOW);
 			StrokeLine(BPoint(ctr.x - 3, ctr.y - 1), BPoint(ctr.x + 3, ctr.y - 1), B_SOLID_LOW);
@@ -523,14 +513,14 @@ CanvasView::tTablet(int32 mode)
 	int strength = position.fPressure;
 	MovePenTo(point);
 	mainapp->HideCursor();
-	if (buttons & B_PRIMARY_MOUSE_BUTTON) // Drawing
+	if (buttons & B_PRIMARY_MOUSE_BUTTON)  // Drawing
 	{
 		drawView->SetHighColor(hicolor->color());
 		drawView->SetLowColor(locolor->color());
 		SetHighColor(hicolor->color());
 		SetLowColor(locolor->color());
 	}
-	if (buttons & B_SECONDARY_MOUSE_BUTTON) // Erasing
+	if (buttons & B_SECONDARY_MOUSE_BUTTON)	 // Erasing
 	{
 		drawView->SetHighColor(locolor->color());
 		drawView->SetLowColor(hicolor->color());
@@ -594,12 +584,10 @@ CanvasView::tTablet(int32 mode)
 				if (abs(str) > 255 * wacom->Threshold()) {
 					if (mode == M_SELECT) {
 						AddToSelection(
-							b, selection, int(nextPos.x - cx), int(nextPos.y - cy), int(strength)
-						);
+							b, selection, int(nextPos.x - cx), int(nextPos.y - cy), int(strength));
 					} else if (dm == B_OP_COPY || dm == B_OP_OVER) {
 						FastAddWithAlpha(
-							int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs)
-						);
+							int(nextPos.x - cx), int(nextPos.y - cy), int(pstrength + i * facs));
 					} else {
 						DrawBitmapAsync(brushbm, BPoint(nextPos.x - cx, nextPos.y - cy));
 						drawView->DrawBitmap(brushbm, BPoint(nextPos.x - cx, nextPos.y - cy));
@@ -678,24 +666,24 @@ CanvasView::tEraser(int32 mode, BPoint point, uint32 buttons)
 		//		start = clock();
 		eraser.OffsetTo(point.x - w / 2, point.y - h / 2);
 		switch (type) {
-		case ERASER_RECT:
-			if (mode == M_DRAW) {
-				drawView->FillRect(eraser, B_SOLID_LOW);
-				//				FillRect (eraser, B_SOLID_LOW);
-			} else
-				selectionView->FillRect(eraser, B_SOLID_LOW);
-			/*S*/ StrokeRect(eraser);
-			break;
-		case ERASER_ELLIPSE:
-			if (mode == M_DRAW) {
-				drawView->FillEllipse(eraser, B_SOLID_LOW);
-				//				FillEllipse (eraser, B_SOLID_LOW);
-			} else
-				selectionView->FillEllipse(eraser, B_SOLID_LOW);
-			/*S*/ StrokeEllipse(eraser);
-			break;
-		default:
-			fprintf(stderr, "Unknown Eraser type...\n");
+			case ERASER_RECT:
+				if (mode == M_DRAW) {
+					drawView->FillRect(eraser, B_SOLID_LOW);
+					//				FillRect (eraser, B_SOLID_LOW);
+				} else
+					selectionView->FillRect(eraser, B_SOLID_LOW);
+				/*S*/ StrokeRect(eraser);
+				break;
+			case ERASER_ELLIPSE:
+				if (mode == M_DRAW) {
+					drawView->FillEllipse(eraser, B_SOLID_LOW);
+					//				FillEllipse (eraser, B_SOLID_LOW);
+				} else
+					selectionView->FillEllipse(eraser, B_SOLID_LOW);
+				/*S*/ StrokeEllipse(eraser);
+				break;
+			default:
+				fprintf(stderr, "Unknown Eraser type...\n");
 		}
 		drawView->Sync();
 		selectionView->Sync();
@@ -734,14 +722,14 @@ CanvasView::tEraserM(int32 /* mode */, BPoint point)
 	prev_eraser = eraser;
 	Window()->UpdateIfNeeded();
 	switch (type) {
-	case ERASER_RECT:
-		/*S*/ StrokeRect(eraser);
-		break;
-	case ERASER_ELLIPSE:
-		/*S*/ StrokeEllipse(eraser); // THIS DOESN'T DO ANYTHING?!
-		break;
-	default:
-		fprintf(stderr, "Unknown Eraser type...\n");
+		case ERASER_RECT:
+			/*S*/ StrokeRect(eraser);
+			break;
+		case ERASER_ELLIPSE:
+			/*S*/ StrokeEllipse(eraser);  // THIS DOESN'T DO ANYTHING?!
+			break;
+		default:
+			fprintf(stderr, "Unknown Eraser type...\n");
 	}
 }
 
@@ -750,11 +738,10 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 {
 #if defined(USE_OLD_TEXT_TOOL)
 	if (text)
-		return; // The old BTextControl is still there...
+		return;	 // The old BTextControl is still there...
 	text = new BTextControl(
 		BRect(point.x * fScale, point.y * fScale, point.x * fScale, point.y * fScale),
-		"tTextControl", NULL, NULL, new BMessage('tTed')
-	);
+		"tTextControl", NULL, NULL, new BMessage('tTed'));
 	extern AttribText* tAttribText;
 	extern ColorMenuButton *locolor, *hicolor;
 	SetupUndo(mode);
@@ -815,7 +802,7 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 	float fy = height * cos(rot);
 
 	int len = strlen(text);
-	char* stext = strdup(text); // we poke zeroes in this string
+	char* stext = strdup(text);	 // we poke zeroes in this string
 	int i = 0, j = 0;
 	BPoint nextpoint = point;
 
@@ -927,7 +914,7 @@ CanvasView::tTextM(int32 mode, BPoint point)
 	float fy = height * cos(rot);
 
 	int len = strlen(text);
-	char* stext = strdup(text); // we poke zeroes in this string
+	char* stext = strdup(text);	 // we poke zeroes in this string
 	int i = 0, j = 0;
 	BPoint nextpoint = point;
 	Invalidate();
@@ -977,8 +964,7 @@ CanvasView::tTextD()
 		}
 	}
 	BPoint place = ConvertFromScreen(
-		text->TextView()->ConvertToScreen((text->TextView()->TextRect().LeftBottom()))
-	);
+		text->TextView()->ConvertToScreen((text->TextView()->TextRect().LeftBottom())));
 	place.x = (place.x + 7) / fScale;
 	place.y = (place.y - 7) / fScale;
 	// Oh, the joy of not having access to the anti-aliasing alpha data...
@@ -1085,7 +1071,7 @@ CanvasView::tSpraycan(int32 mode, BPoint point, uint32 buttons)
 	MovePenTo(point);
 	drawView->MovePenTo(point);
 	if (mode == M_DRAW)
-		StrokeLine(point); // This fixes a _very_ strange bug...  After drawing with another
+		StrokeLine(point);	// This fixes a _very_ strange bug...  After drawing with another
 	//	tool in a large pen size, it seemed no drawing took place to the canvas BView... (R3)
 
 	rgb_color hi, lo, hit = Black, lot = Black;
@@ -1185,8 +1171,7 @@ CanvasView::tSpraycan(int32 mode, BPoint point, uint32 buttons)
 		drawView->Sync();
 		selectionView->Sync();
 		Invalidate(BRect(
-			point.x - 2 * sigma, point.y - 2 * sigma, point.x + 2 * sigma, point.y + 2 * sigma
-		));
+			point.x - 2 * sigma, point.y - 2 * sigma, point.x + 2 * sigma, point.y + 2 * sigma));
 		Window()->UpdateIfNeeded();
 		myWindow->Lock();
 		myWindow->posview->Pulse();
@@ -1218,7 +1203,7 @@ CanvasView::tSpraycanM(int32 mode, BPoint point, uint32 buttons, int pressure, B
 	lo = fSC.lo;
 	hit = fSC.hit;
 	lot = fSC.lot;
-	int strength = pressure; // fSC.strength;
+	int strength = pressure;  // fSC.strength;
 	Position position;
 
 	// make preference!!
@@ -1275,8 +1260,7 @@ CanvasView::tSpraycanM(int32 mode, BPoint point, uint32 buttons, int pressure, B
 	drawView->Sync();
 	selectionView->Sync();
 	Invalidate(
-		BRect(point.x - 2 * sigma, point.y - 2 * sigma, point.x + 2 * sigma, point.y + 2 * sigma)
-	);
+		BRect(point.x - 2 * sigma, point.y - 2 * sigma, point.x + 2 * sigma, point.y + 2 * sigma));
 	Window()->UpdateIfNeeded();
 	myWindow->Lock();
 	myWindow->posview->Pulse();
@@ -1474,10 +1458,8 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 			entry++;
 		} else {
 			if (mode == M_DRAW) {
-				memcpy(
-					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
-					currentLayer()->BitsLength()
-				);
+				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+					currentLayer()->BitsLength());
 				//				if (fillcorners)
 				//				{
 				//					drawView->FillEllipse (pos, halfpensize, halfpensize, curpat);
@@ -1497,9 +1479,8 @@ CanvasView::tLines(int32 mode, BPoint point, uint32 buttons)
 		}
 	} else if (!(buttons & B_TERTIARY_MOUSE_BUTTON)) {
 		if (mode == M_DRAW) {
-			memcpy(
-				currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(), currentLayer()->BitsLength()
-			);
+			memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+				currentLayer()->BitsLength());
 			//			if (fillcorners)
 			//			{
 			//				drawView->FillEllipse (PenLocation(), halfpensize, halfpensize, curpat);
@@ -1604,7 +1585,7 @@ CanvasView::tPolyblob(int32 mode, BPoint point, uint32 buttons)
 	pattern curpat = pat->pat();
 	tSetColors(buttons);
 	SetupUndo(mode);
-	delete polygon; // Pity there isn't a BPolygon::Reset or ::Clear or whatever...
+	delete polygon;	 // Pity there isn't a BPolygon::Reset or ::Clear or whatever...
 	polygon = new BPolygon();
 	if (mode == M_SELECT)
 		SetDrawingMode(B_OP_INVERT);
@@ -1627,29 +1608,29 @@ CanvasView::tPolyblob(int32 mode, BPoint point, uint32 buttons)
 		buttons = position.fButtons;
 	}
 	switch (tAttribPolyblob->getType()) {
-	case POLYBLOB_OUTLINE:
-		if (mode == M_DRAW)
-			drawView->StrokePolygon(polygon, true, curpat);
-		else
-			selectionView->StrokePolygon(polygon, true, curpat);
-		break;
-	case POLYBLOB_FILL:
-		if (mode == M_DRAW)
-			drawView->FillPolygon(polygon, curpat);
-		else
-			selectionView->FillPolygon(polygon, curpat);
-		break;
-	case POLYBLOB_OUTFILL:
-		if (mode == M_DRAW) {
-			drawView->FillPolygon(polygon, curpat);
-			drawView->StrokePolygon(polygon);
-		} else {
-			selectionView->FillPolygon(polygon, curpat);
-			selectionView->StrokePolygon(polygon);
-		}
-		break;
-	default:
-		fprintf(stderr, "Unknown Free Shape type...\n");
+		case POLYBLOB_OUTLINE:
+			if (mode == M_DRAW)
+				drawView->StrokePolygon(polygon, true, curpat);
+			else
+				selectionView->StrokePolygon(polygon, true, curpat);
+			break;
+		case POLYBLOB_FILL:
+			if (mode == M_DRAW)
+				drawView->FillPolygon(polygon, curpat);
+			else
+				selectionView->FillPolygon(polygon, curpat);
+			break;
+		case POLYBLOB_OUTFILL:
+			if (mode == M_DRAW) {
+				drawView->FillPolygon(polygon, curpat);
+				drawView->StrokePolygon(polygon);
+			} else {
+				selectionView->FillPolygon(polygon, curpat);
+				selectionView->StrokePolygon(polygon);
+			}
+			break;
+		default:
+			fprintf(stderr, "Unknown Free Shape type...\n");
 	}
 	selectionView->Sync();
 	drawView->Sync();
@@ -1690,41 +1671,41 @@ CanvasView::tPolygon(int32 mode, BPoint point, uint32 buttons)
 	if (mode == M_SELECT)
 		SetDrawingMode(B_OP_INVERT);
 	if (!entry) {
-		delete polygon; // There should be a more elegant way of clearing an old BPolygon.
+		delete polygon;	 // There should be a more elegant way of clearing an old BPolygon.
 		polygon = new BPolygon(&point, 1);
-		polypoint = point; // This is a hack.  Apparently, a 2-point BPolygon can't be
-						   // drawn, so this is for tPolygonM().
+		polypoint = point;	// This is a hack.  Apparently, a 2-point BPolygon can't be
+							// drawn, so this is for tPolygonM().
 		entry = 1;
 	} else {
 		if ((leftfirst && (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)) ||
 			(!leftfirst && (buttons & B_PRIMARY_MOUSE_BUTTON)) ||
-			(buttons & B_TERTIARY_MOUSE_BUTTON)) // Polygon closed
+			(buttons & B_TERTIARY_MOUSE_BUTTON))  // Polygon closed
 		{
 			SetupUndo(mode);
 			switch (tAttribPolygon->getType()) {
-			case POLYGON_OUTLINE:
-				if (mode == M_DRAW)
-					drawView->StrokePolygon(polygon, true, curpat);
-				else
-					selectionView->StrokePolygon(polygon, true, curpat);
-				break;
-			case POLYGON_FILL:
-				if (mode == M_DRAW)
-					drawView->FillPolygon(polygon, curpat);
-				else
-					selectionView->StrokePolygon(polygon, true, curpat);
-				break;
-			case POLYGON_OUTFILL:
-				if (mode == M_DRAW) {
-					drawView->FillPolygon(polygon, curpat);
-					drawView->StrokePolygon(polygon);
-				} else {
-					selectionView->FillPolygon(polygon, curpat);
-					selectionView->StrokePolygon(polygon);
-				}
-				break;
-			default:
-				fprintf(stderr, "Unknown Polygon type...\n");
+				case POLYGON_OUTLINE:
+					if (mode == M_DRAW)
+						drawView->StrokePolygon(polygon, true, curpat);
+					else
+						selectionView->StrokePolygon(polygon, true, curpat);
+					break;
+				case POLYGON_FILL:
+					if (mode == M_DRAW)
+						drawView->FillPolygon(polygon, curpat);
+					else
+						selectionView->StrokePolygon(polygon, true, curpat);
+					break;
+				case POLYGON_OUTFILL:
+					if (mode == M_DRAW) {
+						drawView->FillPolygon(polygon, curpat);
+						drawView->StrokePolygon(polygon);
+					} else {
+						selectionView->FillPolygon(polygon, curpat);
+						selectionView->StrokePolygon(polygon);
+					}
+					break;
+				default:
+					fprintf(stderr, "Unknown Polygon type...\n");
 			}
 			Sync();
 			selectionView->Sync();
@@ -1771,7 +1752,7 @@ CanvasView::tPolygonM(int32 mode, BPoint point)
 		BPoint pos = PenLocation();
 		if (mode == M_SELECT)
 			SetDrawingMode(B_OP_INVERT);
-		if (entry == 2) // Apparently, a 2-point polygon can't be drawn...?
+		if (entry == 2)	 // Apparently, a 2-point polygon can't be drawn...?
 		{
 			StrokeLine(polypoint, pos);
 			StrokeLine(point);
@@ -1826,18 +1807,18 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 					// drawView->SetDrawingMode (dm);
 					SBitmapToLayer(undo[indexUndo].bitmap, currentLayer(), tframe);
 					switch (tAttribRect->getType()) {
-					case RECT_OUTLINE:
-						drawView->StrokeRect(BRect(pos, point), curpat);
-						break;
-					case RECT_FILL:
-						drawView->FillRect(BRect(pos, point), curpat);
-						break;
-					case RECT_OUTFILL:
-						drawView->FillRect(BRect(pos, point), curpat);
-						drawView->StrokeRect(BRect(pos, point));
-						break;
-					default:
-						fprintf(stderr, "Unknown Rect type...\n");
+						case RECT_OUTLINE:
+							drawView->StrokeRect(BRect(pos, point), curpat);
+							break;
+						case RECT_FILL:
+							drawView->FillRect(BRect(pos, point), curpat);
+							break;
+						case RECT_OUTFILL:
+							drawView->FillRect(BRect(pos, point), curpat);
+							drawView->StrokeRect(BRect(pos, point));
+							break;
+						default:
+							fprintf(stderr, "Unknown Rect type...\n");
 					}
 				} else {
 					// selectionView->SetDrawingMode (B_OP_COPY);
@@ -1845,18 +1826,18 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 					// selectionView->SetDrawingMode (dm);
 					SBitmapToSelection(undo[indexUndo].sbitmap, selection, tframe);
 					switch (tAttribRect->getType()) {
-					case RECT_OUTLINE:
-						selectionView->StrokeRect(BRect(pos, point), curpat);
-						break;
-					case RECT_FILL:
-						selectionView->FillRect(BRect(pos, point), curpat);
-						break;
-					case RECT_OUTFILL:
-						selectionView->FillRect(BRect(pos, point), curpat);
-						selectionView->StrokeRect(BRect(pos, point));
-						break;
-					default:
-						fprintf(stderr, "Unknown Rect type...\n");
+						case RECT_OUTLINE:
+							selectionView->StrokeRect(BRect(pos, point), curpat);
+							break;
+						case RECT_FILL:
+							selectionView->FillRect(BRect(pos, point), curpat);
+							break;
+						case RECT_OUTFILL:
+							selectionView->FillRect(BRect(pos, point), curpat);
+							selectionView->StrokeRect(BRect(pos, point));
+							break;
+						default:
+							fprintf(stderr, "Unknown Rect type...\n");
 					}
 				}
 				drawView->Sync();
@@ -1880,40 +1861,38 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 			entry = 1;
 		} else {
 			if (mode == M_DRAW) {
-				memcpy(
-					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
-					currentLayer()->BitsLength()
-				);
+				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+					currentLayer()->BitsLength());
 				switch (tAttribRect->getType()) {
-				case RECT_OUTLINE:
-					drawView->StrokeRect(BRect(pos, point), curpat);
-					break;
-				case RECT_FILL:
-					drawView->FillRect(BRect(pos, point), curpat);
-					break;
-				case RECT_OUTFILL:
-					drawView->FillRect(BRect(pos, point), curpat);
-					drawView->StrokeRect(BRect(pos, point));
-					break;
-				default:
-					fprintf(stderr, "Unknown Rect type...\n");
+					case RECT_OUTLINE:
+						drawView->StrokeRect(BRect(pos, point), curpat);
+						break;
+					case RECT_FILL:
+						drawView->FillRect(BRect(pos, point), curpat);
+						break;
+					case RECT_OUTFILL:
+						drawView->FillRect(BRect(pos, point), curpat);
+						drawView->StrokeRect(BRect(pos, point));
+						break;
+					default:
+						fprintf(stderr, "Unknown Rect type...\n");
 				}
 				drawView->Sync();
 			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				switch (tAttribRect->getType()) {
-				case RECT_OUTLINE:
-					selectionView->StrokeRect(BRect(pos, point), curpat);
-					break;
-				case RECT_FILL:
-					selectionView->FillRect(BRect(pos, point), curpat);
-					break;
-				case RECT_OUTFILL:
-					selectionView->FillRect(BRect(pos, point), curpat);
-					selectionView->StrokeRect(BRect(pos, point));
-					break;
-				default:
-					fprintf(stderr, "Unknown Rect type...\n");
+					case RECT_OUTLINE:
+						selectionView->StrokeRect(BRect(pos, point), curpat);
+						break;
+					case RECT_FILL:
+						selectionView->FillRect(BRect(pos, point), curpat);
+						break;
+					case RECT_OUTFILL:
+						selectionView->FillRect(BRect(pos, point), curpat);
+						selectionView->StrokeRect(BRect(pos, point));
+						break;
+					default:
+						fprintf(stderr, "Unknown Rect type...\n");
 				}
 				selectionView->Sync();
 			}
@@ -1923,34 +1902,34 @@ CanvasView::tRect(int32 mode, BPoint point, uint32 buttons)
 	} else {
 		if (mode == M_DRAW) {
 			switch (tAttribRect->getType()) {
-			case RECT_OUTLINE:
-				drawView->StrokeRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_FILL:
-				drawView->FillRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_OUTFILL:
-				drawView->FillRect(BRect(PenLocation(), point), curpat);
-				drawView->StrokeRect(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Rect type...\n");
+				case RECT_OUTLINE:
+					drawView->StrokeRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_FILL:
+					drawView->FillRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_OUTFILL:
+					drawView->FillRect(BRect(PenLocation(), point), curpat);
+					drawView->StrokeRect(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Rect type...\n");
 			}
 			drawView->Sync();
 		} else {
 			switch (tAttribRect->getType()) {
-			case RECT_OUTLINE:
-				selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_FILL:
-				selectionView->FillRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_OUTFILL:
-				selectionView->FillRect(BRect(PenLocation(), point), curpat);
-				selectionView->StrokeRect(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Rect type...\n");
+				case RECT_OUTLINE:
+					selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_FILL:
+					selectionView->FillRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_OUTFILL:
+					selectionView->FillRect(BRect(PenLocation(), point), curpat);
+					selectionView->StrokeRect(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Rect type...\n");
 			}
 			selectionView->Sync();
 		}
@@ -1988,35 +1967,35 @@ CanvasView::tRectM(int32 mode, BPoint point)
 		tframe.InsetBy(-halfpensize - 1, -halfpensize - 1);
 		if (mode == M_DRAW) {
 			switch (tAttribRect->getType()) {
-			case RECT_OUTLINE:
-				drawView->StrokeRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_FILL:
-				drawView->FillRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_OUTFILL:
-				drawView->FillRect(BRect(PenLocation(), point), curpat);
-				drawView->StrokeRect(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Rect type...\n");
+				case RECT_OUTLINE:
+					drawView->StrokeRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_FILL:
+					drawView->FillRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_OUTFILL:
+					drawView->FillRect(BRect(PenLocation(), point), curpat);
+					drawView->StrokeRect(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Rect type...\n");
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
 		} else {
 			switch (tAttribRect->getType()) {
-			case RECT_OUTLINE:
-				selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_FILL:
-				selectionView->FillRect(BRect(PenLocation(), point), curpat);
-				break;
-			case RECT_OUTFILL:
-				selectionView->FillRect(BRect(PenLocation(), point), curpat);
-				selectionView->StrokeRect(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Rect type...\n");
+				case RECT_OUTLINE:
+					selectionView->StrokeRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_FILL:
+					selectionView->FillRect(BRect(PenLocation(), point), curpat);
+					break;
+				case RECT_OUTFILL:
+					selectionView->FillRect(BRect(PenLocation(), point), curpat);
+					selectionView->StrokeRect(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Rect type...\n");
 			}
 			selectionView->MovePenTo(pos);
 			selectionView->Sync();
@@ -2074,18 +2053,18 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 				tframe = frame | pframe;
 				tframe.InsetBy(-halfpensize - 1, -halfpensize - 1);
 				switch (tAttribRoundRect->getRadType()) {
-				case RRECT_RELATIVE:
-					xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
-					yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
-					break;
-				case RRECT_ABSOLUTE:
-					xRad = tAttribRoundRect->getRadXabs();
-					yRad = tAttribRoundRect->getRadYabs();
-					break;
-				default:
-					fprintf(stderr, "RoundRect: Unknown radius type\n");
-					xRad = 8;
-					yRad = 8;
+					case RRECT_RELATIVE:
+						xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
+						yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
+						break;
+					case RRECT_ABSOLUTE:
+						xRad = tAttribRoundRect->getRadXabs();
+						yRad = tAttribRoundRect->getRadYabs();
+						break;
+					default:
+						fprintf(stderr, "RoundRect: Unknown radius type\n");
+						xRad = 8;
+						yRad = 8;
 				}
 				if (mode == M_DRAW) {
 					// drawView->SetDrawingMode (B_OP_COPY);
@@ -2093,18 +2072,18 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 					// drawView->SetDrawingMode (dm);
 					SBitmapToLayer(undo[indexUndo].bitmap, currentLayer(), tframe);
 					switch (tAttribRoundRect->getType()) {
-					case RRECT_OUTLINE:
-						drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						break;
-					case RRECT_FILL:
-						drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						break;
-					case RRECT_OUTFILL:
-						drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
-						break;
-					default:
-						fprintf(stderr, "Unknown RoundRect type...\n");
+						case RRECT_OUTLINE:
+							drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							break;
+						case RRECT_FILL:
+							drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							break;
+						case RRECT_OUTFILL:
+							drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
+							break;
+						default:
+							fprintf(stderr, "Unknown RoundRect type...\n");
 					}
 					drawView->Sync();
 				} else {
@@ -2113,18 +2092,18 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 					// selectionView->SetDrawingMode (dm);
 					SBitmapToSelection(undo[indexUndo].sbitmap, selection, tframe);
 					switch (tAttribRoundRect->getType()) {
-					case RRECT_OUTLINE:
-						selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						break;
-					case RRECT_FILL:
-						selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						break;
-					case RRECT_OUTFILL:
-						selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-						selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
-						break;
-					default:
-						fprintf(stderr, "Unknown RoundRect type...\n");
+						case RRECT_OUTLINE:
+							selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							break;
+						case RRECT_FILL:
+							selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							break;
+						case RRECT_OUTFILL:
+							selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+							selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
+							break;
+						default:
+							fprintf(stderr, "Unknown RoundRect type...\n");
 					}
 					selectionView->Sync();
 				}
@@ -2147,6 +2126,63 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 			entry = 1;
 		} else {
 			switch (tAttribRoundRect->getRadType()) {
+				case RRECT_RELATIVE:
+					xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
+					yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
+					break;
+				case RRECT_ABSOLUTE:
+					xRad = tAttribRoundRect->getRadXabs();
+					yRad = tAttribRoundRect->getRadYabs();
+					break;
+				default:
+					fprintf(stderr, "RoundRect: Unknown radius type\n");
+					xRad = 8;
+					yRad = 8;
+			}
+			if (mode == M_DRAW) {
+				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+					currentLayer()->BitsLength());
+				switch (tAttribRoundRect->getType()) {
+					case RRECT_OUTLINE:
+						drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						break;
+					case RRECT_FILL:
+						drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						break;
+					case RRECT_OUTFILL:
+						drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
+						break;
+					default:
+						fprintf(stderr, "Unknown RoundRect type...\n");
+				}
+				drawView->Sync();
+			} else {
+				memcpy(undo[indexUndo].sbitmap->Bits(), selection->Bits(), selection->BitsLength());
+				switch (tAttribRoundRect->getType()) {
+					case RRECT_OUTLINE:
+						selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						break;
+					case RRECT_FILL:
+						selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						break;
+					case RRECT_OUTFILL:
+						selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
+						selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
+						break;
+					default:
+						fprintf(stderr, "Unknown RoundRect type...\n");
+				}
+				selectionView->Sync();
+			}
+			entry = 0;
+			myWindow->posview->SetPoint(-1, -1);
+		}
+	} else {
+		BPoint pos = PenLocation();
+		float xRad;
+		float yRad;
+		switch (tAttribRoundRect->getRadType()) {
 			case RRECT_RELATIVE:
 				xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
 				yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
@@ -2159,96 +2195,37 @@ CanvasView::tRoundRect(int32 mode, BPoint point, uint32 buttons)
 				fprintf(stderr, "RoundRect: Unknown radius type\n");
 				xRad = 8;
 				yRad = 8;
-			}
-			if (mode == M_DRAW) {
-				memcpy(
-					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
-					currentLayer()->BitsLength()
-				);
-				switch (tAttribRoundRect->getType()) {
-				case RRECT_OUTLINE:
-					drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					break;
-				case RRECT_FILL:
-					drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					break;
-				case RRECT_OUTFILL:
-					drawView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					drawView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
-					break;
-				default:
-					fprintf(stderr, "Unknown RoundRect type...\n");
-				}
-				drawView->Sync();
-			} else {
-				memcpy(undo[indexUndo].sbitmap->Bits(), selection->Bits(), selection->BitsLength());
-				switch (tAttribRoundRect->getType()) {
-				case RRECT_OUTLINE:
-					selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					break;
-				case RRECT_FILL:
-					selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					break;
-				case RRECT_OUTFILL:
-					selectionView->FillRoundRect(BRect(pos, point), xRad, yRad, curpat);
-					selectionView->StrokeRoundRect(BRect(pos, point), xRad, yRad);
-					break;
-				default:
-					fprintf(stderr, "Unknown RoundRect type...\n");
-				}
-				selectionView->Sync();
-			}
-			entry = 0;
-			myWindow->posview->SetPoint(-1, -1);
-		}
-	} else {
-		BPoint pos = PenLocation();
-		float xRad;
-		float yRad;
-		switch (tAttribRoundRect->getRadType()) {
-		case RRECT_RELATIVE:
-			xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
-			yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
-			break;
-		case RRECT_ABSOLUTE:
-			xRad = tAttribRoundRect->getRadXabs();
-			yRad = tAttribRoundRect->getRadYabs();
-			break;
-		default:
-			fprintf(stderr, "RoundRect: Unknown radius type\n");
-			xRad = 8;
-			yRad = 8;
 		}
 		if (mode == M_DRAW) {
 			switch (tAttribRoundRect->getType()) {
-			case RRECT_OUTLINE:
-				drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_FILL:
-				drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_OUTFILL:
-				drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
-				break;
-			default:
-				fprintf(stderr, "Unknown RoundRect type...\n");
+				case RRECT_OUTLINE:
+					drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_FILL:
+					drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_OUTFILL:
+					drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
+					break;
+				default:
+					fprintf(stderr, "Unknown RoundRect type...\n");
 			}
 			drawView->Sync();
 		} else {
 			switch (tAttribRoundRect->getType()) {
-			case RRECT_OUTLINE:
-				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_FILL:
-				selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_OUTFILL:
-				selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
-				break;
-			default:
-				fprintf(stderr, "Unknown RoundRect type...\n");
+				case RRECT_OUTLINE:
+					selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_FILL:
+					selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_OUTFILL:
+					selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
+					break;
+				default:
+					fprintf(stderr, "Unknown RoundRect type...\n");
 			}
 			selectionView->Sync();
 		}
@@ -2286,50 +2263,50 @@ CanvasView::tRoundRectM(int32 mode, BPoint point)
 		float xRad;
 		float yRad;
 		switch (tAttribRoundRect->getRadType()) {
-		case RRECT_RELATIVE:
-			xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
-			yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
-			break;
-		case RRECT_ABSOLUTE:
-			xRad = tAttribRoundRect->getRadXabs();
-			yRad = tAttribRoundRect->getRadYabs();
-			break;
-		default:
-			fprintf(stderr, "RoundRect: Unknown radius type\n");
-			xRad = 8;
-			yRad = 8;
+			case RRECT_RELATIVE:
+				xRad = abs(int(pos.x - point.x)) * tAttribRoundRect->getRadXrel();
+				yRad = abs(int(pos.y - point.y)) * tAttribRoundRect->getRadYrel();
+				break;
+			case RRECT_ABSOLUTE:
+				xRad = tAttribRoundRect->getRadXabs();
+				yRad = tAttribRoundRect->getRadYabs();
+				break;
+			default:
+				fprintf(stderr, "RoundRect: Unknown radius type\n");
+				xRad = 8;
+				yRad = 8;
 		}
 		if (mode == M_DRAW) {
 			switch (tAttribRoundRect->getType()) {
-			case RRECT_OUTLINE:
-				drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_FILL:
-				drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_OUTFILL:
-				drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
-				break;
-			default:
-				fprintf(stderr, "Unknown RoundRect type...\n");
+				case RRECT_OUTLINE:
+					drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_FILL:
+					drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_OUTFILL:
+					drawView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					drawView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
+					break;
+				default:
+					fprintf(stderr, "Unknown RoundRect type...\n");
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
 		} else {
 			switch (tAttribRoundRect->getType()) {
-			case RRECT_OUTLINE:
-				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_FILL:
-				selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				break;
-			case RRECT_OUTFILL:
-				selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
-				selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
-				break;
-			default:
-				fprintf(stderr, "Unknown RoundRect type...\n");
+				case RRECT_OUTLINE:
+					selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_FILL:
+					selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					break;
+				case RRECT_OUTFILL:
+					selectionView->FillRoundRect(BRect(PenLocation(), point), xRad, yRad, curpat);
+					selectionView->StrokeRoundRect(BRect(PenLocation(), point), xRad, yRad);
+					break;
+				default:
+					fprintf(stderr, "Unknown RoundRect type...\n");
 			}
 			selectionView->MovePenTo(pos);
 			selectionView->Sync();
@@ -2380,25 +2357,18 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 		while (buttons) {
 			BRect frame, pframe, tframe;
 			if (point != prev) {
-				radius = sqrt(
-					(center.x - point.x) * (center.x - point.x) +
-					(center.y - point.y) * (center.y - point.y)
-				);
+				radius = sqrt((center.x - point.x) * (center.x - point.x) +
+							  (center.y - point.y) * (center.y - point.y));
 				if (cent == FIXES_CENTER) {
 					frame.Set(
-						center.x - radius, center.y - radius, center.x + radius, center.y + radius
-					);
-					pframe.Set(
-						center.x - pradius, center.y - pradius, center.x + pradius,
-						center.y + pradius
-					);
+						center.x - radius, center.y - radius, center.x + radius, center.y + radius);
+					pframe.Set(center.x - pradius, center.y - pradius, center.x + pradius,
+						center.y + pradius);
 				} else {
 					frame.Set(
-						point.x - radius, point.y - radius, point.x + radius, point.y + radius
-					);
+						point.x - radius, point.y - radius, point.x + radius, point.y + radius);
 					pframe.Set(
-						prev.x - pradius, prev.y - pradius, prev.x + pradius, prev.y + pradius
-					);
+						prev.x - pradius, prev.y - pradius, prev.x + pradius, prev.y + pradius);
 				}
 				frame = makePositive(frame);
 				pframe = makePositive(pframe);
@@ -2410,26 +2380,22 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 					// drawView->SetDrawingMode (dm);
 					SBitmapToLayer(undo[indexUndo].bitmap, currentLayer(), tframe);
 					switch (tAttribCircle->getType()) {
-					case CIRCLE_OUTLINE:
-						drawView->StrokeEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						break;
-					case CIRCLE_FILL:
-						drawView->FillEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						break;
-					case CIRCLE_OUTFILL:
-						drawView->FillEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						drawView->StrokeEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius
-						);
-						break;
-					default:
-						fprintf(stderr, "Unknown Circle type...\n");
+						case CIRCLE_OUTLINE:
+							drawView->StrokeEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							break;
+						case CIRCLE_FILL:
+							drawView->FillEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							break;
+						case CIRCLE_OUTFILL:
+							drawView->FillEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							drawView->StrokeEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius);
+							break;
+						default:
+							fprintf(stderr, "Unknown Circle type...\n");
 					}
 					drawView->Sync();
 				} else {
@@ -2438,26 +2404,22 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 					// selectionView->SetDrawingMode (dm);
 					SBitmapToSelection(undo[indexUndo].sbitmap, selection, tframe);
 					switch (tAttribCircle->getType()) {
-					case CIRCLE_OUTLINE:
-						selectionView->StrokeEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						break;
-					case CIRCLE_FILL:
-						selectionView->FillEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						break;
-					case CIRCLE_OUTFILL:
-						selectionView->FillEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-						);
-						selectionView->StrokeEllipse(
-							(cent == FIXES_CENTER) ? center : point, radius, radius
-						);
-						break;
-					default:
-						fprintf(stderr, "Unknown Circle type...\n");
+						case CIRCLE_OUTLINE:
+							selectionView->StrokeEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							break;
+						case CIRCLE_FILL:
+							selectionView->FillEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							break;
+						case CIRCLE_OUTFILL:
+							selectionView->FillEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+							selectionView->StrokeEllipse(
+								(cent == FIXES_CENTER) ? center : point, radius, radius);
+							break;
+						default:
+							fprintf(stderr, "Unknown Circle type...\n");
 					}
 					selectionView->Sync();
 				}
@@ -2481,64 +2443,50 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 			entry = 1;
 		} else {
 			if (mode == M_DRAW) {
-				memcpy(
-					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
-					currentLayer()->BitsLength()
-				);
-				radius = sqrt(
-					(center.x - point.x) * (center.x - point.x) +
-					(center.y - point.y) * (center.y - point.y)
-				);
+				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+					currentLayer()->BitsLength());
+				radius = sqrt((center.x - point.x) * (center.x - point.x) +
+							  (center.y - point.y) * (center.y - point.y));
 				switch (tAttribCircle->getType()) {
-				case CIRCLE_OUTLINE:
-					drawView->StrokeEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					break;
-				case CIRCLE_FILL:
-					drawView->FillEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					break;
-				case CIRCLE_OUTFILL:
-					drawView->FillEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					drawView->StrokeEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius
-					);
-					break;
-				default:
-					fprintf(stderr, "Unknown Circle type...\n");
+					case CIRCLE_OUTLINE:
+						drawView->StrokeEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						break;
+					case CIRCLE_FILL:
+						drawView->FillEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						break;
+					case CIRCLE_OUTFILL:
+						drawView->FillEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						drawView->StrokeEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius);
+						break;
+					default:
+						fprintf(stderr, "Unknown Circle type...\n");
 				}
 				drawView->Sync();
 			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
-				radius = sqrt(
-					(center.x - point.x) * (center.x - point.x) +
-					(center.y - point.y) * (center.y - point.y)
-				);
+				radius = sqrt((center.x - point.x) * (center.x - point.x) +
+							  (center.y - point.y) * (center.y - point.y));
 				switch (tAttribCircle->getType()) {
-				case CIRCLE_OUTLINE:
-					selectionView->StrokeEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					break;
-				case CIRCLE_FILL:
-					selectionView->FillEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					break;
-				case CIRCLE_OUTFILL:
-					selectionView->FillEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-					);
-					selectionView->StrokeEllipse(
-						(cent == FIXES_CENTER) ? center : point, radius, radius
-					);
-					break;
-				default:
-					fprintf(stderr, "Unknown Circle type...\n");
+					case CIRCLE_OUTLINE:
+						selectionView->StrokeEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						break;
+					case CIRCLE_FILL:
+						selectionView->FillEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						break;
+					case CIRCLE_OUTFILL:
+						selectionView->FillEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+						selectionView->StrokeEllipse(
+							(cent == FIXES_CENTER) ? center : point, radius, radius);
+						break;
+					default:
+						fprintf(stderr, "Unknown Circle type...\n");
 				}
 				selectionView->Sync();
 			}
@@ -2550,61 +2498,50 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 		//		float radius = sqrt ((center.x - point.x)*(center.x - point.x) + (center.y -
 		// point.y)*(center.y - point.y));
 		if (mode == M_DRAW) {
-			memcpy(
-				currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(), currentLayer()->BitsLength()
-			);
-			float radius = sqrt(
-				(center.x - point.x) * (center.x - point.x) +
-				(center.y - point.y) * (center.y - point.y)
-			);
+			memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+				currentLayer()->BitsLength());
+			float radius = sqrt((center.x - point.x) * (center.x - point.x) +
+								(center.y - point.y) * (center.y - point.y));
 			switch (tAttribCircle->getType()) {
-			case CIRCLE_OUTLINE:
-				drawView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_FILL:
-				drawView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_OUTFILL:
-				drawView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				drawView->StrokeEllipse((cent == FIXES_CENTER) ? center : point, radius, radius);
-				break;
-			default:
-				fprintf(stderr, "Unknown Circle type...\n");
+				case CIRCLE_OUTLINE:
+					drawView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_FILL:
+					drawView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_OUTFILL:
+					drawView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					drawView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius);
+					break;
+				default:
+					fprintf(stderr, "Unknown Circle type...\n");
 			}
 			drawView->Sync();
 		} else {
 			memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
-			float radius = sqrt(
-				(center.x - point.x) * (center.x - point.x) +
-				(center.y - point.y) * (center.y - point.y)
-			);
+			float radius = sqrt((center.x - point.x) * (center.x - point.x) +
+								(center.y - point.y) * (center.y - point.y));
 			switch (tAttribCircle->getType()) {
-			case CIRCLE_OUTLINE:
-				selectionView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_FILL:
-				selectionView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_OUTFILL:
-				selectionView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				selectionView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius
-				);
-				break;
-			default:
-				fprintf(stderr, "Unknown Circle type...\n");
+				case CIRCLE_OUTLINE:
+					selectionView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_FILL:
+					selectionView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_OUTFILL:
+					selectionView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					selectionView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius);
+					break;
+				default:
+					fprintf(stderr, "Unknown Circle type...\n");
 			}
 			selectionView->Sync();
 		}
@@ -2634,10 +2571,8 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 		float halfpensize = int(pensize / 2 - 0.5);
 		int cent = tAttribCircle->getFirst();
 		BPoint center = PenLocation();
-		float radius = sqrt(
-			(center.x - point.x) * (center.x - point.x) +
-			(center.y - point.y) * (center.y - point.y)
-		);
+		float radius = sqrt((center.x - point.x) * (center.x - point.x) +
+							(center.y - point.y) * (center.y - point.y));
 		SetPenSize(pensize);
 		BPoint pos = PenLocation();
 		BRect frame, pframe;
@@ -2645,8 +2580,7 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 			frame =
 				PRect(center.x - radius, center.y - radius, center.x + radius, center.y + radius);
 			pframe = PRect(
-				center.x - pradius, center.y - pradius, center.x + pradius, center.y + pradius
-			);
+				center.x - pradius, center.y - pradius, center.x + pradius, center.y + pradius);
 		} else {
 			frame = PRect(point.x - radius, point.y - radius, point.x + radius, point.y + radius);
 			pframe = PRect(prev.x - pradius, prev.y - pradius, prev.x + pradius, prev.y + pradius);
@@ -2655,49 +2589,43 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 		tframe.InsetBy(-halfpensize - 1, -halfpensize - 1);
 		if (mode == M_DRAW) {
 			switch (tAttribCircle->getType()) {
-			case CIRCLE_OUTLINE:
-				drawView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_FILL:
-				drawView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_OUTFILL:
-				drawView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				drawView->StrokeEllipse((cent == FIXES_CENTER) ? center : point, radius, radius);
-				break;
-			default:
-				fprintf(stderr, "Unknown Circle type...\n");
+				case CIRCLE_OUTLINE:
+					drawView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_FILL:
+					drawView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_OUTFILL:
+					drawView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					drawView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius);
+					break;
+				default:
+					fprintf(stderr, "Unknown Circle type...\n");
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
 		} else {
 			switch (tAttribCircle->getType()) {
-			case CIRCLE_OUTLINE:
-				selectionView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_FILL:
-				selectionView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				break;
-			case CIRCLE_OUTFILL:
-				selectionView->FillEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius, curpat
-				);
-				selectionView->StrokeEllipse(
-					(cent == FIXES_CENTER) ? center : point, radius, radius
-				);
-				break;
-			default:
-				fprintf(stderr, "Unknown Circle type...\n");
+				case CIRCLE_OUTLINE:
+					selectionView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_FILL:
+					selectionView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					break;
+				case CIRCLE_OUTFILL:
+					selectionView->FillEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius, curpat);
+					selectionView->StrokeEllipse(
+						(cent == FIXES_CENTER) ? center : point, radius, radius);
+					break;
+				default:
+					fprintf(stderr, "Unknown Circle type...\n");
 			}
 			selectionView->MovePenTo(pos);
 			selectionView->Sync();
@@ -2759,18 +2687,18 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 					// drawView->SetDrawingMode (dm);
 					SBitmapToLayer(undo[indexUndo].bitmap, currentLayer(), tframe);
 					switch (tAttribEllipse->getType()) {
-					case ELLIPSE_OUTLINE:
-						drawView->StrokeEllipse(BRect(pos, point), curpat);
-						break;
-					case ELLIPSE_FILL:
-						drawView->FillEllipse(BRect(pos, point), curpat);
-						break;
-					case ELLIPSE_OUTFILL:
-						drawView->FillEllipse(BRect(pos, point), curpat);
-						drawView->StrokeEllipse(BRect(pos, point));
-						break;
-					default:
-						fprintf(stderr, "Unknown Ellipse type...\n");
+						case ELLIPSE_OUTLINE:
+							drawView->StrokeEllipse(BRect(pos, point), curpat);
+							break;
+						case ELLIPSE_FILL:
+							drawView->FillEllipse(BRect(pos, point), curpat);
+							break;
+						case ELLIPSE_OUTFILL:
+							drawView->FillEllipse(BRect(pos, point), curpat);
+							drawView->StrokeEllipse(BRect(pos, point));
+							break;
+						default:
+							fprintf(stderr, "Unknown Ellipse type...\n");
 					}
 					drawView->Sync();
 				} else {
@@ -2779,18 +2707,18 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 					// selectionView->SetDrawingMode (dm);
 					SBitmapToSelection(undo[indexUndo].sbitmap, selection, tframe);
 					switch (tAttribEllipse->getType()) {
-					case ELLIPSE_OUTLINE:
-						selectionView->StrokeEllipse(BRect(pos, point), curpat);
-						break;
-					case ELLIPSE_FILL:
-						selectionView->FillEllipse(BRect(pos, point), curpat);
-						break;
-					case ELLIPSE_OUTFILL:
-						selectionView->FillEllipse(BRect(pos, point), curpat);
-						selectionView->StrokeEllipse(BRect(pos, point));
-						break;
-					default:
-						fprintf(stderr, "Unknown Ellipse type...\n");
+						case ELLIPSE_OUTLINE:
+							selectionView->StrokeEllipse(BRect(pos, point), curpat);
+							break;
+						case ELLIPSE_FILL:
+							selectionView->FillEllipse(BRect(pos, point), curpat);
+							break;
+						case ELLIPSE_OUTFILL:
+							selectionView->FillEllipse(BRect(pos, point), curpat);
+							selectionView->StrokeEllipse(BRect(pos, point));
+							break;
+						default:
+							fprintf(stderr, "Unknown Ellipse type...\n");
 					}
 					selectionView->Sync();
 				}
@@ -2813,40 +2741,38 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 			entry = 1;
 		} else {
 			if (mode == M_DRAW) {
-				memcpy(
-					currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
-					currentLayer()->BitsLength()
-				);
+				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
+					currentLayer()->BitsLength());
 				switch (tAttribEllipse->getType()) {
-				case ELLIPSE_OUTLINE:
-					drawView->StrokeEllipse(BRect(pos, point), curpat);
-					break;
-				case ELLIPSE_FILL:
-					drawView->FillEllipse(BRect(pos, point), curpat);
-					break;
-				case ELLIPSE_OUTFILL:
-					drawView->FillEllipse(BRect(pos, point), curpat);
-					drawView->StrokeEllipse(BRect(pos, point));
-					break;
-				default:
-					fprintf(stderr, "Unknown Ellipse type...\n");
+					case ELLIPSE_OUTLINE:
+						drawView->StrokeEllipse(BRect(pos, point), curpat);
+						break;
+					case ELLIPSE_FILL:
+						drawView->FillEllipse(BRect(pos, point), curpat);
+						break;
+					case ELLIPSE_OUTFILL:
+						drawView->FillEllipse(BRect(pos, point), curpat);
+						drawView->StrokeEllipse(BRect(pos, point));
+						break;
+					default:
+						fprintf(stderr, "Unknown Ellipse type...\n");
 				}
 				drawView->Sync();
 			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
 				switch (tAttribEllipse->getType()) {
-				case ELLIPSE_OUTLINE:
-					selectionView->StrokeEllipse(BRect(pos, point), curpat);
-					break;
-				case ELLIPSE_FILL:
-					selectionView->FillEllipse(BRect(pos, point), curpat);
-					break;
-				case ELLIPSE_OUTFILL:
-					selectionView->FillEllipse(BRect(pos, point), curpat);
-					selectionView->StrokeEllipse(BRect(pos, point));
-					break;
-				default:
-					fprintf(stderr, "Unknown Ellipse type...\n");
+					case ELLIPSE_OUTLINE:
+						selectionView->StrokeEllipse(BRect(pos, point), curpat);
+						break;
+					case ELLIPSE_FILL:
+						selectionView->FillEllipse(BRect(pos, point), curpat);
+						break;
+					case ELLIPSE_OUTFILL:
+						selectionView->FillEllipse(BRect(pos, point), curpat);
+						selectionView->StrokeEllipse(BRect(pos, point));
+						break;
+					default:
+						fprintf(stderr, "Unknown Ellipse type...\n");
 				}
 				selectionView->Sync();
 			}
@@ -2856,34 +2782,34 @@ CanvasView::tEllipse(int32 mode, BPoint point, uint32 buttons)
 	} else {
 		if (mode == M_DRAW) {
 			switch (tAttribEllipse->getType()) {
-			case ELLIPSE_OUTLINE:
-				drawView->StrokeEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_FILL:
-				drawView->FillEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_OUTFILL:
-				drawView->FillEllipse(BRect(PenLocation(), point), curpat);
-				drawView->StrokeEllipse(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Ellipse type...\n");
+				case ELLIPSE_OUTLINE:
+					drawView->StrokeEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_FILL:
+					drawView->FillEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_OUTFILL:
+					drawView->FillEllipse(BRect(PenLocation(), point), curpat);
+					drawView->StrokeEllipse(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Ellipse type...\n");
 			}
 			drawView->Sync();
 		} else {
 			switch (tAttribEllipse->getType()) {
-			case ELLIPSE_OUTLINE:
-				selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_FILL:
-				selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_OUTFILL:
-				selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
-				selectionView->StrokeEllipse(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Ellipse type...\n");
+				case ELLIPSE_OUTLINE:
+					selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_FILL:
+					selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_OUTFILL:
+					selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
+					selectionView->StrokeEllipse(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Ellipse type...\n");
 			}
 			selectionView->Sync();
 		}
@@ -2918,35 +2844,35 @@ CanvasView::tEllipseM(int32 mode, BPoint point)
 		tframe.InsetBy(-halfpensize - 1, -halfpensize - 1);
 		if (mode == M_DRAW) {
 			switch (tAttribEllipse->getType()) {
-			case ELLIPSE_OUTLINE:
-				drawView->StrokeEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_FILL:
-				drawView->FillEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_OUTFILL:
-				drawView->FillEllipse(BRect(PenLocation(), point), curpat);
-				drawView->StrokeEllipse(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Ellipse type...\n");
+				case ELLIPSE_OUTLINE:
+					drawView->StrokeEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_FILL:
+					drawView->FillEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_OUTFILL:
+					drawView->FillEllipse(BRect(PenLocation(), point), curpat);
+					drawView->StrokeEllipse(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Ellipse type...\n");
 			}
 			drawView->MovePenTo(pos);
 			drawView->Sync();
 		} else {
 			switch (tAttribEllipse->getType()) {
-			case ELLIPSE_OUTLINE:
-				selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_FILL:
-				selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
-				break;
-			case ELLIPSE_OUTFILL:
-				selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
-				selectionView->StrokeEllipse(BRect(PenLocation(), point));
-				break;
-			default:
-				fprintf(stderr, "Unknown Ellipse type...\n");
+				case ELLIPSE_OUTLINE:
+					selectionView->StrokeEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_FILL:
+					selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
+					break;
+				case ELLIPSE_OUTFILL:
+					selectionView->FillEllipse(BRect(PenLocation(), point), curpat);
+					selectionView->StrokeEllipse(BRect(PenLocation(), point));
+					break;
+				default:
+					fprintf(stderr, "Unknown Ellipse type...\n");
 			}
 			selectionView->MovePenTo(pos);
 			selectionView->Sync();
@@ -2995,7 +2921,7 @@ CanvasView::isfillcolorrgb(LPoint point, uchar* t)
 	if (c.alpha && abs(c.red - fillcolor.red) <= toleranceRGB.red &&
 		abs(c.green - fillcolor.green) <= toleranceRGB.green &&
 		abs(c.blue - fillcolor.blue) <= toleranceRGB.blue) {
-		if (c.alpha == 255) // Special case
+		if (c.alpha == 255)	 // Special case
 			*t = clipchar(255 - diff(c, fillcolor));
 		else
 			*t = c.alpha;
@@ -3011,7 +2937,7 @@ CanvasView::isfillcolort(LPoint point, uchar* t)
 {
 	rgb_color c = getColor(point);
 	register uchar d;
-	if (!c.alpha) // Special cases
+	if (!c.alpha)  // Special cases
 	{
 		if (!fillcolor.alpha) {
 			*t = 255;
@@ -3081,7 +3007,7 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 	if (((tAttribFill->getTolMode() == FILLTOL_TOL) && (tolerance == 0)) ||
 		(tAttribFill->getTolMode() == FILLTOL_RGB) && (toleranceRGB.red == 0) &&
 			(toleranceRGB.green == 0) &&
-			(toleranceRGB.blue == 0)) { // Use the special case functions for zero tolerance
+			(toleranceRGB.blue == 0)) {	 // Use the special case functions for zero tolerance
 		while (!(ps.isempty())) {
 			LPoint p = ps.pop();
 			LPoint next;

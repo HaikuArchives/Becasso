@@ -1,9 +1,9 @@
 #ifndef ATTRIBBRUSH_H
 #define ATTRIBBRUSH_H
 
+#include <Message.h>
 #include "AttribView.h"
 #include "BitmapView.h"
-#include <Message.h>
 #include "Brush.h"
 #include "Slider.h"
 
@@ -14,15 +14,13 @@
 #define PROP_Y 5
 #define PROP_HARDNESS 6
 
-class AttribBrush : public AttribView
-{
-  public:
+class AttribBrush : public AttribView {
+public:
 	AttribBrush();
 	virtual ~AttribBrush();
 	virtual void MessageReceived(BMessage* msg);
 	virtual BHandler* ResolveSpecifier(
-		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-	);
+		BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property);
 	virtual status_t GetSupportedSuites(BMessage* message);
 
 	float getSpacing() { return fSpacing; };
@@ -31,12 +29,11 @@ class AttribBrush : public AttribView
 
 	Brush* getBrush() { return fBrush; };
 
-  private:
+private:
 	typedef AttribView inherited;
 	void ConstructBrush();
 	void mkGaussianBrush(
-		Brush* b, float sigmaxsq, float sigmaysq, float angle, int cval, float hardness
-	);
+		Brush* b, float sigmaxsq, float sigmaysq, float angle, int cval, float hardness);
 	void mkDiagonalBrush(Brush* b, int dir);
 
 	float fSpacing;

@@ -16,16 +16,15 @@
 
 class BTextControl;
 
-class RegWindow : public BWindow
-{
-  public:
+class RegWindow : public BWindow {
+public:
 	RegWindow(const BRect frame, const char* title, char type);
 	virtual ~RegWindow();
 
 	int32 Go();
 	virtual void MessageReceived(BMessage* msg);
 
-  private:
+private:
 	char fType;
 	int32 fStatus;
 	BTextControl* fName;

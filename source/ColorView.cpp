@@ -1,10 +1,10 @@
-#include <Screen.h>
+#include "ColorView.h"
 #include <AppDefs.h>
 #include <Message.h>
-#include "ColorView.h"
+#include <Screen.h>
+#include <stdio.h>
 #include "RoColor.h"
 #include "hsv.h"
-#include <stdio.h>
 
 ColorView::ColorView(BRect frame, const char* name, rgb_color c)
 	: BView(frame, name, B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW)
@@ -22,7 +22,10 @@ ColorView::ColorView(BRect frame, const char* name, rgb_color c)
 	SetColor(c);
 }
 
-ColorView::~ColorView() { delete bitmap; }
+ColorView::~ColorView()
+{
+	delete bitmap;
+}
 
 void
 ColorView::ScreenChanged(BRect /* frame */, color_space cs)

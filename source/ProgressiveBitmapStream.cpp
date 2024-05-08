@@ -7,17 +7,17 @@
 
 
 // Includes
-#include <string.h>
-#include <stdio.h>
+#include "ProgressiveBitmapStream.h"
 #include <Bitmap.h>
+#include <Button.h>
+#include <Errors.h>
 #include <Invoker.h>
 #include <Message.h>
-#include <Window.h>
-#include <StatusBar.h>
-#include <Button.h>
 #include <Rect.h>
-#include <Errors.h>
-#include "ProgressiveBitmapStream.h"
+#include <StatusBar.h>
+#include <Window.h>
+#include <stdio.h>
+#include <string.h>
 
 
 // Defines
@@ -25,14 +25,13 @@
 #define STOP_PRESSED 'STOP'
 
 // BarWindow class
-class BarWindow : public BWindow
-{
-  public:
+class BarWindow : public BWindow {
+public:
 	BarWindow(BRect frame, char* window_title, float max);
 	virtual void MessageReceived(BMessage* msg);
 	bool StopPressed() const;
 
-  private:
+private:
 	BStatusBar* the_bar;
 	bool stop;
 };
@@ -40,8 +39,7 @@ class BarWindow : public BWindow
 // Progress bar window constructor
 BarWindow::BarWindow(BRect frame, char* window_title, float max)
 	: BWindow(
-		  frame, window_title, B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_CLOSABLE | B_NOT_ZOOMABLE
-	  )
+		  frame, window_title, B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_CLOSABLE | B_NOT_ZOOMABLE)
 
 	  ,
 	  stop(false)
@@ -58,8 +56,7 @@ BarWindow::BarWindow(BRect frame, char* window_title, float max)
 
 	// Stop button
 	main_view->AddChild(
-		new BButton(BRect(180.0, 50.0, 240.0, 74.0), "", "Stop", new BMessage(STOP_PRESSED))
-	);
+		new BButton(BRect(180.0, 50.0, 240.0, 74.0), "", "Stop", new BMessage(STOP_PRESSED)));
 
 	Show();
 }
@@ -69,17 +66,17 @@ void
 BarWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	case UPDATE_BAR:
-		the_bar->Update(msg->FindFloat("delta"));
-		break;
+		case UPDATE_BAR:
+			the_bar->Update(msg->FindFloat("delta"));
+			break;
 
-	case STOP_PRESSED:
-		stop = true;
-		break;
+		case STOP_PRESSED:
+			stop = true;
+			break;
 
-	default:
-		BWindow::MessageReceived(msg);
-		break;
+		default:
+			BWindow::MessageReceived(msg);
+			break;
 	}
 }
 
@@ -93,7 +90,7 @@ BarWindow::StopPressed() const
 // Constructor for when using the bitmap stream as source
 ProgressiveBitmapStream::ProgressiveBitmapStream(BBitmap* bitmap) : BPositionIO()
 {
-	fWriteOnly = false; // Read-only
+	fWriteOnly = false;	 // Read-only
 	fBitmap = bitmap;
 
 	fHeader.magic = B_TRANSLATOR_BITMAP;
@@ -132,8 +129,7 @@ ProgressiveBitmapStream::ProgressiveBitmapStream(BBitmap* bitmap) : BPositionIO(
 
 // Constructor for when using the bitmap stream as destination
 ProgressiveBitmapStream::ProgressiveBitmapStream(
-	BInvoker* bitmap_created, BInvoker* rect_updated, bool dither, bool keep_org
-)
+	BInvoker* bitmap_created, BInvoker* rect_updated, bool dither, bool keep_org)
 	: BPositionIO()
 {
 	fWriteOnly = true;
@@ -202,18 +198,15 @@ ProgressiveBitmapStream::ReadAt(off_t pos, void* buffer, size_t size)
 	// Read data from the bitmap
 	size_t from_bitmap = size - from_header;
 	if (from_bitmap > 0) {
-		memcpy(
-			static_cast<char*>(buffer) + from_header,
+		memcpy(static_cast<char*>(buffer) + from_header,
 			static_cast<char*>(fBitmap->Bits()) + pos + from_header - sizeof(TranslatorBitmap),
-			from_bitmap
-		);
+			from_bitmap);
 
 		// Update the progress bar if there is one
 		if (fBar) {
 			if (!fBarWin) {
 				fBarWin = new BarWindow(
-					BRect(fBarLeftTop, fBarLeftTop + BPoint(250.0, 82.0)), fBarTitle, fDataSize
-				);
+					BRect(fBarLeftTop, fBarLeftTop + BPoint(250.0, 82.0)), fBarTitle, fDataSize);
 			}
 			BMessage msg(UPDATE_BAR);
 			msg.AddFloat("delta", from_bitmap);
@@ -271,8 +264,7 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 			swap_data(B_RECT_TYPE, &(fHeader.bounds), sizeof(BRect), B_SWAP_BENDIAN_TO_HOST);
 			swap_data(B_UINT32_TYPE, &(fHeader.rowBytes), sizeof(uint32), B_SWAP_BENDIAN_TO_HOST);
 			swap_data(
-				B_UINT32_TYPE, &(fHeader.colors), sizeof(color_space), B_SWAP_BENDIAN_TO_HOST
-			);
+				B_UINT32_TYPE, &(fHeader.colors), sizeof(color_space), B_SWAP_BENDIAN_TO_HOST);
 			swap_data(B_UINT32_TYPE, &(fHeader.dataSize), sizeof(uint32), B_SWAP_BENDIAN_TO_HOST);
 
 			// Some rigorous checks
@@ -322,17 +314,13 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 		off_t in_bitmap = pos + to_header - sizeof(TranslatorBitmap);
 		if (fDither) {
 			if (fKeepOrg) {
-				memcpy(
-					static_cast<char*>(fOrgBitmap->Bits()) + in_bitmap,
-					static_cast<const char*>(buffer) + to_header, to_bitmap
-				);
+				memcpy(static_cast<char*>(fOrgBitmap->Bits()) + in_bitmap,
+					static_cast<const char*>(buffer) + to_header, to_bitmap);
 			}
 			Dither(static_cast<const uchar*>(buffer) + to_header, in_bitmap, to_bitmap);
 		} else {
-			memcpy(
-				static_cast<char*>(fBitmap->Bits()) + in_bitmap,
-				static_cast<const char*>(buffer) + to_header, to_bitmap
-			);
+			memcpy(static_cast<char*>(fBitmap->Bits()) + in_bitmap,
+				static_cast<const char*>(buffer) + to_header, to_bitmap);
 		}
 
 		// Send 'rect updated' message
@@ -359,10 +347,8 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 		// Update the progress bar if there is one
 		if (fBar) {
 			if (!fBarWin) {
-				fBarWin = new BarWindow(
-					BRect(fBarLeftTop, fBarLeftTop + BPoint(250.0, 82.0)), fBarTitle,
-					fHeader.dataSize
-				);
+				fBarWin = new BarWindow(BRect(fBarLeftTop, fBarLeftTop + BPoint(250.0, 82.0)),
+					fBarTitle, fHeader.dataSize);
 			}
 			BMessage msg(UPDATE_BAR);
 			msg.AddFloat("delta", to_bitmap);
@@ -384,20 +370,20 @@ off_t
 ProgressiveBitmapStream::Seek(off_t position, uint32 seek_mode)
 {
 	switch (seek_mode) {
-	case SEEK_SET:
-		break;
+		case SEEK_SET:
+			break;
 
-	case SEEK_CUR:
-		position += fPosition;
-		break;
+		case SEEK_CUR:
+			position += fPosition;
+			break;
 
-	case SEEK_END:
-		position += fSize;
-		break;
+		case SEEK_END:
+			position += fSize;
+			break;
 
-	default:
-		return B_ERROR;
-		break;
+		default:
+			return B_ERROR;
+			break;
 	}
 
 	if (position < 0 || position > fSize)
@@ -487,21 +473,21 @@ ProgressiveBitmapStream::SetExtras()
 	fSize = sizeof(TranslatorBitmap) + fHeader.dataSize;
 
 	switch (fHeader.colors) {
-	case B_RGBA32:
-		fBytesPerPixel = 4.0;
-		break;
+		case B_RGBA32:
+			fBytesPerPixel = 4.0;
+			break;
 
-	case B_RGB_16_BIT:
-		fBytesPerPixel = 2.0;
-		break;
+		case B_RGB_16_BIT:
+			fBytesPerPixel = 2.0;
+			break;
 
-	case B_MONOCHROME_1_BIT:
-		fBytesPerPixel = 1.0 / 8.0;
-		break;
+		case B_MONOCHROME_1_BIT:
+			fBytesPerPixel = 1.0 / 8.0;
+			break;
 
-	default: // 8-bit
-		fBytesPerPixel = 1.0;
-		break;
+		default:  // 8-bit
+			fBytesPerPixel = 1.0;
+			break;
 	}
 
 	if (fDither) {
@@ -555,14 +541,11 @@ ProgressiveBitmapStream::Dither(const uchar* src, int32 place, int32 n_bytes)
 				b = (int32)src[0] + (int32)b_delta;
 			} else {
 				// Floyd-Steinberg diffusion
-				r =
-					int(src[2] + r_delta * 0.4375 + deltas[0] * 0.0625 + deltas[3] * 0.3125 +
+				r = int(src[2] + r_delta * 0.4375 + deltas[0] * 0.0625 + deltas[3] * 0.3125 +
 						deltas[6] * 0.1875);
-				g =
-					int(src[1] + g_delta * 0.4375 + deltas[1] * 0.0625 + deltas[4] * 0.3125 +
+				g = int(src[1] + g_delta * 0.4375 + deltas[1] * 0.0625 + deltas[4] * 0.3125 +
 						deltas[7] * 0.1875);
-				b =
-					int(src[0] + b_delta * 0.4375 + deltas[2] * 0.0625 + deltas[5] * 0.3125 +
+				b = int(src[0] + b_delta * 0.4375 + deltas[2] * 0.0625 + deltas[5] * 0.3125 +
 						deltas[8] * 0.1875);
 			}
 
@@ -595,7 +578,7 @@ ProgressiveBitmapStream::Dither(const uchar* src, int32 place, int32 n_bytes)
 			src += 4;
 			n_bytes -= 4;
 		}
-		in_bitmap += row_bytes - x_len; // Skip bytes at row end
+		in_bitmap += row_bytes - x_len;	 // Skip bytes at row end
 		x_pos = 0;
 		deltas = fDeltaBuffer;
 		fSeeked = false;

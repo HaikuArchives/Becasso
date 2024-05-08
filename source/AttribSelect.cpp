@@ -1,8 +1,8 @@
-#include <StringView.h>
 #include "AttribSelect.h"
-#include "Slider.h"
+#include <StringView.h>
 #include "Colors.h"
 #include "Settings.h"
+#include "Slider.h"
 
 static property_info prop_list[] = {0};
 
@@ -29,8 +29,7 @@ AttribSelect::GetSupportedSuites(BMessage* message)
 
 BHandler*
 AttribSelect::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	return inherited::ResolveSpecifier(message, index, specifier, command, property);
 }
@@ -39,8 +38,8 @@ void
 AttribSelect::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	default:
-		inherited::MessageReceived(msg);
-		break;
+		default:
+			inherited::MessageReceived(msg);
+			break;
 	}
 }

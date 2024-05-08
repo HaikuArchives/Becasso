@@ -1,16 +1,16 @@
 // ThumbnailFilePanel
 
 #include "ThumbnailFilePanel.h"
-#include "Colors.h"
-#include <stdio.h>
-#include <string.h>
-#include "BitmapStuff.h"
+#include <Entry.h>
+#include <Mime.h>
 #include <Node.h>
 #include <NodeInfo.h>
 #include <Path.h>
-#include <Entry.h>
-#include <Mime.h>
 #include <Window.h>
+#include <stdio.h>
+#include <string.h>
+#include "BitmapStuff.h"
+#include "Colors.h"
 
 #define THUMBNAIL_VIEW_HEIGHT 120
 #define THUMBNAIL_VIEW_WIDTH 160
@@ -19,15 +19,11 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #endif
 
-ThumbnailFilePanel::ThumbnailFilePanel(
-	file_panel_mode mode, BMessenger* target, entry_ref* panel_directory, uint32 node_flavors,
-	bool allow_multiple_selection, BMessage* message, BRefFilter* filter, bool modal,
-	bool hide_when_done
-)
-	: BFilePanel(
-		  mode, target, panel_directory, node_flavors, allow_multiple_selection, message, filter,
-		  modal, hide_when_done
-	  )
+ThumbnailFilePanel::ThumbnailFilePanel(file_panel_mode mode, BMessenger* target,
+	entry_ref* panel_directory, uint32 node_flavors, bool allow_multiple_selection,
+	BMessage* message, BRefFilter* filter, bool modal, bool hide_when_done)
+	: BFilePanel(mode, target, panel_directory, node_flavors, allow_multiple_selection, message,
+		  filter, modal, hide_when_done)
 {
 	float resizeby = THUMBNAIL_VIEW_HEIGHT - 40;
 	float minWidth, minHeight, maxWidth, maxHeight;
@@ -43,7 +39,7 @@ ThumbnailFilePanel::ThumbnailFilePanel(
 	// printf ("Looking for Horizontal ScrollBar...\n");
 	//  Horizontal ScrollBar workaround
 	//  Note: Be was so kind as to change the name from "" to "HScrollBar" in 4.1
-	if (!hScrollBar) // >= R4.1 I suppose.
+	if (!hScrollBar)  // >= R4.1 I suppose.
 	{
 		for (int i = background->CountChildren(); i > 0; i--) {
 			BView* view = background->ChildAt(i - 1);
@@ -62,24 +58,18 @@ ThumbnailFilePanel::ThumbnailFilePanel(
 	vScrollBar->ResizeBy(0, -resizeby);
 	hScrollBar->MoveBy(0, -resizeby);
 	countVW->MoveBy(0, -resizeby);
-	BRect viewRect = BRect(
-		tFrame.left - 1, tFrame.bottom + 24, tFrame.left + THUMBNAIL_VIEW_WIDTH,
-		tFrame.bottom + 8 + THUMBNAIL_VIEW_HEIGHT
-	);
+	BRect viewRect = BRect(tFrame.left - 1, tFrame.bottom + 24, tFrame.left + THUMBNAIL_VIEW_WIDTH,
+		tFrame.bottom + 8 + THUMBNAIL_VIEW_HEIGHT);
 	fView =
 		new ThumbnailView(viewRect, "thumbnail view", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM, B_WILL_DRAW);
 	background->AddChild(fView);
 
 	infoView1 = new BStringView(
 		BRect(viewRect.right + 8, viewRect.top, background->Frame().right - 4, viewRect.top + 16),
-		"infoView1", "File Type", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM
-	);
-	infoView2 = new BStringView(
-		BRect(
-			viewRect.right + 8, viewRect.top + 18, background->Frame().right - 4, viewRect.top + 34
-		),
-		"infoView2", "Dimensions", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM
-	);
+		"infoView1", "File Type", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM);
+	infoView2 = new BStringView(BRect(viewRect.right + 8, viewRect.top + 18,
+									background->Frame().right - 4, viewRect.top + 34),
+		"infoView2", "Dimensions", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM);
 	background->AddChild(infoView1);
 	background->AddChild(infoView2);
 	SelectionChanged();
@@ -158,7 +148,10 @@ ThumbnailView::AttachedToWindow()
 	SetViewColor(Parent()->ViewColor());
 }
 
-ThumbnailView::~ThumbnailView() { delete fBitmap; }
+ThumbnailView::~ThumbnailView()
+{
+	delete fBitmap;
+}
 
 void
 ThumbnailView::Draw(BRect update)

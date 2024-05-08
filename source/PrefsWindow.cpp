@@ -1,24 +1,24 @@
-#include <TextControl.h>
+#include "PrefsWindow.h"
+#include <Application.h>
 #include <Box.h>
-#include <Rect.h>
-#include <View.h>
 #include <Button.h>
-#include <PopUpMenu.h>
+#include <CheckBox.h>
+#include <Directory.h>
+#include <Entry.h>
 #include <LayoutBuilder.h>
 #include <MenuField.h>
 #include <MenuItem.h>
-#include <CheckBox.h>
+#include <Path.h>
+#include <PopUpMenu.h>
+#include <Rect.h>
+#include <Roster.h>
 #include <StringView.h>
-#include "PrefsWindow.h"
-#include "Colors.h"
+#include <TextControl.h>
+#include <View.h>
 #include <stdio.h>
 #include <string.h>
+#include "Colors.h"
 #include "Settings.h"
-#include <Path.h>
-#include <Entry.h>
-#include <Directory.h>
-#include <Application.h>
-#include <Roster.h>
 #include "Slider.h"
 
 #include <SeparatorView.h>
@@ -29,13 +29,11 @@ extern BLocker g_settings_lock;
 // TODO fix Revert Apply OK use standard behavior
 
 PrefsWindow::PrefsWindow()
-	: BWindow(
-		  BRect(100, 100, 180, 108), lstring(380, "Preferences"), B_TITLED_WINDOW,
-		  B_NOT_RESIZABLE | B_AUTO_UPDATE_SIZE_LIMITS
-	  )
+	: BWindow(BRect(100, 100, 180, 108), lstring(380, "Preferences"), B_TITLED_WINDOW,
+		  B_NOT_RESIZABLE | B_AUTO_UPDATE_SIZE_LIMITS)
 {
 	BView* bg = new BView("SW bg", B_WILL_DRAW);
-	bg->SetViewColor(LightGrey); // TODO Fix This Color
+	bg->SetViewColor(LightGrey);  // TODO Fix This Color
 
 	g_settings_lock.Lock();
 	fLocalSettings = g_settings;
@@ -45,8 +43,7 @@ PrefsWindow::PrefsWindow()
 	BString cur;
 	fNumberFormat.Format(cur, fLocalSettings.recents);
 	fNumEntriesTC = new BTextControl(
-		"recent", lstring(383, "Number of entries in Recent menu:"), cur, new BMessage('prNR')
-	);
+		"recent", lstring(383, "Number of entries in Recent menu:"), cur, new BMessage('prNR'));
 
 
 	fLangPU = new BPopUpMenu("Language");
@@ -81,10 +78,8 @@ PrefsWindow::PrefsWindow()
 				uint32 resizingMode = B_FOLLOW_LEFT_TOP,
 				uint32 flags = B_NAVIGABLE | B_WILL_DRAW
 					| B_FRAME_EVENTS);*/
-	fUndoSlider = new Slider(
-		BRect(10, 80, 272, 96), 150, lstring(331, "Maximum # Undos"), 1, MAX_UNDO - 1, 1,
-		new BMessage('prMU'), B_HORIZONTAL, 16
-	);
+	fUndoSlider = new Slider(BRect(10, 80, 272, 96), 150, lstring(331, "Maximum # Undos"), 1,
+		MAX_UNDO - 1, 1, new BMessage('prMU'), B_HORIZONTAL, 16);
 	fUndoSlider->SetValue(fLocalSettings.max_undo);
 
 
@@ -133,10 +128,8 @@ PrefsWindow::PrefsWindow()
 		.Add(apply)
 		.Add(ok);
 	BLayoutBuilder::Group<>(this, B_VERTICAL, 0)
-		.SetInsets(
-			B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
-			B_USE_DEFAULT_SPACING
-		)
+		.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
+			B_USE_DEFAULT_SPACING)
 		.Add(bg);
 }
 
@@ -157,55 +150,59 @@ void
 PrefsWindow::MessageReceived(BMessage* message)
 {
 	switch (message->what) {
-	case 'prMU': {
-		fLocalSettings.max_undo = int(message->FindFloat("value"));
-		break;
-	}
-	case 'prNR': {
-		fLocalSettings.recents = atoi(fNumEntriesTC->Text());
-		fLocalSettings.settings_touched = true;
-		break;
-	}
-	case 'prLC': {
-		strcpy(fLocalSettings.language, fLangPU->FindMarked()->Label());
-		break;
-	}
-	case 'selI':
-		fLocalSettings.selection_type = fSelectionCB->Value() ? SELECTION_STATIC : SELECTION_IN_OUT;
-		break;
-	case 'totd':
-		fLocalSettings.totd = message->FindInt32("be:value");
-		break;
-	case 'p064':
-		fLocalSettings.preview_size = 64;
-		break;
-	case 'p128':
-		fLocalSettings.preview_size = 128;
-		break;
-	case 'p256':
-		fLocalSettings.preview_size = 256;
-		break;
+		case 'prMU':
+		{
+			fLocalSettings.max_undo = int(message->FindFloat("value"));
+			break;
+		}
+		case 'prNR':
+		{
+			fLocalSettings.recents = atoi(fNumEntriesTC->Text());
+			fLocalSettings.settings_touched = true;
+			break;
+		}
+		case 'prLC':
+		{
+			strcpy(fLocalSettings.language, fLangPU->FindMarked()->Label());
+			break;
+		}
+		case 'selI':
+			fLocalSettings.selection_type =
+				fSelectionCB->Value() ? SELECTION_STATIC : SELECTION_IN_OUT;
+			break;
+		case 'totd':
+			fLocalSettings.totd = message->FindInt32("be:value");
+			break;
+		case 'p064':
+			fLocalSettings.preview_size = 64;
+			break;
+		case 'p128':
+			fLocalSettings.preview_size = 128;
+			break;
+		case 'p256':
+			fLocalSettings.preview_size = 256;
+			break;
 
-	case 'prfR':
-		g_settings_lock.Lock();
-		fLocalSettings = fBackup;
-		g_settings = fLocalSettings;
-		g_settings_lock.Unlock();
-		refresh();
-		break;
-	case 'prfA':
-		g_settings_lock.Lock();
-		g_settings = fLocalSettings;
-		g_settings_lock.Unlock();
-		break;
-	case 'prfK':
-		g_settings_lock.Lock();
-		g_settings = fLocalSettings;
-		g_settings_lock.Unlock();
-		Quit();
-		break;
-	default:
-		inherited::MessageReceived(message);
-		break;
+		case 'prfR':
+			g_settings_lock.Lock();
+			fLocalSettings = fBackup;
+			g_settings = fLocalSettings;
+			g_settings_lock.Unlock();
+			refresh();
+			break;
+		case 'prfA':
+			g_settings_lock.Lock();
+			g_settings = fLocalSettings;
+			g_settings_lock.Unlock();
+			break;
+		case 'prfK':
+			g_settings_lock.Lock();
+			g_settings = fLocalSettings;
+			g_settings_lock.Unlock();
+			Quit();
+			break;
+		default:
+			inherited::MessageReceived(message);
+			break;
 	}
 }

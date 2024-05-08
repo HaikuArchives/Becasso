@@ -2,9 +2,9 @@
 /*	Be sound effects system by Jon Watte <besfx@mindcontrol.org>	*/
 /*	Copyright © 1997 Jon Watte	*/
 
-#include <string.h>
-#include <alloca.h>
 #include <ByteOrder.h>
+#include <alloca.h>
+#include <string.h>
 
 #include "be-sfx.h"
 
@@ -77,8 +77,8 @@ SoundEffect8_11::SoundEffect8_11(char* buffer, int size, int loop, bool toggle)
 	: SoundEffect(false, Convert8_11(buffer, size, loop, toggle), size * 4, loop) /* 11->44 */
 {
 	if (buffer != NULL)
-		free(buffer
-		); /*	since we eat an already allocated malloc() block (say, from FindResource())	*/
+		free(buffer); /*	since we eat an already allocated malloc() block (say, from
+						 FindResource())	*/
 }
 
 EffectsPlayer::EffectsPlayer(int bgVolume, int nChannels)
@@ -132,10 +132,8 @@ EffectsPlayer::StartEffect(SoundEffect* effect, int volume, int pan)
 			}
 		}
 		effect_id evicted = fPlayList[found].id;
-		memcpy(
-			&fPlayList[found], &fPlayList[found + 1],
-			sizeof(PlayingEffect) * (fPlaySize - found - 1)
-		);
+		memcpy(&fPlayList[found], &fPlayList[found + 1],
+			sizeof(PlayingEffect) * (fPlaySize - found - 1));
 		nPlaying = fPlaySize - 1;
 		SoundCompleted(evicted, kSoundEvicted);
 	}
@@ -183,8 +181,7 @@ EffectsPlayer::StopEffect(effect_id effect)
 
 void
 EffectsPlayer::SetEffectVolPan(/*	-1 means no change	*/
-							   effect_id effect, int vol, int pan
-)
+	effect_id effect, int vol, int pan)
 {
 	if (effect < 0)
 		return;
@@ -198,14 +195,12 @@ EffectsPlayer::SetEffectVolPan(/*	-1 means no change	*/
 			/*	because of the linear relation between them. The largest	*/
 			/*	is always whatever the volume is.							*/
 			if (vol < 0)
-				vol =
-					((fPlayList[ix].rvol > fPlayList[ix].lvol) ? fPlayList[ix].rvol
-															   : fPlayList[ix].lvol);
+				vol = ((fPlayList[ix].rvol > fPlayList[ix].lvol) ? fPlayList[ix].rvol
+																 : fPlayList[ix].lvol);
 			if (pan < 0)
-				pan =
-					((fPlayList[ix].rvol >= fPlayList[ix].lvol)
-						 ? (127 - 127 * fPlayList[ix].lvol / fPlayList[ix].rvol)
-						 : (127 * fPlayList[ix].rvol / fPlayList[ix].lvol - 127));
+				pan = ((fPlayList[ix].rvol >= fPlayList[ix].lvol)
+						   ? (127 - 127 * fPlayList[ix].lvol / fPlayList[ix].rvol)
+						   : (127 * fPlayList[ix].rvol / fPlayList[ix].lvol - 127));
 			fPlayList[nPlaying].lvol = vol * ((pan > 0) ? (127.0 - pan) / 127.0 : 1.0);
 			fPlayList[nPlaying].rvol = vol * ((pan < 0) ? (127.0 + pan) / 127.0 : 1.0);
 			break;
@@ -298,10 +293,8 @@ EffectsPlayer::Mix(short* buffer, int numFrames)
 				} else {
 					/*	kick it out	*/
 					list[nNotify++] = -fPlayList[iz].id; /*	to know what kind of notify		*/
-					memcpy(
-						&fPlayList[iz], &fPlayList[iz + 1],
-						sizeof(PlayingEffect) * (nPlaying - iz - 1)
-					);
+					memcpy(&fPlayList[iz], &fPlayList[iz + 1],
+						sizeof(PlayingEffect) * (nPlaying - iz - 1));
 					nPlaying--;
 					iz--; /*	will get incremented in for() clause	*/
 				}

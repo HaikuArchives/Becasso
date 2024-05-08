@@ -1,9 +1,9 @@
 #include "MagView.h"
-#include "MagWindow.h"
-#include "Colors.h"
-#include "ColorMenuButton.h"
-#include "Becasso.h"
 #include <SupportDefs.h>
+#include "Becasso.h"
+#include "ColorMenuButton.h"
+#include "Colors.h"
+#include "MagWindow.h"
 
 MagView::MagView(BRect frame, const char* name, CanvasView* _myView)
 	: BView(frame, name, B_FOLLOW_ALL_SIDES, B_WILL_DRAW | B_FRAME_EVENTS | B_PULSE_NEEDED)
@@ -34,14 +34,10 @@ MagView::Draw(BRect update)
 	SetDrawingMode(B_OP_COPY);
 	BRect source, ibounds;
 	BBitmap* canvas = new BBitmap(myView->canvasFrame(), B_RGBA32);
-	source.Set(
-		int(update.left / zoom), int(update.top / zoom), int(update.right / zoom) + 1,
-		int(update.bottom / zoom) + 1
-	);
-	ibounds.Set(
-		int(source.left) * zoom, int(source.top) * zoom, int(source.right + 1) * zoom,
-		int(source.bottom + 1) * zoom
-	);
+	source.Set(int(update.left / zoom), int(update.top / zoom), int(update.right / zoom) + 1,
+		int(update.bottom / zoom) + 1);
+	ibounds.Set(int(source.left) * zoom, int(source.top) * zoom, int(source.right + 1) * zoom,
+		int(source.bottom + 1) * zoom);
 	myView->ConstructCanvas(canvas, source, false);
 	DrawBitmapAsync(canvas, source, ibounds);
 
@@ -107,12 +103,12 @@ MagView::MouseDown(BPoint point)
 				prevpoint = p;
 				GetMouse(&point, &buttons);
 				BRect bounds = Bounds();
-				if (point.x > bounds.right) // Still flickers...
+				if (point.x > bounds.right)	 // Still flickers...
 					ScrollBy(zoom * (point.x - bounds.right), 0);
 				if (point.x < bounds.left && bounds.left > 0)
 					ScrollBy(zoom * (point.x - bounds.left), 0);
-				if (point.y > bounds.bottom) // Ditto.  Think of a nice test.  (I know what you're
-											 // thinking, but I tried that...)
+				if (point.y > bounds.bottom)  // Ditto.  Think of a nice test.  (I know what you're
+											  // thinking, but I tried that...)
 					ScrollBy(0, zoom * (point.y - bounds.bottom));
 				if (point.y < bounds.top && bounds.top > 0)
 					ScrollBy(0, zoom * (point.y - bounds.top));
@@ -141,7 +137,7 @@ MagView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 
 	int32 buttons;
 	Window()->CurrentMessage()->FindInt32("buttons", &buttons);
-	if (modifiers() & B_OPTION_KEY) // Color Picker
+	if (modifiers() & B_OPTION_KEY)	 // Color Picker
 	{
 		extern ColorMenuButton *hicolor, *locolor;
 		BPoint p = BPoint(int(point.x / zoom), int(point.y / zoom));
@@ -161,15 +157,15 @@ MagView::Pulse()
 	GetMouse(&point, &buttons, true);
 
 	extern Becasso* mainapp;
-	if (modifiers() & B_OPTION_KEY && mouse_on_canvas) // Color Picker
+	if (modifiers() & B_OPTION_KEY && mouse_on_canvas)	// Color Picker
 	{
 		mainapp->setPicker(true);
 		fPicking = true;
 	} else if (fPicking) {
 		mainapp->setPicker(false);
 		if (mouse_on_canvas && !buttons)
-			mainapp->FixCursor(
-			); // Otherwise: Few pixels off!!  (BeOS bug w.r.t. hot spot of cursors ...)
+			mainapp->FixCursor();  // Otherwise: Few pixels off!!  (BeOS bug w.r.t. hot spot of
+								   // cursors ...)
 
 		fPicking = false;
 	}
@@ -180,13 +176,11 @@ MagView::setzoom(int z)
 {
 	zoom = z;
 	int maxw = int(zoom * myView->canvasFrame().IntegerWidth() + B_V_SCROLL_BAR_WIDTH);
-	int maxh =
-		int(zoom * myView->canvasFrame().IntegerHeight() + B_H_SCROLL_BAR_HEIGHT +
-			((MagWindow*)Window())->menubarHeight() + 1);
+	int maxh = int(zoom * myView->canvasFrame().IntegerHeight() + B_H_SCROLL_BAR_HEIGHT +
+				   ((MagWindow*)Window())->menubarHeight() + 1);
 	Window()->SetSizeLimits(64, maxw, 64, maxh);
 	Window()->ResizeTo(
-		min_c(maxw, Window()->Frame().Width()), min_c(maxh, Window()->Frame().Height())
-	);
+		min_c(maxw, Window()->Frame().Width()), min_c(maxh, Window()->Frame().Height()));
 	FrameResized(Bounds().Width(), Bounds().Height());
 	Draw(Bounds());
 }
@@ -298,7 +292,7 @@ MagView::Undo()
 		}
 		return B_OK;
 	} else
-		return B_ERROR; // Nothing to undo...
+		return B_ERROR;	 // Nothing to undo...
 }
 
 status_t

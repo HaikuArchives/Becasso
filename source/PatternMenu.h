@@ -1,23 +1,22 @@
 #ifndef PATTERNMENU_H
 #define PATTERNMENU_H
 
-#include <Rect.h>
 #include <Menu.h>
 #include <Point.h>
+#include <Rect.h>
 #include <View.h>
+#include "DragWindow.h"
 #include "PatternItem.h"
 #include "sfx.h"
-#include "DragWindow.h"
 
 #define MAX_PATTERNS 20
 
 class PatternMenuButton;
 
-class PatternMenu : public BMenu
-{
+class PatternMenu : public BMenu {
 	friend class PatternMenuButton;
 
-  public:
+public:
 	PatternMenu(BView* _view, int h, int v, float s);
 	virtual ~PatternMenu();
 	virtual void AddItem(PatternItem* item, BRect frame);
@@ -32,10 +31,10 @@ class PatternMenu : public BMenu
 	void TearDone(BRect place, bool newwin);
 	void InvalidateWindow();
 
-  protected:
+protected:
 	virtual BPoint ScreenLocation();
 
-  private:
+private:
 	typedef BMenu inherited;
 	DragWindow* fWindow;
 	PatternMenuButton* parent;

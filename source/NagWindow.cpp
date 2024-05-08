@@ -1,16 +1,16 @@
 #include "NagWindow.h"
-#include <View.h>
-#include <unistd.h>
-#include "Colors.h"
-#include "Settings.h"
 #include <Application.h>
-#include <StringView.h>
-#include <Roster.h>
+#include <Bitmap.h>
 #include <File.h>
 #include <Resources.h>
+#include <Roster.h>
 #include <Screen.h>
-#include <Bitmap.h>
+#include <StringView.h>
+#include <View.h>
+#include <unistd.h>
 #include "BitmapView.h"
+#include "Colors.h"
+#include "Settings.h"
 
 #define NAG_TIME 15
 
@@ -43,10 +43,8 @@ NagWindow::NagWindow(BRect frame) : BWindow(frame, "", B_MODAL_WINDOW, B_NOT_RES
 
 	bg->AddChild(new BStringView(BRect(4, 4, 400, 20), "", lstring(4, "Unregistered Version")));
 	bg->AddChild(new BStringView(BRect(4, 22, 400, 38), "", wait));
-	bg->AddChild(new BStringView(
-		BRect(4, 40, 400, 56), "",
-		lstring(433, "(This delay will go away when you register Becasso.)")
-	));
+	bg->AddChild(new BStringView(BRect(4, 40, 400, 56), "",
+		lstring(433, "(This delay will go away when you register Becasso.)")));
 	bg->AddChild(new BStringView(BRect(4, 58, 400, 74), "", lstring(434, "")));
 }
 

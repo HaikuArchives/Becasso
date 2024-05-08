@@ -1,13 +1,12 @@
 #ifndef COLORVIEW_H
 #define COLORVIEW_H
 
-#include <View.h>
-#include <Rect.h>
 #include <Bitmap.h>
+#include <Rect.h>
+#include <View.h>
 
-class ColorView : public BView
-{
-  public:
+class ColorView : public BView {
+public:
 	ColorView(BRect frame, const char* name, rgb_color c);
 	virtual ~ColorView();
 	virtual void Draw(BRect update);
@@ -16,7 +15,7 @@ class ColorView : public BView
 	void SetColor(rgb_color c);
 	rgb_color GetColor();
 
-  private:
+private:
 	typedef BView inherited;
 	BBitmap* bitmap;
 	rgb_color color;

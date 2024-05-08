@@ -3,18 +3,17 @@
 #ifndef TABVIEW_H
 #define TABVIEW_H
 
-#include <View.h>
-#include <Rect.h>
 #include <Point.h>
+#include <Rect.h>
+#include <View.h>
 #include "Build.h"
 
 #define MAX_VIEWS 32
 #define MAX_TAB 32
 #define TAB_HEIGHT 16
 
-class IMPEXP TabView : public BView
-{
-  public:
+class IMPEXP TabView : public BView {
+public:
 	TabView(BRect frame, const char* name, uint32 resizingMode = B_FOLLOW_LEFT | B_FOLLOW_TOP);
 	virtual ~TabView();
 	virtual void Draw(BRect update);
@@ -25,7 +24,7 @@ class IMPEXP TabView : public BView
 	// BView		*Current ();
 	void RaiseView(int n);
 
-  private:
+private:
 	typedef BView inherited;
 	BView* views[MAX_VIEWS];
 	char tabname[MAX_VIEWS][MAX_TAB];

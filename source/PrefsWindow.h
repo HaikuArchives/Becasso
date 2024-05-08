@@ -1,8 +1,8 @@
 #ifndef PREFSWINDOW_H
 #define PREFSWINDOW_H
 
-#include <Window.h>
 #include <NumberFormat.h>
+#include <Window.h>
 #include <stdlib.h>
 #include "Settings.h"
 
@@ -11,9 +11,8 @@ class BTextControl;
 class BPopUpMenu;
 class Slider;
 
-class PrefsWindow : public BWindow
-{
-  public:
+class PrefsWindow : public BWindow {
+public:
 	PrefsWindow();
 	virtual ~PrefsWindow();
 
@@ -21,7 +20,7 @@ class PrefsWindow : public BWindow
 
 	void refresh();
 
-  private:
+private:
 	typedef BWindow inherited;
 	becasso_settings fLocalSettings;
 	becasso_settings fBackup;

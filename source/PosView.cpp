@@ -63,8 +63,8 @@ PosView::Draw(BRect /* updaterect */)
 	StrokeRect(Bounds());
 	SetHighColor(Grey31);
 	StrokeLine(Bounds().LeftTop() + BPoint(1, 1), Bounds().RightTop() + BPoint(-1, 1));
-	if (canvas->Bounds().Contains(BPoint(mouse_x * canvas->getScale(), mouse_y * canvas->getScale())
-		) &&
+	if (canvas->Bounds().Contains(
+			BPoint(mouse_x * canvas->getScale(), mouse_y * canvas->getScale())) &&
 		(Window()->IsActive()))
 		SetHighColor(Black);
 	else
@@ -89,24 +89,19 @@ PosView::Draw(BRect /* updaterect */)
 		fNumberFormat.SetPrecision(1);
 		fNumberFormat.Format(radiusValue, sqrt(delta_x * delta_x + delta_y * delta_y));
 		if (do_radius) {
-			positionString.SetToFormat(
-				"(%s, %s) ∆ (%s%s, %s%s) %s", mouseXData.String(), mouseYData.String(),
-				(delta_x > 0 ? plusSign.String() : ""), deltaXData.String(),
-				(delta_y > 0 ? plusSign.String() : ""), deltaYData.String(), radiusValue.String()
-			);
+			positionString.SetToFormat("(%s, %s) ∆ (%s%s, %s%s) %s", mouseXData.String(),
+				mouseYData.String(), (delta_x > 0 ? plusSign.String() : ""), deltaXData.String(),
+				(delta_y > 0 ? plusSign.String() : ""), deltaYData.String(), radiusValue.String());
 		} else {
-			positionString.SetToFormat(
-				"(%s, %s) ∆ (%s%s, %s%s)", mouseXData.String(), mouseYData.String(),
-				(delta_x > 0 ? plusSign.String() : ""), deltaXData.String(),
-				(delta_y > 0 ? plusSign.String() : ""), deltaYData.String()
-			);
+			positionString.SetToFormat("(%s, %s) ∆ (%s%s, %s%s)", mouseXData.String(),
+				mouseYData.String(), (delta_x > 0 ? plusSign.String() : ""), deltaXData.String(),
+				(delta_y > 0 ? plusSign.String() : ""), deltaYData.String());
 		}
 	} else {
 		positionString.SetToFormat("(%s, %s)", mouseXData.String(), mouseYData.String());
 	}
 	DrawString(
-		positionString.String(), BPoint((POSWIDTH - StringWidth(positionString.String())) / 2, 11)
-	);
+		positionString.String(), BPoint((POSWIDTH - StringWidth(positionString.String())) / 2, 11));
 
 	//	if (is_textlayer)
 	//	{

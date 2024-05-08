@@ -1,15 +1,13 @@
 #include "AttribWindow.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 #include "Becasso.h"
 #include "Colors.h"
 #include "Settings.h"
 
 AttribWindow::AttribWindow(BRect frame, const char* title)
-	: BWindow(
-		  frame, title, B_TITLED_WINDOW,
-		  B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_WILL_ACCEPT_FIRST_CLICK
-	  )
+	: BWindow(frame, title, B_TITLED_WINDOW,
+		  B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_WILL_ACCEPT_FIRST_CLICK)
 {
 	current = -1;
 	numviews = 0;
@@ -56,8 +54,7 @@ AttribWindow::AddView(AttribView* view, BBitmap* icon)
 	if (icon) {
 		view->MoveBy(40, 0);
 		BitmapView* iview = new BitmapView(
-			BRect(0, 0, 39, view->Bounds().Height()), "icon", icon, B_OP_OVER, false
-		);
+			BRect(0, 0, 39, view->Bounds().Height()), "icon", icon, B_OP_OVER, false);
 		iview->SetViewColor(DarkGrey);
 		iview->SetPosition(BPoint(4, 8));
 		entry.icon = iview;
@@ -106,8 +103,7 @@ AttribWindow::Hide()
 
 BHandler*
 AttribWindow::ResolveSpecifier(
-	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property
-)
+	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
 	//	printf ("\nAttribWindow::ResolveSpecifier():  message:\n");
 	//	message->PrintToStream();
@@ -126,8 +122,7 @@ AttribWindow::ResolveSpecifier(
 						name = ToolSpecifiers[index];
 					} else
 						return inherited::ResolveSpecifier(
-							message, index, specifier, command, property
-						);
+							message, index, specifier, command, property);
 				} else if (!strcasecmp(property, "Mode")) {
 					//				extern const int32 NumModes;
 					extern const char* ModeSpecifiers[];
@@ -135,13 +130,12 @@ AttribWindow::ResolveSpecifier(
 						name = ModeSpecifiers[index];
 					} else
 						return inherited::ResolveSpecifier(
-							message, index, specifier, command, property
-						);
+							message, index, specifier, command, property);
 				}
-			} else // Name nor index?!
+			} else	// Name nor index?!
 				return inherited::ResolveSpecifier(message, index, specifier, command, property);
 		}
-	} else // This must be a "normal" Be scripting call
+	} else	// This must be a "normal" Be scripting call
 		return inherited::ResolveSpecifier(message, index, specifier, command, property);
 
 	message->PopSpecifier();
@@ -162,16 +156,16 @@ void
 AttribWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-	default:
-		if (!msg->HasBool("passed"))
-			views[current].view->MessageReceived(msg);
-		// Commenting this out fixes the TAB key bug... I'm expecting some
-		// unwanted side effects but at least this doesn't crash anymore...
-		// UPDATE: The unwanted side effects have been spotted: Popup menus
-		// didn't work anymore.
+		default:
+			if (!msg->HasBool("passed"))
+				views[current].view->MessageReceived(msg);
+			// Commenting this out fixes the TAB key bug... I'm expecting some
+			// unwanted side effects but at least this doesn't crash anymore...
+			// UPDATE: The unwanted side effects have been spotted: Popup menus
+			// didn't work anymore.
 
-		else
-			inherited::MessageReceived(msg);
-		break;
+			else
+				inherited::MessageReceived(msg);
+			break;
 	}
 }

@@ -1,9 +1,9 @@
 #include "PatternMenuButton.h"
-#include "ColorMenuButton.h"
-#include "PatternMenu.h"
-#include "Colors.h"
-#include "debug.h"
 #include <Application.h>
+#include "ColorMenuButton.h"
+#include "Colors.h"
+#include "PatternMenu.h"
+#include "debug.h"
 
 #define OPEN_RAD 4
 
@@ -84,8 +84,7 @@ PatternMenuButton::MouseDown(BPoint point)
 		}
 		if (click != 2) {
 			BRect openRect = BRect(
-				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD
-			);
+				point.x - OPEN_RAD, point.y - OPEN_RAD, point.x + OPEN_RAD, point.y + OPEN_RAD);
 			menu->Show();
 			if ((mselected = menu->Track(true, &openRect)) != NULL) {
 				index = menu->IndexOf(mselected);
