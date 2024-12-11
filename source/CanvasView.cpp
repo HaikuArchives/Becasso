@@ -3519,10 +3519,10 @@ CanvasView::Save(BEntry entry)
 		fNumberFormat.Format(topBound, layer[i]->Bounds().top);
 		fNumberFormat.Format(rightBound, layer[i]->Bounds().right);
 		fNumberFormat.Format(bottomBound, layer[i]->Bounds().bottom);
-		fNumberFormat.Format(mode, layer[i]->getMode());
-		fNumberFormat.Format(layerHidden, layer[i]->IsHidden() ? 1 : 0);
-		fNumberFormat.Format(globalAlpha, layer[i]->getGlobalAlpha());
-		fNumberFormat.Format(alphaMap, layer[i]->getAlphaMap() ? 1 : 0);
+		fNumberFormat.Format(mode, (int32)layer[i]->getMode());
+		fNumberFormat.Format(layerHidden, (int32)(layer[i]->IsHidden() ? 1 : 0));
+		fNumberFormat.Format(globalAlpha, (int32)layer[i]->getGlobalAlpha());
+		fNumberFormat.Format(alphaMap, (int32)(layer[i]->getAlphaMap() ? 1 : 0));
 		lineString.SetToFormat("%s %s %s %s %s %s %s %s %s\n", leftBound.String(),
 			topBound.String(), rightBound.String(), bottomBound.String(), mode.String(),
 			layerHidden.String(), globalAlpha.String(), alphaMap.String(), layer[i]->getName());

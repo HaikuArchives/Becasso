@@ -54,7 +54,7 @@ MainWindow* mainWindow;
 ThumbnailFilePanel* openPanel;
 entry_ref gSaveRef;
 BMessage* printSetup;
-int newnum;
+int32 newnum;
 BBitmap* clip;
 long pasteX, pasteY;
 long fPasteX, fPasteY;

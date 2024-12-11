@@ -79,13 +79,13 @@ PosView::Draw(BRect /* updaterect */)
 	BString radiusValue;
 	BString plusSign = BString("+");
 	BString positionString;
-	fNumberFormat.Format(mouseXData, mouse_x);
-	fNumberFormat.Format(mouseYData, mouse_y);
+	fNumberFormat.Format(mouseXData, (int32)mouse_x);
+	fNumberFormat.Format(mouseYData, (int32)mouse_y);
 	if (set_x >= 0) {
 		int delta_x = mouse_x - set_x;
 		int delta_y = mouse_y - set_y;
-		fNumberFormat.Format(deltaXData, delta_x);
-		fNumberFormat.Format(deltaYData, delta_y);
+		fNumberFormat.Format(deltaXData, (int32)delta_x);
+		fNumberFormat.Format(deltaYData, (int32)delta_y);
 		fNumberFormat.SetPrecision(1);
 		fNumberFormat.Format(radiusValue, sqrt(delta_x * delta_x + delta_y * delta_y));
 		if (do_radius) {

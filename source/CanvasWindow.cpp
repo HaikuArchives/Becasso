@@ -1038,7 +1038,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 							}
 						} else {
 							BString indexSpecifierData, numberOfLayersData, errorString;
-							fNumberFormat.Format(numberOfLayersData, canvas->numLayers() - 1);
+							fNumberFormat.Format(numberOfLayersData, (int32)(canvas->numLayers() - 1));
 							fNumberFormat.Format(indexSpecifierData, indexspecifier);
 							errorString.SetToFormat("Layer index out of range [0..%s]: %s",
 								numberOfLayersData.String(), indexSpecifierData.String());
