@@ -760,9 +760,9 @@ ColorMenuButton::Save(BEntry entry)
 	BString redS, greenS, blueS, lineS;
 	for (int i = 0; i < C_V_NUM * C_H_NUM; i++) {
 		rgb_color c = menu->ItemAt(i)->getColor();
-		fNumberFormat.Format(redS, int(c.red));
-		fNumberFormat.Format(greenS, int(c.green));
-		fNumberFormat.Format(blueS, int(c.blue));
+		fNumberFormat.Format(redS, (int32)int(c.red));
+		fNumberFormat.Format(greenS, (int32)int(c.green));
+		fNumberFormat.Format(blueS, (int32)int(c.blue));
 		lineS.SetToFormat("%s %s %s\n", redS.String(), greenS.String(), blueS.String());
 		fputs(lineS.String(), fp);
 	}
