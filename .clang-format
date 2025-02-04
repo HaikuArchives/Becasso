@@ -17,4 +17,6 @@ BreakBeforeBraces: Custom
 AllowShortEnumsOnASingleLine: false
 SeparateDefinitionBlocks: Leave
 MaxEmptyLinesToKeep: 2
-
+PackConstructorInitializers: Never
+BreakBeforeBinaryOperators: All
+Cpp11BracedListStyle: false

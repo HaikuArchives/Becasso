@@ -46,7 +46,7 @@ make_recent_menu()
 	g_settings_lock.Lock();
 	int32 max_entries = g_settings.recents;
 	g_settings_lock.Unlock();
-	const char* typelist[2] = {"image", "application/postscript"};
+	const char* typelist[2] = { "image", "application/postscript" };
 	BMenuItem* recent = new BMenuItem(BRecentFilesList::NewFileListMenu(lstring(12, "Open…"), NULL,
 										  NULL, be_app, max_entries, false, typelist, 2, NULL),
 		new BMessage('open'));
@@ -214,7 +214,8 @@ PrefsLoader::PrefsLoader()
 								ptr++;
 							ptr++;
 							if (sscanf(ptr, "%f,%f", &g_settings.origin[index].x,
-									&g_settings.origin[index].y) != 2)
+									&g_settings.origin[index].y)
+								!= 2)
 								fprintf(
 									stderr, "Illegal window origin in Becasso settings: %s\n", ptr);
 						} else

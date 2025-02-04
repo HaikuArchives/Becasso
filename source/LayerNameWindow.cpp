@@ -14,16 +14,16 @@ LayerNameWindow::LayerNameWindow(const char* _name)
 	AddChild(bg);
 
 	textFrame.Set(8, 8, 152, 26);
-	fName =
-		new BTextControl(textFrame, "fName", lstring(176, "Name: "), _name, new BMessage('LNWc'));
+	fName
+		= new BTextControl(textFrame, "fName", lstring(176, "Name: "), _name, new BMessage('LNWc'));
 	fName->SetAlignment(B_ALIGN_RIGHT, B_ALIGN_LEFT);
 	fName->SetDivider(40);
 	bg->AddChild(fName);
 
 	cancelFrame.Set(38, 36, 90, 60);
 	okFrame.Set(98, 36, 150, 60);
-	BButton* cancel =
-		new BButton(cancelFrame, "LNW cancel", lstring(131, "Cancel"), new BMessage('LNcn'));
+	BButton* cancel
+		= new BButton(cancelFrame, "LNW cancel", lstring(131, "Cancel"), new BMessage('LNcn'));
 	BButton* ok = new BButton(okFrame, "LNW open", lstring(136, "OK"), new BMessage('LNok'));
 	ok->MakeDefault(true);
 	bg->AddChild(cancel);

@@ -9,7 +9,8 @@
 #define XPW_BSIZE 74
 
 XpalWindow::XpalWindow(BRect rect, const char* name, BMessenger* target)
-	: BWindow(rect, name, B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE), fTarget(target)
+	: BWindow(rect, name, B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE),
+	  fTarget(target)
 {
 	BView* bg = new BView(Bounds(), "bg", B_FOLLOW_ALL, B_WILL_DRAW);
 	bg->SetViewColor(LightGrey);

@@ -2,7 +2,8 @@
 #include "ColorMenuButton.h"
 #include "Colors.h"
 
-ColorItem::ColorItem(const rgb_color _color) : BMenuItem("", NULL)
+ColorItem::ColorItem(const rgb_color _color)
+	: BMenuItem("", NULL)
 {
 	color = _color;
 }

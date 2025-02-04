@@ -102,8 +102,8 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	sFrame.Set(16, 290, 160, 308);
 	vFrame.Set(16, 312, 160, 330);
 	hTC = new BTextControl(hFrame, "hTC", lstring(199, "Hue (0–360)"), hS, new BMessage('TrbH'));
-	sTC =
-		new BTextControl(sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
+	sTC = new BTextControl(
+		sFrame, "sTC", lstring(200, "Saturation (0–1)"), sS, new BMessage('TrbS'));
 	vTC = new BTextControl(vFrame, "vTC", lstring(201, "Value (0–1)"), vS, new BMessage('TrbV'));
 	hTC->SetDivider(90);
 	sTC->SetDivider(90);
@@ -133,14 +133,14 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	slidBox->AddChild(tSlid);
 
 	setFrame.Set(bg2Frame.Width() - 92, 84, bg2Frame.Width() - 8, 109);
-	BButton* setCurrent =
-		new BButton(setFrame, "CE Setbutton", lstring(206, "Current"), new BMessage('CXSc'));
+	BButton* setCurrent
+		= new BButton(setFrame, "CE Setbutton", lstring(206, "Current"), new BMessage('CXSc'));
 	bg2->AddChild(setCurrent);
 	setCurrent->MakeDefault(true);
 
 	setFrame.Set(bg2Frame.Width() - 92, 115, bg2Frame.Width() - 8, 140);
-	BButton* setMatch =
-		new BButton(setFrame, "CE Matchbutton", lstring(207, "Best Match"), new BMessage('CXSm'));
+	BButton* setMatch
+		= new BButton(setFrame, "CE Matchbutton", lstring(207, "Best Match"), new BMessage('CXSm'));
 	bg2->AddChild(setMatch);
 
 	//	cancFrame = setFrame;
@@ -161,8 +161,8 @@ ColorWindow::ColorWindow(BRect frame, const char* name, ColorMenuButton* but)
 	bg2->AddChild(selText);
 
 	distFrame.Set(42, 108, 200, 124);
-	BStringView* matchText =
-		new BStringView(distFrame, "MatchText", lstring(209, "Closest Match in Palette"));
+	BStringView* matchText
+		= new BStringView(distFrame, "MatchText", lstring(209, "Closest Match in Palette"));
 	bg2->AddChild(matchText);
 
 	distFrame.Set(42, 124, 200, 138);
@@ -221,8 +221,8 @@ ColorWindow::MessageReceived(BMessage* msg)
 		{
 			rgb_color* dropped;
 			long dummy;
-			if (msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) ==
-				B_OK) {
+			if (msg->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy)
+				== B_OK) {
 				BMessage* cdrop = new BMessage('SetC');
 				cdrop->AddInt32("color", dropped->red);
 				cdrop->AddInt32("color", dropped->green);

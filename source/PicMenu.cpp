@@ -11,7 +11,8 @@
 #include "PicMenuView.h"
 #include "Settings.h"
 
-PicMenu::PicMenu(const char* name, BView* _view, int h, int v, float s) : BMenu(name, h * s, v * s)
+PicMenu::PicMenu(const char* name, BView* _view, int h, int v, float s)
+	: BMenu(name, h * s, v * s)
 {
 	marked = 0;
 	numitems = 0;
@@ -91,7 +92,10 @@ PicMenu::ScreenLocation()
 
 class picTearInfo {
 public:
-	picTearInfo(BRect r, PicMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
+	picTearInfo(BRect r, PicMenu* p, BView* s)
+		: dragRect(r),
+		  parent(p),
+		  someView(s) {};
 	BRect dragRect;
 	PicMenu* parent;
 	BView* someView;

@@ -88,7 +88,8 @@ BarWindow::StopPressed() const
 }
 
 // Constructor for when using the bitmap stream as source
-ProgressiveBitmapStream::ProgressiveBitmapStream(BBitmap* bitmap) : BPositionIO()
+ProgressiveBitmapStream::ProgressiveBitmapStream(BBitmap* bitmap)
+	: BPositionIO()
 {
 	fWriteOnly = false;	 // Read-only
 	fBitmap = bitmap;
@@ -268,9 +269,9 @@ ProgressiveBitmapStream::WriteAt(off_t pos, const void* buffer, size_t size)
 			swap_data(B_UINT32_TYPE, &(fHeader.dataSize), sizeof(uint32), B_SWAP_BENDIAN_TO_HOST);
 
 			// Some rigorous checks
-			if (fHeader.magic != B_TRANSLATOR_BITMAP || !fHeader.bounds.IsValid() ||
-				fHeader.dataSize !=
-					(fHeader.bounds.bottom - fHeader.bounds.top + 1) * fHeader.rowBytes) {
+			if (fHeader.magic != B_TRANSLATOR_BITMAP || !fHeader.bounds.IsValid()
+				|| fHeader.dataSize
+					   != (fHeader.bounds.bottom - fHeader.bounds.top + 1) * fHeader.rowBytes) {
 				return B_ERROR;
 			}
 
@@ -541,12 +542,12 @@ ProgressiveBitmapStream::Dither(const uchar* src, int32 place, int32 n_bytes)
 				b = (int32)src[0] + (int32)b_delta;
 			} else {
 				// Floyd-Steinberg diffusion
-				r = int(src[2] + r_delta * 0.4375 + deltas[0] * 0.0625 + deltas[3] * 0.3125 +
-						deltas[6] * 0.1875);
-				g = int(src[1] + g_delta * 0.4375 + deltas[1] * 0.0625 + deltas[4] * 0.3125 +
-						deltas[7] * 0.1875);
-				b = int(src[0] + b_delta * 0.4375 + deltas[2] * 0.0625 + deltas[5] * 0.3125 +
-						deltas[8] * 0.1875);
+				r = int(src[2] + r_delta * 0.4375 + deltas[0] * 0.0625 + deltas[3] * 0.3125
+						+ deltas[6] * 0.1875);
+				g = int(src[1] + g_delta * 0.4375 + deltas[1] * 0.0625 + deltas[4] * 0.3125
+						+ deltas[7] * 0.1875);
+				b = int(src[0] + b_delta * 0.4375 + deltas[2] * 0.0625 + deltas[5] * 0.3125
+						+ deltas[8] * 0.1875);
 			}
 
 			// Store deltas for the current pixel

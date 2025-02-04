@@ -3,9 +3,13 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	0,
+};
 
-AttribFreehand::AttribFreehand() : AttribView(BRect(0, 0, 148, 40), lstring(27, "Freehand"))
+AttribFreehand::AttribFreehand()
+	: AttribView(BRect(0, 0, 148, 40), lstring(27, "Freehand"))
 {
 	SetViewColor(LightGrey);
 	pSlid = new Slider(

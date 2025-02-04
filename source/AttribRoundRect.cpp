@@ -9,15 +9,19 @@
 #include "Settings.h"
 #include "TabView.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline"},
-	{"RelativeWidth|RelX", SET, DIRECT, "float: 0 .. 0.5"},
-	{"RelativeHeight|RelY", SET, DIRECT, "float: 0 .. 0.5"},
-	{"AbsoluteWidth|AbsX", SET, DIRECT, "float: 0 .. 200"},
-	{"AbsoluteHeight|AbsY", SET, DIRECT, "float: 0 .. 200"},
-	{"Corners", SET, DIRECT, "string: Relative, Absolute"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline" },
+	{ "RelativeWidth|RelX", SET, DIRECT, "float: 0 .. 0.5" },
+	{ "RelativeHeight|RelY", SET, DIRECT, "float: 0 .. 0.5" },
+	{ "AbsoluteWidth|AbsX", SET, DIRECT, "float: 0 .. 200" },
+	{ "AbsoluteHeight|AbsY", SET, DIRECT, "float: 0 .. 200" },
+	{ "Corners", SET, DIRECT, "string: Relative, Absolute" },
+	0,
+};
 
-AttribRoundRect::AttribRoundRect() : AttribView(BRect(0, 0, 148, 190), lstring(32, "Ovals"))
+AttribRoundRect::AttribRoundRect()
+	: AttribView(BRect(0, 0, 148, 190), lstring(32, "Ovals"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(

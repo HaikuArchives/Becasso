@@ -176,8 +176,8 @@ MagView::setzoom(int z)
 {
 	zoom = z;
 	int maxw = int(zoom * myView->canvasFrame().IntegerWidth() + B_V_SCROLL_BAR_WIDTH);
-	int maxh = int(zoom * myView->canvasFrame().IntegerHeight() + B_H_SCROLL_BAR_HEIGHT +
-				   ((MagWindow*)Window())->menubarHeight() + 1);
+	int maxh = int(zoom * myView->canvasFrame().IntegerHeight() + B_H_SCROLL_BAR_HEIGHT
+				   + ((MagWindow*)Window())->menubarHeight() + 1);
 	Window()->SetSizeLimits(64, maxw, 64, maxh);
 	Window()->ResizeTo(
 		min_c(maxw, Window()->Frame().Width()), min_c(maxh, Window()->Frame().Height()));
@@ -265,7 +265,7 @@ MagView::Undo()
 		BPoint p = BPoint(undo[undoIndex].x, undo[undoIndex].y);
 		if (myView->LockLooper()) {
 			uint32 c = undo[undoIndex].c;
-			rgb_color col = {RED(c), GREEN(c), BLUE(c), ALPHA(c)};
+			rgb_color col = { RED(c), GREEN(c), BLUE(c), ALPHA(c) };
 			undo[undoIndex].c = myView->get_and_plot(p, col);
 			myView->Invalidate(BRect(p.x - 1, p.y - 1, p.x + 1, p.y + 1));
 			myView->UnlockLooper();
@@ -303,7 +303,7 @@ MagView::Redo()
 			++undoIndex;
 			BPoint p = BPoint(undo[undoIndex].x, undo[undoIndex].y);
 			uint32 c = undo[undoIndex].c;
-			rgb_color col = {RED(c), GREEN(c), BLUE(c), ALPHA(c)};
+			rgb_color col = { RED(c), GREEN(c), BLUE(c), ALPHA(c) };
 			undo[undoIndex].c = myView->get_and_plot(p, col);
 			myView->Invalidate(BRect(p.x - 1, p.y - 1, p.x + 1, p.y + 1));
 			myView->UnlockLooper();

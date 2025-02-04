@@ -71,26 +71,28 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 					{
 					} else {
 #if !defined(BLEND_USES_SHIFTS)
-						*dest = ((((destpixel & 0xFF000000) / 255 * da +
-									 (srcpixel & 0xFF000000) / 255 * sa)) &
-									0xFF000000) |
-								((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
-									 255) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
-									 255) &
-									0x0000FF00) |  // (max_c (sa, destpixel & 0xFF));
+						*dest = ((((destpixel & 0xFF000000) / 255 * da
+									 + (srcpixel & 0xFF000000) / 255 * sa))
+									& 0xFF000000)
+								| ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+									   / 255)
+									& 0x00FF0000)
+								| ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+									   / 255)
+									& 0x0000FF00)
+								|  // (max_c (sa, destpixel & 0xFF));
 								(clipchar(sa + int(destpixel & 0xFF)));
 #else
-						*dest =
-							(((((destpixel & 0xFF000000) >> 8) * da +
-								 ((srcpixel & 0xFF000000) >> 8) * sa)) &
-								0xFF000000) |
-							((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8) &
-								0x00FF0000) |
-							((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) >> 8) &
-								0x0000FF00) |
-							(clipchar(sa + int(destpixel & 0xFF)));
+						*dest = (((((destpixel & 0xFF000000) >> 8) * da
+									 + ((srcpixel & 0xFF000000) >> 8) * sa))
+									& 0xFF000000)
+								| ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+									   >> 8)
+									& 0x00FF0000)
+								| ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+									   >> 8)
+									& 0x0000FF00)
+								| (clipchar(sa + int(destpixel & 0xFF)));
 #endif
 					}
 #else
@@ -105,25 +107,27 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 					{
 					} else {
 #if !defined(BLEND_USES_SHIFTS)
-						*dest = ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
-									 255) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
-									 255) &
-									0x0000FF00) |
-								((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) /
-									 255) &
-									0x000000FF) |
-								(clipchar(sa + int(destpixel >> 24)) << 24);
+						*dest = ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+									 / 255)
+									& 0x00FF0000)
+								| ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+									   / 255)
+									& 0x0000FF00)
+								| ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa)
+									   / 255)
+									& 0x000000FF)
+								| (clipchar(sa + int(destpixel >> 24)) << 24);
 #else
-						*dest =
-							((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8) &
-								0x00FF0000) |
-							((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) >> 8) &
-								0x0000FF00) |
-							((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) >> 8) &
-								0x000000FF) |
-							(clipchar(sa + int(destpixel >> 24)) << 24);
+						*dest
+							= ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >> 8)
+								  & 0x00FF0000)
+							  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+									 >> 8)
+								  & 0x0000FF00)
+							  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa)
+									 >> 8)
+								  & 0x000000FF)
+							  | (clipchar(sa + int(destpixel >> 24)) << 24);
 #endif
 					}
 #endif
@@ -147,31 +151,31 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 					} else if (sa == 255)  // Fully opaque pixel
 					{
 						*dest = (((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025)
-									 << 24) &
-									0xFF000000) |
-								(((((srcpixel >> 16) & 0xFF) *
-									  (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
-									 << 16) &
-									0x00FF0000) |
-								(((((srcpixel >> 8) & 0xFF) *
-									  (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
-									 << 8) &
-									0x0000FF00) |
-								(clipchar(sa + int(destpixel & 0xFF)));
+									 << 24)
+									& 0xFF000000)
+								| (((((srcpixel >> 16) & 0xFF)
+										* (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
+									   << 16)
+									& 0x00FF0000)
+								| (((((srcpixel >> 8) & 0xFF)
+										* (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
+									   << 8)
+									& 0x0000FF00)
+								| (clipchar(sa + int(destpixel & 0xFF)));
 					} else {
-						*dest = (((tsa + sa * ((srcpixel >> 24))) *
-										 (tda + da * ((destpixel >> 24))) / 16581375
-									 << 24) &
-									0xFF000000) |
-								(((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-										 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-									 << 16) &
-									0x00FF0000) |
-								(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-										 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-									 << 8) &
-									0x0000FF00) |
-								(clipchar(sa + int(destpixel & 0xFF)));
+						*dest = (((tsa + sa * ((srcpixel >> 24))) * (tda + da * ((destpixel >> 24)))
+										 / 16581375
+									 << 24)
+									& 0xFF000000)
+								| (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+										   * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+									   << 16)
+									& 0x00FF0000)
+								| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+										   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+									   << 8)
+									& 0x0000FF00)
+								| (clipchar(sa + int(destpixel & 0xFF)));
 					}
 #else
 					uint32 srcpixel = *(++src);
@@ -184,31 +188,31 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 					{
 					} else if (sa == 255)  // Fully opaque pixel
 					{
-						*dest =
-							(((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF)) /
-								  65025)
-								 << 16) &
-								0x00FF0000) |
-							(((((srcpixel >> 8) & 0xFF) * (tda + da * ((destpixel >> 8) & 0xFF)) /
-								  65025)
-								 << 8) &
-								0x0000FF00) |
-							(((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF)) / 65025)) &
-								0x000000FF) |
-							(clipchar(sa + int(destpixel >> 24)) << 24);
+						*dest
+							= (((((srcpixel >> 16) & 0xFF) * (tda + da * ((destpixel >> 16) & 0xFF))
+									/ 65025)
+								   << 16)
+								  & 0x00FF0000)
+							  | (((((srcpixel >> 8) & 0xFF) * (tda + da * ((destpixel >> 8) & 0xFF))
+									  / 65025)
+									 << 8)
+								  & 0x0000FF00)
+							  | (((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF)) / 65025))
+								  & 0x000000FF)
+							  | (clipchar(sa + int(destpixel >> 24)) << 24);
 					} else {
-						*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-										 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-									 << 16) &
-									0x00FF0000) |
-								(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-										 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-									 << 8) &
-									0x0000FF00) |
-								(((tsa + sa * ((srcpixel) & 0xFF)) *
-									 (tda + da * ((destpixel) & 0xFF)) / 16581375) &
-									0x000000FF) |
-								(clipchar(sa + int(destpixel >> 24)) << 24);
+						*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+										 * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+									 << 16)
+									& 0x00FF0000)
+								| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+										   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+									   << 8)
+									& 0x0000FF00)
+								| (((tsa + sa * ((srcpixel) & 0xFF))
+									   * (tda + da * ((destpixel) & 0xFF)) / 16581375)
+									& 0x000000FF)
+								| (clipchar(sa + int(destpixel >> 24)) << 24);
 					}
 #endif
 				}
@@ -303,8 +307,8 @@ entry2bitmap(BEntry entry, bool silent)
 			{
 				return NULL;
 			}
-			if (int(cvers) == int(tvers) &&
-				cvers - int(cvers) > tvers - int(tvers))  // Check release
+			if (int(cvers) == int(tvers)
+				&& cvers - int(cvers) > tvers - int(tvers))	 // Check release
 			{
 				return NULL;
 			}
@@ -369,8 +373,8 @@ entry2bitmap(BEntry entry, bool silent)
 							zstream->avail_in = 0;
 						}
 						zstream->next_in = tmpzbuf;
-						zstream->avail_in +=
-							fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+						zstream->avail_in
+							+= fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
 						zstream->next_out = (uchar*)layer[i]->Bits();
 						zstream->avail_out = layer[i]->BitsLength();
 						//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
@@ -434,8 +438,8 @@ entry2bitmap(BEntry entry, bool silent)
 							zstream->avail_in = 0;
 						}
 						zstream->next_in = tmpzbuf;
-						zstream->avail_in +=
-							fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+						zstream->avail_in
+							+= fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
 						zstream->next_out = (uchar*)layer[i]->Bits();
 						zstream->avail_out = layer[i]->BitsLength();
 						//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
@@ -526,8 +530,8 @@ entry2bitmap(BEntry entry, bool silent)
 				// Error translating...
 				char errstring[B_FILE_NAME_LENGTH + 64];
 				sprintf(errstring, "Datatypes error:\nCouldn't translate `%s'", fName);
-				BAlert* alert =
-					new BAlert("", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+				BAlert* alert = new BAlert(
+					"", errstring, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				alert->Go();
 			}
 		} else {
@@ -545,8 +549,8 @@ entry2bitmap(BEntry entry, bool silent)
 	if (!(map = BTranslationUtils::GetBitmapFile(path.Path())) && !silent) {
 		char errstring[B_FILE_NAME_LENGTH + 64];
 		sprintf(errstring, "Translation Kit error:\nCouldn't translate '%s'", path.Path());
-		BAlert* alert =
-			new BAlert("", errstring, "Help", "OK", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+		BAlert* alert
+			= new BAlert("", errstring, "Help", "OK", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		uint32 button = alert->Go();
 		if (button == 0) {
 			BNode node(&entry);
@@ -646,46 +650,47 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 			uint32 srcpixel = *(++src_data);
 			uint32 destpixel = *(++dest_data);
 			int sa = srcpixel & 0xFF;
-			int da = 255 - sa;	 // destpixel & 0xFF;
-			int ta = 255;		 // sa + da;
-			if (sa == 255)				 // Fully Opaque
+			int da = 255 - sa;	// destpixel & 0xFF;
+			int ta = 255;		// sa + da;
+			if (sa == 255)		// Fully Opaque
 			{
 				*dest_data = srcpixel;
 			} else if (sa == 0)	 // Fully transparent
 			{
 			} else {
-				*dest_data =
-					((((((destpixel >> 24)) * da + ((srcpixel >> 24)) * sa) / ta) << 24) &
-						0xFF000000) |
-					((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
-						 << 16) &
-						0x00FF0000) |
-					((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
-						 << 8) &
-						0x0000FF00) |
-					clipchar(sa + int(destpixel & 0xFF));
+				*dest_data
+					= ((((((destpixel >> 24)) * da + ((srcpixel >> 24)) * sa) / ta) << 24)
+						  & 0xFF000000)
+					  | ((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
+							 << 16)
+						  & 0x00FF0000)
+					  | ((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
+							 << 8)
+						  & 0x0000FF00)
+					  | clipchar(sa + int(destpixel & 0xFF));
 			}
 #else
 			uint32 srcpixel = *(++src_data);
 			uint32 destpixel = *(++dest_data);
 			int sa = srcpixel >> 24;
-			int da = 255 - sa;	 // destpixel >> 24;
-			int ta = 255;		 // sa + da;
-			if (sa == 255)				 // Fully Opaque
+			int da = 255 - sa;	// destpixel >> 24;
+			int ta = 255;		// sa + da;
+			if (sa == 255)		// Fully Opaque
 			{
 				*dest_data = srcpixel;
 			} else if (sa == 0)	 // Fully transparent
 			{
 			} else {
-				*dest_data =
-					((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
-						 << 16) &
-						0x00FF0000) |
-					((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
-						 << 8) &
-						0x0000FF00) |
-					((((((destpixel) & 0xFF) * da + ((srcpixel) & 0xFF) * sa) / ta)) & 0x000000FF) |
-					((clipchar(sa + int(destpixel >> 24))) << 24);
+				*dest_data
+					= ((((((destpixel >> 16) & 0xFF) * da + ((srcpixel >> 16) & 0xFF) * sa) / ta)
+						   << 16)
+						  & 0x00FF0000)
+					  | ((((((destpixel >> 8) & 0xFF) * da + ((srcpixel >> 8) & 0xFF) * sa) / ta)
+							 << 8)
+						  & 0x0000FF00)
+					  | ((((((destpixel) & 0xFF) * da + ((srcpixel) & 0xFF) * sa) / ta))
+						  & 0x000000FF)
+					  | ((clipchar(sa + int(destpixel >> 24))) << 24);
 			}
 #endif
 		}
@@ -752,16 +757,16 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
-					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da +
-							 ((srcpixel & 0xFF000000) / ta) * sa) &
-							0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da +
-							 ((srcpixel & 0x00FF0000) / ta) * sa) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta &
-							0x0000FF00) |
-						clipchar(sa + int(destpixel & 0xFF));
+					*dest_data
+						= ((((destpixel & 0xFF000000) / ta) * da
+							   + ((srcpixel & 0xFF000000) / ta) * sa)
+							  & 0xFF000000)
+						  | ((((destpixel & 0x00FF0000) / ta) * da
+								 + ((srcpixel & 0x00FF0000) / ta) * sa)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta
+							  & 0x0000FF00)
+						  | clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
 #else
@@ -776,17 +781,17 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
-					*dest_data =
-						((((((destpixel & 0x00FF0000) >> 1) * da +
-							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
-							  ta)
-							 << 1) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-							0x0000FF00) |
-						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-							0x000000FF) |
-						(clipchar(sa + int(destpixel >> 24)) << 24);
+					*dest_data
+						= ((((((destpixel & 0x00FF0000) >> 1) * da
+								 + ((srcpixel & 0x00FF0000) >> 1) * sa)
+								/ ta)
+							   << 1)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta)
+							  & 0x0000FF00)
+						  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta)
+							  & 0x000000FF)
+						  | (clipchar(sa + int(destpixel >> 24)) << 24);
 				}
 #endif
 			}
@@ -815,16 +820,16 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
-					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da +
-							 ((srcpixel & 0xFF000000) / ta) * sa) &
-							0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da +
-							 ((srcpixel & 0x00FF0000) / ta) * sa) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta &
-							0x0000FF00) |
-						clipchar(sa + int(destpixel & 0xFF));
+					*dest_data
+						= ((((destpixel & 0xFF000000) / ta) * da
+							   + ((srcpixel & 0xFF000000) / ta) * sa)
+							  & 0xFF000000)
+						  | ((((destpixel & 0x00FF0000) / ta) * da
+								 + ((srcpixel & 0x00FF0000) / ta) * sa)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta
+							  & 0x0000FF00)
+						  | clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
 #else
@@ -832,24 +837,24 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 				uint32 destpixel = *(++dest_data);
 				int sa = (srcpixel >> 24) * strength / 255;
 				int da = /*destpixel >> 24;*/ 255 - sa;
-				int ta = sa + da;								   // 255
+				int ta = sa + da;										   // 255
 				if (sa == 255 || /* da == 0 */ !(destpixel & 0xFF000000))  // Fully opaque
 				{
 					*dest_data = srcpixel;
 				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
-					*dest_data =
-						((((((destpixel & 0x00FF0000) >> 1) * da +
-							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
-							  ta)
-							 << 1) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-							0x0000FF00) |
-						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-							0x000000FF) |
-						(clipchar(sa + int(destpixel >> 24)) << 24);
+					*dest_data
+						= ((((((destpixel & 0x00FF0000) >> 1) * da
+								 + ((srcpixel & 0x00FF0000) >> 1) * sa)
+								/ ta)
+							   << 1)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta)
+							  & 0x0000FF00)
+						  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta)
+							  & 0x000000FF)
+						  | (clipchar(sa + int(destpixel >> 24)) << 24);
 				}
 #endif
 			}
@@ -1007,11 +1012,11 @@ CopyWithTransparency(BBitmap* src, BBitmap* dest, long x, long y)
 // (not `real' alpha-aware bitmaps)
 {
 #if defined(__POWERPC__)
-	uint32 transparent = (B_TRANSPARENT_32_BIT.blue << 24) + (B_TRANSPARENT_32_BIT.green << 16) +
-						 (B_TRANSPARENT_32_BIT.red << 8) + (B_TRANSPARENT_32_BIT.alpha);
+	uint32 transparent = (B_TRANSPARENT_32_BIT.blue << 24) + (B_TRANSPARENT_32_BIT.green << 16)
+						 + (B_TRANSPARENT_32_BIT.red << 8) + (B_TRANSPARENT_32_BIT.alpha);
 #else
-	uint32 transparent = (B_TRANSPARENT_32_BIT.alpha << 24) + (B_TRANSPARENT_32_BIT.red << 16) +
-						 (B_TRANSPARENT_32_BIT.green << 8) + (B_TRANSPARENT_32_BIT.blue);
+	uint32 transparent = (B_TRANSPARENT_32_BIT.alpha << 24) + (B_TRANSPARENT_32_BIT.red << 16)
+						 + (B_TRANSPARENT_32_BIT.green << 8) + (B_TRANSPARENT_32_BIT.blue);
 #endif
 	uint32* src_data = (uint32*)src->Bits();
 	ulong src_bprl = src->BytesPerRow() / 4;
@@ -1105,8 +1110,8 @@ CutOrCopy(BBitmap* src, BBitmap* dest, BBitmap* sel, long offx, long offy, bool 
 	dest->Lock();
 	uchar trans8;
 #if defined(__POWERPC__)
-	uint32 transparent = (B_TRANSPARENT_32_BIT.blue << 24) + (B_TRANSPARENT_32_BIT.green << 16) +
-						 (B_TRANSPARENT_32_BIT.red << 8) + (B_TRANSPARENT_32_BIT.alpha);
+	uint32 transparent = (B_TRANSPARENT_32_BIT.blue << 24) + (B_TRANSPARENT_32_BIT.green << 16)
+						 + (B_TRANSPARENT_32_BIT.red << 8) + (B_TRANSPARENT_32_BIT.alpha);
 #else
 //	uint32 transparent = (B_TRANSPARENT_32_BIT.alpha << 24) + (B_TRANSPARENT_32_BIT.red << 16)
 //		+ (B_TRANSPARENT_32_BIT.green << 8) + (B_TRANSPARENT_32_BIT.blue);
@@ -1415,8 +1420,8 @@ FSDither(BBitmap* b32, BBitmap* b8, BRect place)
 	 */
 	ulong in_width = place.Width() + 1;
 	ulong in_height = place.Height() + 1;
-	uint32* in_data =
-		(uint32*)b32->Bits() + ulong(place.top) * b32->BytesPerRow() / 4 + ulong(place.left) - 1;
+	uint32* in_data
+		= (uint32*)b32->Bits() + ulong(place.top) * b32->BytesPerRow() / 4 + ulong(place.left) - 1;
 	char* delta = new char[(in_width) * 2 * 4];
 	uchar* dstb = (uchar*)b8->Bits() + ulong(place.left) - 1;
 	uchar* xpal = (uchar*)system_colors()->index_map;
@@ -1560,8 +1565,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 			if (DebugLevel)
 				printf("Scaling %d -> %d; gcd = %d\n", sw, dw, nbx);
 			time_t start = clock();
-			if (UseMMX &&
-				sw <= 1024)	 // otherwise, fixed point arithmetic in MMX code will overflow.
+			if (UseMMX
+				&& sw <= 1024)	// otherwise, fixed point arithmetic in MMX code will overflow.
 			{
 #if defined(__INTEL__)
 				mmx_scale_32_h((bgra_pixel*)src->Bits(), (bgra_pixel*)stmp->Bits(), sh, sw, dw,
@@ -1600,8 +1605,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixel & 0x00FF0000) >> 16) * alpha;
 								b += (pixel >> 24) * alpha;
 								a += (pixel & 0x000000FF) * alpha;
-								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16) +
-												(uint8(r) << 8) + (uint8(a));
+								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16)
+												+ (uint8(r) << 8) + (uint8(a));
 								r = ((pixel & 0x0000FF00) >> 8) * beta;
 								g = ((pixel & 0x00FF0000) >> 16) * beta;
 								b = (pixel >> 24) * beta;
@@ -1613,8 +1618,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixel & 0x00FF0000) >> 16) * f;
 								b += (pixel >> 24) * f;
 								a += (pixel & 0x000000FF) * f;
-								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16) +
-												(uint8(r) << 8) + (uint8(a));
+								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16)
+												+ (uint8(r) << 8) + (uint8(a));
 								stillinblock = false;
 							}
 						}
@@ -1708,8 +1713,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixelb & 0x00FF0000) >> 16) * beta;
 								b += (pixelb >> 24) * beta;
 								a += (pixelb & 0x000000FF) * beta;
-								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16) +
-												(uint8(r) << 8) + (uint8(a));
+								*(destline++) = (uint8(b) << 24) + (uint8(g) << 16)
+												+ (uint8(r) << 8) + (uint8(a));
 								d++;
 							} else {
 								*(destline++) = *(srcline++);
@@ -1813,8 +1818,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixel & 0x00FF0000) >> 16) * alpha;
 								b += (pixel >> 24) * alpha;
 								a += (pixel & 0x000000FF) * alpha;
-								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8) +
-										   (uint8(a));
+								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8)
+										   + (uint8(a));
 								destcol += dlpr;
 								d++;
 								r = ((pixel & 0x0000FF00) >> 8) * beta;
@@ -1830,8 +1835,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixel & 0x00FF0000) >> 16) * f;
 								b += (pixel >> 24) * f;
 								a += (pixel & 0x000000FF) * f;
-								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8) +
-										   (uint8(a));
+								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8)
+										   + (uint8(a));
 								destcol += dlpr;
 								stillinblock = false;
 							}
@@ -1933,8 +1938,8 @@ Scale(BBitmap* src, BBitmap* srcmap, BBitmap* dest, BBitmap* destmap)
 								g += ((pixelb & 0x00FF0000) >> 16) * beta;
 								b += (pixelb >> 24) * beta;
 								a += (pixelb & 0x000000FF) * beta;
-								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8) +
-										   (uint8(a));
+								*destcol = (uint8(b) << 24) + (uint8(g) << 16) + (uint8(r) << 8)
+										   + (uint8(a));
 								destcol += dlpr;
 								d++;
 							} else {
@@ -2096,18 +2101,18 @@ Rotate(SBitmap* s, Layer* d, BPoint o, float rad, bool hiq)
 				}
 
 				uint8 red, green, blue, alpha;
-				red = clipchar(float(
-					(RED(a1) * A1 + RED(a2) * A2 + RED(a3) * A3 + RED(a4) * A4 + RED(a5) * A5 +
-						RED(a6) * A6 + RED(a7) * A7 + RED(a8) * A8 + RED(a9) * A9) /
-					256));
-				green = clipchar(float((GREEN(a1) * A1 + GREEN(a2) * A2 + GREEN(a3) * A3 +
-										   GREEN(a4) * A4 + GREEN(a5) * A5 + GREEN(a6) * A6 +
-										   GREEN(a7) * A7 + GREEN(a8) * A8 + GREEN(a9) * A9) /
-									   256));
+				red = clipchar(
+					float((RED(a1) * A1 + RED(a2) * A2 + RED(a3) * A3 + RED(a4) * A4 + RED(a5) * A5
+							  + RED(a6) * A6 + RED(a7) * A7 + RED(a8) * A8 + RED(a9) * A9)
+						  / 256));
+				green = clipchar(float((GREEN(a1) * A1 + GREEN(a2) * A2 + GREEN(a3) * A3
+										   + GREEN(a4) * A4 + GREEN(a5) * A5 + GREEN(a6) * A6
+										   + GREEN(a7) * A7 + GREEN(a8) * A8 + GREEN(a9) * A9)
+									   / 256));
 				blue = clipchar(float(
-					(BLUE(a1) * A1 + BLUE(a2) * A2 + BLUE(a3) * A3 + BLUE(a4) * A4 + BLUE(a5) * A5 +
-						BLUE(a6) * A6 + BLUE(a7) * A7 + BLUE(a8) * A8 + BLUE(a9) * A9) /
-					256));
+					(BLUE(a1) * A1 + BLUE(a2) * A2 + BLUE(a3) * A3 + BLUE(a4) * A4 + BLUE(a5) * A5
+						+ BLUE(a6) * A6 + BLUE(a7) * A7 + BLUE(a8) * A8 + BLUE(a9) * A9)
+					/ 256));
 				alpha = clipchar(float(A1 + A2 + A3 + A4 + A5 + A6 + A7 + A8 + A9));
 				*(++dl) = PIXEL(red, green, blue, alpha);
 				ix += cr;

@@ -82,8 +82,8 @@ SView::GetPosition(Position* position, bool setcursor)
 	fDevice = DEV_MOUSE;
 	position->fPoint = point;
 	float tx, ty;
-	if (currentMessage->FindFloat("be:tilt_x", &tx) != B_OK ||
-		currentMessage->FindFloat("be:tilt_y", &ty) != B_OK)
+	if (currentMessage->FindFloat("be:tilt_x", &tx) != B_OK
+		|| currentMessage->FindFloat("be:tilt_y", &ty) != B_OK)
 		position->fTilt = BPoint(0, 0);
 	else
 		position->fTilt = BPoint(tx, ty);

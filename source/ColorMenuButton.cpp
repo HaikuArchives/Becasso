@@ -35,8 +35,8 @@ ColorMenuButton::ColorMenuButton(const char* ident, BRect frame, const char* nam
 	frame.OffsetTo(B_ORIGIN);
 	{
 		BScreen screen;
-		button =
-			new BBitmap(frame, (screen.ColorSpace() == B_COLOR_8_BIT) ? B_COLOR_8_BIT : B_RGBA32);
+		button
+			= new BBitmap(frame, (screen.ColorSpace() == B_COLOR_8_BIT) ? B_COLOR_8_BIT : B_RGBA32);
 		// This is because we can't store 16 bit bitmaps, and 32 bit bitmaps don't look too bad on
 		// 16 bit screens.
 	}
@@ -212,9 +212,9 @@ bool
 ColorMenuButton::approx(rgb_color a, rgb_color b)
 // Note: Doesn't check for alpha.
 {
-	return ((abs(int(a.red) - b.red) <= rgb_tolerance.red) &&
-			(abs(int(a.green) - b.green) <= rgb_tolerance.green) &&
-			(abs(int(a.blue) - b.blue) <= rgb_tolerance.blue));
+	return ((abs(int(a.red) - b.red) <= rgb_tolerance.red)
+			&& (abs(int(a.green) - b.green) <= rgb_tolerance.green)
+			&& (abs(int(a.blue) - b.blue) <= rgb_tolerance.blue));
 }
 
 float
@@ -336,9 +336,9 @@ have_bmax:
 	// Use 2-norm; scaled distances (i.e. green weighs in more)
 	// Note: Maybe the factors should be squared too, but IMHO this puts
 	//       too much emphasis on green.
-	box->volume = (uint32)(RED_WEIGHT * (box->rmax - box->rmin) * (box->rmax - box->rmin) +
-						   GREEN_WEIGHT * (box->gmax - box->gmin) * (box->gmax - box->gmin) +
-						   BLUE_WEIGHT * (box->bmax - box->bmin) * (box->bmax - box->bmin));
+	box->volume = (uint32)(RED_WEIGHT * (box->rmax - box->rmin) * (box->rmax - box->rmin)
+						   + GREEN_WEIGHT * (box->gmax - box->gmin) * (box->gmax - box->gmin)
+						   + BLUE_WEIGHT * (box->bmax - box->bmin) * (box->bmax - box->bmin));
 }
 
 CMB_box*
@@ -760,9 +760,9 @@ ColorMenuButton::Save(BEntry entry)
 	BString redS, greenS, blueS, lineS;
 	for (int i = 0; i < C_V_NUM * C_H_NUM; i++) {
 		rgb_color c = menu->ItemAt(i)->getColor();
-		fNumberFormat.Format(redS, (int32)int(c.red));
-		fNumberFormat.Format(greenS, (int32)int(c.green));
-		fNumberFormat.Format(blueS, (int32)int(c.blue));
+		fNumberFormat.Format(redS, (int32) int(c.red));
+		fNumberFormat.Format(greenS, (int32) int(c.green));
+		fNumberFormat.Format(blueS, (int32) int(c.blue));
 		lineS.SetToFormat("%s %s %s\n", redS.String(), greenS.String(), blueS.String());
 		fputs(lineS.String(), fp);
 	}

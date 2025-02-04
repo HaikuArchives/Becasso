@@ -4,10 +4,14 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"Corners|FillCorners", SET, DIRECT, "bool: true, false"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "Corners|FillCorners", SET, DIRECT, "bool: true, false" },
+	0,
+};
 
-AttribLines::AttribLines() : AttribView(BRect(0, 0, 148, 54), lstring(28, "Lines"))
+AttribLines::AttribLines()
+	: AttribView(BRect(0, 0, 148, 54), lstring(28, "Lines"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(

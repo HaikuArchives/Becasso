@@ -34,7 +34,9 @@ SBitmap::SBitmap(BBitmap* src)
 	memcpy(fBits, src->Bits(), src->BitsLength());
 }
 
-SBitmap::SBitmap(const BRect bounds, const color_space cs) : fBounds(bounds), fCS(cs)
+SBitmap::SBitmap(const BRect bounds, const color_space cs)
+	: fBounds(bounds),
+	  fCS(cs)
 {
 	switch (cs) {
 		case B_COLOR_8_BIT:

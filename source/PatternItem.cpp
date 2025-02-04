@@ -3,7 +3,8 @@
 #include "Colors.h"
 #include "PatternMenuButton.h"
 
-PatternItem::PatternItem(const pattern _p) : BMenuItem("", NULL)
+PatternItem::PatternItem(const pattern _p)
+	: BMenuItem("", NULL)
 {
 	pat = _p;
 }

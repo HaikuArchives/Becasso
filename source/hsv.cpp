@@ -152,8 +152,8 @@ IMPEXP float
 cdiff(rgb_color a, rgb_color b)
 // Note: Doesn't take alpha channel into account.
 {
-	return (sqrt((a.red - b.red) * (a.red - b.red) + (a.green - b.green) * (a.green - b.green) +
-				 (a.blue - b.blue) * (a.blue - b.blue)));
+	return (sqrt((a.red - b.red) * (a.red - b.red) + (a.green - b.green) * (a.green - b.green)
+				 + (a.blue - b.blue) * (a.blue - b.blue)));
 }
 
 #endif
@@ -247,11 +247,11 @@ IMPEXP bgra_pixel
 rgb2bgra(rgb_color c)
 {
 #if defined(__POWERPC__)
-	return (((c.blue << 24) & 0xFF000000) | ((c.green << 16) & 0x00FF0000) |
-			((c.red << 8) & 0x0000FF00) | ((c.alpha) & 0x000000FF));
+	return (((c.blue << 24) & 0xFF000000) | ((c.green << 16) & 0x00FF0000)
+			| ((c.red << 8) & 0x0000FF00) | ((c.alpha) & 0x000000FF));
 #else
-	return (((c.blue) & 0x000000FF) | ((c.green << 8) & 0x0000FF00) | ((c.red << 16) & 0x00FF0000) |
-			((c.alpha << 24) & 0xFF000000));
+	return (((c.blue) & 0x000000FF) | ((c.green << 8) & 0x0000FF00) | ((c.red << 16) & 0x00FF0000)
+			| ((c.alpha << 24) & 0xFF000000));
 #endif
 }
 

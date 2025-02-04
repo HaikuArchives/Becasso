@@ -8,12 +8,19 @@
 #include "Settings.h"
 #include "Slider.h"
 
-static property_info prop_list[] = {{"Family", SET, DIRECT, "string: family_name"},
-	{"Style", SET, DIRECT, "string: style_name"}, {"PtSize|Size", SET, DIRECT, "float: 4 .. 144"},
-	{"Shear", SET, DIRECT, "float: 45 .. 135"}, {"Rotation", SET, DIRECT, "float: 0 .. 360"},
-	{"AntiAliasing", SET, DIRECT, "bool: true, false"}, {"Text", SET, DIRECT, "string: text"}, 0};
+static property_info prop_list[] = {
+	{ "Family", SET, DIRECT, "string: family_name" },
+	{ "Style", SET, DIRECT, "string: style_name" },
+	{ "PtSize|Size", SET, DIRECT, "float: 4 .. 144" },
+	{ "Shear", SET, DIRECT, "float: 45 .. 135" },
+	{ "Rotation", SET, DIRECT, "float: 0 .. 360" },
+	{ "AntiAliasing", SET, DIRECT, "bool: true, false" },
+	{ "Text", SET, DIRECT, "string: text" },
+	0,
+};
 
-AttribText::AttribText() : AttribView(BRect(0, 0, 224, 208), lstring(25, "Text"))
+AttribText::AttribText()
+	: AttribView(BRect(0, 0, 224, 208), lstring(25, "Text"))
 {
 	SetViewColor(LightGrey);
 	fFont = BFont(be_plain_font);
@@ -45,11 +52,11 @@ AttribText::AttribText() : AttribView(BRect(0, 0, 224, 208), lstring(25, "Text")
 		fStylePU->AddItem(new BMenuItem(styles[j], new BMessage('fchg')));
 	fStylePU->ItemAt(0)->SetMarked(true);
 	fStylePU->SetTargetForItems(this);
-	BMenuField* dFamily =
-		new BMenuField(BRect(4, 2, 220, 20), "dFamily", lstring(360, "Family: "), fFamilyPU);
+	BMenuField* dFamily
+		= new BMenuField(BRect(4, 2, 220, 20), "dFamily", lstring(360, "Family: "), fFamilyPU);
 	dFamily->SetDivider(50);
-	BMenuField* dStyle =
-		new BMenuField(BRect(4, 24, 220, 40), "dStyle", lstring(361, "Style: "), fStylePU);
+	BMenuField* dStyle
+		= new BMenuField(BRect(4, 24, 220, 40), "dStyle", lstring(361, "Style: "), fStylePU);
 	dStyle->SetDivider(50);
 	AddChild(dFamily);
 	AddChild(dStyle);

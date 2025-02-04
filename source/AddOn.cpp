@@ -51,8 +51,8 @@ AddOn::AddOn(BEntry entry)
 			fprintf(stderr, "Problems finding addon_make_config routine in %s\n", path.Path());
 		throw(1);
 	}
-	if (process &&
-		get_image_symbol(fAddOnID, "addon_close", B_SYMBOL_TYPE_TEXT, (void**)&addon_close)) {
+	if (process
+		&& get_image_symbol(fAddOnID, "addon_close", B_SYMBOL_TYPE_TEXT, (void**)&addon_close)) {
 		if (VerbAddOns)
 			fprintf(stderr, "Problems finding addon_close routine in %s\n", path.Path());
 		throw(1);

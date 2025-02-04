@@ -86,9 +86,9 @@ BitmapStream::WriteAt(off_t pos, const void* data, size_t size)
 			fSize = pos;
 		/*	If we change the header, the rest goes */
 		if (pos == sizeof(DATABitmap)) {
-			if (fMap &&
-				((fMap->Bounds() != fHeader.bounds) || (fMap->ColorSpace() != fHeader.colors) ||
-					(fMap->BytesPerRow() != fHeader.rowBytes))) {
+			if (fMap
+				&& ((fMap->Bounds() != fHeader.bounds) || (fMap->ColorSpace() != fHeader.colors)
+					|| (fMap->BytesPerRow() != fHeader.rowBytes))) {
 				if (!fDetached)	 //	if someone detached, we don't delete
 					delete fMap;
 				fMap = NULL;

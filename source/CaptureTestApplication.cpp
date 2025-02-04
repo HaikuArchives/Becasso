@@ -35,7 +35,10 @@ main()
 
 const char* SIGNATURE = "application/x-redrackam-testCaptureHandler";
 
-TestApplication::TestApplication() : BApplication(SIGNATURE) {}
+TestApplication::TestApplication()
+	: BApplication(SIGNATURE)
+{
+}
 
 class BitmapView : public BView {
 public:
@@ -48,7 +51,10 @@ private:
 	BBitmap* bitmap;
 };
 
-BitmapView ::BitmapView(BRect a) : BView(a, "BitmapInput", B_FOLLOW_NONE, B_WILL_DRAW) {}
+BitmapView ::BitmapView(BRect a)
+	: BView(a, "BitmapInput", B_FOLLOW_NONE, B_WILL_DRAW)
+{
+}
 
 void
 BitmapView ::Draw(BRect area)
@@ -182,8 +188,8 @@ TestApplication::preRun(void)
 			mw->Unlock();
 			view = new BitmapView(area);
 			area.OffsetTo(100, 100);
-			BWindow* new_bw =
-				new BWindow(area, "Capture", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE);
+			BWindow* new_bw
+				= new BWindow(area, "Capture", B_TITLED_WINDOW, B_NOT_RESIZABLE | B_NOT_ZOOMABLE);
 
 			new_bw->AddChild(view);
 			view->Decode(&stream);
@@ -208,8 +214,8 @@ MyWindow::MyWindow()
 	int32 ix;
 	BRect x;
 	if (DATAListCaptures(DATA_BITMAP, list, count) || (count < 1)) {
-		BAlert* alrt =
-			new BAlert("Not!", "There are no bitmap capture datatypes installed.", "Quit");
+		BAlert* alrt
+			= new BAlert("Not!", "There are no bitmap capture datatypes installed.", "Quit");
 		alrt->Go();
 		PostMessage(B_QUIT_REQUESTED);
 		return;
@@ -220,8 +226,8 @@ MyWindow::MyWindow()
 		fCapture = NULL;
 	}
 	if (!fCapture) {
-		BAlert* alrt =
-			new BAlert("Not!", "None of the installed btmap capture datatypes liked me.", "Quit");
+		BAlert* alrt
+			= new BAlert("Not!", "None of the installed btmap capture datatypes liked me.", "Quit");
 		alrt->Go();
 		PostMessage(B_QUIT_REQUESTED);
 		delete[] list;

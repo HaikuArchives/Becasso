@@ -82,7 +82,8 @@ SoundEffect8_11::SoundEffect8_11(char* buffer, int size, int loop, bool toggle)
 }
 
 EffectsPlayer::EffectsPlayer(int bgVolume, int nChannels)
-	: BSubscriber("be-sfx by h+"), fLock("sfx locker")
+	: BSubscriber("be-sfx by h+"),
+	  fLock("sfx locker")
 {
 	/*	set up the area used for remembering what's being played	*/
 	fPlayList = new PlayingEffect[nChannels];
@@ -138,8 +139,8 @@ EffectsPlayer::StartEffect(SoundEffect* effect, int volume, int pan)
 		SoundCompleted(evicted, kSoundEvicted);
 	}
 	/*	finally, we know where we live - set up struct to remember us	*/
-	fPlayList[nPlaying].data =
-		effect->GetBuffer(fPlayList[nPlaying].frames, fPlayList[nPlaying].loop);
+	fPlayList[nPlaying].data
+		= effect->GetBuffer(fPlayList[nPlaying].frames, fPlayList[nPlaying].loop);
 	fPlayList[nPlaying].offset = 0;
 	fPlayList[nPlaying].lvol = volume * ((pan > 0) ? (127.0 - pan) / 127.0 : 1.0);
 	fPlayList[nPlaying].rvol = volume * ((pan < 0) ? (127.0 + pan) / 127.0 : 1.0);

@@ -125,8 +125,8 @@ OutputFormatWindow::MessageReceived(BMessage* msg)
 				if (the_roster == 0)
 					the_roster = BTranslatorRoster::Default();
 
-				OutputFormatView* main_view =
-					new OutputFormatView(Bounds(), the_stream, selected_invoker, the_roster);
+				OutputFormatView* main_view
+					= new OutputFormatView(Bounds(), the_stream, selected_invoker, the_roster);
 				ResizeTo(main_view->Bounds().Width(), main_view->Bounds().Height());
 				Lock();
 				AddChild(main_view);
@@ -183,8 +183,8 @@ OutputFormatView::OutputFormatView(
 	SetLowColor(222, 222, 222);
 
 	// Top caption
-	CaptionView* caption_view =
-		new CaptionView(BRect(8.0, 0.0, Bounds().right - 8.0, 0.0), "Output Formats");
+	CaptionView* caption_view
+		= new CaptionView(BRect(8.0, 0.0, Bounds().right - 8.0, 0.0), "Output Formats");
 	AddChild(caption_view);
 
 	// Create the main list view; we'll put it in a scroll view later
@@ -220,7 +220,8 @@ OutputFormatView::OutputFormatView(
 				const translation_format* format_list = 0;	// --SS const
 				int32 format_count = 0;
 				if (the_roster->GetOutputFormats(
-						info_list[i].translator, &format_list, &format_count) == B_NO_ERROR) {
+						info_list[i].translator, &format_list, &format_count)
+					== B_NO_ERROR) {
 					for (int32 j = 0; j < format_count; ++j) {
 						// Only list formats that differ from the input format
 						// and belong to the same group.
@@ -282,18 +283,18 @@ OutputFormatView::OutputFormatView(
 
 	// Center the cancel button next to the main button
 	cancel_button->MoveBy(the_button->Frame().left - cancel_button->Frame().right - 10.0,
-		the_button->Frame().top - cancel_button->Frame().top +
-			(the_button->Frame().Height() - cancel_button->Frame().Height()) / 2.0);
+		the_button->Frame().top - cancel_button->Frame().top
+			+ (the_button->Frame().Height() - cancel_button->Frame().Height()) / 2.0);
 
 	// Caption for the info view
-	info_caption =
-		new CaptionView(BRect(8.0, the_button->Frame().bottom + 1.0, Bounds().right - 8.0, 0.0),
+	info_caption
+		= new CaptionView(BRect(8.0, the_button->Frame().bottom + 1.0, Bounds().right - 8.0, 0.0),
 			"Translator Information");
 	AddChild(info_caption);
 
 	// Info view
-	info_view =
-		new InfoLinesView(BRect(16.0, info_caption->Frame().bottom + 1.0, Bounds().right, 0.0), 3);
+	info_view = new InfoLinesView(
+		BRect(16.0, info_caption->Frame().bottom + 1.0, Bounds().right, 0.0), 3);
 	AddChild(info_view);
 
 	// Resize the main view so that everything fits
@@ -349,8 +350,8 @@ OutputFormatView::MessageReceived(BMessage* msg)
 
 	switch (msg->what) {
 		case ITEM_SELECTED:
-			if (msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
-				item_index < list_view->CountItems()) {
+			if (msg->FindInt32("index", &item_index) == B_OK && item_index >= 0
+				&& item_index < list_view->CountItems()) {
 				// Store the currently selected item
 				// in the class member 'index'
 				index = item_index;
@@ -390,8 +391,8 @@ OutputFormatView::MessageReceived(BMessage* msg)
 
 		case SEND_MESSAGE:
 			// An output format has been selected
-			if (!message_sent && msg->FindInt32("index", &item_index) == B_OK && item_index >= 0 &&
-				item_index < list_view->CountItems()) {
+			if (!message_sent && msg->FindInt32("index", &item_index) == B_OK && item_index >= 0
+				&& item_index < list_view->CountItems()) {
 				// Get the message from the invoker
 				BMessage the_message(*(selected_invoker->Message()));
 
@@ -434,8 +435,9 @@ OutputFormatView::AddConfigView()
 
 	BRect config_rect;
 	if (the_roster->MakeConfigurationView(
-			output_list[index].translator, 0, &config_view, &config_rect) == B_NO_ERROR &&
-		config_view != 0) {
+			output_list[index].translator, 0, &config_view, &config_rect)
+			== B_NO_ERROR
+		&& config_view != 0) {
 		// Create a caption for the config view
 		// if there wasn't one already
 		if (!config_caption) {
@@ -521,7 +523,8 @@ OutputFormatView::RecursiveSetMode(BView* view)
 
 // InfoLinesView constructor
 InfoLinesView::InfoLinesView(BRect frame, int32 nLines)
-	: BView(frame, "", B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW), mLines(nLines)
+	: BView(frame, "", B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW),
+	  mLines(nLines)
 {
 	mLineTexts = new const char*[mLines];  // --SS const
 	for (int32 i = 0; i < mLines; ++i)

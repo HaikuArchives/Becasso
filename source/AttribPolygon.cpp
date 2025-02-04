@@ -8,10 +8,14 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline" },
+	0,
+};
 
-AttribPolygon::AttribPolygon() : AttribView(BRect(0, 0, 148, 90), lstring(30, "Polygons"))
+AttribPolygon::AttribPolygon()
+	: AttribView(BRect(0, 0, 148, 90), lstring(30, "Polygons"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(
@@ -23,8 +27,8 @@ AttribPolygon::AttribPolygon() : AttribView(BRect(0, 0, 148, 90), lstring(30, "P
 	type->SetLabel(lstring(311, "Type"));
 	AddChild(type);
 
-	BPoint pointArray[] = {
-		BPoint(2, 8), BPoint(9, 2), BPoint(27, 12), BPoint(19, 28), BPoint(14, 20), BPoint(9, 26)};
+	BPoint pointArray[] = { BPoint(2, 8), BPoint(9, 2), BPoint(27, 12), BPoint(19, 28),
+		BPoint(14, 20), BPoint(9, 26) };
 	BPolygon* poly = new BPolygon();
 	poly->AddPoints(pointArray, 6);
 

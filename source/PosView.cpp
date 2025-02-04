@@ -64,8 +64,8 @@ PosView::Draw(BRect /* updaterect */)
 	SetHighColor(Grey31);
 	StrokeLine(Bounds().LeftTop() + BPoint(1, 1), Bounds().RightTop() + BPoint(-1, 1));
 	if (canvas->Bounds().Contains(
-			BPoint(mouse_x * canvas->getScale(), mouse_y * canvas->getScale())) &&
-		(Window()->IsActive()))
+			BPoint(mouse_x * canvas->getScale(), mouse_y * canvas->getScale()))
+		&& (Window()->IsActive()))
 		SetHighColor(Black);
 	else
 		SetHighColor(DarkGrey);

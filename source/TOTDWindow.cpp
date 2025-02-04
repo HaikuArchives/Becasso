@@ -28,8 +28,8 @@ TOTDWindow::TOTDWindow(const BRect frame, const int num)
 	size_t size;
 	const void* icondata = res.LoadResource('ICON', "BEOS:L:TOTD", &size);
 	icon->SetBits(icondata, 1024, 0, B_COLOR_8_BIT);
-	BitmapView* iview =
-		new BitmapView(BRect(0, 0, 39, Bounds().Height()), "icon", icon, B_OP_OVER, false);
+	BitmapView* iview
+		= new BitmapView(BRect(0, 0, 39, Bounds().Height()), "icon", icon, B_OP_OVER, false);
 	iview->SetViewColor(DarkGrey);
 	iview->SetPosition(BPoint(4, 8));
 	AddChild(iview);
@@ -42,8 +42,8 @@ TOTDWindow::TOTDWindow(const BRect frame, const int num)
 	AddChild(v);
 	rest.OffsetTo(B_ORIGIN);
 
-	BButton* next =
-		new BButton(BRect(rest.right - 80, rest.bottom - 32, rest.right - 4, rest.bottom - 4),
+	BButton* next
+		= new BButton(BRect(rest.right - 80, rest.bottom - 32, rest.right - 4, rest.bottom - 4),
 			"next", lstring(502, "Next tip"), new BMessage('next'));
 	v->AddChild(next);
 

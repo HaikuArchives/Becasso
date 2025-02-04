@@ -9,11 +9,16 @@
 #include "TabView.h"
 
 static property_info prop_list[] = {
-	{"ToleranceType|Type", SET, DIRECT, "string: Visual, Absolute|RGB"},
-	{"Tolerance|Visual", SET, DIRECT, "float: 0 .. 255"}, {"Red", SET, DIRECT, "int: 0 .. 255"},
-	{"Green", SET, DIRECT, "int: 0 .. 255"}, {"Blue", SET, DIRECT, "int: 0 .. 255"}, 0};
+	{ "ToleranceType|Type", SET, DIRECT, "string: Visual, Absolute|RGB" },
+	{ "Tolerance|Visual", SET, DIRECT, "float: 0 .. 255" },
+	{ "Red", SET, DIRECT, "int: 0 .. 255" },
+	{ "Green", SET, DIRECT, "int: 0 .. 255" },
+	{ "Blue", SET, DIRECT, "int: 0 .. 255" },
+	0,
+};
 
-AttribFill::AttribFill() : AttribView(BRect(0, 0, 146, 146), lstring(24, "Fill"))
+AttribFill::AttribFill()
+	: AttribView(BRect(0, 0, 146, 146), lstring(24, "Fill"))
 {
 	SetViewColor(LightGrey);
 	BBox* tolSets = new BBox(BRect(4, 4, 142, 142), "tol");
@@ -36,10 +41,10 @@ AttribFill::AttribFill() : AttribView(BRect(0, 0, 146, 146), lstring(24, "Fill")
 	rgbTab->SetViewColor(LightGrey);
 	bgTab->AddView(tolTab, lstring(341, "Visual"));
 	bgTab->AddView(rgbTab, lstring(342, "RGB"));
-	BStringView* explD =
-		new BStringView(BRect(2, 8, 122, 20), "explD", lstring(343, "Visual Factors:"));
-	BStringView* facD =
-		new BStringView(BRect(2, 20, 122, 32), "facD", lstring(344, "R: 0.213 G: 0.715 B: 0.072"));
+	BStringView* explD
+		= new BStringView(BRect(2, 8, 122, 20), "explD", lstring(343, "Visual Factors:"));
+	BStringView* facD = new BStringView(
+		BRect(2, 20, 122, 32), "facD", lstring(344, "R: 0.213 G: 0.715 B: 0.072"));
 	explD->SetFontSize(10);
 	facD->SetFontSize(10);
 	sT = new Slider(BRect(4, 42, 122, 58), 10, "D", 0, 255, 1, new BMessage('AFcT'));

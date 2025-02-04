@@ -33,38 +33,29 @@ extern bool DataTypes;
 #pragma optimization_level 1
 #endif
 
-#define GET_AND_SET                       \
-	{                                     \
-		B_GET_PROPERTY, B_SET_PROPERTY, 0 \
-	}
-#define GET               \
-	{                     \
-		B_GET_PROPERTY, 0 \
-	}
-#define SET               \
-	{                     \
-		B_SET_PROPERTY, 0 \
-	}
-#define DIRECT_AND_INDEX                         \
-	{                                            \
-		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 \
-	}
-#define DIRECT                \
-	{                         \
-		B_DIRECT_SPECIFIER, 0 \
-	}
+#define GET_AND_SET { B_GET_PROPERTY, B_SET_PROPERTY, 0 }
+#define GET { B_GET_PROPERTY, 0 }
+#define SET { B_SET_PROPERTY, 0 }
+#define DIRECT_AND_INDEX { B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 }
+#define DIRECT { B_DIRECT_SPECIFIER, 0 }
 
-static property_info prop_list[] = {{"Name", GET, DIRECT, "Get Canvas name"},
-	{"Layer", {B_CREATE_PROPERTY, 0}, DIRECT, "Name (string)"},
-	{"Layer", GET, DIRECT_AND_INDEX, ""},
-	{"ActiveLayer", GET_AND_SET, DIRECT_AND_INDEX, "Get and set currently active layer"}, 0};
+static property_info prop_list[] = {
+	{ "Name", GET, DIRECT, "Get Canvas name" },
+	{ "Layer", { B_CREATE_PROPERTY, 0 }, DIRECT, "Name (string)" },
+	{ "Layer", GET, DIRECT_AND_INDEX, "" },
+	{ "ActiveLayer", GET_AND_SET, DIRECT_AND_INDEX, "Get and set currently active layer" },
+	0,
+};
 
 static value_info value_list[] = {
-	{"Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)"},
-	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"}, 0};
+	{ "Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)" },
+	{ "Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect" },
+	0,
+};
 
-float zoomLevels[] = {0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0};
-char aspectLevels[][7] = {"(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)"};
+float zoomLevels[] = { 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0 };
+char aspectLevels[][7]
+	= { "(1:8)", "(1:4)", "(1:2)", "(1:1)", "(2:1)", "(4:1)", "(8:1)", "(16:1)" };
 
 CanvasWindow::CanvasWindow(BRect frame, const char* name, BBitmap* map, BMessenger* target,
 	bool AskForAlpha, rgb_color color)
@@ -141,8 +132,8 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 				fclose(fp);
 				throw(1);
 			}
-			if (int(cvers) == int(tvers) &&
-				cvers - int(cvers) > tvers - int(tvers))  // Check release
+			if (int(cvers) == int(tvers)
+				&& cvers - int(cvers) > tvers - int(tvers))	 // Check release
 			{
 				char string[B_FILE_NAME_LENGTH + 128];
 				sprintf(string,
@@ -178,8 +169,8 @@ CanvasWindow::CanvasWindow(BRect frame, entry_ref ref, bool AskForAlpha, BMessen
 		if (DATATranslate(inStream, NULL, NULL, *bms, DATA_BITMAP)) {
 			char string[B_FILE_NAME_LENGTH + 64];
 			sprintf(string, "Datatype error:\nCouldn't translate `%s'", fName);
-			BAlert* alert =
-				new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+			BAlert* alert
+				= new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 			alert->Go();
 			throw(0);
 		} else {
@@ -937,8 +928,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				{
 					char title[MAXLAYERNAME];
 					const char* namestring;
-					if (message->FindString("Name", &namestring) == B_OK ||
-						message->FindString("name", &namestring) == B_OK)
+					if (message->FindString("Name", &namestring) == B_OK
+						|| message->FindString("name", &namestring) == B_OK)
 						strcpy(title, namestring);
 					else
 						strcpy(title, lstring(149, "Untitled"));
@@ -1038,7 +1029,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 							}
 						} else {
 							BString indexSpecifierData, numberOfLayersData, errorString;
-							fNumberFormat.Format(numberOfLayersData, (int32)(canvas->numLayers() - 1));
+							fNumberFormat.Format(
+								numberOfLayersData, (int32)(canvas->numLayers() - 1));
 							fNumberFormat.Format(indexSpecifierData, indexspecifier);
 							errorString.SetToFormat("Layer index out of range [0..%s]: %s",
 								numberOfLayersData.String(), indexSpecifierData.String());
@@ -1120,7 +1112,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 					//					BRect canvasWindowFrame;
 					//					canvasWindowFrame.Set (128 + newnum*16, 128 + newnum*16,
 					//						128 + newnum*16 + newWidth - 1, 128 + newnum*16 +
-					//newHeight
+					// newHeight
 					//- 1); 					CanvasWindow *canvasWindow = new CanvasWindow
 					//(canvasWindowFrame, title, map, &ie); canvasWindow->Show();
 					BMessage* ok = new BMessage(BBP_BBITMAP_OPENED);
@@ -1250,10 +1242,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				// (however, we shouldn't be _exporting_ to Becasso via the TK at all...)
 				{
 					int il = strlen(suggestion);
-					while (
-						il > 0 &&
-						suggestion[il] !=
-							'.')  // Yes >0; .dotfiles shouldn't have their entire name cut off...
+					while (il > 0 && suggestion[il] != '.')	 // Yes >0; .dotfiles shouldn't have
+															 // their entire name cut off...
 						il--;
 
 					if (!il) {
@@ -1265,7 +1255,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 					int32 format_count = 0;
 
 					if (BTranslatorRoster::Default()->GetOutputFormats(
-							out_translator, &format_list, &format_count) == B_NO_ERROR) {
+							out_translator, &format_list, &format_count)
+						== B_NO_ERROR) {
 						// printf ("%ld formats found\n", format_count);
 						for (int i = 0; i < format_count; ++i) {
 							// printf ("Trying format %d...\n", i);
@@ -1275,9 +1266,9 @@ CanvasWindow::MessageReceived(BMessage* message)
 								BMessage extensions;
 								extern bool PatronizeMIME;
 								char* ext;
-								if (mime.GetFileExtensions(&extensions) == B_OK &&
-									extensions.FindString("extensions", 0, (const char**)&ext) ==
-										B_OK)
+								if (mime.GetFileExtensions(&extensions) == B_OK
+									&& extensions.FindString("extensions", 0, (const char**)&ext)
+										   == B_OK)
 								// Only look for the first one (if there are more)
 								{
 									// extensions.PrintToStream();
@@ -1337,8 +1328,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 											// First, look for application/postscript as a special
 											// case
 											BMimeType psmt("application/postscript");
-											if (psmt.GetFileExtensions(&pmtext) != B_OK ||
-												!pmtext.HasString("extensions")) {
+											if (psmt.GetFileExtensions(&pmtext) != B_OK
+												|| !pmtext.HasString("extensions")) {
 												pmtext.AddString("extensions", "eps");
 												pmtext.AddString("extensions", "ps");
 												psmt.SetFileExtensions(&pmtext);
@@ -1346,24 +1337,25 @@ CanvasWindow::MessageReceived(BMessage* message)
 
 											BMimeType::GetInstalledTypes("image", &types);
 											t = 0;
-											while (types.FindString(
-													   "types", t++, (const char**)&type) == B_OK) {
+											while (
+												types.FindString("types", t++, (const char**)&type)
+												== B_OK) {
 												// printf ("Working on %s\n", type);
 												BMessage mtext;
 												BMimeType mt(type);
 												if (mt.InitCheck() != B_OK)
 													printf("ALARM!\n");
 												bool foundsomething = false;
-												if (mt.GetFileExtensions(&mtext) != B_OK ||
-													!mtext.HasString("extensions")) {
+												if (mt.GetFileExtensions(&mtext) != B_OK
+													|| !mtext.HasString("extensions")) {
 													char* ext = type + 6;  // skip "image/"
 													if (strlen(ext) == 3)  // Easy!
 													{
 														// printf ("Easy: %s\n", ext);
 														mtext.AddString("extensions", ext);
 														foundsomething = true;
-													} else if ((ext[0] == 'x') && (ext[1] == '-') &&
-															   (strlen(ext + 2) == 3))	// x-foo?
+													} else if ((ext[0] == 'x') && (ext[1] == '-')
+															   && (strlen(ext + 2) == 3))  // x-foo?
 													{
 														// printf ("Easy: x-%s\n", ext + 2);
 														mtext.AddString("extensions", ext + 2);
@@ -1385,8 +1377,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 																sd[3] = 0;
 																for (spacep = 0; spacep < 3;
 																	 spacep++)
-																	sd[spacep] =
-																		tolower(sd[spacep]);
+																	sd[spacep]
+																		= tolower(sd[spacep]);
 																// printf ("From desc: %s\n", sd);
 																mtext.AddString("extensions", sd);
 																foundsomething = true;
@@ -1399,8 +1391,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 															mtext.AddString("extensions", "jpg");
 															mtext.AddString("extensions", "jpeg");
 															foundsomething = true;
-														} else if (!strcmp(ext, "targa") ||
-																   !strcmp(ext, "x-targa")) {
+														} else if (!strcmp(ext, "targa")
+																   || !strcmp(ext, "x-targa")) {
 															mtext.AddString("extensions", "tga");
 															foundsomething = true;
 														} else if (!strcmp(ext, "tiff")) {
@@ -1433,8 +1425,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 									// printf ("Second try...\n");
 									// extensions.PrintToStream();
 									char* ext;
-									if (extensions.FindString(
-											"extensions", 0, (const char**)&ext) == B_OK)
+									if (extensions.FindString("extensions", 0, (const char**)&ext)
+										== B_OK)
 									// Only look for the first one (if there are more)
 									{
 										// printf ("Adding extension %s\n", ext);
@@ -1541,8 +1533,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				if (DATATranslate(*bitmapStream, &out_info, NULL, outStream, out_type)) {
 					char errstring[B_FILE_NAME_LENGTH + 64];
 					sprintf(errstring, "Datatype error:\nCouldn't translate `%s'", fName);
-					BAlert* alert =
-						new BAlert("", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* alert = new BAlert(
+						"", string, "OK", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					alert->Go();
 				}
 #else
@@ -1570,7 +1562,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				const translation_format* format_list = 0;
 				int32 format_count = 0;
 				if (BTranslatorRoster::Default()->GetOutputFormats(
-						out_translator, &format_list, &format_count) == B_NO_ERROR) {
+						out_translator, &format_list, &format_count)
+					== B_NO_ERROR) {
 					for (int i = 0; i < format_count; ++i) {
 						if (format_list[i].type == out_type) {
 							outStream.RemoveAttr("BEOS:TYPE");
@@ -1622,8 +1615,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 		case 'M_S':
 			float scale;
 			int32 index;
-			if (message->FindFloat("scale", &scale) == B_OK &&
-				message->FindInt32("index", &index) == B_OK) {
+			if (message->FindFloat("scale", &scale) == B_OK
+				&& message->FindInt32("index", &index) == B_OK) {
 				canvas->setScale(scale);
 			}
 			break;
@@ -1896,8 +1889,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				droppoint = canvas->ConvertFromScreen(droppoint);
 				canvas->SetScale(1);
 				long dummy;
-				if (message->FindData(
-						"RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy) == B_OK)
+				if (message->FindData("RGBColor", B_RGB_COLOR_TYPE, (const void**)&dropped, &dummy)
+					== B_OK)
 					canvas->Fill(M_DRAW, droppoint, dropped);
 			} else
 				canvas->Paste(false);
@@ -1917,8 +1910,8 @@ CanvasWindow::MessageReceived(BMessage* message)
 				canvasWindowFrame = clip->Bounds();
 				BBitmap* newClip = new BBitmap(clip);
 				canvasWindowFrame.OffsetTo(Frame().left + 16, Frame().top + 16);
-				CanvasWindow* canvasWindow =
-					new CanvasWindow(canvasWindowFrame, title, newClip, NULL, false);
+				CanvasWindow* canvasWindow
+					= new CanvasWindow(canvasWindowFrame, title, newClip, NULL, false);
 				canvasWindow->Show();  // will register itself with the app
 			}
 			break;

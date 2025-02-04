@@ -318,11 +318,12 @@ CanvasView::tClone(int32 mode, BPoint point, uint32 buttons)
 				int32 off_y = int32(point.y + fCC.offset.y - h / 2);
 				for (int y = 0; y < h; y++) {
 					for (int x = 0; x < w; x++) {
-						cbits[y * cbprl + x] =
-							(y + off_y <= ch && x + off_x <= cw && y + off_y >= 0 && x + off_x >= 0)
-								? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK) |
-									  bd[y * w + x] << ALPHA_BPOS)
-								: 0;
+						cbits[y * cbprl + x]
+							= (y + off_y <= ch && x + off_x <= cw && y + off_y >= 0
+								  && x + off_x >= 0)
+								  ? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK)
+										| bd[y * w + x] << ALPHA_BPOS)
+								  : 0;
 						//								(0xFF00FF00 & COLOR_MASK | bd[y*w + x] <<
 						// ALPHA_BPOS) : 0;
 					}
@@ -420,12 +421,12 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 					int32 off_y = int32(nextPos.y + fCC.offset.y - h / 2);
 					for (int y = 0; y < h; y++) {
 						for (int x = 0; x < w; x++) {
-							cbits[y * cbprl + x] =
-								(y + off_y <= ch && x + off_x <= cw && y + off_y >= 0 &&
-									x + off_x >= 0)
-									? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK) |
-										  bd[y * w + x] << ALPHA_BPOS)
-									: 0;
+							cbits[y * cbprl + x]
+								= (y + off_y <= ch && x + off_x <= cw && y + off_y >= 0
+									  && x + off_x >= 0)
+									  ? ((dbits[(y + off_y) * bbprl + x + off_x] & COLOR_MASK)
+											| bd[y * w + x] << ALPHA_BPOS)
+									  : 0;
 							//								(0xFF00FF00 & COLOR_MASK | bd[y*w + x]
 							//<< ALPHA_BPOS) : 0;
 						}
@@ -478,8 +479,8 @@ CanvasView::tTablet(int32 mode)
 	extern Tablet* wacom;
 #if defined(USE_THREAD_FOR_POSITION)
 	extern port_id position_port;
-	thread_id position_thread =
-		spawn_thread(position_tracker, "Position Tracker", B_DISPLAY_PRIORITY, this);
+	thread_id position_thread
+		= spawn_thread(position_tracker, "Position Tracker", B_DISPLAY_PRIORITY, this);
 #endif
 	wacom->SetScale(fCanvasFrame.Width(), fCanvasFrame.Height());
 #if defined(USE_THREAD_FOR_POSITION)
@@ -570,8 +571,8 @@ CanvasView::tTablet(int32 mode)
 		float dy = pos.y - point.y;
 		float ds = dx * dx + dy * dy;
 		float distance = sqrt(ds);
-		BRect aR =
-			BRect(point.x - borderx, point.y - bordery, point.x + borderx, point.y + bordery);
+		BRect aR
+			= BRect(point.x - borderx, point.y - bordery, point.x + borderx, point.y + bordery);
 		BRect bR = BRect(pos.x - borderx, pos.y - bordery, pos.x + borderx, pos.y + bordery);
 		if (distance > Spacing) {
 			float num = distance / Spacing;
@@ -836,8 +837,8 @@ CanvasView::tText(int32 mode, BPoint point, uint32 buttons)
 		int value = 255 - int(0.5 * c.green + 0.3 * c.red + 0.2 * c.blue + 0.5);
 		BBitmap* tempsel = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		bzero(tempsel->Bits(), tempsel->BitsLength());
-		BView* tempselView =
-			new BView(fCanvasFrame, "Temp Selection View", uint32(NULL), uint32(NULL));
+		BView* tempselView
+			= new BView(fCanvasFrame, "Temp Selection View", uint32(NULL), uint32(NULL));
 		tempsel->Lock();
 		tempsel->AddChild(tempselView);
 		tempselView->SetHighColor(value, value, value);
@@ -972,8 +973,8 @@ CanvasView::tTextD()
 		if (dm == B_OP_COPY || dm == B_OP_BLEND) {
 			BBitmap* tempsel = new BBitmap(fCanvasFrame, B_RGBA32, true);
 			bzero(tempsel->Bits(), tempsel->BitsLength());
-			BView* tempselView =
-				new BView(fCanvasFrame, "Temp Text View", uint32(NULL), uint32(NULL));
+			BView* tempselView
+				= new BView(fCanvasFrame, "Temp Text View", uint32(NULL), uint32(NULL));
 			tempsel->Lock();
 			tempsel->AddChild(tempselView);
 			tempselView->SetHighColor(White);
@@ -1010,8 +1011,8 @@ CanvasView::tTextD()
 	} else {
 		BBitmap* tempsel = new BBitmap(fCanvasFrame, B_RGBA32, true);
 		bzero(tempsel->Bits(), tempsel->BitsLength());
-		BView* tempselView =
-			new BView(fCanvasFrame, "Temp Selection View", uint32(NULL), uint32(NULL));
+		BView* tempselView
+			= new BView(fCanvasFrame, "Temp Selection View", uint32(NULL), uint32(NULL));
 		tempsel->Lock();
 		tempsel->AddChild(tempselView);
 		tempselView->SetHighColor(White);
@@ -1677,9 +1678,9 @@ CanvasView::tPolygon(int32 mode, BPoint point, uint32 buttons)
 							// drawn, so this is for tPolygonM().
 		entry = 1;
 	} else {
-		if ((leftfirst && (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY)) ||
-			(!leftfirst && (buttons & B_PRIMARY_MOUSE_BUTTON)) ||
-			(buttons & B_TERTIARY_MOUSE_BUTTON))  // Polygon closed
+		if ((leftfirst && (buttons & B_SECONDARY_MOUSE_BUTTON || modifiers() & B_CONTROL_KEY))
+			|| (!leftfirst && (buttons & B_PRIMARY_MOUSE_BUTTON))
+			|| (buttons & B_TERTIARY_MOUSE_BUTTON))	 // Polygon closed
 		{
 			SetupUndo(mode);
 			switch (tAttribPolygon->getType()) {
@@ -2357,8 +2358,8 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 		while (buttons) {
 			BRect frame, pframe, tframe;
 			if (point != prev) {
-				radius = sqrt((center.x - point.x) * (center.x - point.x) +
-							  (center.y - point.y) * (center.y - point.y));
+				radius = sqrt((center.x - point.x) * (center.x - point.x)
+							  + (center.y - point.y) * (center.y - point.y));
 				if (cent == FIXES_CENTER) {
 					frame.Set(
 						center.x - radius, center.y - radius, center.x + radius, center.y + radius);
@@ -2445,8 +2446,8 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 			if (mode == M_DRAW) {
 				memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
 					currentLayer()->BitsLength());
-				radius = sqrt((center.x - point.x) * (center.x - point.x) +
-							  (center.y - point.y) * (center.y - point.y));
+				radius = sqrt((center.x - point.x) * (center.x - point.x)
+							  + (center.y - point.y) * (center.y - point.y));
 				switch (tAttribCircle->getType()) {
 					case CIRCLE_OUTLINE:
 						drawView->StrokeEllipse(
@@ -2468,8 +2469,8 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 				drawView->Sync();
 			} else {
 				memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
-				radius = sqrt((center.x - point.x) * (center.x - point.x) +
-							  (center.y - point.y) * (center.y - point.y));
+				radius = sqrt((center.x - point.x) * (center.x - point.x)
+							  + (center.y - point.y) * (center.y - point.y));
 				switch (tAttribCircle->getType()) {
 					case CIRCLE_OUTLINE:
 						selectionView->StrokeEllipse(
@@ -2500,8 +2501,8 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 		if (mode == M_DRAW) {
 			memcpy(currentLayer()->Bits(), undo[indexUndo].bitmap->Bits(),
 				currentLayer()->BitsLength());
-			float radius = sqrt((center.x - point.x) * (center.x - point.x) +
-								(center.y - point.y) * (center.y - point.y));
+			float radius = sqrt((center.x - point.x) * (center.x - point.x)
+								+ (center.y - point.y) * (center.y - point.y));
 			switch (tAttribCircle->getType()) {
 				case CIRCLE_OUTLINE:
 					drawView->StrokeEllipse(
@@ -2523,8 +2524,8 @@ CanvasView::tCircle(int32 mode, BPoint point, uint32 buttons)
 			drawView->Sync();
 		} else {
 			memcpy(selection->Bits(), undo[indexUndo].sbitmap->Bits(), selection->BitsLength());
-			float radius = sqrt((center.x - point.x) * (center.x - point.x) +
-								(center.y - point.y) * (center.y - point.y));
+			float radius = sqrt((center.x - point.x) * (center.x - point.x)
+								+ (center.y - point.y) * (center.y - point.y));
 			switch (tAttribCircle->getType()) {
 				case CIRCLE_OUTLINE:
 					selectionView->StrokeEllipse(
@@ -2571,14 +2572,14 @@ CanvasView::tCircleM(int32 mode, BPoint point)
 		float halfpensize = int(pensize / 2 - 0.5);
 		int cent = tAttribCircle->getFirst();
 		BPoint center = PenLocation();
-		float radius = sqrt((center.x - point.x) * (center.x - point.x) +
-							(center.y - point.y) * (center.y - point.y));
+		float radius = sqrt((center.x - point.x) * (center.x - point.x)
+							+ (center.y - point.y) * (center.y - point.y));
 		SetPenSize(pensize);
 		BPoint pos = PenLocation();
 		BRect frame, pframe;
 		if (cent == FIXES_CENTER) {
-			frame =
-				PRect(center.x - radius, center.y - radius, center.x + radius, center.y + radius);
+			frame
+				= PRect(center.x - radius, center.y - radius, center.x + radius, center.y + radius);
 			pframe = PRect(
 				center.x - pradius, center.y - pradius, center.x + pradius, center.y + pradius);
 		} else {
@@ -2918,9 +2919,9 @@ CanvasView::isfillcolorrgb(LPoint point, uchar* t)
 	if (!fillcolor.alpha && !c.alpha)
 		return true;
 
-	if (c.alpha && abs(c.red - fillcolor.red) <= toleranceRGB.red &&
-		abs(c.green - fillcolor.green) <= toleranceRGB.green &&
-		abs(c.blue - fillcolor.blue) <= toleranceRGB.blue) {
+	if (c.alpha && abs(c.red - fillcolor.red) <= toleranceRGB.red
+		&& abs(c.green - fillcolor.green) <= toleranceRGB.green
+		&& abs(c.blue - fillcolor.blue) <= toleranceRGB.blue) {
 		if (c.alpha == 255)	 // Special case
 			*t = clipchar(255 - diff(c, fillcolor));
 		else
@@ -3004,10 +3005,10 @@ CanvasView::tFill(int32 mode, BPoint point, uint32 buttons, rgb_color* c)
 	tempView->Sync();
 
 	// printf ("Everything set up - entering loop\n");
-	if (((tAttribFill->getTolMode() == FILLTOL_TOL) && (tolerance == 0)) ||
-		(tAttribFill->getTolMode() == FILLTOL_RGB) && (toleranceRGB.red == 0) &&
-			(toleranceRGB.green == 0) &&
-			(toleranceRGB.blue == 0)) {	 // Use the special case functions for zero tolerance
+	if (((tAttribFill->getTolMode() == FILLTOL_TOL) && (tolerance == 0))
+		|| (tAttribFill->getTolMode() == FILLTOL_RGB) && (toleranceRGB.red == 0)
+			   && (toleranceRGB.green == 0)
+			   && (toleranceRGB.blue == 0)) {  // Use the special case functions for zero tolerance
 		while (!(ps.isempty())) {
 			LPoint p = ps.pop();
 			LPoint next;

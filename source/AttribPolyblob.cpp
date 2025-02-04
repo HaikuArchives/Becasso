@@ -6,10 +6,14 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline" },
+	0,
+};
 
-AttribPolyblob::AttribPolyblob() : AttribView(BRect(0, 0, 148, 90), lstring(29, "Free Shapes"))
+AttribPolyblob::AttribPolyblob()
+	: AttribView(BRect(0, 0, 148, 90), lstring(29, "Free Shapes"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(
@@ -21,10 +25,10 @@ AttribPolyblob::AttribPolyblob() : AttribView(BRect(0, 0, 148, 90), lstring(29, 
 	type->SetLabel(lstring(311, "Type"));
 	AddChild(type);
 
-	BPoint pointArray[] = {BPoint(2, 8), BPoint(3, 4), BPoint(6, 3), BPoint(9, 2), BPoint(12, 3),
+	BPoint pointArray[] = { BPoint(2, 8), BPoint(3, 4), BPoint(6, 3), BPoint(9, 2), BPoint(12, 3),
 		BPoint(20, 5), BPoint(23, 7), BPoint(27, 12), BPoint(26, 15), BPoint(24, 20),
 		BPoint(22, 23), BPoint(19, 28), BPoint(18, 28), BPoint(16, 23), BPoint(15, 20),
-		BPoint(13, 21), BPoint(11, 23), BPoint(6, 22), BPoint(4, 15), BPoint(3, 10)};
+		BPoint(13, 21), BPoint(11, 23), BPoint(6, 22), BPoint(4, 15), BPoint(3, 10) };
 	BPolygon* poly = new BPolygon();
 	poly->AddPoints(pointArray, 20);
 

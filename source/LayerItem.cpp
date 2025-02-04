@@ -149,8 +149,8 @@ LayerItem::MouseDown(BPoint point)
 		}
 		if (!bt && click != 2) {
 			click = 1;
-		} else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON &&
-				   !(modifiers() & B_CONTROL_KEY)) {
+		} else if (click != 2 && buttons & B_PRIMARY_MOUSE_BUTTON
+				   && !(modifiers() & B_CONTROL_KEY)) {
 			BMessage* dragmessage = new BMessage('ldrg');
 			dragmessage->AddInt32("startingindex", index);
 			BBitmap* dragbitmap = new BBitmap(Bounds(), B_RGBA32, true);
@@ -216,19 +216,15 @@ LayerItem::Draw(BRect /* update */)
 		uint32 pixel = *(++bits);
 #if defined(__POWERPC__)
 		uint32 a = pixel & 0x000000FF;
-		uint32 b =
-			(((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
-		uint32 g =
-			(((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
+		uint32 b = (((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
+		uint32 g = (((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
 		uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
 		*bits = (b | g | r | a);
 #else
 		uint32 a = pixel >> 24;
 		uint32 b = ((((pixel & 0x000000FF) * a) >> 8) - (a) + (255)) & 0x000000FF;
-		uint32 g =
-			((((pixel & 0x0000FF00) * a) >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
-		uint32 r =
-			((((pixel & 0x00FF0000) * a) >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
+		uint32 g = ((((pixel & 0x0000FF00) * a) >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
+		uint32 r = ((((pixel & 0x00FF0000) * a) >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
 		*bits = (b | g | r | (a << 24));
 #endif
 	}
@@ -262,18 +258,15 @@ LayerItem::DrawThumbOnly()
 		uint32 pixel = *(++bits);
 #if defined(__POWERPC__)
 		uint32 a = pixel & 0x000000FF;
-		uint32 b =
-			(((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
-		uint32 g =
-			(((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
+		uint32 b = (((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
+		uint32 g = (((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
 		uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
 		*bits = (b | g | r | a);
 #else
 		uint32 a = pixel >> 24;
 		uint32 b = (((pixel & 0x000000FF) * a >> 8) - (a) + (255)) & 0x000000FF;
 		uint32 g = (((pixel & 0x0000FF00) * a >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
-		uint32 r =
-			(((pixel & 0x00FF0000) * a >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
+		uint32 r = (((pixel & 0x00FF0000) * a >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
 		*bits = (b | g | r | (a << 24));
 #endif
 	}

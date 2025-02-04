@@ -98,11 +98,11 @@ generate_alphabuffer(char* alpha)
 			}
 			fclose(cd);
 			if (!done) {
-				int button =
-					(new BAlert("Reg",
-						 lstring(423, "For registration: please mount the Becasso 2.0 CD-ROM"),
-						 lstring(131, "Cancel"), lstring(424, "Done")))
-						->Go();
+				int button
+					= (new BAlert("Reg",
+						   lstring(423, "For registration: please mount the Becasso 2.0 CD-ROM"),
+						   lstring(131, "Cancel"), lstring(424, "Done")))
+						  ->Go();
 				if (button == 0)
 					done = true;
 			}
@@ -117,8 +117,8 @@ generate_alphabuffer(char* alpha)
 	if (reg == REG_HAIKU) {
 		strcat(gAlphaMask, "Haiku");
 	} else {
-		RegWindow* rw =
-			new RegWindow(BRect(100, 100, 440, 240), lstring(420, "Register Becasso 2.0"), reg);
+		RegWindow* rw
+			= new RegWindow(BRect(100, 100, 440, 240), lstring(420, "Register Becasso 2.0"), reg);
 		int val = rw->Go();
 		rw->Lock();
 		rw->Quit();
@@ -150,9 +150,9 @@ generate_alphabuffer(char* alpha)
 	gAlphaBuffer[13] = reg;
 	for (i = 0; i <= vlen; i++)
 		gAlphaBuffer[2 * i + 15] = Version[i];
-	char filler[] =
-		"Well done, you have cracked the keyfile code!  Please don't pass it on, I "
-		"need to eat too - Sander";
+	char filler[]
+		= "Well done, you have cracked the keyfile code!  Please don't pass it on, I "
+		  "need to eat too - Sander";
 	for (i = 0; i < strlen(filler); i++)
 		gAlphaBuffer[2 * i + 2 * vlen + 15] = filler[i];
 	uint32 sum = 0;
@@ -163,7 +163,7 @@ generate_alphabuffer(char* alpha)
 	gAlphaBuffer[253] = schar[1];
 	gAlphaBuffer[254] = schar[2];
 	gAlphaBuffer[255] = schar[3];
-	uchar xAlphaMask[256] = {KEYFILE_MASK};
+	uchar xAlphaMask[256] = { KEYFILE_MASK };
 	char wbuffer[256];
 	for (i = 0; i < 255; i++)
 		wbuffer[i] = gAlphaBuffer[i] ^ xAlphaMask[i];
@@ -208,7 +208,7 @@ setup_alphabuffer()
 		fclose(kf);
 		// Here, demangle the keyfile into the registration info.
 		// first, xor using the mask.
-		char xAlphaMask[256] = {KEYFILE_MASK};
+		char xAlphaMask[256] = { KEYFILE_MASK };
 		int i;
 		for (i = 0; i < 255; i++)
 			gAlphaBuffer[i] = buffer[i] ^ xAlphaMask[i];
@@ -219,11 +219,11 @@ setup_alphabuffer()
 			sum += gAlphaBuffer[i];
 		char* schar = (char*)(&sum);
 #if defined(__POWERPC__)
-		if (gAlphaBuffer[252] != schar[3] || gAlphaBuffer[253] != schar[2] ||
-			gAlphaBuffer[254] != schar[1] || gAlphaBuffer[255] != schar[0])
+		if (gAlphaBuffer[252] != schar[3] || gAlphaBuffer[253] != schar[2]
+			|| gAlphaBuffer[254] != schar[1] || gAlphaBuffer[255] != schar[0])
 #else
-		if (gAlphaBuffer[252] != schar[0] || gAlphaBuffer[253] != schar[1] ||
-			gAlphaBuffer[254] != schar[2] || gAlphaBuffer[255] != schar[3])
+		if (gAlphaBuffer[252] != schar[0] || gAlphaBuffer[253] != schar[1]
+			|| gAlphaBuffer[254] != schar[2] || gAlphaBuffer[255] != schar[3])
 #endif
 		{
 			fprintf(stderr, "keyfile checksum failure\n");	//: %x, %x %x %x %x\n", sum,
@@ -407,8 +407,8 @@ main(int argc, char** argv)
 	BScreen screen;
 	BRect becassorect = BRect(0, 0, 231, 93);
 	BRect sumrect = BRect(0, 0, 63, 83);
-	BBitmap* becasso =
-		new BBitmap(becassorect, (screen.ColorSpace() == B_COLOR_8_BIT) ? B_COLOR_8_BIT : B_RGB32);
+	BBitmap* becasso = new BBitmap(
+		becassorect, (screen.ColorSpace() == B_COLOR_8_BIT) ? B_COLOR_8_BIT : B_RGB32);
 	// This strange color space thing is because we can't store bitmaps in 16 bit depth, so we use
 	// a 32bit version for this screen mode (which doesn't look too bad).
 	BBitmap* sum = new BBitmap(sumrect, B_RGB32);

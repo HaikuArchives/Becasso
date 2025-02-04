@@ -69,7 +69,10 @@ ColorMenu::FindMarked()
 
 class colorTearInfo {
 public:
-	colorTearInfo(BRect r, ColorMenu* p, BView* s) : dragRect(r), parent(p), someView(s){};
+	colorTearInfo(BRect r, ColorMenu* p, BView* s)
+		: dragRect(r),
+		  parent(p),
+		  someView(s) {};
 	BRect dragRect;
 	ColorMenu* parent;
 	BView* someView;

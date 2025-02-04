@@ -8,12 +8,18 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"Spacing", SET, DIRECT, "float: 1 .. 64"},
-	{"Strength", SET, DIRECT, "int: 0 .. 255"}, {"Angle", SET, DIRECT, "float: 0 .. 45"},
-	{"Width|XSize", SET, DIRECT, "int: 0 .. 40"}, {"Height|YSize", SET, DIRECT, "int: 0 .. 40"},
-	{"Hardness", SET, DIRECT, "int: 0 .. 100"}, 0};
+static property_info prop_list[] = {
+	{ "Spacing", SET, DIRECT, "float: 1 .. 64" },
+	{ "Strength", SET, DIRECT, "int: 0 .. 255" },
+	{ "Angle", SET, DIRECT, "float: 0 .. 45" },
+	{ "Width|XSize", SET, DIRECT, "int: 0 .. 40" },
+	{ "Height|YSize", SET, DIRECT, "int: 0 .. 40" },
+	{ "Hardness", SET, DIRECT, "int: 0 .. 100" },
+	0,
+};
 
-AttribBrush::AttribBrush() : AttribView(BRect(0, 0, 160, 280), lstring(22, "Brush"))
+AttribBrush::AttribBrush()
+	: AttribView(BRect(0, 0, 160, 280), lstring(22, "Brush"))
 {
 	SetViewColor(LightGrey);
 	fSpacing = 1;

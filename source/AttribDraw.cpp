@@ -9,9 +9,10 @@
 #include "Slider.h"
 #include "Tablet.h"
 
-static property_info prop_list[] = {0};
+static property_info prop_list[] = { 0 };
 
-AttribDraw::AttribDraw() : AttribView(BRect(0, 0, 164, 58), lstring(20, "Draw"))
+AttribDraw::AttribDraw()
+	: AttribView(BRect(0, 0, 164, 58), lstring(20, "Draw"))
 {
 	extern bool BuiltInTablet;
 	SetViewColor(LightGrey);
@@ -27,8 +28,8 @@ AttribDraw::AttribDraw() : AttribView(BRect(0, 0, 164, 58), lstring(20, "Draw"))
 	fModePU->AddItem(new BMenuItem(lstring(326, "Add"), NULL));
 	fModePU->AddItem(new BMenuItem(lstring(327, "Subtract"), NULL));
 	fModePU->AddItem(new BMenuItem(lstring(328, "Blend"), NULL));
-	BMenuField* dMode =
-		new BMenuField(BRect(8, 6, 156, 24), "dMode", lstring(329, "Drawing Mode:"), fModePU);
+	BMenuField* dMode
+		= new BMenuField(BRect(8, 6, 156, 24), "dMode", lstring(329, "Drawing Mode:"), fModePU);
 	dMode->SetDivider(82);
 	drawmode[0] = B_OP_COPY;
 	drawmode[1] = B_OP_OVER;
@@ -48,8 +49,8 @@ AttribDraw::AttribDraw() : AttribView(BRect(0, 0, 164, 58), lstring(20, "Draw"))
 		item->SetMarked(true);
 		fTabletPU->AddItem(item);
 		fTabletPU->AddItem(new BMenuItem("Serial 4", new BMessage('TBL4')));
-		BMenuField* dTablet =
-			new BMenuField(BRect(8, 30, 156, 48), "dTablet", lstring(330, "Tablet: "), fTabletPU);
+		BMenuField* dTablet
+			= new BMenuField(BRect(8, 30, 156, 48), "dTablet", lstring(330, "Tablet: "), fTabletPU);
 		dTablet->SetDivider(82);
 		AddChild(dTablet);
 	}

@@ -14,7 +14,8 @@
 
 #define NAG_TIME 15
 
-NagWindow::NagWindow(BRect frame) : BWindow(frame, "", B_MODAL_WINDOW, B_NOT_RESIZABLE)
+NagWindow::NagWindow(BRect frame)
+	: BWindow(frame, "", B_MODAL_WINDOW, B_NOT_RESIZABLE)
 {
 	BRect bgFrame, iFrame;
 	bgFrame = Bounds();

@@ -3,16 +3,20 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"Sigma", SET, DIRECT, "float: 1 .. 25"},
-	{"Ratio|ColorRatio", SET, DIRECT, "float: 0 .. 1"},
-	{"Rate|FlowRate", SET, DIRECT, "float: 1 .. 20"}, {"Fade", SET, DIRECT, "bool: true, false"},
-	0};
+static property_info prop_list[] = {
+	{ "Sigma", SET, DIRECT, "float: 1 .. 25" },
+	{ "Ratio|ColorRatio", SET, DIRECT, "float: 0 .. 1" },
+	{ "Rate|FlowRate", SET, DIRECT, "float: 1 .. 20" },
+	{ "Fade", SET, DIRECT, "bool: true, false" },
+	0,
+};
 
-AttribSpraycan::AttribSpraycan() : AttribView(BRect(0, 0, 164, 90), lstring(26, "Spraycan"))
+AttribSpraycan::AttribSpraycan()
+	: AttribView(BRect(0, 0, 164, 90), lstring(26, "Spraycan"))
 {
 	SetViewColor(LightGrey);
-	sSlid =
-		new Slider(BRect(4, 4, 160, 22), 60, lstring(355, "Sigma"), 1, 25, 1, new BMessage('ASsg'));
+	sSlid = new Slider(
+		BRect(4, 4, 160, 22), 60, lstring(355, "Sigma"), 1, 25, 1, new BMessage('ASsg'));
 	cSlid = new Slider(BRect(4, 26, 160, 44), 60, lstring(356, "Color Ratio"), 0, 1, 0.01,
 		new BMessage('AScr'), B_HORIZONTAL, 0, "%.2f");
 	fSlid = new Slider(

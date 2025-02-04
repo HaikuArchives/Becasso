@@ -83,12 +83,12 @@ PrefsWindow::PrefsWindow()
 	fUndoSlider->SetValue(fLocalSettings.max_undo);
 
 
-	fSelectionCB =
-		new BCheckBox("selection", lstring(435, "Always invert selection"), new BMessage('selI'));
+	fSelectionCB
+		= new BCheckBox("selection", lstring(435, "Always invert selection"), new BMessage('selI'));
 	fSelectionCB->SetValue(fLocalSettings.selection_type == SELECTION_STATIC);
 
-	BCheckBox* totdCB =
-		new BCheckBox("totd", lstring(387, "Show tips at startup"), new BMessage('totd'));
+	BCheckBox* totdCB
+		= new BCheckBox("totd", lstring(387, "Show tips at startup"), new BMessage('totd'));
 	totdCB->SetValue(fLocalSettings.totd);
 
 
@@ -105,8 +105,8 @@ PrefsWindow::PrefsWindow()
 	if (fLocalSettings.preview_size == 256)
 		item->SetMarked(true);
 	fPrevSizePU->AddItem(item);
-	BMenuField* previewMF =
-		new BMenuField("prv", lstring(386, "Filter Preview Size: "), fPrevSizePU);
+	BMenuField* previewMF
+		= new BMenuField("prv", lstring(386, "Filter Preview Size: "), fPrevSizePU);
 
 	BButton* revert = new BButton("revert", lstring(381, "Revert"), new BMessage('prfR'));
 	BButton* apply = new BButton("apply", lstring(382, "Apply"), new BMessage('prfA'));
@@ -167,8 +167,8 @@ PrefsWindow::MessageReceived(BMessage* message)
 			break;
 		}
 		case 'selI':
-			fLocalSettings.selection_type =
-				fSelectionCB->Value() ? SELECTION_STATIC : SELECTION_IN_OUT;
+			fLocalSettings.selection_type
+				= fSelectionCB->Value() ? SELECTION_STATIC : SELECTION_IN_OUT;
 			break;
 		case 'totd':
 			fLocalSettings.totd = message->FindInt32("be:value");

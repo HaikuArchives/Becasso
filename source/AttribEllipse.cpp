@@ -6,10 +6,14 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline" },
+	0,
+};
 
-AttribEllipse::AttribEllipse() : AttribView(BRect(0, 0, 148, 90), lstring(34, "Ellipses"))
+AttribEllipse::AttribEllipse()
+	: AttribView(BRect(0, 0, 148, 90), lstring(34, "Ellipses"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(

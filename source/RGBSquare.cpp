@@ -229,9 +229,9 @@ RGBSquare::SetColor(rgb_color c)
 // There is a one pixel black border which I don't understand...
 {
 	// This could be faster... In the meantime, just do it.
-	if (true || first || ((notcolor == 0) && (c.red != current.red)) ||
-		((notcolor == 1) && (c.green != current.green)) ||
-		((notcolor == 2) && (c.blue != current.blue))) {
+	if (true || first || ((notcolor == 0) && (c.red != current.red))
+		|| ((notcolor == 1) && (c.green != current.green))
+		|| ((notcolor == 2) && (c.blue != current.blue))) {
 		if (notcolor == 0)	// Red in the column
 		{
 			uchar r = c.red;

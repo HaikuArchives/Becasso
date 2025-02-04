@@ -75,132 +75,155 @@ translator_id def_out_translator;
 
 //__declspec (dllexport) const int32 NumTools = 13;
 //__declspec (dllexport) const int32 NumModes = 2;
-const char* ModeSpecifiers[NumModes] = {"Draw", "Select"};
-const char* ToolSpecifiers[NumTools] = {"Brush", "Eraser", "Fill", "Text", "Spray Can", "Clone",
-	"Freehand", "Lines", "Free Shape", "Polygons", "Rectangles", "Ovals", "Circles", "Ellipses"};
+const char* ModeSpecifiers[NumModes] = { "Draw", "Select" };
+const char* ToolSpecifiers[NumTools] = {
+	"Brush",
+	"Eraser",
+	"Fill",
+	"Text",
+	"Spray Can",
+	"Clone",
+	"Freehand",
+	"Lines",
+	"Free Shape",
+	"Polygons",
+	"Rectangles",
+	"Ovals",
+	"Circles",
+	"Ellipses",
+};
 
-uchar cross[3][68] = {{16,												   // Size
-						  1,											   // Bit depth
-						  7, 7,											   // hot spot
-						  0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,  // Image
-						  0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7C, 0x7C, 0x00, 0x00, 0x01, 0x00,
-						  0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-						  0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80,  // Mask
-						  0x03, 0x80, 0x03, 0x80, 0xFC, 0x7E, 0xFC, 0x7E, 0xFC, 0x7E, 0x03, 0x80,
-						  0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x00, 0x00},
-	{16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x18, 0x80, 0x04,
+uchar cross[3][68] = { { 16,   // Size
+						   1,  // Bit depth
+						   7,
+						   7,  // hot spot
+						   0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01,
+						   0x00,  // Image
+						   0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x7C, 0x7C, 0x00, 0x00, 0x01, 0x00,
+						   0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+						   0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03,
+						   0x80,  // Mask
+						   0x03, 0x80, 0x03, 0x80, 0xFC, 0x7E, 0xFC, 0x7E, 0xFC, 0x7E, 0x03, 0x80,
+						   0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x03, 0x80, 0x00, 0x00 },
+	{ 16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x18, 0x80, 0x04,
 		0x00, 0x00, 0x00, 0x00, 0x40, 0x02, 0x30, 0x04, 0x08, 0x04, 0x00, 0x08, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x00, 0xF0, 0x70, 0xF0, 0x7D, 0xE0, 0x7F,
 		0xE0, 0x3F, 0xC0, 0x0E, 0x70, 0x07, 0xF8, 0x0F, 0xFc, 0x0F, 0x7C, 0x1E, 0x1C, 0x1E, 0x00,
-		0x1C, 0x00, 0x00, 0x00, 0x00, 0x00},
-	{16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x04, 0x08, 0x02, 0x30, 0x00,
+		0x1C, 0x00, 0x00, 0x00, 0x00, 0x00 },
+	{ 16, 1, 7, 7, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x04, 0x08, 0x02, 0x30, 0x00,
 		0x40, 0x00, 0x00, 0x04, 0x00, 0x18, 0x00, 0x40, 0x80, 0x00, 0x40, 0x00, 0x40, 0x00, 0x20,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x1E, 0x00, 0x1E, 0x1C, 0x0F, 0x7C, 0x0F,
 		0xFC, 0x07, 0xF8, 0x0E, 0xE0, 0x3F, 0xC0, 0x7F, 0xE0, 0x7D, 0xE0, 0x70, 0xF0, 0x00, 0xE0,
-		0x00, 0x70, 0x00, 0x00, 0x00, 0x00}};
+		0x00, 0x70, 0x00, 0x00, 0x00, 0x00 } };
 
-uchar ccross[68] = {16,								 // Size,
-	1,												 // Bit depth,
-	7, 7,											 // hot spot
-	0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x09, 0x20,	 // Image
+uchar ccross[68] = { 16,  // Size,
+	1,					  // Bit depth,
+	7,
+	7,	// hot spot
+	0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x09,
+	0x20,  // Image
 	0x11, 0x10, 0x01, 0x00, 0x20, 0x08, 0x7C, 0x7C, 0x20, 0x08, 0x01, 0x00, 0x11, 0x10, 0x09, 0x20,
 	0x03, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x0F, 0xE0, 0x1F,
 	0xF0,  // Mask
 	0x3B, 0xB8, 0x73, 0x9C, 0xFF, 0xFE, 0xFE, 0xFE, 0xFF, 0xFE, 0x73, 0x9C, 0x3B, 0xB8, 0x1F, 0xF0,
-	0x0F, 0xE0, 0x07, 0xC0, 0x03, 0x80, 0x00, 0x00};
+	0x0F, 0xE0, 0x07, 0xC0, 0x03, 0x80, 0x00, 0x00 };
 
-uchar scross[68] = {16,								 // Size
-	1,												 // Bit depth
-	7, 7,											 // hot spot
-	0x00, 0x00, 0x03, 0x80, 0x02, 0x80, 0x02, 0x80,	 // Image
+uchar scross[68] = { 16,  // Size
+	1,					  // Bit depth
+	7,
+	7,	// hot spot
+	0x00, 0x00, 0x03, 0x80, 0x02, 0x80, 0x02,
+	0x80,  // Image
 	0x02, 0x80, 0x01, 0x00, 0x78, 0x3C, 0x44, 0x44, 0x78, 0x3C, 0x01, 0x00, 0x02, 0x80, 0x02, 0x80,
 	0x02, 0x80, 0x03, 0x80, 0x00, 0x00, 0x00, 0x00, 0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x07,
 	0xC0,  // Mask
 	0x07, 0xC0, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0xF8, 0x3E, 0x07, 0xC0, 0x07, 0xC0,
-	0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x00, 0x00};
+	0x07, 0xC0, 0x07, 0xC0, 0x07, 0xC0, 0x00, 0x00 };
 
-uchar hand[68] = {16,								 // Size
-	1,												 // Bit depth
-	7, 7,											 // hot spot
-	0x01, 0x80, 0x1A, 0x70, 0x26, 0x48, 0x26, 0x4A,	 // Image
+uchar hand[68] = { 16,	// Size
+	1,					// Bit depth
+	7,
+	7,	// hot spot
+	0x01, 0x80, 0x1A, 0x70, 0x26, 0x48, 0x26,
+	0x4A,  // Image
 	0x12, 0x4D, 0x12, 0x49, 0x68, 0x09, 0x98, 0x01, 0x88, 0x02, 0x40, 0x02, 0x20, 0x02, 0x20, 0x04,
 	0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08, 0x01, 0x80, 0x1B, 0xF0, 0x3F, 0xF8, 0x3F,
 	0xFA,  // Mask
 	0x1F, 0xFF, 0x1F, 0xFF, 0x6F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0x7F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFC,
-	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
+	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8 };
 
-uchar grab[68] = {16,								 // Size
-	1,												 // Bit depth
-	7, 7,											 // hot spot
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	 // Image
+uchar grab[68] = { 16,	// Size
+	1,					// Bit depth
+	7,
+	7,	// hot spot
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00,  // Image
 	0x0D, 0xB0, 0x12, 0x4C, 0x10, 0x0A, 0x08, 0x02, 0x18, 0x02, 0x20, 0x02, 0x20, 0x02, 0x20, 0x04,
 	0x10, 0x04, 0x08, 0x08, 0x04, 0x08, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00,  // Mask
 	0x0D, 0xB0, 0x1F, 0xFC, 0x1F, 0xFE, 0x0F, 0xFE, 0x1F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFE, 0x3F, 0xFC,
-	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8};
+	0x1F, 0xFC, 0x0F, 0xF8, 0x07, 0xF8, 0x07, 0xF8 };
 
-uchar picker[68] = {16,								 // Size,
-	1,												 // Bit depth,
-	14, 1,											 // hot spot
-	0x00, 0x00, 0x00, 0x0C, 0x00, 0x1E, 0x00, 0x2E,	 // Image
+uchar picker[68] = { 16,  // Size,
+	1,					  // Bit depth,
+	14,
+	1,	// hot spot
+	0x00, 0x00, 0x00, 0x0C, 0x00, 0x1E, 0x00,
+	0x2E,  // Image
 	0x01, 0xBC, 0x01, 0x38, 0x00, 0xE0, 0x01, 0x70, 0x02, 0xB0, 0x05, 0x00, 0x0A, 0x00, 0x14, 0x00,
 	0x28, 0x00, 0x50, 0x00, 0x60, 0x00, 0x00, 0x00, 0x00, 0x1E, 0x00, 0x3F, 0x00, 0x7F, 0x03,
 	0xFF,  // Mask
 	0x03, 0xFF, 0x03, 0xFE, 0x03, 0xFC, 0x07, 0xF8, 0x0F, 0xF8, 0x1F, 0xF8, 0x3F, 0x80, 0x7F, 0x00,
-	0xFE, 0x00, 0xFC, 0x00, 0xF8, 0x00, 0xF0, 0x00};
+	0xFE, 0x00, 0xFC, 0x00, 0xF8, 0x00, 0xF0, 0x00 };
 
-uchar mover[68] = {16, 1, 7, 7, 0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x01, 0x00, 0x11,
+uchar mover[68] = { 16, 1, 7, 7, 0x00, 0x00, 0x01, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x01, 0x00, 0x11,
 	0x10, 0x31, 0x18, 0x7F, 0xFC, 0x31, 0x18, 0x11, 0x10, 0x01, 0x00, 0x07, 0xC0, 0x03, 0x80, 0x01,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x80, 0x07, 0xC0, 0x07, 0xE0, 0x0F, 0xF0, 0x3F, 0xF8, 0x7B,
 	0xBC, 0xFF, 0xFE, 0xFF, 0xFE, 0xFF, 0xFE, 0x7B, 0xBC, 0x3F, 0xF8, 0x0F, 0xE0, 0x0F, 0xE0, 0x07,
-	0xC0, 0x03, 0x80, 0x00, 0x00};
+	0xC0, 0x03, 0x80, 0x00, 0x00 };
 
-uchar rotator[68] = {16, 1, 7, 7, 0x00, 0x00, 0x03, 0x80, 0x0C, 0x60, 0x10, 0x10, 0x20, 0x08, 0x20,
+uchar rotator[68] = { 16, 1, 7, 7, 0x00, 0x00, 0x03, 0x80, 0x0C, 0x60, 0x10, 0x10, 0x20, 0x08, 0x20,
 	0x08, 0x41, 0x04, 0x42, 0x84, 0x41, 0x04, 0x20, 0x00, 0x20, 0x00, 0x10, 0xF0, 0x0C, 0x38, 0x03,
 	0xD0, 0x00, 0x10, 0x00, 0x00, 0x07, 0xC0, 0x1F, 0xF0, 0x3F, 0xF8, 0x7E, 0xFC, 0x78, 0x3C, 0xF3,
 	0x9E, 0xF7, 0xDE, 0xE7, 0xCE, 0xF7, 0xCE, 0xF3, 0x8E, 0x79, 0xF8, 0x7F, 0xF8, 0x3F, 0xF8, 0x1F,
-	0xF8, 0x07, 0xF8, 0x00, 0x38};
+	0xF8, 0x07, 0xF8, 0x00, 0x38 };
 
-#define GET_AND_SET                       \
-	{                                     \
-		B_GET_PROPERTY, B_SET_PROPERTY, 0 \
-	}
-#define GET_SET_AND_PROP                                          \
-	{                                                             \
-		B_GET_PROPERTY, B_SET_PROPERTY, B_GET_SUPPORTED_SUITES, 0 \
-	}
-#define SET               \
-	{                     \
-		B_SET_PROPERTY, 0 \
-	}
-#define DIRECT_AND_INDEX                         \
-	{                                            \
-		B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 \
-	}
-#define DIRECT                \
-	{                         \
-		B_DIRECT_SPECIFIER, 0 \
-	}
+#define GET_AND_SET { B_GET_PROPERTY, B_SET_PROPERTY, 0 }
+#define GET_SET_AND_PROP { B_GET_PROPERTY, B_SET_PROPERTY, B_GET_SUPPORTED_SUITES, 0 }
+#define SET { B_SET_PROPERTY, 0 }
+#define DIRECT_AND_INDEX { B_DIRECT_SPECIFIER, B_INDEX_SPECIFIER, 0 }
+#define DIRECT { B_DIRECT_SPECIFIER, 0 }
 
 static property_info prop_list[] = {
-	{"Tool", GET_SET_AND_PROP, DIRECT_AND_INDEX, "Get or set current tool"},
-	{"Mode", GET_SET_AND_PROP, DIRECT_AND_INDEX, "Get or set current mode"},
-	{"Foreground", SET, DIRECT, "By name or rgb_color"},
-	{"Background", SET, DIRECT, "By name or rgb_color"},
-	{"TabletArea", GET_AND_SET, DIRECT, "BRect (only useful with -t switch)"},
-	{"ExportFormat", GET_AND_SET, DIRECT, "by MIME type or type code"},
-	{"Scriptee", GET_AND_SET, DIRECT_AND_INDEX, "Get or set current scripting target (canvas)"},
-	{"Canvas", {B_CREATE_PROPERTY, 0}, DIRECT, "Name (string), Size (BRect)"}, 0};
+	{ "Tool", GET_SET_AND_PROP, DIRECT_AND_INDEX, "Get or set current tool" },
+	{ "Mode", GET_SET_AND_PROP, DIRECT_AND_INDEX, "Get or set current mode" },
+	{ "Foreground", SET, DIRECT, "By name or rgb_color" },
+	{ "Background", SET, DIRECT, "By name or rgb_color" },
+	{ "TabletArea", GET_AND_SET, DIRECT, "BRect (only useful with -t switch)" },
+	{ "ExportFormat", GET_AND_SET, DIRECT, "by MIME type or type code" },
+	{ "Scriptee", GET_AND_SET, DIRECT_AND_INDEX, "Get or set current scripting target (canvas)" },
+	{ "Canvas", { B_CREATE_PROPERTY, 0 }, DIRECT, "Name (string), Size (BRect)" },
+	0,
+};
 
 static value_info value_list[] = {
-	{"Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)"},
-	{"Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect"}, 0};
+	{ "Export", 'expt', B_COMMAND_KIND, "Export the current canvas. Name|Filename (string)" },
+	{ "Crop", 'Crop', B_COMMAND_KIND, "Crop the current canvas to the given BRect" },
+	0,
+};
 
-static property_info prop_list_BBP[] = {{"", {0}, {0}, ""}, 0};
+static property_info prop_list_BBP[] = {
+	{ "", { 0 }, { 0 }, "" },
+	0,
+};
 
-static value_info value_list_BBP[] = {{"BBP_*_BBITMAP", 'BPxx', B_COMMAND_KIND, "See BBP.h"}, 0};
+static value_info value_list_BBP[] = {
+	{ "BBP_*_BBITMAP", 'BPxx', B_COMMAND_KIND, "See BBP.h" },
+	0,
+};
 
-Becasso::Becasso() : BApplication("application/x-sum-becasso")
+Becasso::Becasso()
+	: BApplication("application/x-sum-becasso")
 {
 	fBusy = 0;
 	SetPulseRate(100000);
@@ -617,8 +640,8 @@ Becasso::RefsReceived(BMessage* message)
 			// message->PrintToStream();
 			if (message->FindBool("AskForAlpha", &AskForAlpha) == B_OK)
 				refmsg->AddBool("AskForAlpha", AskForAlpha);
-			else if ((message->FindString("AskForAlpha", &AskForAlphaString) == B_OK) &&
-					 (!strcasecmp(AskForAlphaString, "false")))
+			else if ((message->FindString("AskForAlpha", &AskForAlphaString) == B_OK)
+					 && (!strcasecmp(AskForAlphaString, "false")))
 				refmsg->AddBool("AskForAlpha", false);
 			// refmsg->PrintToStream();
 			PostMessage(refmsg);
@@ -672,8 +695,8 @@ Becasso::ResolveSpecifier(
 	//	printf ("command: %ld, property: ""%s""\n", command, property);
 
 	if (!strcasecmp(property, "Tool")) {
-		if (specifier->HasString("name") ||
-			specifier->HasInt32("index"))  // Part of a specifier for Tool settings.
+		if (specifier->HasString("name")
+			|| specifier->HasInt32("index"))  // Part of a specifier for Tool settings.
 		{
 			// Note: Don't PopSpecifier() !!
 			// We'll let the AttribWindow resolve the exact tool specifier first...
@@ -686,8 +709,8 @@ Becasso::ResolveSpecifier(
 		}
 	}
 	if (!strcasecmp(property, "Mode")) {
-		if (specifier->HasString("name") ||
-			specifier->HasInt32("index"))  // Part of a specifier for Mode settings.
+		if (specifier->HasString("name")
+			|| specifier->HasInt32("index"))  // Part of a specifier for Mode settings.
 		{
 			// Note: Don't PopSpecifier() !!
 			// We'll let the AttribWindow resolve the exact mode specifier first...
@@ -861,7 +884,7 @@ Becasso::MessageReceived(BMessage* message)
 		}
 		case 'aURL':
 		{
-			char* argv[1] = {"https://github.com/HaikuArchives/Becasso"};
+			char* argv[1] = { "https://github.com/HaikuArchives/Becasso" };
 			be_roster->Launch("text/html", 1, argv);
 			break;
 		}
@@ -922,10 +945,10 @@ Becasso::MessageReceived(BMessage* message)
 
 			BMessage exportMessage('expt');
 			const char* namestring;
-			if (message->FindString("name", &namestring) == B_OK ||
-				message->FindString("Name", &namestring) == B_OK ||
-				message->FindString("filename", &namestring) == B_OK ||
-				message->FindString("Filename", &namestring) == B_OK) {
+			if (message->FindString("name", &namestring) == B_OK
+				|| message->FindString("Name", &namestring) == B_OK
+				|| message->FindString("filename", &namestring) == B_OK
+				|| message->FindString("Filename", &namestring) == B_OK) {
 				exportMessage.AddString("filename", namestring);
 				// printf ("File name: %s\n", namestring);
 			}
@@ -959,10 +982,9 @@ Becasso::MessageReceived(BMessage* message)
 
 			BMessage cropMessage('Crop');
 			BRect rect;
-			if (message->FindRect("data", &rect) == B_OK ||
-				message->FindRect("rect", &rect) == B_OK ||
-				message->FindRect("croprect", &rect) == B_OK ||
-				message->FindRect("CropRect", &rect) == B_OK) {
+			if (message->FindRect("data", &rect) == B_OK || message->FindRect("rect", &rect) == B_OK
+				|| message->FindRect("croprect", &rect) == B_OK
+				|| message->FindRect("CropRect", &rect) == B_OK) {
 				cropMessage.AddRect("data", rect);
 			}
 
@@ -1004,8 +1026,8 @@ Becasso::MessageReceived(BMessage* message)
 						color.alpha = 0;
 						break;
 				}
-				CanvasWindow* canvasWindow =
-					new CanvasWindow(canvasWindowFrame, title, NULL, NULL, false, color);
+				CanvasWindow* canvasWindow
+					= new CanvasWindow(canvasWindowFrame, title, NULL, NULL, false, color);
 				delete fCurrentScriptee;
 				fCurrentScriptee = new BMessenger(canvasWindow);
 				canvasWindow->Show();
@@ -1355,8 +1377,8 @@ Becasso::MessageReceived(BMessage* message)
 						BRect canvasWindowFrame;
 						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
 							128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
-						CanvasWindow* canvasWindow =
-							new CanvasWindow(canvasWindowFrame, title, map, &ie);
+						CanvasWindow* canvasWindow
+							= new CanvasWindow(canvasWindowFrame, title, map, &ie);
 						delete fCurrentScriptee;
 						fCurrentScriptee = new BMessenger(canvasWindow);
 						extern int SilentOperation;
@@ -1419,8 +1441,8 @@ Becasso::MessageReceived(BMessage* message)
 						BRect canvasWindowFrame;
 						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
 							128 + newnum * 16 + newWidth - 1, 128 + newnum * 16 + newHeight - 1);
-						CanvasWindow* canvasWindow =
-							new CanvasWindow(canvasWindowFrame, title, map, &ie);
+						CanvasWindow* canvasWindow
+							= new CanvasWindow(canvasWindowFrame, title, map, &ie);
 						delete fCurrentScriptee;
 						fCurrentScriptee = new BMessenger(canvasWindow);
 						extern int SilentOperation;
@@ -1475,8 +1497,8 @@ Becasso::MessageReceived(BMessage* message)
 							CanvasWindow* canvasWindow;
 							BRect canvasWindowFrame;
 							canvasWindowFrame.Set(100, 180, 500, 500);
-							canvasWindow =
-								new CanvasWindow(canvasWindowFrame, ref, AskForAlpha, &ie);
+							canvasWindow
+								= new CanvasWindow(canvasWindowFrame, ref, AskForAlpha, &ie);
 							delete fCurrentScriptee;
 							fCurrentScriptee = new BMessenger(canvasWindow);
 							BScreen screen;
@@ -1559,8 +1581,8 @@ Becasso::MessageReceived(BMessage* message)
 						canvasWindowFrame.Set(128 + newnum * 16, 128 + newnum * 16,
 							128 + newnum * 16 + map->Bounds().Width(),
 							128 + newnum * 16 + map->Bounds().Height());
-						CanvasWindow* canvasWindow =
-							new CanvasWindow(canvasWindowFrame, title, map);
+						CanvasWindow* canvasWindow
+							= new CanvasWindow(canvasWindowFrame, title, map);
 						delete fCurrentScriptee;
 						fCurrentScriptee = new BMessenger(canvasWindow);
 						extern int SilentOperation;
@@ -1607,14 +1629,14 @@ Becasso::MessageReceived(BMessage* message)
 						128 + newnum * 16 + 255, 128 + newnum * 16 + 255);
 
 					const char* namestring;
-					if (message->FindString("Name", &namestring) == B_OK ||
-						message->FindString("name", &namestring) == B_OK) {
+					if (message->FindString("Name", &namestring) == B_OK
+						|| message->FindString("name", &namestring) == B_OK) {
 						title.SetTo(namestring);
 					}
 
 					BRect rect;
-					if (message->FindRect("Size", &rect) == B_OK ||
-						message->FindRect("size", &rect) == B_OK) {
+					if (message->FindRect("Size", &rect) == B_OK
+						|| message->FindRect("size", &rect) == B_OK) {
 						canvasWindowFrame = rect;
 					}
 
@@ -1899,8 +1921,9 @@ Becasso::MessageReceived(BMessage* message)
 							}
 						}
 						break;
-					} else if (message->FindData("data", B_RGB_COLOR_TYPE,
-								   (const void**)&rgbspecifier, &dummy) == B_OK) {
+					} else if (message->FindData(
+								   "data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy)
+							   == B_OK) {
 						extern ColorMenuButton* hicolor;
 						hicolor->set(*rgbspecifier);
 						if (message->IsSourceWaiting()) {
@@ -1965,8 +1988,9 @@ Becasso::MessageReceived(BMessage* message)
 							}
 						}
 						break;
-					} else if (message->FindData("data", B_RGB_COLOR_TYPE,
-								   (const void**)&rgbspecifier, &dummy) == B_OK) {
+					} else if (message->FindData(
+								   "data", B_RGB_COLOR_TYPE, (const void**)&rgbspecifier, &dummy)
+							   == B_OK) {
 						extern ColorMenuButton* locolor;
 						locolor->set(*rgbspecifier);
 						if (message->IsSourceWaiting()) {

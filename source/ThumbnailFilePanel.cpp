@@ -60,8 +60,8 @@ ThumbnailFilePanel::ThumbnailFilePanel(file_panel_mode mode, BMessenger* target,
 	countVW->MoveBy(0, -resizeby);
 	BRect viewRect = BRect(tFrame.left - 1, tFrame.bottom + 24, tFrame.left + THUMBNAIL_VIEW_WIDTH,
 		tFrame.bottom + 8 + THUMBNAIL_VIEW_HEIGHT);
-	fView =
-		new ThumbnailView(viewRect, "thumbnail view", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM, B_WILL_DRAW);
+	fView = new ThumbnailView(
+		viewRect, "thumbnail view", B_FOLLOW_LEFT | B_FOLLOW_BOTTOM, B_WILL_DRAW);
 	background->AddChild(fView);
 
 	infoView1 = new BStringView(

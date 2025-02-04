@@ -4,7 +4,8 @@
 #include "BecassoAddOn.h"
 #include "DModes.h"
 
-Layer::Layer(BRect bounds, const char* name) : BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
+Layer::Layer(BRect bounds, const char* name)
+	: BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
 {
 	fRect = bounds;
 	fMode = DM_BLEND;
@@ -18,7 +19,8 @@ Layer::Layer(BRect bounds, const char* name) : BBitmap(bounds, B_BITMAP_ACCEPTS_
 	//		*(++bits) = COLOR_MASK;
 }
 
-Layer::Layer(const Layer& layer) : BBitmap(layer.fRect, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
+Layer::Layer(const Layer& layer)
+	: BBitmap(layer.fRect, B_BITMAP_ACCEPTS_VIEWS, B_RGBA32)
 {
 	fRect = layer.fRect;
 	fMode = layer.fMode;

@@ -203,8 +203,8 @@ CanvasView::CanvasView(const BRect frame, const char* name, FILE* fp)
 					zstream->avail_in = 0;
 				}
 				zstream->next_in = tmpzbuf;
-				zstream->avail_in +=
-					fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+				zstream->avail_in
+					+= fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
 				zstream->next_out = (uchar*)layer[i]->Bits();
 				zstream->avail_out = layer[i]->BitsLength();
 				//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
@@ -268,8 +268,8 @@ CanvasView::CanvasView(const BRect frame, const char* name, FILE* fp)
 					zstream->avail_in = 0;
 				}
 				zstream->next_in = tmpzbuf;
-				zstream->avail_in +=
-					fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
+				zstream->avail_in
+					+= fread(tmpzbuf, 1, layer[i]->BitsLength() - zstream->avail_in, fp);
 				zstream->next_out = (uchar*)layer[i]->Bits();
 				zstream->avail_out = layer[i]->BitsLength();
 				//			printf ("avail_in = %li, avail_out = %li\n", zstream->avail_in,
@@ -564,8 +564,8 @@ uint32
 CanvasView::get_and_plot(BPoint p, rgb_color c)
 {
 	if (Bounds().Contains(p)) {
-		uint32* addr = (uint32*)currentLayer()->Bits() +
-					   currentLayer()->BytesPerRow() / 4 * long(p.y + 0.5) + long(p.x + 0.5);
+		uint32* addr = (uint32*)currentLayer()->Bits()
+					   + currentLayer()->BytesPerRow() / 4 * long(p.y + 0.5) + long(p.x + 0.5);
 		uint32 pix = *addr;
 		*addr = PIXEL(c.red, c.green, c.blue, c.alpha);
 		changed = true;
@@ -578,8 +578,8 @@ void
 CanvasView::plot(BPoint p, rgb_color c)
 {
 	if (Bounds().Contains(p)) {
-		uint32* addr = (uint32*)currentLayer()->Bits() +
-					   currentLayer()->BytesPerRow() / 4 * long(p.y + 0.5) + long(p.x + 0.5);
+		uint32* addr = (uint32*)currentLayer()->Bits()
+					   + currentLayer()->BytesPerRow() / 4 * long(p.y + 0.5) + long(p.x + 0.5);
 		*addr = PIXEL(c.red, c.green, c.blue, c.alpha);
 		changed = true;
 	}
@@ -596,8 +596,8 @@ CanvasView::plot_alpha(BPoint p, rgb_color c)
 		uint32 pixel = *addr;
 		int sa = c.alpha;
 		int da = 255 - sa;
-		*addr =
-			PIXEL((RED(pixel) * da + c.red * sa) / 255, (GREEN(pixel) * da + c.green * sa) / 255,
+		*addr
+			= PIXEL((RED(pixel) * da + c.red * sa) / 255, (GREEN(pixel) * da + c.green * sa) / 255,
 				(BLUE(pixel) * da + c.blue * sa) / 255, clipchar(int(ALPHA(pixel)) + int(c.alpha)));
 		changed = true;
 	}
@@ -629,8 +629,8 @@ CanvasView::fplot_alpha(BPoint p, rgb_color c)
 		uint32 pixel = *addr;
 		int sa = c.alpha;
 		int da = 255 - sa;
-		*addr =
-			PIXEL((RED(pixel) * da + c.red * sa) / 255, (GREEN(pixel) * da + c.green * sa) / 255,
+		*addr
+			= PIXEL((RED(pixel) * da + c.red * sa) / 255, (GREEN(pixel) * da + c.green * sa) / 255,
 				(BLUE(pixel) * da + c.blue * sa) / 255, clipchar(int(ALPHA(pixel)) + int(c.alpha)));
 		changed = true;
 	}
@@ -1289,8 +1289,8 @@ CanvasView::Crop(BRect rect)
 		rect.bottom += fCanvasFrame.bottom;
 	if (rect.right < 0)
 		rect.right += fCanvasFrame.right;
-	if (rect.left < 0 || rect.top < 0 || rect.bottom > fCanvasFrame.bottom ||
-		rect.right > fCanvasFrame.right)
+	if (rect.left < 0 || rect.top < 0 || rect.bottom > fCanvasFrame.bottom
+		|| rect.right > fCanvasFrame.right)
 		return -2;
 	if (rect.left > fCanvasFrame.right || rect.top > fCanvasFrame.bottom)
 		return -3;
@@ -1937,7 +1937,8 @@ CanvasView::Filter(AddOn* addon, uint8 preview)
 		DetachSelection();
 		BRect pRect = sel ? GetSmallestRect(selection) : fCanvasFrame;
 		if (addon->Process(currentLayer(), sel ? selection : NULL, &newlayer, &newselection,
-				mode->selected(), &pRect, !preview) != ADDON_OK) {
+				mode->selected(), &pRect, !preview)
+			!= ADDON_OK) {
 			if (newlayer != currentLayer())
 				delete newlayer;
 			if (newselection != selection)
@@ -2015,7 +2016,8 @@ CanvasView::Transform(AddOn* addon, uint8 preview)
 	DetachSelection();
 	BRect pRect = sel ? GetSmallestRect(selection) : fCanvasFrame;
 	if (addon->Process(currentLayer(), sel ? selection : NULL, &newlayer, &newselection,
-			mode->selected(), &pRect, !preview) != ADDON_OK) {
+			mode->selected(), &pRect, !preview)
+		!= ADDON_OK) {
 		if (newlayer != currentLayer())
 			delete newlayer;
 		if (newselection != selection)
@@ -2093,7 +2095,8 @@ CanvasView::Generate(AddOn* addon, uint8 preview)
 	DetachSelection();
 	BRect pRect = sel ? GetSmallestRect(selection) : fCanvasFrame;
 	if (addon->Process(currentLayer(), sel ? selection : NULL, &newlayer, &newselection,
-			mode->selected(), &pRect, !preview) != ADDON_OK) {
+			mode->selected(), &pRect, !preview)
+		!= ADDON_OK) {
 		if (newlayer != currentLayer())
 			delete newlayer;
 		if (newselection != selection)
@@ -2644,9 +2647,9 @@ CanvasView::ConstructCanvas(BBitmap* bitmap, BRect update, bool doselect, bool d
 	bitmap->Lock();
 	if (doselect)
 		selection->Lock();
-	update = update &
-			 bitmap->Bounds();	// This used not to be necessary, but somehow R3 can crash if you
-								// go (too far) outside the bitmap.  Strange that PR2 didn't!
+	update = update
+			 & bitmap->Bounds();  // This used not to be necessary, but somehow R3 can crash if you
+								  // go (too far) outside the bitmap.  Strange that PR2 didn't!
 
 #if 0
 	BPoint po = fPreviewRect.LeftTop();
@@ -2710,8 +2713,8 @@ CanvasView::ConstructCanvas(BBitmap* bitmap, BRect update, bool doselect, bool d
 			Layer* pLayer = NULL;
 			Selection* pSelection = NULL;
 			bool preview_done = false;
-			if ((currentLayerIndex() == i) && (doselect) && (filterOpen) &&
-				(filterOpen->DoesPreview()) & (update.Intersects(fPreviewRect))) {
+			if ((currentLayerIndex() == i) && (doselect) && (filterOpen)
+				&& (filterOpen->DoesPreview()) & (update.Intersects(fPreviewRect))) {
 				pLayer = new Layer(*previewLayer);
 				pSelection = new Selection(*previewSelection);
 				BView* preView = new SView(pLayer->Bounds(), "preView", B_FOLLOW_ALL, uint32(NULL));
@@ -2822,8 +2825,8 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 	int ga = b->getGlobalAlpha();
 	switch (b->getMode()) {
 		case DM_BLEND:
-			if (/* mode->selected() == M_SELECT && */ invertselect && selchanged && doselect &&
-				!inAddOn) {
+			if (/* mode->selected() == M_SELECT && */ invertselect && selchanged && doselect
+				&& !inAddOn) {
 				//					printf ("Selection in layer %i\n", i);
 				for (ulong y = rt; y <= rb; y++) {
 					for (ulong x = rl; x <= rr; x++) {
@@ -2844,58 +2847,58 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 //								 ((((destpixel>> 8) & 0xFF)*da + ((srcpixel>> 8) & 0xFF)*sa)       &
 // 0x0000FF00) | 								(sa & 0xFF);//(max_c (sa, da) & 0xFF);
 #if !defined(BLEND_USES_SHIFTS)
-							*dest =
-								((((destpixel & 0xFF000000) / 255 * da +
-									 (srcpixel & 0xFF000000) / 255 * sa)) &
-									0xFF000000) |
-								((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
-									 255) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
-									 255) &
-									0x0000FF00) |  // (max_c (sa, destpixel & 0xFF));
-								(clipchar(sa + int(destpixel & 0xFF)));
+							*dest
+								= ((((destpixel & 0xFF000000) / 255 * da
+									   + (srcpixel & 0xFF000000) / 255 * sa))
+									  & 0xFF000000)
+								  | ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+										 / 255)
+									  & 0x00FF0000)
+								  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+										 / 255)
+									  & 0x0000FF00)
+								  |	 // (max_c (sa, destpixel & 0xFF));
+								  (clipchar(sa + int(destpixel & 0xFF)));
 #else
-							*dest =
-								(((((destpixel & 0xFF000000) >> 8) * da +
-									 ((srcpixel & 0xFF000000) >> 8) * sa)) &
-									0xFF000000) |
-								((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) >>
-									 8) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) >>
-									 8) &
-									0x0000FF00) |
-								(clipchar(sa + int(destpixel & 0xFF)));
+							*dest
+								= (((((destpixel & 0xFF000000) >> 8) * da
+									   + ((srcpixel & 0xFF000000) >> 8) * sa))
+									  & 0xFF000000)
+								  | ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+										 >> 8)
+									  & 0x00FF0000)
+								  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+										 >> 8)
+									  & 0x0000FF00)
+								  | (clipchar(sa + int(destpixel & 0xFF)));
 #endif
 						} else {
 							//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) |
-							//sa;
-							uint32 ipixel =
-								pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
+							// sa;
+							uint32 ipixel = pixelblend(
+								srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
 #if !defined(BLEND_USES_SHIFTS)
-							*dest = ((((destpixel & 0xFF000000) / 255 * da +
-										 (ipixel & 0xFF000000) / 255 * sa)) &
-										0xFF000000) |
-									((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
-										 255) &
-										0x00FF0000) |
-									((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) /
-										 255) &
-										0x0000FF00) |
-									sa;
+							*dest = ((((destpixel & 0xFF000000) / 255 * da
+										 + (ipixel & 0xFF000000) / 255 * sa))
+										& 0xFF000000)
+									| ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										   / 255)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   / 255)
+										& 0x0000FF00)
+									| sa;
 #else
-							*dest =
-								(((((destpixel & 0xFF000000) >> 8) * da +
-									 ((ipixel & 0xFF000000) >> 8) * sa)) &
-									0xFF000000) |
-								((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) >>
-									 8) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) >>
-									 8) &
-									0x0000FF00) |
-								sa;
+							*dest = (((((destpixel & 0xFF000000) >> 8) * da
+										 + ((ipixel & 0xFF000000) >> 8) * sa))
+										& 0xFF000000)
+									| ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										   >> 8)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   >> 8)
+										& 0x0000FF00)
+									| sa;
 #endif
 						}
 #else  // Intel
@@ -2910,32 +2913,32 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 //								((((destpixel & 0x00FF00FF)*da + (srcpixel & 0x00FF00FF)*sa)/255) &
 // 0x00FF00FF) | 								(sa);
 #if !defined(BLEND_USES_SHIFTS)
-							*dest =
-								((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa) /
-									 255) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) /
-									 255) &
-									0x0000FF00) |
-								((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) /
-									 255) &
-									0x000000FF) |
-								(clipchar(sa + int(destpixel >> 24)) << 24);
+							*dest
+								= ((((destpixel & 0x00FF0000) * da + (srcpixel & 0x00FF0000) * sa)
+									   / 255)
+									  & 0x00FF0000)
+								  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)
+										 / 255)
+									  & 0x0000FF00)
+								  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa)
+										 / 255)
+									  & 0x000000FF)
+								  | (clipchar(sa + int(destpixel >> 24)) << 24);
 							//((max_c (sa, destpixel >> 24)) << 24);
 #else
-							*dest = (((((destpixel & 0x00FF0000) - (srcpixel & 0x00FF0000)) * da +
-										  ((srcpixel & 0x00FF0000) << 8)) >>
-										 8) &
-										0x00FF0000) |
-									(((((destpixel & 0x0000FF00) - (srcpixel & 0x0000FF00)) * da +
-										  ((srcpixel & 0x0000FF00) << 8)) >>
-										 8) &
-										0x0000FF00) |
-									(((((destpixel & 0x000000FF) - (srcpixel & 0x000000FF)) * da +
-										  ((srcpixel & 0x000000FF) << 8)) >>
-										 8) &
-										0x000000FF) |
-									(clipchar(sa + int(destpixel >> 24)) << 24);
+							*dest = (((((destpixel & 0x00FF0000) - (srcpixel & 0x00FF0000)) * da
+										  + ((srcpixel & 0x00FF0000) << 8))
+										 >> 8)
+										& 0x00FF0000)
+									| (((((destpixel & 0x0000FF00) - (srcpixel & 0x0000FF00)) * da
+											+ ((srcpixel & 0x0000FF00) << 8))
+										   >> 8)
+										& 0x0000FF00)
+									| (((((destpixel & 0x000000FF) - (srcpixel & 0x000000FF)) * da
+											+ ((srcpixel & 0x000000FF) << 8))
+										   >> 8)
+										& 0x000000FF)
+									| (clipchar(sa + int(destpixel >> 24)) << 24);
 #endif
 						} else {
 							//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) |
@@ -2944,28 +2947,27 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							uint32 ipixel = pixelblend(
 								srcpixel, (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sel << 24));
 #if !defined(BLEND_USES_SHIFTS)
-							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
-										 255) &
-										0x00FF0000) |
-									((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) /
-										 255) &
-										0x0000FF00) |
-									((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa) /
-										 255) &
-										0x000000FF) |
-									(sa << 24);
+							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										 / 255)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   / 255)
+										& 0x0000FF00)
+									| ((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa)
+										   / 255)
+										& 0x000000FF)
+									| (sa << 24);
 #else
-							*dest =
-								((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) >>
-									 8) &
-									0x00FF0000) |
-								((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) >>
-									 8) &
-									0x0000FF00) |
-								((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa) >>
-									 8) &
-									0x000000FF) |
-								(sa << 24);
+							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										 >> 8)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   >> 8)
+										& 0x0000FF00)
+									| ((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa)
+										   >> 8)
+										& 0x000000FF)
+									| (sa << 24);
 #endif
 						}
 #endif
@@ -3002,31 +3004,32 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 //									 ((((destpixel>> 8) & 0xFF)*da + ((srcpixel>> 8) & 0xFF)*sa) &
 // 0x0000FF00) | 									(sa & 0xFF);//(max_c (sa, da) & 0xFF);
 #if !defined(BLEND_USES_SHIFTS)
-								*dest = ((((destpixel & 0xFF000000) / 255 * da +
-											 (srcpixel & 0xFF000000) / 255 * sa)) &
-											0xFF000000) |
-										((((destpixel & 0x00FF0000) * da +
-											  (srcpixel & 0x00FF0000) * sa) /
-											 255) &
-											0x00FF0000) |
-										((((destpixel & 0x0000FF00) * da +
-											  (srcpixel & 0x0000FF00) * sa) /
-											 255) &
-											0x0000FF00) |  // (max_c (sa, destpixel & 0xFF));
+								*dest = ((((destpixel & 0xFF000000) / 255 * da
+											 + (srcpixel & 0xFF000000) / 255 * sa))
+											& 0xFF000000)
+										| ((((destpixel & 0x00FF0000) * da
+												+ (srcpixel & 0x00FF0000) * sa)
+											   / 255)
+											& 0x00FF0000)
+										| ((((destpixel & 0x0000FF00) * da
+												+ (srcpixel & 0x0000FF00) * sa)
+											   / 255)
+											& 0x0000FF00)
+										|  // (max_c (sa, destpixel & 0xFF));
 										(clipchar(sa + int(destpixel & 0xFF)));
 #else
-								*dest = (((((destpixel & 0xFF000000) >> 8) * da +
-											 ((srcpixel & 0xFF000000) >> 8) * sa)) &
-											0xFF000000) |
-										((((destpixel & 0x00FF0000) * da +
-											  (srcpixel & 0x00FF0000) * sa) >>
-											 8) &
-											0x00FF0000) |
-										((((destpixel & 0x0000FF00) * da +
-											  (srcpixel & 0x0000FF00) * sa) >>
-											 8) &
-											0x0000FF00) |
-										(clipchar(sa + int(destpixel & 0xFF)));
+								*dest = (((((destpixel & 0xFF000000) >> 8) * da
+											 + ((srcpixel & 0xFF000000) >> 8) * sa))
+											& 0xFF000000)
+										| ((((destpixel & 0x00FF0000) * da
+												+ (srcpixel & 0x00FF0000) * sa)
+											   >> 8)
+											& 0x00FF0000)
+										| ((((destpixel & 0x0000FF00) * da
+												+ (srcpixel & 0x0000FF00) * sa)
+											   >> 8)
+											& 0x0000FF00)
+										| (clipchar(sa + int(destpixel & 0xFF)));
 #endif
 							}
 #else  // Intel
@@ -3051,34 +3054,34 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 //									((((((destpixel    ) & 0xFF)*da + ((srcpixel    ) & 0xFF)*sa)
 //)/255) & 0x000000FF) |
 #if !defined(BLEND_USES_SHIFTS)
-								*dest = ((((destpixel & 0x00FF0000) * da +
-											  (srcpixel & 0x00FF0000) * sa) /
-											 255) &
-											0x00FF0000) |
-										((((destpixel & 0x0000FF00) * da +
-											  (srcpixel & 0x0000FF00) * sa) /
-											 255) &
-											0x0000FF00) |
-										((((destpixel & 0x000000FF) * da +
-											  (srcpixel & 0x000000FF) * sa) /
-											 255) &
-											0x000000FF) |
-										(clipchar(sa + int(destpixel >> 24)) << 24);
+								*dest = ((((destpixel & 0x00FF0000) * da
+											  + (srcpixel & 0x00FF0000) * sa)
+											 / 255)
+											& 0x00FF0000)
+										| ((((destpixel & 0x0000FF00) * da
+												+ (srcpixel & 0x0000FF00) * sa)
+											   / 255)
+											& 0x0000FF00)
+										| ((((destpixel & 0x000000FF) * da
+												+ (srcpixel & 0x000000FF) * sa)
+											   / 255)
+											& 0x000000FF)
+										| (clipchar(sa + int(destpixel >> 24)) << 24);
 								//((max_c (sa, destpixel >> 24)) << 24);
 #else
-								*dest = ((((destpixel & 0x00FF0000) * da +
-											  (srcpixel & 0x00FF0000) * sa) >>
-											 8) &
-											0x00FF0000) |
-										((((destpixel & 0x0000FF00) * da +
-											  (srcpixel & 0x0000FF00) * sa) >>
-											 8) &
-											0x0000FF00) |
-										((((destpixel & 0x000000FF) * da +
-											  (srcpixel & 0x000000FF) * sa) >>
-											 8) &
-											0x000000FF) |
-										(clipchar(sa + int(destpixel >> 24)) << 24);
+								*dest = ((((destpixel & 0x00FF0000) * da
+											  + (srcpixel & 0x00FF0000) * sa)
+											 >> 8)
+											& 0x00FF0000)
+										| ((((destpixel & 0x0000FF00) * da
+												+ (srcpixel & 0x0000FF00) * sa)
+											   >> 8)
+											& 0x0000FF00)
+										| ((((destpixel & 0x000000FF) * da
+												+ (srcpixel & 0x000000FF) * sa)
+											   >> 8)
+											& 0x000000FF)
+										| (clipchar(sa + int(destpixel >> 24)) << 24);
 #endif
 							}
 #endif
@@ -3090,8 +3093,8 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 			}
 			break;
 		case DM_MULTIPLY:
-			if (/* mode->selected() == M_SELECT && */ invertselect && selchanged && doselect &&
-				!inAddOn) {
+			if (/* mode->selected() == M_SELECT && */ invertselect && selchanged && doselect
+				&& !inAddOn) {
 				//					printf ("Selection in layer %i\n", i);
 				for (ulong y = rt; y <= rb; y++) {
 					for (ulong x = rl; x <= rr; x++) {
@@ -3104,37 +3107,37 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						int tsa = 65025 - sa * 255;
 						int tda = 65025 - da * 255;
 						if (!sel) {
-							*dest = (((tsa + sa * ((srcpixel >> 24))) *
-											 (tda + da * ((destpixel >> 24))) / 16581375
-										 << 24) &
-										0xFF000000) |
-									(((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-											 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-										 << 16) &
-										0x00FF0000) |
-									(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-											 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-										 << 8) &
-										0x0000FF00) |
-									(max_c(sa, da) & 0xFF);
+							*dest = (((tsa + sa * ((srcpixel >> 24)))
+											 * (tda + da * ((destpixel >> 24))) / 16581375
+										 << 24)
+										& 0xFF000000)
+									| (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+											   * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+										   << 16)
+										& 0x00FF0000)
+									| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+											   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+										   << 8)
+										& 0x0000FF00)
+									| (max_c(sa, da) & 0xFF);
 						} else {
 							//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) |
-							//sa;
-							uint32 ipixel =
-								pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
+							// sa;
+							uint32 ipixel = pixelblend(
+								srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
 							//						uint32 ipixel = 0xFFFFFF00 - (srcpixel
 							//&
 							// 0xFFFFFF00);
-							*dest = ((((destpixel & 0xFF000000) / 255 * da +
-										 (ipixel & 0xFF000000) / 255 * sa)) &
-										0xFF000000) |
-									((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
-										 255) &
-										0x00FF0000) |
-									((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) /
-										 255) &
-										0x0000FF00) |
-									sa;
+							*dest = ((((destpixel & 0xFF000000) / 255 * da
+										 + (ipixel & 0xFF000000) / 255 * sa))
+										& 0xFF000000)
+									| ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										   / 255)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   / 255)
+										& 0x0000FF00)
+									| sa;
 						}
 #else
 						uint32 srcpixel = *(++src);
@@ -3145,18 +3148,18 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						int tsa = 65025 - sa * 255;
 						int tda = 65025 - da * 255;
 						if (!sel) {
-							*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-											 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-										 << 16) &
-										0x00FF0000) |
-									(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-											 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-										 << 8) &
-										0x0000FF00) |
-									(((tsa + sa * ((srcpixel) & 0xFF)) *
-										 (tda + da * ((destpixel) & 0xFF)) / 16581375) &
-										0x000000FF) |
-									(clipchar(sa + int(destpixel >> 24)) << 24);
+							*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+											 * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+										 << 16)
+										& 0x00FF0000)
+									| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+											   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+										   << 8)
+										& 0x0000FF00)
+									| (((tsa + sa * ((srcpixel) & 0xFF))
+										   * (tda + da * ((destpixel) & 0xFF)) / 16581375)
+										& 0x000000FF)
+									| (clipchar(sa + int(destpixel >> 24)) << 24);
 							//((max_c (sa, da) & 0xFF) << 24);
 						} else {
 							//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) |
@@ -3165,16 +3168,16 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							//(srcpixel & 0x00FFFFFF);
 							uint32 ipixel = pixelblend(
 								srcpixel, (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sel << 24));
-							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
-										 255) &
-										0x00FF0000) |
-									((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa) /
-										 255) &
-										0x0000FF00) |
-									((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa) /
-										 255) &
-										0x000000FF) |
-									(sa << 24);
+							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa)
+										 / 255)
+										& 0x00FF0000)
+									| ((((destpixel & 0x0000FF00) * da + (ipixel & 0x0000FF00) * sa)
+										   / 255)
+										& 0x0000FF00)
+									| ((((destpixel & 0x000000FF) * da + (ipixel & 0x000000FF) * sa)
+										   / 255)
+										& 0x000000FF)
+									| (sa << 24);
 						}
 #endif
 					}
@@ -3196,34 +3199,34 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						{
 						} else if (sa == 255)  // Fully opaque pixel
 						{
-							*dest =
-								(((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025)
-									 << 24) &
-									0xFF000000) |
-								(((((srcpixel >> 16) & 0xFF) *
-									  (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
-									 << 16) &
-									0x00FF0000) |
-								(((((srcpixel >> 8) & 0xFF) *
-									  (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
-									 << 8) &
-									0x0000FF00) |
-								(clipchar(sa + int(destpixel & 0xFF)));
+							*dest
+								= (((((srcpixel >> 24)) * (tda + da * ((destpixel >> 24))) / 65025)
+									   << 24)
+									  & 0xFF000000)
+								  | (((((srcpixel >> 16) & 0xFF)
+										  * (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
+										 << 16)
+									  & 0x00FF0000)
+								  | (((((srcpixel >> 8) & 0xFF)
+										  * (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
+										 << 8)
+									  & 0x0000FF00)
+								  | (clipchar(sa + int(destpixel & 0xFF)));
 							//(max_c (sa, da) & 0xFF);
 						} else {
-							*dest = (((tsa + sa * ((srcpixel >> 24))) *
-											 (tda + da * ((destpixel >> 24))) / 16581375
-										 << 24) &
-										0xFF000000) |
-									(((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-											 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-										 << 16) &
-										0x00FF0000) |
-									(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-											 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-										 << 8) &
-										0x0000FF00) |
-									(clipchar(sa + int(destpixel & 0xFF)));
+							*dest = (((tsa + sa * ((srcpixel >> 24)))
+											 * (tda + da * ((destpixel >> 24))) / 16581375
+										 << 24)
+										& 0xFF000000)
+									| (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+											   * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+										   << 16)
+										& 0x00FF0000)
+									| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+											   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+										   << 8)
+										& 0x0000FF00)
+									| (clipchar(sa + int(destpixel & 0xFF)));
 							//(max_c (sa, da) & 0xFF);
 						}
 #else
@@ -3237,32 +3240,32 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						{
 						} else if (sa == 255)  // Fully opaque pixel
 						{
-							*dest = (((((srcpixel >> 16) & 0xFF) *
-										  (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
-										 << 16) &
-										0x00FF0000) |
-									(((((srcpixel >> 8) & 0xFF) *
-										  (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
-										 << 8) &
-										0x0000FF00) |
-									(((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF)) /
-										 65025)) &
-										0x000000FF) |
-									(clipchar(sa + int(destpixel >> 24)) << 24);
+							*dest = (((((srcpixel >> 16) & 0xFF)
+										  * (tda + da * ((destpixel >> 16) & 0xFF)) / 65025)
+										 << 16)
+										& 0x00FF0000)
+									| (((((srcpixel >> 8) & 0xFF)
+											* (tda + da * ((destpixel >> 8) & 0xFF)) / 65025)
+										   << 8)
+										& 0x0000FF00)
+									| (((((srcpixel) & 0xFF) * (tda + da * ((destpixel) & 0xFF))
+										   / 65025))
+										& 0x000000FF)
+									| (clipchar(sa + int(destpixel >> 24)) << 24);
 							//((max_c (sa, da) & 0xFF) << 24);
 						} else {
-							*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
-											 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
-										 << 16) &
-										0x00FF0000) |
-									(((tsa + sa * ((srcpixel >> 8) & 0xFF)) *
-											 (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
-										 << 8) &
-										0x0000FF00) |
-									(((tsa + sa * ((srcpixel) & 0xFF)) *
-										 (tda + da * ((destpixel) & 0xFF)) / 16581375) &
-										0x000000FF) |
-									(clipchar(sa + int(destpixel >> 24)) << 24);
+							*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF))
+											 * (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
+										 << 16)
+										& 0x00FF0000)
+									| (((tsa + sa * ((srcpixel >> 8) & 0xFF))
+											   * (tda + da * ((destpixel >> 8) & 0xFF)) / 16581375
+										   << 8)
+										& 0x0000FF00)
+									| (((tsa + sa * ((srcpixel) & 0xFF))
+										   * (tda + da * ((destpixel) & 0xFF)) / 16581375)
+										& 0x000000FF)
+									| (clipchar(sa + int(destpixel >> 24)) << 24);
 							//((max_c (sa, da) & 0xFF) << 24);
 						}
 #endif
@@ -3984,23 +3987,23 @@ CanvasView::SimpleData(BMessage* message)
 
 	const void* dataPtr;
 	ssize_t numBytes;
-	if (message->FindData("image/x-becasso", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/x-becasso", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/png", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/png", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/x-png", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/x-png", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/targa", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/targa", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/x-targa", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK ||
-		message->FindData("image/x-targa", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK) {
+	if (message->FindData("image/x-becasso", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/x-becasso", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/png", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/png", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/x-png", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/x-png", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/targa", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/targa", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/x-targa", B_RAW_TYPE, &dataPtr, &numBytes) == B_OK
+		|| message->FindData("image/x-targa", B_MIME_TYPE, &dataPtr, &numBytes) == B_OK) {
 		// Looks like we got a data message!
 		verbose(2, "Data message\n");
 		//		message->PrintToStream();
 		BBitmapStream bstr;
 		BMemoryIO* mstr = new BMemoryIO(dataPtr, numBytes);
-		if (BTranslatorRoster::Default()->Translate(mstr, NULL, NULL, &bstr, B_TRANSLATOR_BITMAP) !=
-			B_OK) {
+		if (BTranslatorRoster::Default()->Translate(mstr, NULL, NULL, &bstr, B_TRANSLATOR_BITMAP)
+			!= B_OK) {
 			fprintf(stderr, "CanvasView: Data Message translation error...\n");
 			delete mstr;
 			return;
@@ -4062,8 +4065,8 @@ CanvasView::SimpleData(BMessage* message)
 	if ((fr.left > fr.right) || (fr.top > fr.bottom))
 		goto outside;
 
-	if (!drop_map && !message->IsSourceRemote() &&
-		!message->FindPointer("be:_bitmap_ptr", (void**)&bitmap_ptr)) {
+	if (!drop_map && !message->IsSourceRemote()
+		&& !message->FindPointer("be:_bitmap_ptr", (void**)&bitmap_ptr)) {
 		//		printf ("SourceRemote && FindPointer\n");
 		/* this is one big race condition -- what if the source window went away? */
 		/* make sure we have bitmap in our color space */
@@ -4244,8 +4247,8 @@ CanvasView::CopyTarget(BMessage* message)
 		if (!strcasecmp(type, B_FILE_MIME_TYPE)) {
 			const char* name;
 			entry_ref dir;
-			if (!message->FindString("be:filetypes", &type) &&
-				!message->FindString("name", &name) && !message->FindRef("directory", &dir)) {
+			if (!message->FindString("be:filetypes", &type) && !message->FindString("name", &name)
+				&& !message->FindRef("directory", &dir)) {
 				//	write file
 				uint32 type_code = TypeCodeForMIME(type);
 				BDirectory d(&dir);
@@ -4359,8 +4362,8 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		//		printf ("%sinDrag, %sinPaste\n", inDrag ? "" : "!", inPaste ? "" : "!");
 		extern PicMenuButton* tool;
 		int32 currentTool = tool->selected();
-		if ((transformerOpen && !(transformerOpen->DoesPreview() & PREVIEW_MOUSE)) ||
-			(generatorOpen && !(generatorOpen->DoesPreview() & PREVIEW_MOUSE)))
+		if ((transformerOpen && !(transformerOpen->DoesPreview() & PREVIEW_MOUSE))
+			|| (generatorOpen && !(generatorOpen->DoesPreview() & PREVIEW_MOUSE)))
 			mainapp->setCCross();
 		else if (fTranslating)
 			mainapp->setMover();
@@ -4387,12 +4390,11 @@ CanvasView::MouseMoved(BPoint point, uint32 transit, const BMessage* msg)
 		//		MouseDown (point);
 
 		fMouseDown = buttons;
-		if (fMouseDown && Window()->IsActive() &&
-			!msg  // Don't draw inside a drag!
+		if (fMouseDown && Window()->IsActive()
+			&& !msg	 // Don't draw inside a drag!
 			// The following disables spraycan and brush to be used when
 			// a previewing add-on is open (to fix a bug - this is _not_ ideal!!)
-			&&
-			(!(							 //(filterOpen && filterOpen->DoesPreview())
+			&& (!(						 //(filterOpen && filterOpen->DoesPreview())
 				(generatorOpen)			 // && (generatorOpen->DoesPreview() & PREVIEW_MOUSE))
 				|| (transformerOpen))))	 // && (transformerOpen->DoesPreview() & PREVIEW_MOUSE)))))
 		{
@@ -4685,8 +4687,8 @@ CanvasView::KeyDown(const char* bytes, int32 numBytes)
 
 				Position position;
 				position.fPoint = BPoint(point.x * fScale, point.y * fScale);
-				position.fButtons =
-					(modifiers() & B_SHIFT_KEY) ? B_SECONDARY_MOUSE_BUTTON : B_PRIMARY_MOUSE_BUTTON;
+				position.fButtons = (modifiers() & B_SHIFT_KEY) ? B_SECONDARY_MOUSE_BUTTON
+																: B_PRIMARY_MOUSE_BUTTON;
 				position.fTilt = B_ORIGIN;
 				position.fProximity = false;
 				position.fPressure = 255;
@@ -4773,8 +4775,8 @@ CanvasView::SetupUndo(int32 mode)
 	//	extern AttribDraw *mAttribDraw;
 	maxUndo = max_undo();
 	int32 prevtype = undo[indexUndo].type;
-	if ((prevtype == UNDO_DRAW && type == UNDO_SELECT) ||
-		(prevtype == UNDO_SELECT && type == UNDO_DRAW)) {
+	if ((prevtype == UNDO_DRAW && type == UNDO_SELECT)
+		|| (prevtype == UNDO_SELECT && type == UNDO_DRAW)) {
 		type = UNDO_SWITCH;
 	}
 	if (indexUndo + 1 == maxUndo - 1) {
@@ -4909,8 +4911,8 @@ CanvasView::Undo(bool advance, bool menu)
 			default:
 				fprintf(stderr, "Undo: Unknown mode [%li]...\n", currentmode);
 		}
-		if ((prevtype == UNDO_DRAW && type == UNDO_SELECT) ||
-			(prevtype == UNDO_SELECT && type == UNDO_DRAW)) {
+		if ((prevtype == UNDO_DRAW && type == UNDO_SELECT)
+			|| (prevtype == UNDO_SELECT && type == UNDO_DRAW)) {
 			type = UNDO_SWITCH;
 		}
 		indexUndo++;
@@ -5339,8 +5341,8 @@ GetExportingTranslators(BMessage* inHere)
 			continue;
 		}
 		for (int iy = 0; iy < nInput; iy++) {
-			if (formats[iy].type ==
-				B_TRANSLATOR_BITMAP) { /* using goto avoids pesky flag variables! */
+			if (formats[iy].type
+				== B_TRANSLATOR_BITMAP) { /* using goto avoids pesky flag variables! */
 				goto do_this_translator;
 			}
 		}
@@ -5385,8 +5387,8 @@ TypeCodeForMIME(const char* MIME)
 	for (int ix = 0; ix < count; ix++) {
 		const translation_format* format_list = NULL;
 		int32 fmt_count;
-		if (B_OK <=
-			BTranslatorRoster::Default()->GetInputFormats(trans[ix], &format_list, &fmt_count)) {
+		if (B_OK
+			<= BTranslatorRoster::Default()->GetInputFormats(trans[ix], &format_list, &fmt_count)) {
 			for (int iy = 0; iy < fmt_count; iy++) {
 				if (!strcasecmp(format_list[iy].MIME, MIME)) {
 					uint32 type_code = format_list[iy].type;
@@ -5838,10 +5840,10 @@ CanvasView::SelectionToChannel(uint32 what)
 			for (uint32 i = 0; i < h; i++) {
 				for (uint32 j = 0; j < w; j++) {
 					bgra_pixel p = *(++c_data);
-					*(c_data) =
-						((cmyk2bgra((bgra2cmyk(p) & ICYAN_MASK) | (*(++s_data) << CYAN_BPOS))) &
-							COLOR_MASK) |
-						(p & ALPHA_MASK);
+					*(c_data)
+						= ((cmyk2bgra((bgra2cmyk(p) & ICYAN_MASK) | (*(++s_data) << CYAN_BPOS)))
+							  & COLOR_MASK)
+						  | (p & ALPHA_MASK);
 				}
 				s_data += sdif;
 			}
@@ -5850,10 +5852,10 @@ CanvasView::SelectionToChannel(uint32 what)
 			for (uint32 i = 0; i < h; i++) {
 				for (uint32 j = 0; j < w; j++) {
 					bgra_pixel p = *(++c_data);
-					*(c_data) = ((cmyk2bgra((bgra2cmyk(p) & IMAGENTA_MASK) |
-											(*(++s_data) << MAGENTA_BPOS))) &
-									COLOR_MASK) |
-								(p & ALPHA_MASK);
+					*(c_data) = ((cmyk2bgra((bgra2cmyk(p) & IMAGENTA_MASK)
+											| (*(++s_data) << MAGENTA_BPOS)))
+									& COLOR_MASK)
+								| (p & ALPHA_MASK);
 				}
 				s_data += sdif;
 			}
@@ -5862,10 +5864,10 @@ CanvasView::SelectionToChannel(uint32 what)
 			for (uint32 i = 0; i < h; i++) {
 				for (uint32 j = 0; j < w; j++) {
 					bgra_pixel p = *(++c_data);
-					*(c_data) =
-						((cmyk2bgra((bgra2cmyk(p) & IYELLOW_MASK) | (*(++s_data) << YELLOW_BPOS))) &
-							COLOR_MASK) |
-						(p & ALPHA_MASK);
+					*(c_data)
+						= ((cmyk2bgra((bgra2cmyk(p) & IYELLOW_MASK) | (*(++s_data) << YELLOW_BPOS)))
+							  & COLOR_MASK)
+						  | (p & ALPHA_MASK);
 				}
 				s_data += sdif;
 			}
@@ -5874,10 +5876,10 @@ CanvasView::SelectionToChannel(uint32 what)
 			for (uint32 i = 0; i < h; i++) {
 				for (uint32 j = 0; j < w; j++) {
 					bgra_pixel p = *(++c_data);
-					*(c_data) =
-						((cmyk2bgra((bgra2cmyk(p) & IBLACK_MASK) | (*(++s_data) << BLACK_BPOS))) &
-							COLOR_MASK) |
-						(p & ALPHA_MASK);
+					*(c_data)
+						= ((cmyk2bgra((bgra2cmyk(p) & IBLACK_MASK) | (*(++s_data) << BLACK_BPOS)))
+							  & COLOR_MASK)
+						  | (p & ALPHA_MASK);
 				}
 				s_data += sdif;
 			}
@@ -6147,24 +6149,24 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
-					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da +
-							 ((srcpixel & 0xFF000000) / ta) * sa) &
-							0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da +
-							 ((srcpixel & 0x00FF0000) / ta) * sa) &
-							0x00FF0000) |
-						(((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta) &
-							0x0000FF00) |
-						clipchar(sa + int(destpixel & 0xFF));
+					*dest_data
+						= ((((destpixel & 0xFF000000) / ta) * da
+							   + ((srcpixel & 0xFF000000) / ta) * sa)
+							  & 0xFF000000)
+						  | ((((destpixel & 0x00FF0000) / ta) * da
+								 + ((srcpixel & 0x00FF0000) / ta) * sa)
+							  & 0x00FF0000)
+						  | (((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa)) / ta)
+							  & 0x0000FF00)
+						  | clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
 #else
 				uint32 srcpixel = *(++src_data);
 				uint32 destpixel = *(++dest_data);
 				int sa = srcpixel >> 24;
-				int da = destpixel >> 24;						   // 255 - sa;
-				int ta = sa + da;								   // ta = 255;
+				int da = destpixel >> 24;								   // 255 - sa;
+				int ta = sa + da;										   // ta = 255;
 				if (sa == 255 || da == 0 /* !(destpixel & 0xFF000000) */)  // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -6177,18 +6179,19 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					// 0x00FF00FF)*sa)/255) & 0x00FF00FF) |
 					// (clipchar (sa + int (destpixel >> 24)) << 24);
 
-					*dest_data =
-						((((((destpixel & 0x00FF0000) >> 1) * da +
-							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
-							  ta)
-							 << 1) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-							0x0000FF00) |
-						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-							0x000000FF) |
-						// (clipchar (ta) << 24);
-						(clipchar(sa + int(destpixel >> 24)) << 24);
+					*dest_data
+						= ((((((destpixel & 0x00FF0000) >> 1) * da
+								 + ((srcpixel & 0x00FF0000) >> 1) * sa)
+								/ ta)
+							   << 1)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta)
+							  & 0x0000FF00)
+						  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta)
+							  & 0x000000FF)
+						  |
+						  // (clipchar (ta) << 24);
+						  (clipchar(sa + int(destpixel >> 24)) << 24);
 					//								    ((max_c (sa, destpixel >> 24)) << 24);
 				}
 #endif
@@ -6218,16 +6221,16 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					//								  ((((((destpixel>> 8) & 0xFF)*da + ((srcpixel>>
 					// 8) & 0xFF)*sa)/ta)<< 8) & 0x0000FF00) |
 					// clipchar (sa + int (destpixel & 0xFF));
-					*dest_data =
-						((((destpixel & 0xFF000000) / ta) * da +
-							 ((srcpixel & 0xFF000000) / ta) * sa) &
-							0xFF000000) |
-						((((destpixel & 0x00FF0000) / ta) * da +
-							 ((srcpixel & 0x00FF0000) / ta) * sa) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-							0x0000FF00) |
-						clipchar(sa + int(destpixel & 0xFF));
+					*dest_data
+						= ((((destpixel & 0xFF000000) / ta) * da
+							   + ((srcpixel & 0xFF000000) / ta) * sa)
+							  & 0xFF000000)
+						  | ((((destpixel & 0x00FF0000) / ta) * da
+								 + ((srcpixel & 0x00FF0000) / ta) * sa)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta)
+							  & 0x0000FF00)
+						  | clipchar(sa + int(destpixel & 0xFF));
 					// clipchar (ta);
 				}
 #else
@@ -6242,19 +6245,21 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 				} else if (sa == 0)	 // Fully transparent
 				{
 				} else {
-					*dest_data =
-						((((((destpixel & 0x00FF0000) >> 1) * da +
-							   ((srcpixel & 0x00FF0000) >> 1) * sa) /
-							  ta)
-							 << 1) &
-							0x00FF0000) |
-						((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta) &
-							0x0000FF00) |
-						((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta) &
-							0x000000FF) |
-						//									  (clipchar (ta) << 24);
-						//								    ((max_c (sa, destpixel >> 24)) << 24);
-						(clipchar(sa + int(destpixel >> 24)) << 24);
+					*dest_data
+						= ((((((destpixel & 0x00FF0000) >> 1) * da
+								 + ((srcpixel & 0x00FF0000) >> 1) * sa)
+								/ ta)
+							   << 1)
+							  & 0x00FF0000)
+						  | ((((destpixel & 0x0000FF00) * da + (srcpixel & 0x0000FF00) * sa) / ta)
+							  & 0x0000FF00)
+						  | ((((destpixel & 0x000000FF) * da + (srcpixel & 0x000000FF) * sa) / ta)
+							  & 0x000000FF)
+						  |
+						  //									  (clipchar (ta) << 24);
+						  //								    ((max_c (sa, destpixel >> 24)) <<
+						  // 24);
+						  (clipchar(sa + int(destpixel >> 24)) << 24);
 				}
 #endif
 			}
@@ -6351,7 +6356,7 @@ CanvasView::FastBlendWithAlpha(long x, long y, int /* strength */)
 	src_data--;
 	for (int j = miny; j < maxy; j++) {
 		for (int i = minx; i < maxx; i++) {
-			int sa = src_data[4];	// Yes, 4.  *_data are pre-decremented.
+			int sa = src_data[4];  // Yes, 4.  *_data are pre-decremented.
 			int da = dest_data[4];
 			int ta = sa + da;
 			if (da == 0) {
@@ -6415,8 +6420,8 @@ CanvasView::WindowActivated(bool active)
 		}
 		if (Bounds().Contains(point)) {
 			extern Becasso* mainapp;
-			if ((transformerOpen && !(transformerOpen->DoesPreview() & PREVIEW_MOUSE)) ||
-				(generatorOpen && !(generatorOpen->DoesPreview() & PREVIEW_MOUSE)))
+			if ((transformerOpen && !(transformerOpen->DoesPreview() & PREVIEW_MOUSE))
+				|| (generatorOpen && !(generatorOpen->DoesPreview() & PREVIEW_MOUSE)))
 				mainapp->setCCross();
 			else
 				mainapp->setCross();

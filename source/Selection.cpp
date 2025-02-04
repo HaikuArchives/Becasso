@@ -3,7 +3,8 @@
 #include <string.h>
 #include "DModes.h"
 
-Selection::Selection(BRect bounds) : BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_GRAYSCALE_8_BIT)
+Selection::Selection(BRect bounds)
+	: BBitmap(bounds, B_BITMAP_ACCEPTS_VIEWS, B_GRAYSCALE_8_BIT)
 {
 	fRect = bounds;
 	fMode = DM_BLEND;

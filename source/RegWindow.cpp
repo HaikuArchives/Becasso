@@ -47,8 +47,8 @@ RegWindow::RegWindow(const BRect frame, const char* title, char type)
 	regFrame.Set(
 		bgFrame.Width() - 80, bgFrame.bottom - 34, bgFrame.Width() - 8, bgFrame.bottom - 8);
 	cancelFrame.Set(regFrame.left - 88, regFrame.top, regFrame.left - 8, regFrame.bottom);
-	BButton* cancel =
-		new BButton(cancelFrame, "RW cancel", lstring(131, "Cancel"), new BMessage('Rcnc'));
+	BButton* cancel
+		= new BButton(cancelFrame, "RW cancel", lstring(131, "Cancel"), new BMessage('Rcnc'));
 	BButton* reg = new BButton(regFrame, "RW reg", lstring(426, "Register"), new BMessage('Rreg'));
 	reg->MakeDefault(true);
 	bg->AddChild(cancel);

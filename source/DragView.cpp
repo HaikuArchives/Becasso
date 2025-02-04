@@ -108,10 +108,10 @@ DragView::DrawHorz()
 {
 	Window()->Lock();
 
-	rgb_color Gold = {255, 203, 0, 255};
-	rgb_color Yellow = {255, 255, 0, 255};
-	rgb_color DkGrey = {176, 176, 176, 255};
-	rgb_color LtGrey = {230, 230, 230, 255};
+	rgb_color Gold = { 255, 203, 0, 255 };
+	rgb_color Yellow = { 255, 255, 0, 255 };
+	rgb_color DkGrey = { 176, 176, 176, 255 };
+	rgb_color LtGrey = { 230, 230, 230, 255 };
 
 	BRect bounds;
 	bounds = Bounds();
@@ -142,10 +142,10 @@ DragView::DrawVert()
 {
 	Window()->Lock();
 
-	rgb_color Gold = {255, 203, 0};
-	rgb_color Yellow = {255, 255, 0};
-	rgb_color DkGrey = {176, 176, 176};
-	rgb_color LtGrey = {230, 230, 230, 0};
+	rgb_color Gold = { 255, 203, 0 };
+	rgb_color Yellow = { 255, 255, 0 };
+	rgb_color DkGrey = { 176, 176, 176 };
+	rgb_color LtGrey = { 230, 230, 230, 0 };
 
 	BRect bounds = Bounds();
 

@@ -4,13 +4,14 @@
 #include "Settings.h"
 #include "Slider.h"
 
-static property_info prop_list[] = {0};
+static property_info prop_list[] = { 0 };
 
-AttribSelect::AttribSelect() : AttribView(BRect(0, 0, 128, 40), lstring(21, "Select"))
+AttribSelect::AttribSelect()
+	: AttribView(BRect(0, 0, 128, 40), lstring(21, "Select"))
 {
 	SetViewColor(LightGrey);
-	BStringView* sv =
-		new BStringView(BRect(6, 6, 120, 26), "no controls", lstring(306, "No Parameters"));
+	BStringView* sv
+		= new BStringView(BRect(6, 6, 120, 26), "no controls", lstring(306, "No Parameters"));
 	AddChild(sv);
 	//	Slider *pSlid = new Slider (BRect (8, 8, 120, 26), 46, "Pen Size", 0, 50, 1, new BMessage
 	//('AFpc')); 	AddChild (pSlid);

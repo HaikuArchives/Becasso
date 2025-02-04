@@ -6,11 +6,15 @@
 #include "Colors.h"
 #include "Settings.h"
 
-static property_info prop_list[] = {{"PenSize", SET, DIRECT, "float: 0 .. 50"},
-	{"ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline"},
-	{"FixPoint|FirstClick", SET, DIRECT, "string: Center, Perimeter"}, 0};
+static property_info prop_list[] = {
+	{ "PenSize", SET, DIRECT, "float: 0 .. 50" },
+	{ "ShapeType|Type", SET, DIRECT, "string: FilledOutline, Filled, Outline" },
+	{ "FixPoint|FirstClick", SET, DIRECT, "string: Center, Perimeter" },
+	0,
+};
 
-AttribCircle::AttribCircle() : AttribView(BRect(0, 0, 148, 148), lstring(33, "Circles"))
+AttribCircle::AttribCircle()
+	: AttribView(BRect(0, 0, 148, 148), lstring(33, "Circles"))
 {
 	SetViewColor(LightGrey);
 	lSlid = new Slider(

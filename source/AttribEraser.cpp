@@ -7,11 +7,15 @@
 #include "Settings.h"
 #include "Slider.h"
 
-static property_info prop_list[] = {{"XSize|Width|HSize", SET, DIRECT, "float: 1 .. 50"},
-	{"YSize|Height|VSize", SET, DIRECT, "float: 1 .. 50"},
-	{"Shape|Type", SET, DIRECT, "string: Ellipse, Rectangle"}, 0};
+static property_info prop_list[] = {
+	{ "XSize|Width|HSize", SET, DIRECT, "float: 1 .. 50" },
+	{ "YSize|Height|VSize", SET, DIRECT, "float: 1 .. 50" },
+	{ "Shape|Type", SET, DIRECT, "string: Ellipse, Rectangle" },
+	0,
+};
 
-AttribEraser::AttribEraser() : AttribView(BRect(0, 0, 126, 102), lstring(23, "Eraser"))
+AttribEraser::AttribEraser()
+	: AttribView(BRect(0, 0, 126, 102), lstring(23, "Eraser"))
 {
 	SetViewColor(LightGrey);
 	BBox* type = new BBox(BRect(8, 8, 119, 58), "type");
@@ -104,13 +108,13 @@ BHandler*
 AttribEraser::ResolveSpecifier(
 	BMessage* message, int32 index, BMessage* specifier, int32 command, const char* property)
 {
-	if (!strcasecmp(property, "XSize") || !strcasecmp(property, "Width") ||
-		!strcasecmp(property, "HSize")) {
+	if (!strcasecmp(property, "XSize") || !strcasecmp(property, "Width")
+		|| !strcasecmp(property, "HSize")) {
 		fCurrentProperty = PROP_XSIZE;
 		return this;
 	}
-	if (!strcasecmp(property, "YSize") || !strcasecmp(property, "Height") ||
-		!strcasecmp(property, "VSize")) {
+	if (!strcasecmp(property, "YSize") || !strcasecmp(property, "Height")
+		|| !strcasecmp(property, "VSize")) {
 		fCurrentProperty = PROP_YSIZE;
 		return this;
 	}
