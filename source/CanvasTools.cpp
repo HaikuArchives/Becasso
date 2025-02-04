@@ -116,19 +116,19 @@ CanvasView::tBrush(int32 mode, BPoint point, uint32 buttons)
 	//	BRect frame = fCanvasFrame;
 	int pstrength = strength;
 	while (buttons) {
-		register float dx = pos.x - point.x;
-		register float dy = pos.y - point.y;
-		register float ds = dx * dx + dy * dy;
-		register float distance = sqrt(ds);
+		float dx = pos.x - point.x;
+		float dy = pos.y - point.y;
+		float ds = dx * dx + dy * dy;
+		float distance = sqrt(ds);
 		BRect aR = BRect(point.x - cx - 1, point.y - cy - 1, point.x + cx + 1, point.y + cy + 1);
 		BRect bR = BRect(pos.x - cx - 1, pos.y - cy - 1, pos.x + cx + 1, pos.y + cy + 1);
 		if (distance > Spacing) {
 			clock_t start, end;
 			start = clock();
-			register float num = distance / Spacing;
-			register float facx = (point.x - pos.x) / num;
-			register float facy = (point.y - pos.y) / num;
-			register float facs = (strength - pstrength) / num;
+			float num = distance / Spacing;
+			float facx = (point.x - pos.x) / num;
+			float facy = (point.y - pos.y) / num;
+			float facs = (strength - pstrength) / num;
 			for (float i = 1; i < num; i++) {
 				nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 				if (mode == M_SELECT) {
@@ -188,10 +188,10 @@ CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 	int pstrength = fBC.pstrength;
 	//	BBitmap *brushbm = fBC.brushbm;
 
-	register float dx = pos.x - point.x;
-	register float dy = pos.y - point.y;
-	register float ds = dx * dx + dy * dy;
-	register float distance = sqrt(ds);
+	float dx = pos.x - point.x;
+	float dy = pos.y - point.y;
+	float ds = dx * dx + dy * dy;
+	float distance = sqrt(ds);
 	BRect aR = BRect(point.x - cx - 1, point.y - cy - 1, point.x + cx + 1, point.y + cy + 1);
 	BRect bR = BRect(pos.x - cx - 1, pos.y - cy - 1, pos.x + cx + 1, pos.y + cy + 1);
 
@@ -201,10 +201,10 @@ CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 	if (distance > Spacing) {
 		clock_t start, end;
 		start = clock();
-		register float num = distance / Spacing;
-		register float facx = (point.x - pos.x) / num;
-		register float facy = (point.y - pos.y) / num;
-		register float facs = (strength - pstrength) / num;
+		float num = distance / Spacing;
+		float facx = (point.x - pos.x) / num;
+		float facy = (point.y - pos.y) / num;
+		float facs = (strength - pstrength) / num;
 		for (float i = 1; i < num; i++) {
 			nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 			if (mode == M_SELECT) {
@@ -366,10 +366,10 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 	Brush* b = fCC.b;
 	int pstrength = fCC.pstrength;
 
-	register float dx = pos.x - point.x;
-	register float dy = pos.y - point.y;
-	register float ds = dx * dx + dy * dy;
-	register float distance = sqrt(ds);
+	float dx = pos.x - point.x;
+	float dy = pos.y - point.y;
+	float ds = dx * dx + dy * dy;
+	float distance = sqrt(ds);
 	BRect aR = BRect(point.x - cx - 1, point.y - cy - 1, point.x + cx + 1, point.y + cy + 1);
 	BRect bR = BRect(pos.x - cx - 1, pos.y - cy - 1, pos.x + cx + 1, pos.y + cy + 1);
 	extern Becasso* mainapp;
@@ -566,18 +566,18 @@ CanvasView::tTablet(int32 mode)
 	bool proximity = true;
 	// printf ("Entering loop\n");
 	while (proximity && Window()->IsActive()) {
-		register float dx = pos.x - point.x;
-		register float dy = pos.y - point.y;
-		register float ds = dx * dx + dy * dy;
-		register float distance = sqrt(ds);
+		float dx = pos.x - point.x;
+		float dy = pos.y - point.y;
+		float ds = dx * dx + dy * dy;
+		float distance = sqrt(ds);
 		BRect aR =
 			BRect(point.x - borderx, point.y - bordery, point.x + borderx, point.y + bordery);
 		BRect bR = BRect(pos.x - borderx, pos.y - bordery, pos.x + borderx, pos.y + bordery);
 		if (distance > Spacing) {
-			register float num = distance / Spacing;
-			register float facx = (point.x - pos.x) / num;
-			register float facy = (point.y - pos.y) / num;
-			register float facs = (strength - pstrength) / num;
+			float num = distance / Spacing;
+			float facx = (point.x - pos.x) / num;
+			float facy = (point.y - pos.y) / num;
+			float facs = (strength - pstrength) / num;
 			for (float i = 1; i < num; i++) {
 				nextPos = BPoint(pos.x + i * facx, pos.y + i * facy);
 				int str = int(strength + i * facs);
@@ -2936,7 +2936,7 @@ inline bool
 CanvasView::isfillcolort(LPoint point, uchar* t)
 {
 	rgb_color c = getColor(point);
-	register uchar d;
+	uchar d;
 	if (!c.alpha)  // Special cases
 	{
 		if (!fillcolor.alpha) {

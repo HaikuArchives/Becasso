@@ -311,12 +311,12 @@ find_best_colors(
 {
 	int ir, ig, ib;
 	int i, icolor;
-	register float* bptr; // pointer into bestdist[] array
+	float* bptr; // pointer into bestdist[] array
 	uint8* cptr;		  // pointer into bestcolor[] array
 	float dist0, dist1;	  // initial distance values
-	register float dist2; // current distance in inner loop
+	float dist2; // current distance in inner loop
 	float xx0, xx1;		  // distance increments
-	register float xx2;
+	float xx2;
 	float inc0, inc1, inc2; // initial values for increments
 	// This array holds the distance to the nearest-so-far color for each cell
 	float bestdist[BOX_R_ELEMS * BOX_G_ELEMS * BOX_B_ELEMS];
@@ -383,7 +383,7 @@ fill_lut(int16* lut, rgb_color palette[], int max_colors, int r, int g, int b)
 {
 	int minr, ming, minb; /* lower left corner of update box */
 	int ir, ig, ib;
-	register uint8* cptr; /* pointer into bestcolor[] array */
+	uint8* cptr; /* pointer into bestcolor[] array */
 
 	/* This array lists the candidate colormap indexes. */
 	uint8 colorlist[256];

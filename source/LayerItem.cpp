@@ -213,21 +213,21 @@ LayerItem::Draw(BRect /* update */)
 	thumbView->Sync();
 	uint32* bits = ((uint32*)thumbnail->Bits()) - 1;
 	for (int i = 0; i < thumbnail->BitsLength() / 4; i++) {
-		register uint32 pixel = *(++bits);
+		uint32 pixel = *(++bits);
 #if defined(__POWERPC__)
-		register uint32 a = pixel & 0x000000FF;
-		register uint32 b =
+		uint32 a = pixel & 0x000000FF;
+		uint32 b =
 			(((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
-		register uint32 g =
+		uint32 g =
 			(((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
-		register uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
+		uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
 		*bits = (b | g | r | a);
 #else
-		register uint32 a = pixel >> 24;
-		register uint32 b = ((((pixel & 0x000000FF) * a) >> 8) - (a) + (255)) & 0x000000FF;
-		register uint32 g =
+		uint32 a = pixel >> 24;
+		uint32 b = ((((pixel & 0x000000FF) * a) >> 8) - (a) + (255)) & 0x000000FF;
+		uint32 g =
 			((((pixel & 0x0000FF00) * a) >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
-		register uint32 r =
+		uint32 r =
 			((((pixel & 0x00FF0000) * a) >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
 		*bits = (b | g | r | (a << 24));
 #endif
@@ -259,20 +259,20 @@ LayerItem::DrawThumbOnly()
 	thumbView->Sync();
 	uint32* bits = ((uint32*)thumbnail->Bits()) - 1;
 	for (int i = 0; i < thumbnail->BitsLength() / 4; i++) {
-		register uint32 pixel = *(++bits);
+		uint32 pixel = *(++bits);
 #if defined(__POWERPC__)
-		register uint32 a = pixel & 0x000000FF;
-		register uint32 b =
+		uint32 a = pixel & 0x000000FF;
+		uint32 b =
 			(((pixel & 0xFF000000) >> 8) * a - (a << 24) + (255 << 24)) & 0xFF000000;
-		register uint32 g =
+		uint32 g =
 			(((pixel & 0x00FF0000) >> 8) * a - (a << 16) + (255 << 16)) & 0x00FF0000;
-		register uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
+		uint32 r = (((pixel & 0x0000FF00) >> 8) * a - (a << 8) + (255 << 8)) & 0x0000FF00;
 		*bits = (b | g | r | a);
 #else
-		register uint32 a = pixel >> 24;
-		register uint32 b = (((pixel & 0x000000FF) * a >> 8) - (a) + (255)) & 0x000000FF;
-		register uint32 g = (((pixel & 0x0000FF00) * a >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
-		register uint32 r =
+		uint32 a = pixel >> 24;
+		uint32 b = (((pixel & 0x000000FF) * a >> 8) - (a) + (255)) & 0x000000FF;
+		uint32 g = (((pixel & 0x0000FF00) * a >> 8) - (a << 8) + (255 << 8)) & 0x0000FF00;
+		uint32 r =
 			(((pixel & 0x00FF0000) * a >> 8) - (a << 16) + (255 << 16)) & 0x00FF0000;
 		*bits = (b | g | r | (a << 24));
 #endif

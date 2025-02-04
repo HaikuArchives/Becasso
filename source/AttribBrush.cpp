@@ -97,9 +97,9 @@ AttribBrush::mkGaussianBrush(
 	float rangle = -angle / 180 * M_PI;
 	for (float x = -hw; x <= hw; x++) {
 		for (float y = -hh; y <= hh; y++) {
-			register float rx = (x * cos(rangle) + y * sin(rangle)) / sigmaxsq * 2;
-			register float ry = (x * sin(rangle) - y * cos(rangle)) / sigmaysq * 2;
-			register float r = rx * rx + ry * ry;
+			float rx = (x * cos(rangle) + y * sin(rangle)) / sigmaxsq * 2;
+			float ry = (x * sin(rangle) - y * cos(rangle)) / sigmaysq * 2;
+			float r = rx * rx + ry * ry;
 			b->Set(hw + x, hh + y, cval * exp(-(hfunc(r, hardness))));
 		}
 	}

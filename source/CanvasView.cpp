@@ -2828,11 +2828,11 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 				for (ulong y = rt; y <= rb; y++) {
 					for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel & 0xFF) * ga / 255;
-						register int da = 255 - sa;
-						register unsigned int sel = *(++sel_data);
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel & 0xFF) * ga / 255;
+						int da = 255 - sa;
+						unsigned int sel = *(++sel_data);
 						if (!sel) {
 //						*dest = ((((destpixel & 0xFF00FF00) >> 8)*da + ((srcpixel & 0xFF00FF00) >>
 // 8)*sa) & 0xFF00FF00) |
@@ -2871,7 +2871,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						} else {
 							//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) |
 							//sa;
-							register uint32 ipixel =
+							uint32 ipixel =
 								pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
 #if !defined(BLEND_USES_SHIFTS)
 							*dest = ((((destpixel & 0xFF000000) / 255 * da +
@@ -2899,11 +2899,11 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 #endif
 						}
 #else  // Intel
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel >> 24) * ga / 255;
-						register int da = 255 - sa;
-						register unsigned int sel = *(++sel_data);
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel >> 24) * ga / 255;
+						int da = 255 - sa;
+						unsigned int sel = *(++sel_data);
 						if (!sel) {
 //						*dest = ((((destpixel & 0x0000FF00)*da + (srcpixel & 0x0000FF00)*sa)/255) &
 // 0x0000FF00) |
@@ -2941,7 +2941,7 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) |
 							//(sa
 							//<< 24);
-							register uint32 ipixel = pixelblend(
+							uint32 ipixel = pixelblend(
 								srcpixel, (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sel << 24));
 #if !defined(BLEND_USES_SHIFTS)
 							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
@@ -2982,10 +2982,10 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 					for (ulong y = rt; y <= rb; y++) {
 						for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-							register uint32 srcpixel = *(++src);
-							register uint32 destpixel = *(++dest);
-							register int sa = (srcpixel & 0xFF) * ga / 255;
-							register int da = 255 - sa;
+							uint32 srcpixel = *(++src);
+							uint32 destpixel = *(++dest);
+							int sa = (srcpixel & 0xFF) * ga / 255;
+							int da = 255 - sa;
 							if (da == 0)  // Fully opaque pixel
 							{
 								*dest = srcpixel;
@@ -3030,10 +3030,10 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 #endif
 							}
 #else  // Intel
-							register uint32 srcpixel = *(++src);
-							register uint32 destpixel = *(++dest);
-							register int sa = (srcpixel >> 24) * ga / 255;
-							register int da = 255 - sa;
+							uint32 srcpixel = *(++src);
+							uint32 destpixel = *(++dest);
+							int sa = (srcpixel >> 24) * ga / 255;
+							int da = 255 - sa;
 							if (da == 0)  // Fully opaque pixel
 							{
 								*dest = srcpixel;
@@ -3096,13 +3096,13 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 				for (ulong y = rt; y <= rb; y++) {
 					for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel & 0xFF) * ga / 255;
-						register int da = destpixel & 0xFF;
-						register unsigned int sel = *(++sel_data);
-						register int tsa = 65025 - sa * 255;
-						register int tda = 65025 - da * 255;
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel & 0xFF) * ga / 255;
+						int da = destpixel & 0xFF;
+						unsigned int sel = *(++sel_data);
+						int tsa = 65025 - sa * 255;
+						int tda = 65025 - da * 255;
 						if (!sel) {
 							*dest = (((tsa + sa * ((srcpixel >> 24))) *
 											 (tda + da * ((destpixel >> 24))) / 16581375
@@ -3120,9 +3120,9 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						} else {
 							//						*dest = (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) |
 							//sa;
-							register uint32 ipixel =
+							uint32 ipixel =
 								pixelblend(srcpixel, (0xFFFFFF00 - (srcpixel & 0xFFFFFF00)) | sel);
-							//						register uint32 ipixel = 0xFFFFFF00 - (srcpixel
+							//						uint32 ipixel = 0xFFFFFF00 - (srcpixel
 							//&
 							// 0xFFFFFF00);
 							*dest = ((((destpixel & 0xFF000000) / 255 * da +
@@ -3137,13 +3137,13 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 									sa;
 						}
 #else
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel >> 24) * ga / 255;
-						register int da = destpixel >> 24;
-						register unsigned int sel = *(++sel_data);
-						register int tsa = 65025 - sa * 255;
-						register int tda = 65025 - da * 255;
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel >> 24) * ga / 255;
+						int da = destpixel >> 24;
+						unsigned int sel = *(++sel_data);
+						int tsa = 65025 - sa * 255;
+						int tda = 65025 - da * 255;
 						if (!sel) {
 							*dest = (((tsa + sa * ((srcpixel >> 16) & 0xFF)) *
 											 (tda + da * ((destpixel >> 16) & 0xFF)) / 16581375
@@ -3161,9 +3161,9 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 						} else {
 							//						*dest = (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) |
 							//(sa
-							//<< 24); 						register uint32 ipixel = 0x00FFFFFF -
+							//<< 24); 						uint32 ipixel = 0x00FFFFFF -
 							//(srcpixel & 0x00FFFFFF);
-							register uint32 ipixel = pixelblend(
+							uint32 ipixel = pixelblend(
 								srcpixel, (0x00FFFFFF - (srcpixel & 0x00FFFFFF)) | (sel << 24));
 							*dest = ((((destpixel & 0x00FF0000) * da + (ipixel & 0x00FF0000) * sa) /
 										 255) &
@@ -3186,12 +3186,12 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 				for (ulong y = rt; y <= rb; y++) {
 					for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel & 0xFF) * ga / 255;
-						register int da = destpixel & 0xFF;
-						register int tsa = 65025 - sa * 255;
-						register int tda = 65025 - da * 255;
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel & 0xFF) * ga / 255;
+						int da = destpixel & 0xFF;
+						int tsa = 65025 - sa * 255;
+						int tda = 65025 - da * 255;
 						if (sa == 0)  // Fully transparent pixel
 						{
 						} else if (sa == 255)  // Fully opaque pixel
@@ -3227,12 +3227,12 @@ CanvasView::Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preser
 							//(max_c (sa, da) & 0xFF);
 						}
 #else
-						register uint32 srcpixel = *(++src);
-						register uint32 destpixel = *(++dest);
-						register int sa = (srcpixel >> 24) * ga / 255;
-						register int da = destpixel >> 24;
-						register int tsa = 65025 - sa * 255;
-						register int tda = 65025 - da * 255;
+						uint32 srcpixel = *(++src);
+						uint32 destpixel = *(++dest);
+						int sa = (srcpixel >> 24) * ga / 255;
+						int da = destpixel >> 24;
+						int tsa = 65025 - sa * 255;
+						int tda = 65025 - da * 255;
 						if (sa == 0)  // Fully transparent pixel
 						{
 						} else if (sa == 255)  // Fully opaque pixel
@@ -6017,9 +6017,9 @@ CanvasView::ColorizeSelection(rgb_color c)
 	bgra_pixel b = rgb2bgra(c);
 	for (uint32 i = 0; i < h; i++) {
 		for (uint32 j = 0; j < w; j++) {
-			register bgra_pixel d = *(++c_data);
-			register int sa = *(++s_data);
-			//			register int da = 255 - sa;
+			bgra_pixel d = *(++c_data);
+			int sa = *(++s_data);
+			//			int da = 255 - sa;
 			b &= COLOR_MASK;
 			b |= (sa << ALPHA_BPOS);
 			//			if (da == 0)		// Fully opaque pixel
@@ -6129,11 +6129,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = srcpixel & 0xFF;
-				register int da = /*destpixel & 0xFF;*/ 255 - sa;
-				register int ta = /*sa + da;*/ 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = srcpixel & 0xFF;
+				int da = /*destpixel & 0xFF;*/ 255 - sa;
+				int ta = /*sa + da;*/ 255;
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF))  // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -6160,11 +6160,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					// clipchar (ta);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = srcpixel >> 24;
-				register int da = destpixel >> 24;						   // 255 - sa;
-				register int ta = sa + da;								   // ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = srcpixel >> 24;
+				int da = destpixel >> 24;						   // 255 - sa;
+				int ta = sa + da;								   // ta = 255;
 				if (sa == 255 || da == 0 /* !(destpixel & 0xFF000000) */)  // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -6200,11 +6200,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel & 0xFF) * strength / 255;
-				register int da = /*destpixel & 0xFF;*/ 255 - sa;
-				register int ta = /*sa + da;*/ 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel & 0xFF) * strength / 255;
+				int da = /*destpixel & 0xFF;*/ 255 - sa;
+				int ta = /*sa + da;*/ 255;
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF))  // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -6231,11 +6231,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					// clipchar (ta);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel >> 24) * strength / 255;
-				register int da = /*destpixel >> 24; */ 255 - sa;
-				register int ta = /*sa + da;*/ 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel >> 24) * strength / 255;
+				int da = /*destpixel >> 24; */ 255 - sa;
+				int ta = /*sa + da;*/ 255;
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -6266,11 +6266,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel & 0xFF) * (-strength) / 255;
-				register int da = (destpixel & 0xFF);
-				register int ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel & 0xFF) * (-strength) / 255;
+				int da = (destpixel & 0xFF);
+				int ta = 255;
 				if (sa == 255 || !(destpixel & 0xFF))  // Fully opaque
 				{
 					*dest_data = destpixel & 0xFFFFFF00;
@@ -6280,11 +6280,11 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 					*dest_data = (destpixel & 0xFFFFFF00) | clipchar(da - sa);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel >> 24) * (-strength) / 255;
-				register int da = (destpixel >> 24);
-				//				register int ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel >> 24) * (-strength) / 255;
+				int da = (destpixel >> 24);
+				//				int ta = 255;
 				if (sa == 255 || !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = destpixel & 0x00FFFFFF;
@@ -6351,9 +6351,9 @@ CanvasView::FastBlendWithAlpha(long x, long y, int /* strength */)
 	src_data--;
 	for (int j = miny; j < maxy; j++) {
 		for (int i = minx; i < maxx; i++) {
-			register int sa = src_data[4];	// Yes, 4.  *_data are pre-decremented.
-			register int da = dest_data[4];
-			register int ta = sa + da;
+			int sa = src_data[4];	// Yes, 4.  *_data are pre-decremented.
+			int da = dest_data[4];
+			int ta = sa + da;
 			if (da == 0) {
 				*(++dest_data) = *(++src_data);
 				*(++dest_data) = *(++src_data);

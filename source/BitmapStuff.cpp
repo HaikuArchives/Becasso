@@ -60,10 +60,10 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 			for (ulong y = rt; y <= rb; y++) {
 				for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-					register uint32 srcpixel = *(++src);
-					register uint32 destpixel = *(++dest);
-					register int sa = (srcpixel & 0xFF) * ga / 255;
-					register int da = 255 - sa;
+					uint32 srcpixel = *(++src);
+					uint32 destpixel = *(++dest);
+					int sa = (srcpixel & 0xFF) * ga / 255;
+					int da = 255 - sa;
 					if (da == 0)  // Fully opaque pixel
 					{
 						*dest = srcpixel;
@@ -94,10 +94,10 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 #endif
 					}
 #else
-					register uint32 srcpixel = *(++src);
-					register uint32 destpixel = *(++dest);
-					register int sa = (srcpixel >> 24) * ga / 255;
-					register int da = 255 - sa;
+					uint32 srcpixel = *(++src);
+					uint32 destpixel = *(++dest);
+					int sa = (srcpixel >> 24) * ga / 255;
+					int da = 255 - sa;
 					if (da == 0)  // Fully opaque pixel
 					{
 						*dest = srcpixel;
@@ -136,12 +136,12 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 			for (ulong y = rt; y <= rb; y++) {
 				for (ulong x = rl; x <= rr; x++) {
 #if defined(__POWERPC__)
-					register uint32 srcpixel = *(++src);
-					register uint32 destpixel = *(++dest);
-					register int sa = (srcpixel & 0xFF) * ga / 255;
-					register int da = destpixel & 0xFF;
-					register int tsa = 65025 - sa * 255;
-					register int tda = 65025 - da * 255;
+					uint32 srcpixel = *(++src);
+					uint32 destpixel = *(++dest);
+					int sa = (srcpixel & 0xFF) * ga / 255;
+					int da = destpixel & 0xFF;
+					int tsa = 65025 - sa * 255;
+					int tda = 65025 - da * 255;
 					if (sa == 0)  // Fully transparent pixel
 					{
 					} else if (sa == 255)  // Fully opaque pixel
@@ -174,12 +174,12 @@ Merge(BBitmap* a, Layer* b, BRect update, bool doselect, bool preserve_alpha)
 								(clipchar(sa + int(destpixel & 0xFF)));
 					}
 #else
-					register uint32 srcpixel = *(++src);
-					register uint32 destpixel = *(++dest);
-					register int sa = (srcpixel >> 24) * ga / 255;
-					register int da = destpixel >> 24;
-					register int tsa = 65025 - sa * 255;
-					register int tda = 65025 - da * 255;
+					uint32 srcpixel = *(++src);
+					uint32 destpixel = *(++dest);
+					int sa = (srcpixel >> 24) * ga / 255;
+					int da = destpixel >> 24;
+					int tsa = 65025 - sa * 255;
+					int tda = 65025 - da * 255;
 					if (sa == 0)  // Fully transparent pixel
 					{
 					} else if (sa == 255)  // Fully opaque pixel
@@ -643,11 +643,11 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 	for (int j = miny; j < maxy; j++) {
 		for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-			register uint32 srcpixel = *(++src_data);
-			register uint32 destpixel = *(++dest_data);
-			register int sa = srcpixel & 0xFF;
-			register int da = 255 - sa;	 // destpixel & 0xFF;
-			register int ta = 255;		 // sa + da;
+			uint32 srcpixel = *(++src_data);
+			uint32 destpixel = *(++dest_data);
+			int sa = srcpixel & 0xFF;
+			int da = 255 - sa;	 // destpixel & 0xFF;
+			int ta = 255;		 // sa + da;
 			if (sa == 255)				 // Fully Opaque
 			{
 				*dest_data = srcpixel;
@@ -666,11 +666,11 @@ BlendWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int /* strength */)
 					clipchar(sa + int(destpixel & 0xFF));
 			}
 #else
-			register uint32 srcpixel = *(++src_data);
-			register uint32 destpixel = *(++dest_data);
-			register int sa = srcpixel >> 24;
-			register int da = 255 - sa;	 // destpixel >> 24;
-			register int ta = 255;		 // sa + da;
+			uint32 srcpixel = *(++src_data);
+			uint32 destpixel = *(++dest_data);
+			int sa = srcpixel >> 24;
+			int da = 255 - sa;	 // destpixel >> 24;
+			int ta = 255;		 // sa + da;
 			if (sa == 255)				 // Fully Opaque
 			{
 				*dest_data = srcpixel;
@@ -734,11 +734,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = srcpixel & 0xFF;
-				register int da = /* destpixel & 0xFF; */ 255 - sa;
-				register int ta = /* sa + da;*/ 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = srcpixel & 0xFF;
+				int da = /* destpixel & 0xFF; */ 255 - sa;
+				int ta = /* sa + da;*/ 255;
 				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF))	// Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -765,11 +765,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					// clipchar (ta);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = srcpixel >> 24;
-				register int da = /*destpixel >> 24;*/ 255 - sa;
-				register int ta = /*sa + da; */ ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = srcpixel >> 24;
+				int da = /*destpixel >> 24;*/ 255 - sa;
+				int ta = /*sa + da; */ ta = 255;
 				if (sa == 255 || /*da == 0*/ !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -797,11 +797,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel & 0xFF) * strength / 255;
-				register int da = /* destpixel & 0xFF;*/ 255 - sa;
-				register int ta = /* sa + da;*/ 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel & 0xFF) * strength / 255;
+				int da = /* destpixel & 0xFF;*/ 255 - sa;
+				int ta = /* sa + da;*/ 255;
 				if (sa == 255 || /* da == 0*/ !(destpixel & 0xFF))	// Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -828,11 +828,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					// clipchar (ta);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel >> 24) * strength / 255;
-				register int da = /*destpixel >> 24;*/ 255 - sa;
-				register int ta = sa + da;								   // 255
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel >> 24) * strength / 255;
+				int da = /*destpixel >> 24;*/ 255 - sa;
+				int ta = sa + da;								   // 255
 				if (sa == 255 || /* da == 0 */ !(destpixel & 0xFF000000))  // Fully opaque
 				{
 					*dest_data = srcpixel;
@@ -861,11 +861,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 		for (int j = miny; j < maxy; j++) {
 			for (int i = minx; i < maxx; i++) {
 #if defined(__POWERPC__)
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel & 0xFF) * (-strength) / 255;
-				register int da = (destpixel & 0xFF);
-				register int ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel & 0xFF) * (-strength) / 255;
+				int da = (destpixel & 0xFF);
+				int ta = 255;
 				if (sa == 255 || !(destpixel & 0xFF))  // Fully opaque
 				{
 					*dest_data = destpixel & 0xFFFFFF00;
@@ -875,11 +875,11 @@ AddWithAlpha(BBitmap* src, BBitmap* dest, long x, long y, int strength)
 					*dest_data = (destpixel & 0xFFFFFF00) | clipchar(da - sa);
 				}
 #else
-				register uint32 srcpixel = *(++src_data);
-				register uint32 destpixel = *(++dest_data);
-				register int sa = (srcpixel >> 24) * (-strength) / 255;
-				register int da = (destpixel >> 24);
-				//				register int ta = 255;
+				uint32 srcpixel = *(++src_data);
+				uint32 destpixel = *(++dest_data);
+				int sa = (srcpixel >> 24) * (-strength) / 255;
+				int da = (destpixel >> 24);
+				//				int ta = 255;
 				if (sa == 255 || !(destpixel & 0xFF000000))	 // Fully opaque
 				{
 					*dest_data = destpixel & 0x00FFFFFF;
@@ -914,7 +914,7 @@ InvertWithInverseAlpha(BBitmap* src, BBitmap* selection)
 	if (src->ColorSpace() == B_RGBA32) {
 		for (int j = 0; j <= h; j++) {
 			for (int i = 0; i <= w; i++) {
-				register unsigned int ialpha = *(++sel_data);
+				unsigned int ialpha = *(++sel_data);
 				if (ialpha == 255)
 					src_data += 4;
 				else {
@@ -931,7 +931,7 @@ InvertWithInverseAlpha(BBitmap* src, BBitmap* selection)
 		long src_bprdif = src_bpr - w - 1;
 		for (int j = 0; j <= h; j++) {
 			for (int i = 0; i <= w; i++) {
-				register unsigned int ialpha = *(++sel_data);
+				unsigned int ialpha = *(++sel_data);
 				if (ialpha == 255)
 					++src_data;
 				else
@@ -1135,8 +1135,8 @@ CutOrCopy(BBitmap* src, BBitmap* dest, BBitmap* sel, long offx, long offy, bool 
 	selbits--;
 	for (long i = 0; i <= dest->Bounds().bottom; i++) {
 		for (long j = 0; j <= dest->Bounds().right; j++) {
-			register unsigned int opacity = sel ? *(++selbits) : 255;
-			//			register unsigned int transparency = 255 - opacity;
+			unsigned int opacity = sel ? *(++selbits) : 255;
+			//			unsigned int transparency = 255 - opacity;
 			//			uchar *dpixel = (uchar *)destbits;
 			uchar* spixel = (uchar*)srcbits;
 #if defined(__POWERPC__)
