@@ -82,9 +82,9 @@ class BView;
 #define MAGENTA(x) (((x) >> 8) & 0xFF)
 #define YELLOW(x) (((x) >> 16) & 0xFF)
 #define BLACK(x) ((x) >> 24)
-#define PIXEL(r, g, b, a)                                                                     \
-	(((int(b) << 24) & 0xFF000000) | ((int(g) << 16) & 0xFF0000) | ((int(r) << 8) & 0xFF00) | \
-		(int(a) & 0xFF))
+#define PIXEL(r, g, b, a)                                                                   \
+	(((int(b) << 24) & 0xFF000000) | ((int(g) << 16) & 0xFF0000) | ((int(r) << 8) & 0xFF00) \
+		| (int(a) & 0xFF))
 #else  // IA
 #define COLOR_MASK 0x00FFFFFF
 #define ALPHA_MASK 0xFF000000
@@ -118,9 +118,9 @@ class BView;
 #define MAGENTA(x) (((x) >> 8) & 0xFF)
 #define YELLOW(x) (((x) >> 16) & 0xFF)
 #define BLACK(x) ((x) >> 24)
-#define PIXEL(r, g, b, a)                                                                     \
-	(((int(a) << 24) & 0xFF000000) | ((int(r) << 16) & 0xFF0000) | ((int(g) << 8) & 0xFF00) | \
-		(int(b) & 0xFF))
+#define PIXEL(r, g, b, a)                                                                   \
+	(((int(a) << 24) & 0xFF000000) | ((int(r) << 16) & 0xFF0000) | ((int(g) << 8) & 0xFF00) \
+		| (int(b) & 0xFF))
 #endif
 
 // Rectangle constants

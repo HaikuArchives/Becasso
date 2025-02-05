@@ -362,7 +362,8 @@ OutputFormatView::MessageReceived(BMessage* msg)
 				int32 ver = outVersion / 100;
 				int32 rev1 = (outVersion % 100) / 10;
 				int32 rev2 = outVersion % 10;
-				sprintf(version_line, "Version %" B_PRId32 ".%" B_PRId32 ".%" B_PRId32, ver, rev1, rev2);	// --SS %ld
+				sprintf(version_line, "Version %" B_PRId32 ".%" B_PRId32 ".%" B_PRId32, ver, rev1,
+					rev2);	// --SS %ld
 				info_lines[0] = name_line;
 				info_lines[1] = info_line;
 				info_lines[2] = version_line;

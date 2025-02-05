@@ -5,7 +5,7 @@
 
 class LPoint {
 public:
-	LPoint(){};
+	LPoint() {};
 
 	LPoint(long _x, long _y)
 	{
@@ -19,7 +19,7 @@ public:
 		y = long(p.y);
 	};
 
-	~LPoint(){};
+	~LPoint() {};
 	long x;
 	long y;
 };

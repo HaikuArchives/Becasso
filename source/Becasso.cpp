@@ -1856,7 +1856,8 @@ Becasso::MessageReceived(BMessage* message)
 							break;
 						} else {
 							char errstring[256];
-							sprintf(errstring, "Mode Index Out of Range [0..%" B_PRId32 "]: %" B_PRId32,
+							sprintf(errstring,
+								"Mode Index Out of Range [0..%" B_PRId32 "]: %" B_PRId32,
 								NumTools - 1, numberspecifier);
 							if (message->IsSourceWaiting()) {
 								BMessage error(B_ERROR);
@@ -2140,7 +2141,9 @@ Becasso::MessageReceived(BMessage* message)
 							}
 						} else {
 							char errstring[256];
-							sprintf(errstring, "Invalid Scriptee: Index %" B_PRId32 " out of range [0..%" B_PRId32 "]",
+							sprintf(errstring,
+								"Invalid Scriptee: Index %" B_PRId32 " out of range [0..%" B_PRId32
+								"]",
 								indexspecifier, CountWindows() - 1);
 							if (message->IsSourceWaiting()) {
 								BMessage error(B_ERROR);

@@ -219,8 +219,8 @@ AddOn::Close(bool client_quits)
 	if (addon_close) {
 		status_t err = (*addon_close)();
 		if (err)
-			fprintf(
-				stderr, "Warning: add-on %s returned 0x%" B_PRIx32 " from addon_close()\n", fInfo.name, err);
+			fprintf(stderr, "Warning: add-on %s returned 0x%" B_PRIx32 " from addon_close()\n",
+				fInfo.name, err);
 	}
 
 	if (client_quits)

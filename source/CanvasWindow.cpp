@@ -1368,7 +1368,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 															// "PPM Image")
 															int spacep;
 															for (spacep = 0; spacep < strlen(sd);
-																 spacep++) {
+																spacep++) {
 																if (sd[spacep] == ' ')
 																	break;
 															}
@@ -1376,7 +1376,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 															{
 																sd[3] = 0;
 																for (spacep = 0; spacep < 3;
-																	 spacep++)
+																	spacep++)
 																	sd[spacep]
 																		= tolower(sd[spacep]);
 																// printf ("From desc: %s\n", sd);
@@ -2129,8 +2129,9 @@ CanvasWindow::MessageReceived(BMessage* message)
 					canvas->Generate(addon, true);
 					break;
 				default:
-					fprintf(
-						stderr, "Unknown addon requested preview: %" B_PRId32 ", type: %" B_PRId32 "\n", index, type);
+					fprintf(stderr,
+						"Unknown addon requested preview: %" B_PRId32 ", type: %" B_PRId32 "\n",
+						index, type);
 			}
 			break;
 		}

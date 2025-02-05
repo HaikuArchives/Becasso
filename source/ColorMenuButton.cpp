@@ -389,7 +389,7 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 	bgra_pixel* s = (bgra_pixel*)l->Bits() - 1;
 	// Iterate over all the pixels
 	for (uint32 p = (l->Bounds().IntegerWidth() + 1) * (l->Bounds().IntegerHeight() + 1); p > 0;
-		 p--) {
+		p--) {
 		bgra_pixel pixel = *(++s);
 		if (!needtoquantize)  // Maybe we can get away with the existing colors...
 		{

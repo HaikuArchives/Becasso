@@ -1120,7 +1120,7 @@ CanvasView::tSpraycan(int32 mode, BPoint point, uint32 buttons)
 #if !defined(USE_MOUSEMOVED)
 	while (buttons) {
 		for (int i = 0;
-			 i < (buttons & B_TERTIARY_MOUSE_BUTTON ? flowrate : flowrate * strength / 255); i++) {
+			i < (buttons & B_TERTIARY_MOUSE_BUTTON ? flowrate : flowrate * strength / 255); i++) {
 			float msigma = (buttons & B_TERTIARY_MOUSE_BUTTON ? sigma * strength / 255 : sigma);
 			float r = frand() * msigma;
 			float phi = frand() * 2 * M_PI;
@@ -1209,7 +1209,7 @@ CanvasView::tSpraycanM(int32 mode, BPoint point, uint32 buttons, int pressure, B
 
 	// make preference!!
 	for (int i = 0; i < (buttons & B_TERTIARY_MOUSE_BUTTON ? flowrate : flowrate * strength / 255);
-		 i++) {
+		i++) {
 		float msigma = (buttons & B_TERTIARY_MOUSE_BUTTON ? sigma * strength / 255 : sigma);
 		float r = frand() * msigma;
 		float phi = frand() * 2 * M_PI;
