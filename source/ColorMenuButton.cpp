@@ -344,7 +344,7 @@ have_bmax:
 CMB_box*
 biggest_population(CMB_box* b, int boxindex)
 {
-	int32 maxv = 0;
+	uint32 maxv = 0;
 	int i;
 
 	CMB_box* thebiggest = NULL;
@@ -359,7 +359,7 @@ biggest_population(CMB_box* b, int boxindex)
 CMB_box*
 biggest_volume(CMB_box* b, int boxindex)
 {
-	int32 maxv = 0;
+	uint32 maxv = 0;
 	int i;
 
 	CMB_box* thebiggest = NULL;
@@ -463,7 +463,7 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 						// (This shouldn't happen, because we test for #colors <= max_col first)
 
 			if (DebugLevel > 2)
-				printf("Biggest: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+				printf("Biggest: %" B_PRId32 " colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
 					biggest->num_colors, biggest->rmin, biggest->rmax, biggest->gmin, biggest->gmax,
 					biggest->bmin, biggest->bmax);
 
@@ -515,22 +515,22 @@ ColorMenuButton::extractPalette(Layer* l, int max_col, bool clobber)
 			trim_box(n, histogram);
 			trim_box(biggest, histogram);
 			if (DebugLevel > 2)
-				printf("  After split: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+				printf("  After split: %" B_PRId32 " colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
 					biggest->num_colors, biggest->rmin, biggest->rmax, biggest->gmin, biggest->gmax,
 					biggest->bmin, biggest->bmax);
 			if (DebugLevel > 2)
-				printf("  And:         %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
+				printf("  And:         %" B_PRId32 " colors R[%d - %d] G[%d - %d] B[%d - %d]\n",
 					n->num_colors, n->rmin, n->rmax, n->gmin, n->gmax, n->bmin, n->bmax);
 		}
 
 		if (DebugLevel)
-			fprintf(stderr, "Found %ld boxes.  Calculating averages...\n", boxindex);
+			fprintf(stderr, "Found %" B_PRId32 " boxes.  Calculating averages...\n", boxindex);
 
 		// Next, iterate over all the boxes and fill the color table with
 		// reasonable averages for the box colors.
 		for (int j = 0; j < max_col; j++) {
 			if (DebugLevel > 2)
-				printf("Box %i: %ld colors R[%d - %d] G[%d - %d] B[%d - %d]\n", j,
+				printf("Box %i: %" B_PRId32 " colors R[%d - %d] G[%d - %d] B[%d - %d]\n", j,
 					boxes[j].num_colors, boxes[j].rmin, boxes[j].rmax, boxes[j].gmin, boxes[j].gmax,
 					boxes[j].bmin, boxes[j].bmax);
 			uint32 fr, fg, fb;

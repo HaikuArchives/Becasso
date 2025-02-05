@@ -6,8 +6,9 @@ if $(haver4stdc++) {
 	STDCPPLIBS = -lstdc++.r4 ;
 }
 
+C++FLAGS = -Wall ; # -g -O1 -fsanitize=address ;
 LINKLIBS on Becasso = -lbe -lz -ltracker -ltranslation -lgame -ldevice $(STDCPPLIBS) ;
-LINKFLAGS on Becasso = -Xlinker -soname=_APP_ ;
+LINKFLAGS on Becasso = -Xlinker -soname=_APP_ ; # -fsanitize=address ;
 
 AS = nasm -f elf32 ;
 

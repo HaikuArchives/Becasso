@@ -250,7 +250,7 @@ void
 ErrorAlert(const char* message, status_t err)
 {
 	char msg[256];
-	sprintf(msg, "%s\n%s [%lx]", message, strerror(err), err);
+	sprintf(msg, "%s\n%s [%" B_PRIx32 "]", message, strerror(err), err);
 	(new BAlert("", msg, "Quit"))->Go();
 }
 

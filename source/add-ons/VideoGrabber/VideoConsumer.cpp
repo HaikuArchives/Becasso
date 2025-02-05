@@ -228,7 +228,7 @@ VideoConsumer::CreateBuffers(const media_format& with_format)
 			} // else PROGRESS("VideoConsumer::CreateBuffers - SUCCESSFUL ADD BUFFER TO GROUP\n");
 		} else {
 			ERROR(
-				"VideoConsumer::CreateBuffers - ERROR CREATING VIDEO RING BUFFER: %08lx\n", status
+				"VideoConsumer::CreateBuffers - ERROR CREATING VIDEO RING BUFFER: %08" B_PRIx32 "\n", status
 			);
 			return B_ERROR;
 		}

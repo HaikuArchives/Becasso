@@ -1514,7 +1514,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 				fName.SetTo(message->FindString("name"));
 				if (!out_type) {
 					fNumberFormat.FormatPercent(percentData, (double)fScale);
-					title.SetToFormat("%s (%s)", fName, percentData.String());
+					title.SetToFormat("%s (%s)", fName.String(), percentData.String());
 					SetTitle(title.String());
 				}
 			}
@@ -1527,7 +1527,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 						BPoint(200, 200), lstring(155, "Writing Image…"));
 				BFile outStream;
 				if (outStream.SetTo(&entry, B_READ_WRITE | B_CREATE_FILE | B_ERASE_FILE))
-					printf("Error opening %s!\n", fName);
+					printf("Error opening %s!\n", fName.String());
 				bitmapStream->SetDispose(true);
 #if defined(DATATYPES)
 				if (DATATranslate(*bitmapStream, &out_info, NULL, outStream, out_type)) {
@@ -2130,7 +2130,7 @@ CanvasWindow::MessageReceived(BMessage* message)
 					break;
 				default:
 					fprintf(
-						stderr, "Unknown addon requested preview: %li, type: %li\n", index, type);
+						stderr, "Unknown addon requested preview: %" B_PRId32 ", type: %" B_PRId32 "\n", index, type);
 			}
 			break;
 		}

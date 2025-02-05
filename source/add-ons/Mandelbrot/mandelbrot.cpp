@@ -341,7 +341,7 @@ MandelView::MessageReceived(BMessage* msg)
 	case K_INVERT_MSG:
 		if (mIInvert)
 			mInvert = mIInvert->Value();
-		printf("mIInvert %p, value %ld\n", mIInvert, mIInvert->Value());
+		printf("mIInvert %p, value %" B_PRId32 "\n", mIInvert, mIInvert->Value());
 		break;
 	case K_ISOMORPH_MSG:
 		if (mIIsomorphic)
@@ -422,7 +422,7 @@ MandelView::displayAngle(void)
 {
 	char s[64];
 	if (LockLooper()) {
-		sprintf(s, "%ld deg", mAngle);
+		sprintf(s, "%" B_PRId32 " deg", mAngle);
 		if (mIAngle)
 			mIAngle->SetText(s);
 		UnlockLooper();
@@ -437,10 +437,10 @@ MandelView::displayIter(void)
 {
 	char s[64];
 	if (LockLooper()) {
-		sprintf(s, "%ld", mApplyIterations);
+		sprintf(s, "%" B_PRId32, mApplyIterations);
 		if (mIApplyIter)
 			mIApplyIter->SetText(s);
-		sprintf(s, "%ld", mPreviewIterations);
+		sprintf(s, "%" B_PRId32, mPreviewIterations);
 		if (mIPreviewIter)
 			mIPreviewIter->SetText(s);
 		UnlockLooper();

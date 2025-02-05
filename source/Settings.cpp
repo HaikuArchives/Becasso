@@ -209,7 +209,7 @@ PrefsLoader::PrefsLoader()
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld:", &index) == 1) {
+						if (sscanf(ptr, "%" B_PRId32 ":", &index) == 1) {
 							while (*ptr != ':')
 								ptr++;
 							ptr++;
@@ -232,32 +232,32 @@ PrefsLoader::PrefsLoader()
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld", &g_settings.recents) != 1)
+						if (sscanf(ptr, "%" B_PRId32, &g_settings.recents) != 1)
 							fprintf(
 								stderr, "Illegal # of Recent items in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "max_undo")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld", &g_settings.max_undo) != 1)
+						if (sscanf(ptr, "%" B_PRId32, &g_settings.max_undo) != 1)
 							fprintf(stderr, "Illegal max_undo # in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "preview_size")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld", &g_settings.preview_size) != 1)
+						if (sscanf(ptr, "%" B_PRId32, &g_settings.preview_size) != 1)
 							fprintf(stderr, "Illegal preview_size in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "totd")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld", &g_settings.totd) != 1)
+						if (sscanf(ptr, "%" B_PRId32, &g_settings.totd) != 1)
 							fprintf(stderr, "Illegal totd number in Becasso settings: %s\n", ptr);
 					} else if (!strcmp(name, "selection_render")) {
 						while (*ptr != '=')
 							ptr++;
 						ptr++;
-						if (sscanf(ptr, "%ld", &g_settings.selection_type) != 1)
+						if (sscanf(ptr, "%" B_PRId32, &g_settings.selection_type) != 1)
 							fprintf(
 								stderr, "Illegal selection_render in Becasso settings: %s\n", ptr);
 					} else {
@@ -302,15 +302,15 @@ PrefsLoader::Save()
 		if (fp) {
 			fprintf(fp, "# Becasso settings - Sum Software (http://www.sumware.demon.nl)\n");
 			fprintf(fp, "language=%s\n", g_settings.language);
-			fprintf(fp, "recent_entries=%ld\n", g_settings.recents);
-			fprintf(fp, "max_undo=%ld\n", g_settings.max_undo);
-			fprintf(fp, "preview_size=%ld\n", g_settings.preview_size);
-			fprintf(fp, "selection_render=%ld\n", g_settings.selection_type);
-			fprintf(fp, "totd=%ld\n", g_settings.totd);
+			fprintf(fp, "recent_entries=%" B_PRId32 "\n", g_settings.recents);
+			fprintf(fp, "max_undo=%" B_PRId32 "\n", g_settings.max_undo);
+			fprintf(fp, "preview_size=%" B_PRId32 "\n", g_settings.preview_size);
+			fprintf(fp, "selection_render=%" B_PRId32 "\n", g_settings.selection_type);
+			fprintf(fp, "totd=%" B_PRId32 "\n", g_settings.totd);
 			for (int index = 0; index < NUM_WINDOWS; index++) {
 				BPoint origin = g_settings.origin[index];
 				if (origin != InvalidPoint)
-					fprintf(fp, "window_origin = %d:%g,%g\n", index, origin.x, origin.y);
+					fprintf(fp, "window_origin = %" B_PRId32 ":%g,%g\n", index, origin.x, origin.y);
 			}
 			fclose(fp);
 		} else

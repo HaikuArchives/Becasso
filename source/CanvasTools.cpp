@@ -230,7 +230,7 @@ CanvasView::tBrushM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 		end = clock();
 		extern int DebugLevel;
 		if (DebugLevel > 7)
-			printf("Brush Stroke took %ld ms\n", end - start);
+			printf("Brush Stroke took %" B_PRId32 " ms\n", end - start);
 		fBC.pos = pos;
 	}
 	//	snooze (10000);
@@ -461,7 +461,7 @@ CanvasView::tCloneM(int32 mode, BPoint point, uint32 buttons, int strength, BPoi
 			end = clock();
 			extern int DebugLevel;
 			if (DebugLevel > 7)
-				printf("Clone Stroke took %ld ms\n", end - start);
+				printf("Clone Stroke took %" B_PRId32 " ms\n", end - start);
 			fCC.pos = pos;
 		}
 	}

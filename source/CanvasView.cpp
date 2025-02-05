@@ -1206,7 +1206,7 @@ CanvasView::setLayerContentsToBitmap(int index, BBitmap* map, int32 resize)
 	end = clock();
 	extern int DebugLevel;
 	if (DebugLevel > 2)
-		printf("CanvasView::setLayerContentsToBitmap Took %ld ms\n", end - start);
+		printf("CanvasView::setLayerContentsToBitmap Took %" B_PRId32 " ms\n", end - start);
 }
 
 void
@@ -3376,7 +3376,7 @@ CanvasView::Invalidate(const BRect rect)
 	end = clock();
 	extern int DebugLevel;
 	if (DebugLevel > 7)
-		printf("Invalidate (BRect) took %ld ms\n", end - start);
+		printf("Invalidate (BRect) took %" B_PRId32 " ms\n", end - start);
 }
 
 void
@@ -3786,7 +3786,7 @@ CanvasView::MessageReceived(BMessage* msg)
 							error.AddString("result", layer[fLayerSpecifier]->getName());
 							msg->SendReply(&error);
 						} else
-							fprintf(stderr, "Layer %ld = %s\n", fLayerSpecifier,
+							fprintf(stderr, "Layer %" B_PRId32 " = %s\n", fLayerSpecifier,
 								layer[fLayerSpecifier]->getName());
 					}
 					fLayerSpecifier = -1;
@@ -3873,7 +3873,7 @@ CanvasView::MessageReceived(BMessage* msg)
 					end = clock();
 					extern int DebugLevel;
 					if (DebugLevel > 2)
-						printf("MessageReceived case Took %ld ms\n", end - start);
+						printf("MessageReceived case Took %" B_PRId32 " ms\n", end - start);
 					break;
 				}
 				default:
@@ -4756,7 +4756,7 @@ CanvasView::SetupUndo(int32 mode)
 			type = UNDO_BOTH;
 			break;
 		default:
-			fprintf(stderr, "SetupUndo: Unknown mode [%li]...\n", mode);
+			fprintf(stderr, "SetupUndo: Unknown mode [%" B_PRIi32 "]...\n", mode);
 			return;
 	}
 	if (type == UNDO_SELECT || type == UNDO_BOTH) {
@@ -4909,7 +4909,7 @@ CanvasView::Undo(bool advance, bool menu)
 				type = UNDO_SELECT;
 				break;
 			default:
-				fprintf(stderr, "Undo: Unknown mode [%li]...\n", currentmode);
+				fprintf(stderr, "Undo: Unknown mode [%" B_PRIi32 "]...\n", currentmode);
 		}
 		if ((prevtype == UNDO_DRAW && type == UNDO_SELECT)
 			|| (prevtype == UNDO_SELECT && type == UNDO_DRAW)) {
@@ -6309,7 +6309,7 @@ CanvasView::FastAddWithAlpha(long x, long y, int strength)
 	end = clock();
 	extern int DebugLevel;
 	if (DebugLevel > 7)
-		printf("FastAddWithAlpha took %ld ms\n", end - start);
+		printf("FastAddWithAlpha took %" B_PRId32 " ms\n", end - start);
 }
 
 
@@ -6519,7 +6519,7 @@ CanvasView::ExportCstruct(const char* fname)
 	FILE* f = fopen(fname, "wb");
 	printf("Dumping to %s\n", fname);
 	fprintf(f, "/* C array for %s */\n", fname);
-	fprintf(f, "uchar data[%ld*%ld] = {\n	", fCanvasFrame.IntegerHeight() + 1,
+	fprintf(f, "uchar data[%" B_PRId32 "*%" B_PRId32 "] = {\n	", fCanvasFrame.IntegerHeight() + 1,
 		fCanvasFrame.IntegerWidth() + 1);
 	for (int i = 0; i <= fCanvasFrame.IntegerHeight(); i++) {
 		for (int j = 0; j <= fCanvasFrame.IntegerWidth(); j++) {

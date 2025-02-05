@@ -308,7 +308,7 @@ Becasso::Becasso()
 		int clen = cdata[0];
 		NumColors = cdata[1] + 256 * cdata[2];
 		if (ShowColors && SHOW_EXTRA_COLOR_INFO) {
-			printf("Number of Color Names: %ld\n", NumColors);
+			printf("Number of Color Names: %" B_PRId32 "\n", NumColors);
 			printf("Max length of color name: %d\n", clen);
 		}
 		cdata += 3;
@@ -777,7 +777,7 @@ Becasso::ResolveSpecifier(
 							error.AddString("message", errorString);
 							message->SendReply(&error);
 						} else
-							fprintf(stderr, "%s\n", errorString);
+							fprintf(stderr, "%s\n", errorString.String());
 					}
 				}
 				break;
@@ -901,7 +901,7 @@ Becasso::MessageReceived(BMessage* message)
 			char dirname[B_FILE_NAME_LENGTH];
 			strcpy(dirname, appPath.Path());
 			char* argv[1];
-			argv[0] = new char[B_FILE_NAME_LENGTH];
+			argv[0] = new char[B_FILE_NAME_LENGTH + 34];
 			sprintf(argv[0], "file://%s/Documentation/Becasso.html", dirname);
 			be_roster->Launch("text/html", 1, argv);
 			break;
@@ -1671,7 +1671,7 @@ Becasso::MessageReceived(BMessage* message)
 						reply.AddInt32("result", NumTools);
 						message->SendReply(&reply);
 					} else
-						fprintf(stderr, "Number of Tools: %ld\n", NumTools);
+						fprintf(stderr, "Number of Tools: %" B_PRId32 "\n", NumTools);
 					break;
 				}
 				case PROP_MODE:
@@ -1682,7 +1682,7 @@ Becasso::MessageReceived(BMessage* message)
 						reply.AddInt32("result", NumModes);
 						message->SendReply(&reply);
 					} else
-						fprintf(stderr, "Number of Modes: %ld\n", NumModes);
+						fprintf(stderr, "Number of Modes: %" B_PRId32 "\n", NumModes);
 					break;
 				}
 				default:
@@ -1856,7 +1856,7 @@ Becasso::MessageReceived(BMessage* message)
 							break;
 						} else {
 							char errstring[256];
-							sprintf(errstring, "Mode Index Out of Range [0..%ld]: %ld",
+							sprintf(errstring, "Mode Index Out of Range [0..%" B_PRId32 "]: %" B_PRId32,
 								NumTools - 1, numberspecifier);
 							if (message->IsSourceWaiting()) {
 								BMessage error(B_ERROR);
@@ -2140,7 +2140,7 @@ Becasso::MessageReceived(BMessage* message)
 							}
 						} else {
 							char errstring[256];
-							sprintf(errstring, "Invalid Scriptee: Index %ld out of range [0..%ld]",
+							sprintf(errstring, "Invalid Scriptee: Index %" B_PRId32 " out of range [0..%" B_PRId32 "]",
 								indexspecifier, CountWindows() - 1);
 							if (message->IsSourceWaiting()) {
 								BMessage error(B_ERROR);
