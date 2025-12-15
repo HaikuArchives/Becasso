@@ -26,5 +26,5 @@ jobs:
           version: ${{ matrix.config.version }}
           architecture: ${{ matrix.config.architecture }}
           run: |
-            ssh user@localhost "pkgman update -y haiku_devel devel:libz cmd:jam cmd:gcc cmd:nasm" &&
+            ssh user@localhost "pkgman update -y devel:libz cmd:jam cmd:gcc cmd:nasm" &&
             jam -q
